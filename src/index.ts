@@ -25,11 +25,33 @@ client.on("message", ({ content, channel, author, mentions, ...message }) => {
         channel.send("Tag the person you want to fight, yo.");
         return;
       }
-
       const taggedUser = mentions.users.first();
       channel.send(
         `${author.toString()} has challenged ${taggedUser?.toString()} to a fight!`
       );
+      break;
+    case "avatar":
+      if (!mentions.users.size) {
+        channel.send(`${author.toString()}'s avatar`, {
+          files: [
+            author.displayAvatarURL({
+              format: "png",
+              dynamic: true,
+            }),
+          ],
+        });
+        return;
+      }
+      mentions.users.forEach((user) => {
+        channel.send(`${user.toString()}'s avatar`, {
+          files: [
+            user.displayAvatarURL({
+              format: "png",
+              dynamic: true,
+            }),
+          ],
+        });
+      });
       break;
     default:
       channel.send("I didn't understand that command.");
