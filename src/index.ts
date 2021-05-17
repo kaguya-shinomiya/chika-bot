@@ -1,67 +1,35 @@
-import { Client } from "discord.js";
+import Discord from "discord.js";
 import dotenv from "dotenv-safe";
+import { commandList } from "./commands";
 import { PREFIX } from "./constants";
+import { Command } from "./types/command";
 dotenv.config();
 
-const client = new Client();
+const client = new Discord.Client();
+const commands = new Discord.Collection<string, Command>();
+commandList.forEach((command) => commands.set(command.name, command));
 
 client.once("ready", () => {
   console.log("ready!");
 });
 
-client.on("message", ({ content, channel, author, mentions, ...message }) => {
-  if (!content.startsWith(PREFIX) || author.bot) return;
+client.on("message", (message) => {
+  if (!message.content.startsWith(PREFIX) || message.author.bot) return;
+  const args = message.content.split(/ +/);
+  const sentCommand = args.shift()?.toLowerCase().replace(PREFIX, "");
+  if (!sentCommand) return;
+  const command = commands.get(sentCommand);
+  if (!command) {
+    return message.channel.send("I didn't understand that command.");
+  }
 
-  const args = content.split(/ +/);
-  const command = args.shift()?.toLowerCase().replace("ck!", "");
-
-  switch (command) {
-    case "ping":
-      channel.send(`Yo ${author.toString()}, Love Detective Chika here.`);
-      break;
-    case "fight":
-      if (!mentions.users.size) {
-        // size attr returns 0 if the collection is empty
-        channel.send("Tag the person you want to fight, yo.");
-        return;
-      }
-      const taggedUser = mentions.users.first();
-      channel.send(
-        `${author.toString()} has challenged ${taggedUser?.toString()} to a fight!`
-      );
-      break;
-    case "avatar":
-      if (!mentions.users.size) {
-        channel.send(`${author.toString()}'s avatar`, {
-          files: [
-            author.displayAvatarURL({
-              format: "png",
-              dynamic: true,
-            }),
-          ],
-        });
-        return;
-      }
-      mentions.users.forEach((user) => {
-        channel.send(`${user.toString()}'s avatar`, {
-          files: [
-            user.displayAvatarURL({
-              format: "png",
-              dynamic: true,
-            }),
-          ],
-        });
-      });
-      break;
-    case "goodnight":
-      channel.send("Goodnight!", {
-        files: [
-          "https://i.pinimg.com/originals/41/72/fa/4172fa1b40d8aba47a6c9b2e79b0c565.gif",
-        ],
-      });
-      break;
-    default:
-      channel.send("I didn't understand that command.");
+  try {
+    command.execute(message, args);
+  } catch (err) {
+    console.log(err);
+    return message.channel.send(
+      "I ran into an error while processing your request."
+    );
   }
 });
 
