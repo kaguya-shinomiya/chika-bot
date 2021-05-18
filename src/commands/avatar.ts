@@ -1,6 +1,6 @@
 import { Command } from "../types/command";
 
-export const avatar: Command = {
+const avatar: Command = {
   name: "avatar",
   description: "Retrieves avatars for specified users.",
   execute({ mentions, author, channel }, _args) {
@@ -27,3 +27,5 @@ export const avatar: Command = {
     });
   },
 };
+
+export default avatar;

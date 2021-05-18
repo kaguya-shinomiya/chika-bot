@@ -1,8 +1,9 @@
 import { Command } from "../types/command";
 
-export const goodnight: Command = {
+const goodnight: Command = {
   name: "goodnight",
   description: "Greets goodnight.",
+  aliases: ["gn"],
   execute({ channel }, _args) {
     channel.send("Goodnight!", {
       files: [
@@ -11,3 +12,5 @@ export const goodnight: Command = {
     });
   },
 };
+
+export default goodnight;
