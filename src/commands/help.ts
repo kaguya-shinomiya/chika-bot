@@ -1,5 +1,5 @@
 import { Command } from "@/types/command";
-import { PREFIX } from "@/constants";
+import { PREFIX } from "../constants";
 
 const help: Command = {
   name: "help",

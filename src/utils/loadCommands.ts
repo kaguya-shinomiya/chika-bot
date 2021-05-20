@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import { Command } from "@/types/command";
 
-export const getCommands = (): Client["commands"] => {
+export const loadCommands = (): Client["commands"] => {
   const commands = new Collection<string, Command>();
   const commandFiles = fs
     .readdirSync(path.join(__dirname, "../commands"))

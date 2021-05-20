@@ -1,8 +1,8 @@
+import { Command } from "@/types/command";
 import Discord from "discord.js";
 import dotenv from "dotenv-safe";
 import { PREFIX, PREFIX_RE } from "./constants";
-import { Command } from "@customTypes/command";
-import { getCommands } from "./utils/getCommands";
+import { loadCommands } from "./utils/loadCommands";
 dotenv.config();
 
 declare module "discord.js" {
@@ -12,7 +12,8 @@ declare module "discord.js" {
 }
 
 const client = new Discord.Client();
-client.commands = getCommands();
+client.login(process.env.APP_TOKEN);
+client.commands = loadCommands();
 
 client.once("ready", () => {
   console.log("Chika bot is ready!");
@@ -41,5 +42,3 @@ client.on("message", (message) => {
     );
   }
 });
-
-client.login(process.env.APP_TOKEN);
