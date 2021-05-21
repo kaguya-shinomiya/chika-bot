@@ -1,7 +1,4 @@
-// TODO make this an embedded message
-// TODO split commands into categories
-
-import { genBadCommandEmbed } from "../../utils/genBadCommandEmbed";
+import { genBadCommandEmbed } from "../../shared/genBadCommandEmbed";
 import { Command } from "../../types/command";
 import { MessageEmbed } from "discord.js";
 import { chika_pink } from "../../constants";
