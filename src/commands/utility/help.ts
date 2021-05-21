@@ -9,8 +9,9 @@ import { chika_pink } from "../../constants";
 const help: Command = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
-  usage: "help [command ...]",
+  usage: "ck!help [command ...]",
   category: "Utility",
+  argsCount: -1,
   aliases: ["h"],
   execute({ channel, client: { commands, commandsHelp } }, args) {
     if (!args.length || /all/i.test(args[0])) {

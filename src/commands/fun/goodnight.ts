@@ -1,12 +1,14 @@
 import { Command } from "../../types/command";
 import { MessageEmbed } from "discord.js";
+import { chika_pink, kaguya_sleep_gif } from "../../constants";
 
 const goodnight: Command = {
   name: "goodnight",
   description: "Greets goodnight.",
   category: "Fun",
-  usage: "goodnight [user ...]",
+  usage: "ck!goodnight [user ...]",
   aliases: ["gn"],
+  argsCount: -1,
   execute({ channel, mentions, author }, _args) {
     let message;
     if (!mentions.users.size) {
@@ -22,8 +24,9 @@ const goodnight: Command = {
           : `${author.toString()} wishes ${userNames[0].toString()} goodnight!`;
     }
     const embed = new MessageEmbed()
+      .setColor(chika_pink)
       .setDescription(message)
-      .setImage("https://i.imgur.com/4y1lORB.gif");
+      .setImage(kaguya_sleep_gif);
     channel.send(embed);
   },
 };

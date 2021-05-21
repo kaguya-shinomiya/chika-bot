@@ -1,7 +1,9 @@
 import Discord from "discord.js";
 import dotenv from "dotenv-safe";
 import { PREFIX, PREFIX_RE } from "./constants";
-import { genBadCommandEmbed } from "./utils/genBadCommandEmbed";
+import { genBadArgsEmbed } from "./shared/genBadArgsEmbed";
+import { genBadCommandEmbed } from "./shared/genBadCommandEmbed";
+import { genericErrorEmbed } from "./shared/genericErrorEmbed";
 import { loadCommands } from "./utils/loadCommands";
 import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 dotenv.config();
@@ -17,6 +19,7 @@ client.once("ready", () => {
 
 client.on("message", (message) => {
   if (!PREFIX_RE.test(message.content) || message.author.bot) return;
+
   const args = message.content.split(/ +/);
   const sentCommand = args.shift()?.toLowerCase().replace(PREFIX, "");
   if (!sentCommand) return;
@@ -29,11 +32,16 @@ client.on("message", (message) => {
     return;
   }
 
+  if (command.argsCount !== -1 && command.argsCount !== args.length) {
+    message.channel.send(genBadArgsEmbed(command, args.length));
+    return;
+  }
+
   try {
     command.execute(message, args);
   } catch (err) {
     console.log(err);
-    message.channel.send("I ran into an error while processing your request.");
+    message.channel.send(genericErrorEmbed);
     return;
   }
 });

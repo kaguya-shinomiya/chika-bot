@@ -1,10 +1,10 @@
-import { chika_pink } from "../constants";
+import { chika_crying_jpg, chika_pink } from "../constants";
 import { MessageEmbed } from "discord.js";
 
 export const genBadCommandEmbed = (...badCommands: string[]) => {
   return new MessageEmbed()
     .setColor(chika_pink)
-    .setThumbnail("https://i.imgur.com/yFjZVZN.png")
+    .setThumbnail(chika_crying_jpg)
     .setDescription(
       `I couldn't understand these commands: ${badCommands
         .map((cmd) => `**${cmd}**`)

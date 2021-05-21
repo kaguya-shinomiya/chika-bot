@@ -8,5 +8,6 @@ export interface Command {
   category: commandCategory;
   usage: string;
   aliases?: string[];
+  argsCount: number; // set to -1 for any
   execute: (message: Message, args: string[]) => void;
 }
