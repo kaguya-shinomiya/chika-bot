@@ -1,4 +1,4 @@
-import { Command, commandCategory } from "@/types/command";
+import { Command, commandCategory } from "../types/command";
 import { Collection, EmbedFieldData, MessageEmbed } from "discord.js";
 import { chika_pink } from "../constants";
 
@@ -23,6 +23,6 @@ export const prepareCommandsHelp = (
   return new MessageEmbed()
     .setColor(chika_pink)
     .setTitle("Chika Commands")
-    .setThumbnail("https://i.imgur.com/GltCjkg.jpg")
+    .setThumbnail("https://i.imgur.com/Ftwr8nw.png")
     .addFields(fields);
 };

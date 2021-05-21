@@ -1,6 +1,7 @@
 import Discord from "discord.js";
 import dotenv from "dotenv-safe";
 import { PREFIX, PREFIX_RE } from "./constants";
+import { genBadCommandEmbed } from "./utils/genBadCommandEmbed";
 import { loadCommands } from "./utils/loadCommands";
 import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 dotenv.config();
@@ -24,15 +25,15 @@ client.on("message", (message) => {
       command.name === sentCommand || !!command.aliases?.includes(sentCommand)
   );
   if (!command) {
-    return message.channel.send("I didn't understand that command.");
+    message.channel.send(genBadCommandEmbed(sentCommand));
+    return;
   }
 
   try {
     command.execute(message, args);
   } catch (err) {
     console.log(err);
-    return message.channel.send(
-      "I ran into an error while processing your request."
-    );
+    message.channel.send("I ran into an error while processing your request.");
+    return;
   }
 });

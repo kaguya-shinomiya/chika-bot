@@ -1,11 +1,11 @@
-import { Command } from "@/types/command";
+import { Command } from "../../types/command";
 import { MessageEmbed } from "discord.js";
 
 const goodnight: Command = {
   name: "goodnight",
   description: "Greets goodnight.",
   category: "Fun",
-  usage: "goodnight [users ...]",
+  usage: "goodnight [user ...]",
   aliases: ["gn"],
   execute({ channel, mentions, author }, _args) {
     let message;
@@ -23,7 +23,7 @@ const goodnight: Command = {
     }
     const embed = new MessageEmbed()
       .setDescription(message)
-      .setImage("https://i.imgur.com/bK10Nbi.gif");
+      .setImage("https://i.imgur.com/4y1lORB.gif");
     channel.send(embed);
   },
 };

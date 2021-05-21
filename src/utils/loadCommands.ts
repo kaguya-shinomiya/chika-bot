@@ -1,7 +1,7 @@
 import { Client, Collection } from "discord.js";
 import fs from "fs";
 import path from "path";
-import { Command } from "@/types/command";
+import { Command } from "../types/command";
 
 export const loadCommands = (): Client["commands"] => {
   const commands = new Collection<string, Command>();
