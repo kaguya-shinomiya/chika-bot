@@ -2,7 +2,9 @@ import { Command } from "@/types/command";
 
 const avatar: Command = {
   name: "avatar",
-  description: "Retrieves avatars for specified users.",
+  description: "Retrieves users' avatars.",
+  category: "Fun",
+  usage: "avatar [users ...]",
   execute({ mentions, author, channel }, _args) {
     if (!mentions.users.size) {
       channel.send(`${author.toString()}'s avatar`, {

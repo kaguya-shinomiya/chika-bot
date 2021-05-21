@@ -5,12 +5,16 @@ import { Command } from "@/types/command";
 
 export const loadCommands = (): Client["commands"] => {
   const commands = new Collection<string, Command>();
-  const commandFiles = fs
-    .readdirSync(path.join(__dirname, "../commands"))
-    .filter((filename) => filename.endsWith(".js"));
-  commandFiles.forEach((filename) => {
-    const command: Command = require(`../commands/${filename}`).default;
-    commands.set(command.name, command);
+  const commandFolders = fs.readdirSync(path.join(__dirname, "..", "commands"));
+  commandFolders.forEach((folder) => {
+    const commandFiles = fs
+      .readdirSync(path.join(__dirname, "..", "commands", folder))
+      .filter((filename) => filename.endsWith(".js"));
+    commandFiles.forEach((filename) => {
+      const command: Command =
+        require(`../commands/${folder}/${filename}`).default;
+      commands.set(command.name, command);
+    });
   });
   return commands;
 };

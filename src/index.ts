@@ -1,19 +1,14 @@
-import { Command } from "@/types/command";
 import Discord from "discord.js";
 import dotenv from "dotenv-safe";
 import { PREFIX, PREFIX_RE } from "./constants";
 import { loadCommands } from "./utils/loadCommands";
+import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 dotenv.config();
-
-declare module "discord.js" {
-  export interface Client {
-    commands: Discord.Collection<string, Command>; // adds commands attr to Client class
-  }
-}
 
 const client = new Discord.Client();
 client.login(process.env.APP_TOKEN);
 client.commands = loadCommands();
+client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
 
 client.once("ready", () => {
   console.log("Chika bot is ready!");
@@ -32,7 +27,6 @@ client.on("message", (message) => {
     return message.channel.send("I didn't understand that command.");
   }
 
-  console.log(`Executing ${command.name} command...`);
   try {
     command.execute(message, args);
   } catch (err) {
