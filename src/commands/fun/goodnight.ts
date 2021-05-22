@@ -18,9 +18,9 @@ const goodnight: Command = {
       mentions.users.forEach((user) => userNames.push(user.toString()));
       message =
         userNames.length > 1
-          ? `${author.toString()} wishes` +
-            userNames.slice(0, userNames.length - 1).join(",") +
-            `and ${userNames[userNames.length - 1].toString()} goodnight!`
+          ? `${author.toString()} wishes ` +
+            userNames.slice(0, userNames.length - 1).join(", ") +
+            ` and ${userNames[userNames.length - 1].toString()} goodnight!`
           : `${author.toString()} wishes ${userNames[0].toString()} goodnight!`;
     }
     const embed = new MessageEmbed()
