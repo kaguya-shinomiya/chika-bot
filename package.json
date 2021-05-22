@@ -16,6 +16,7 @@
   },
   "scripts": {
     "start": "node dist/index.js",
+    "build": "tsc",
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
     "test": "mocha "
