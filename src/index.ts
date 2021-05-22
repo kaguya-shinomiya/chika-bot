@@ -5,12 +5,14 @@ import { genBadArgsEmbed } from "./shared/genBadArgsEmbed";
 import { genBadCommandEmbed } from "./shared/genBadCommandEmbed";
 import { genericErrorEmbed } from "./shared/genericErrorEmbed";
 import { loadCommands } from "./utils/loadCommands";
+import { loadGames } from "./utils/loadGames";
 import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 dotenv.config();
 
 const client = new Discord.Client();
 client.login(process.env.APP_TOKEN);
 client.commands = loadCommands();
+client.games = loadGames();
 client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
 
 client.once("ready", () => {

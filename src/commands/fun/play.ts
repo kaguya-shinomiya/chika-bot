@@ -7,7 +7,10 @@ export const play: Command = {
   usage: "ck!play <game>",
   argsCount: 1,
   aliases: ["p"],
-  execute(message, args) {},
+  execute(message, args) {
+    // TODO dispatch to the right game
+    const game = args[0];
+  },
 };
 
 export default play;
