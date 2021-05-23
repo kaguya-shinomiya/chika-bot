@@ -1,12 +1,12 @@
 import { MessageEmbed } from "discord.js";
-import { chika_crying_jpg, chika_pink } from "../constants";
+import { chika_crying_png, chika_pink } from "../constants";
 import { Command } from "../types/command";
 
 export const genBadArgsEmbed = (command: Command, provided: number) => {
   // TODO display help message for the command
   return new MessageEmbed()
     .setColor(chika_pink)
-    .setThumbnail(chika_crying_jpg)
+    .setThumbnail(chika_crying_png)
     .setDescription(
       `Command \`${command.name}\` expected ${command.argsCount} ${
         command.argsCount === 1 ? `argument` : `arguments`

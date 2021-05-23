@@ -11,11 +11,11 @@ dotenv.config();
 
 const main = async () => {
   const client = new Discord.Client();
-  await client.login(process.env.APP_TOKEN);
+  client.login(process.env.APP_TOKEN);
   client.commands = loadCommands();
-  loadEventListeners(client);
   client.games = loadGames();
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
+  loadEventListeners(client);
 };
 
 main().catch((err) => console.log(err));
