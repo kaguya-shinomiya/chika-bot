@@ -1,8 +1,7 @@
 import { Message } from "discord.js";
 import { Game } from "../types/game";
+import { sendNoTagError, sendTaggedSelfError } from "./utils/errorSenders";
 import { handleOpponentResponse } from "./utils/handleOpponentResponse";
-import { sendNoTagError } from "./utils/sendNoTagError";
-import { sendTaggedSelfError } from "./utils/sendTaggedSelfError";
 
 class Shiritori extends Game {
   pregame(message: Message) {

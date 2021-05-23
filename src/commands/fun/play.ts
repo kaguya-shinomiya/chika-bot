@@ -1,6 +1,8 @@
 import { PREFIX } from "../../constants";
-import { sendNoGameSelectedEmbed } from "../../games/utils/sendNoGameSelectedEmbed";
-import { sendUnknownGameError } from "../../games/utils/sendUnknownGameError";
+import {
+  sendNoGameSelectedError,
+  sendUnknownGameError,
+} from "../../games/utils/errorSenders";
 import { Command } from "../../types/command";
 
 export const play: Command = {
@@ -14,7 +16,7 @@ export const play: Command = {
     // TODO dispatch to the right game
     const [requestedGame] = args;
     if (!requestedGame) {
-      sendNoGameSelectedEmbed(message.channel);
+      sendNoGameSelectedError(message.channel);
       return;
     }
     const toPlay = message.client.games.find(
