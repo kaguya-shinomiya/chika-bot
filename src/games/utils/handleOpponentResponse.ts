@@ -6,7 +6,8 @@ import { OpponentResponse } from "../../types/game";
 export const handleOpponentResponse = async (
   { channel, author }: Message,
   opponent: User,
-  onAccept: any
+  onAccept: any,
+  onReject: any
 ) => {
   channel
     .send(
@@ -47,9 +48,7 @@ export const handleOpponentResponse = async (
         case "timeout":
           break;
         case "rejected":
-          channel.send(
-            `**${opponent.username}** has turned down the challenge.`
-          );
+          onReject();
           break;
         case "accepted":
           onAccept();
