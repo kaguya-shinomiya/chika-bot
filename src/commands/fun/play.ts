@@ -1,6 +1,6 @@
 import { PREFIX } from "../../constants";
-import { sendNoGameSelectedEmbed } from "../../games/utils.ts/sendNoGameSelectedEmbed";
-import { sendUnknownGameError } from "../../games/utils.ts/sendUnknownGameError";
+import { sendNoGameSelectedEmbed } from "../../games/utils/sendNoGameSelectedEmbed";
+import { sendUnknownGameError } from "../../games/utils/sendUnknownGameError";
 import { Command } from "../../types/command";
 
 export const play: Command = {

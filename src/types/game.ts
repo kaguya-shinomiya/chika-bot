@@ -2,6 +2,8 @@ import { Message } from "discord.js";
 
 export type nextFn = (...args: any[]) => void;
 export type gameType = "single" | "1v1" | "multi";
+export type OpponentResponse = "timeout" | "rejected" | "accepted";
+
 export class Game {
   name: string;
   type: gameType;

@@ -1,13 +1,8 @@
-import { MessageReaction } from "discord.js";
-import { User } from "discord.js";
-import { Message } from "discord.js";
+import { Message, MessageReaction, User } from "discord.js";
 import { red_cross, white_check_mark } from "../assets";
 import { genericErrorEmbed } from "../shared/genericErrorEmbed";
-import { Game } from "../types/game";
-import { sendNoTagError } from "./utils.ts/sendNoTagError";
-import { sendTaggedSelfError } from "./utils.ts/sendTaggedSelfError";
-
-type OpponentResponse = "timeout" | "rejected" | "accepted";
+import { Game, OpponentResponse } from "../types/game";
+import { sendNoTagError } from "./utils/sendNoTagError";
 
 class Shiritori extends Game {
   pregame(message: Message) {
@@ -47,26 +42,32 @@ class Shiritori extends Game {
           )
           .then((collected): Promise<OpponentResponse> => {
             const reaction = collected.first();
-            if (!reaction) return Promise.reject<OpponentResponse>("timeout");
-            if (reaction?.emoji.name === red_cross) {
-              channel.send(
-                `**${opponent.username}** has turned down the challenge.`
-              );
-              return Promise.reject<OpponentResponse>("rejected");
+            switch (reaction?.emoji.name) {
+              case red_cross:
+                return Promise.resolve<OpponentResponse>("rejected");
+              case white_check_mark:
+                return Promise.resolve<OpponentResponse>("accepted");
+              default:
+                return Promise.resolve<OpponentResponse>("timeout");
             }
-            return Promise.resolve<OpponentResponse>("accepted");
           });
       })
-      .then(
-        () => {
-          // TODO register the new message listener
-          console.log("the challenge was accepted");
-        },
-        () => {
-          // TODO nothing lol
-          console.log("the challenge was rejected");
+      .then((response) => {
+        // TODO register the new message listener
+        switch (response) {
+          case "timeout":
+            // TODO probably do nothing
+            break;
+          case "rejected":
+            channel.send(
+              `**${opponent.username}** has turned down the challenge.`
+            );
+            break;
+          case "accepted":
+            // TODO start the game, register new message listener
+            console.log("match is gonna start");
         }
-      )
+      })
       .catch(() => {
         channel.send(genericErrorEmbed);
       });
