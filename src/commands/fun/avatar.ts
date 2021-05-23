@@ -1,6 +1,6 @@
 import { User } from "discord.js";
 import { MessageEmbed } from "discord.js";
-import { chika_pink } from "../../constants";
+import { chika_pink, PREFIX } from "../../constants";
 import { Command } from "../../types/command";
 
 const genAvatarEmbed = (user: User): MessageEmbed =>
@@ -14,7 +14,7 @@ const avatar: Command = {
   name: "avatar",
   description: "Retrieves users' avatars.",
   category: "Fun",
-  usage: "ck!avatar [user ...]",
+  usage: `${PREFIX}avatar [user ...]`,
   argsCount: -1,
   execute({ mentions, author, channel }, _args) {
     if (!mentions.users.size) {

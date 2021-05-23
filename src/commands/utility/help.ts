@@ -1,12 +1,12 @@
 import { genBadCommandEmbed } from "../../shared/genBadCommandEmbed";
 import { Command } from "../../types/command";
 import { MessageEmbed } from "discord.js";
-import { chika_pink } from "../../constants";
+import { chika_pink, PREFIX } from "../../constants";
 
 const help: Command = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
-  usage: "ck!help [command ...]",
+  usage: `${PREFIX}help [command ...]`,
   category: "Utility",
   argsCount: -1,
   aliases: ["h"],

@@ -1,8 +1,15 @@
 import { Message } from "discord.js";
 
 export type nextFn = (...args: any[]) => void;
-export interface Game {
+export type gameType = "single" | "1v1" | "multi";
+export class Game {
   name: string;
-  type: "single" | "1v1" | "multi";
-  pregame?: (message: Message, next?: nextFn) => void;
+  type: gameType;
+
+  pregame?(_message: Message) {}
+
+  constructor(name: string, type: gameType) {
+    this.name = name;
+    this.type = type;
+  }
 }

@@ -1,4 +1,5 @@
-import { chika_crying_png, chika_pink } from "../constants";
+import { chika_pink, PREFIX } from "../constants";
+import { chika_crying_png } from "../assets";
 import { MessageEmbed } from "discord.js";
 
 export const genBadCommandEmbed = (...badCommands: string[]) => {
@@ -12,6 +13,6 @@ export const genBadCommandEmbed = (...badCommands: string[]) => {
     )
     .addField(
       "\u200b",
-      "Run `ck!help` to get a list of all the commands I know."
+      `Run \`${PREFIX}help\` to get a list of all the commands I know.`
     );
 };

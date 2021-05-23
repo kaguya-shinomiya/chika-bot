@@ -1,5 +1,6 @@
 import { MessageEmbed } from "discord.js";
-import { chika_crying_png, chika_pink } from "../constants";
+import { chika_pink, PREFIX } from "../constants";
+import { chika_crying_png } from "../assets";
 import { Command } from "../types/command";
 
 export const genBadArgsEmbed = (command: Command, provided: number) => {
@@ -12,5 +13,5 @@ export const genBadArgsEmbed = (command: Command, provided: number) => {
         command.argsCount === 1 ? `argument` : `arguments`
       }, but ${provided} ${provided === 1 ? `was` : `were`} provided.`
     )
-    .addField("\u200b", `Run \`ck!help ${command.name}\` for more info.`);
+    .addField("\u200b", `Run \`${PREFIX}help ${command.name}\` for more info.`);
 };

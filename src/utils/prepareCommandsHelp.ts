@@ -1,6 +1,7 @@
 import { Command, commandCategory } from "../types/command";
 import { Collection, EmbedFieldData, MessageEmbed } from "discord.js";
-import { chika_detective_png, chika_pink } from "../constants";
+import { chika_pink } from "../constants";
+import { chika_detective_png } from "../assets";
 
 export const prepareCommandsHelp = (
   commands: Collection<string, Command>

@@ -1,12 +1,13 @@
 import { Command } from "../../types/command";
 import { MessageEmbed } from "discord.js";
-import { chika_pink, kaguya_sleep_gif } from "../../constants";
+import { chika_pink, PREFIX } from "../../constants";
+import { kaguya_sleep_gif } from "../../assets";
 
 const goodnight: Command = {
   name: "goodnight",
   description: "Greets goodnight.",
   category: "Fun",
-  usage: "ck!goodnight [user ...]",
+  usage: `${PREFIX}goodnight [user ...]`,
   aliases: ["gn"],
   argsCount: -1,
   execute({ channel, mentions, author }, _args) {
@@ -18,7 +19,7 @@ const goodnight: Command = {
       mentions.users.forEach((user) => userNames.push(user.toString()));
       message =
         userNames.length > 1
-          ? `${author.toString()} wishes ` +
+          ? `**${author.username}** wishes ` +
             userNames.slice(0, userNames.length - 1).join(", ") +
             ` and ${userNames[userNames.length - 1].toString()} goodnight!`
           : `${author.toString()} wishes ${userNames[0].toString()} goodnight!`;

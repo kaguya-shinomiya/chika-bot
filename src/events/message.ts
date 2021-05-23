@@ -9,7 +9,7 @@ const message: Event = {
   name: "message",
   once: false,
   listener(client: Client, message) {
-    if (!PREFIX_RE.test(message.content) || message.author.bot) return;
+    if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);
     const sentCommand = args.shift()?.toLowerCase().replace(PREFIX, "");

@@ -1,5 +1,6 @@
 import { DMChannel, MessageEmbed, NewsChannel, TextChannel } from "discord.js";
-import { chika_crying_png, chika_pink } from "../../constants";
+import { chika_pink } from "../../constants";
+import { chika_crying_png } from "../../assets";
 
 export const sendUnknownGameError = async (
   gameName: string,

@@ -1,5 +1,6 @@
 import { DMChannel, MessageEmbed, NewsChannel, TextChannel } from "discord.js";
-import { chika_peeking_png, chika_pink } from "../../constants";
+import { chika_pink } from "../../constants";
+import { chika_peeking_png } from "../../assets";
 
 export const sendTaggedSelfError = async (
   channel: TextChannel | DMChannel | NewsChannel

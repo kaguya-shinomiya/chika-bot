@@ -10,9 +10,11 @@ export const loadEventListeners = (client: Client) => {
   eventFiles.forEach((file) => {
     const event: Event = require(`../events/${file}`).default;
     if (event.once) {
-      client.once(event.name, (...args) => event.listener(client, ...args));
+      client.once(event.name, async (...args) =>
+        event.listener(client, ...args)
+      );
     } else {
-      client.on(event.name, (...args) => event.listener(client, ...args));
+      client.on(event.name, async (...args) => event.listener(client, ...args));
     }
   });
 };
