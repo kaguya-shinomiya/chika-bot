@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import { Collection } from "discord.js";
 import dotenv from "dotenv-safe";
 import { loadCommands } from "./utils/loadCommands";
 import { loadEventListeners } from "./utils/loadEventListeners";
@@ -14,6 +15,7 @@ const main = async () => {
   client.login(process.env.APP_TOKEN);
   client.commands = loadCommands();
   client.games = loadGames();
+  client.gameState = new Collection(); // initialize an empty gameState instance
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   loadEventListeners(client);
 };
