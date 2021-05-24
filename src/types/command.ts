@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 
-export type commandCategory = "Fun" | "Utility";
+export type commandCategory = "Fun" | "Utility" | "Music";
 
 export interface Command {
   name: string;

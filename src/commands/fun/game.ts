@@ -5,15 +5,15 @@ import {
 } from "../../games/utils/errorSenders";
 import { Command } from "../../types/command";
 
-export const play: Command = {
-  name: "play",
+// TODO ensure only one play per channel
+
+export const game: Command = {
+  name: "game",
   description: "Play a game with Pro Gamer Chika.",
   category: "Fun",
-  usage: `${PREFIX}play <game>`,
+  usage: `${PREFIX}game <game_title>`,
   argsCount: -1,
-  aliases: ["p"],
   execute(message, args) {
-    // TODO dispatch to the right game
     const [requestedGame] = args;
     if (!requestedGame) {
       sendNoGameSelectedError(message.channel);
@@ -26,11 +26,10 @@ export const play: Command = {
       sendUnknownGameError(requestedGame, message.channel);
       return;
     }
-    // TODO start the game
     if (toPlay.pregame) {
       toPlay.pregame(message);
     }
   },
 };
 
-export default play;
+export default game;

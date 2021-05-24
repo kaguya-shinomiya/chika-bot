@@ -5,9 +5,9 @@ import {
   chika_rap_png,
 } from "../../assets";
 import { chika_pink } from "../../constants";
-import { GameChannel } from "../../types/game";
+import { GenericChannel } from "../../types/game";
 
-export const sendNoGameSelectedError = async (channel: GameChannel) => {
+export const sendNoGameSelectedError = async (channel: GenericChannel) => {
   channel.send(
     new MessageEmbed()
       .setColor(chika_pink)
@@ -19,7 +19,7 @@ export const sendNoGameSelectedError = async (channel: GameChannel) => {
 
 export const sendNoTagError = async (
   gameName: string,
-  channel: GameChannel,
+  channel: GenericChannel,
   single: boolean
 ) => {
   channel.send(
@@ -35,7 +35,7 @@ export const sendNoTagError = async (
   );
 };
 
-export const sendTaggedSelfError = async (channel: GameChannel) => {
+export const sendTaggedSelfError = async (channel: GenericChannel) => {
   channel.send(
     new MessageEmbed()
       .setColor(chika_pink)
@@ -47,7 +47,7 @@ export const sendTaggedSelfError = async (channel: GameChannel) => {
 
 export const sendUnknownGameError = async (
   gameName: string,
-  channel: GameChannel
+  channel: GenericChannel
 ) => {
   channel.send(
     new MessageEmbed()
@@ -59,7 +59,7 @@ export const sendUnknownGameError = async (
   // TODO return a list of playable games
 };
 
-export const sendGameCrashedError = async (channel: GameChannel) => {
+export const sendGameCrashedError = async (channel: GenericChannel) => {
   channel.send(
     new MessageEmbed()
       .setColor(chika_pink)

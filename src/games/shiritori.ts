@@ -6,7 +6,6 @@ import {
   chika_rap_png,
   chika_spin_gif,
   red_cross,
-  white_check_mark,
 } from "../assets";
 import { chika_pink } from "../constants";
 import { Game } from "../types/game";
@@ -15,6 +14,7 @@ import { STOP_GAME_RE } from "./utils/constants";
 import { sendGameCrashedError, sendNoTagError } from "./utils/errorSenders";
 import { handleOpponentResponse } from "./utils/handleOpponentResponse";
 
+// TODO game timeout on inactivity
 interface ShiritoriGameStateConstructorProps {
   channelID: string;
   p1: User;
