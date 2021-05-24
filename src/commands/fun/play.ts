@@ -7,7 +7,7 @@ import { Command } from "../../types/command";
 
 export const play: Command = {
   name: "play",
-  description: "Play a game with Chika.",
+  description: "Play a game with Pro Gamer Chika.",
   category: "Fun",
   usage: `${PREFIX}play <game>`,
   argsCount: -1,

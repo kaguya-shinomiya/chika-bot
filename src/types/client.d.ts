@@ -1,4 +1,5 @@
 import Discord from "discord.js";
+import { ShiritoriGameState } from "../games/shiritori";
 import { Command } from "./command";
 import { Game } from "./game";
 import { GameState } from "./gameState";
