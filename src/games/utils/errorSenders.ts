@@ -1,14 +1,13 @@
-import { DMChannel, MessageEmbed, NewsChannel, TextChannel } from "discord.js";
-import { chika_pink } from "../../constants";
+import { MessageEmbed } from "discord.js";
 import {
   chika_crying_png,
   chika_peeking_png,
   chika_rap_png,
 } from "../../assets";
+import { chika_pink } from "../../constants";
+import { GameChannel } from "../../types/game";
 
-export const sendNoGameSelectedError = async (
-  channel: TextChannel | DMChannel | NewsChannel
-) => {
+export const sendNoGameSelectedError = async (channel: GameChannel) => {
   channel.send(
     new MessageEmbed()
       .setColor(chika_pink)
@@ -20,7 +19,7 @@ export const sendNoGameSelectedError = async (
 
 export const sendNoTagError = async (
   gameName: string,
-  channel: TextChannel | DMChannel | NewsChannel,
+  channel: GameChannel,
   single: boolean
 ) => {
   channel.send(
@@ -36,9 +35,7 @@ export const sendNoTagError = async (
   );
 };
 
-export const sendTaggedSelfError = async (
-  channel: TextChannel | DMChannel | NewsChannel
-) => {
+export const sendTaggedSelfError = async (channel: GameChannel) => {
   channel.send(
     new MessageEmbed()
       .setColor(chika_pink)
@@ -50,7 +47,7 @@ export const sendTaggedSelfError = async (
 
 export const sendUnknownGameError = async (
   gameName: string,
-  channel: TextChannel | DMChannel | NewsChannel
+  channel: GameChannel
 ) => {
   channel.send(
     new MessageEmbed()
@@ -60,4 +57,14 @@ export const sendUnknownGameError = async (
       .setDescription(`I don't know how to play *${gameName}*.`)
   );
   // TODO return a list of playable games
+};
+
+export const sendGameCrashedError = async (channel: GameChannel) => {
+  channel.send(
+    new MessageEmbed()
+      .setColor(chika_pink)
+      .setThumbnail(chika_crying_png)
+      .setTitle("what the heck")
+      .setDescription("The game crashed for some reason.")
+  );
 };
