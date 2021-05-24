@@ -6,7 +6,7 @@ declare module "discord.js" {
   export interface Client {
     commands: Discord.Collection<string, Command>;
     games: Discord.Collection<string, Game>;
-    gameState: Discord.Collection<string, GameState>; // the key is a uuid
+    gameStates: Discord.Collection<string, GameState>; // the key is a uuid
     commandsHelp: Discord.MessageEmbed;
   }
 }

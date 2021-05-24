@@ -58,7 +58,7 @@ class Shiritori extends Game {
 
     // TODO send some kinda start message
     const gameID = v4();
-    client.gameState.set(
+    client.gameStates.set(
       gameID,
       new ShiritoriGameState(channel.id, [p1.id, p2.id], p1Cards, p2Cards)
     );
@@ -70,11 +70,11 @@ class Shiritori extends Game {
     }
 
     function listener({ author, content, channel }: Message) {
-      const state = client.gameState.get(gameID);
+      // this function contains the main 'loop' logic
+      const state = client.gameStates.get(gameID);
       console.log(state);
       if (!state) {
         sendGameCrashedError(channel);
-        // TODO terminate the game
         stopListening();
         return;
       }
@@ -85,6 +85,7 @@ class Shiritori extends Game {
       if (content === "!stop") {
         console.log("stop command received");
         stopListening();
+        client.gameStates.delete(gameID);
       }
     }
 
