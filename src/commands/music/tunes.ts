@@ -1,12 +1,13 @@
-import { MessageEmbed } from "discord.js";
 import ytdl from "ytdl-core";
-import { chika_crying_png } from "../../assets";
-import { chika_pink, PREFIX } from "../../constants";
+import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
-import { sendAddedToQueue, sendNoVideo, sendNowPlaying } from "./utils/embeds";
-import { getVideoByLink, searchOneVideo } from "./utils/youtube";
-
-const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
+import {
+  sendAddedToQueue,
+  sendNotInVoiceChannel,
+  sendNoVideo,
+  sendNowPlaying,
+} from "./utils/embeds";
+import { checkValidSearch } from "./utils/youtube";
 
 const tunes: Command = {
   name: "tunes",
@@ -18,38 +19,17 @@ const tunes: Command = {
     if (!guild) return;
 
     if (!member?.voice.channel) {
-      channel.send(
-        new MessageEmbed()
-          .setColor(chika_pink)
-          .setThumbnail(chika_crying_png)
-          .setTitle("I can play music for you!")
-          .setDescription("But you must join a voice channel first.")
-      );
+      sendNotInVoiceChannel(channel);
       return;
     }
 
-    let link: string;
-    let videoData: any;
-
-    if (YOUTUBE_URL_RE.test(args[0])) {
-      [link] = args;
-      [videoData] = (await getVideoByLink(link)).items;
-      if (!videoData) {
-        sendNoVideo(link, channel);
-        return;
-      }
-    } else {
-      const searchString = args.join(" ");
-      [videoData] = (await searchOneVideo(searchString)).items;
-      if (!videoData) {
-        sendNoVideo(searchString, channel);
-        return;
-      }
-      link = `https://www.youtube.com/watch?v=${videoData.id.videoId}`;
+    const videoInfo = await checkValidSearch(args);
+    if (!videoInfo) {
+      sendNoVideo(args.join(" "), channel);
+      return;
     }
+    const [link, videoData] = videoInfo;
 
-    // TODO check if we're already in a voice channel
-    const connection = await member.voice.channel.join();
     const queue = client.audioQueues.get(channel.id);
     if (queue) {
       queue.queue.unshift({
@@ -61,12 +41,14 @@ const tunes: Command = {
       return;
     }
 
+    // TODO check if we're already in a voice channel?
+    const connection = await member.voice.channel.join();
+
     const dispatcher = connection.play(ytdl(link, { filter: "audioonly" }));
     client.audioQueues.set(channel.id, { dispatcher, queue: [] });
     sendNowPlaying(channel, { videoData });
 
     const songFinishListener = () => {
-      // TODO check if there are songs in queue
       const nowQueue = client.audioQueues.get(channel.id)!;
       if (!nowQueue.queue.length) {
         nowQueue.dispatcher.destroy();
@@ -84,6 +66,7 @@ const tunes: Command = {
         ytdl(nextLink, { filter: "audioonly" })
       );
       nowQueue.dispatcher.on("finish", songFinishListener); // another one
+      // TODO handle errors for dispatcher
     };
 
     dispatcher.on("finish", songFinishListener); // register a listener

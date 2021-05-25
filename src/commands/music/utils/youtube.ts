@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const YOUTUBE_URL_ID_RE = /youtu(?:.*\/v\/|.*v=|\.be\/)([A-Za-z0-9_-]{11})/;
+const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
 export const getVideoByLink = (link: string) => {
   const vid = link.match(YOUTUBE_URL_ID_RE)![1];
@@ -22,3 +23,25 @@ export const searchOneVideo = (title: string) =>
       },
     })
     .then((response) => response.data);
+
+export const checkValidSearch = async (
+  args: string[]
+): Promise<[string, any] | null> => {
+  let link: string;
+  let videoData: any;
+  if (YOUTUBE_URL_RE.test(args[0])) {
+    [link] = args;
+    [videoData] = (await getVideoByLink(link)).items;
+    if (!videoData) {
+      return null;
+    }
+  } else {
+    const searchString = args.join(" ");
+    [videoData] = (await searchOneVideo(searchString)).items;
+    if (!videoData) {
+      return null;
+    }
+    link = `https://www.youtube.com/watch?v=${videoData.id.videoId}`;
+  }
+  return Promise.resolve([link, videoData]);
+};

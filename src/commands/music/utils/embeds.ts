@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import { chika_pointing_png } from "../../../assets";
+import { chika_crying_png, chika_pointing_png } from "../../../assets";
 import { chika_pink } from "../../../constants";
 import { GenericChannel } from "../../../types/game";
 
@@ -34,6 +34,15 @@ export const sendNoVideo = async (searched: string, channel: GenericChannel) =>
       .setTitle("What the heck")
       .setDescription(`I couldn't find anything at **${searched}**.`)
       .setThumbnail(chika_pointing_png)
+  );
+
+export const sendNotInVoiceChannel = async (channel: GenericChannel) =>
+  channel.send(
+    new MessageEmbed()
+      .setColor(chika_pink)
+      .setThumbnail(chika_crying_png)
+      .setTitle("I can play music for you!")
+      .setDescription("But you must join a voice channel first.")
   );
 
 export const sendAddedToQueue = async (
