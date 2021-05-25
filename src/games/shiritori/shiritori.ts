@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import axios from "axios";
 import { Message, MessageEmbed, User } from "discord.js";
 import { v4 } from "uuid";
@@ -6,49 +7,13 @@ import {
   chika_rap_png,
   chika_spin_gif,
   red_cross,
-} from "../assets";
-import { chika_pink } from "../constants";
-import { Game } from "../types/game";
-import { GameState } from "../types/gameState";
-import { STOP_GAME_RE } from "./utils/constants";
-import { sendGameCrashedError, sendNoTagError } from "./utils/errorSenders";
-import { handleOpponentResponse } from "./utils/handleOpponentResponse";
-
-// TODO game timeout on inactivity
-interface ShiritoriGameStateConstructorProps {
-  channelID: string;
-  p1: User;
-  p2: User;
-  p1Cards: string[];
-  p2Cards: string[];
-  stack: string[];
-}
-
-class ShiritoriGameState extends GameState {
-  p1: User;
-  p2: User;
-  p1Cards: string[];
-  p2Cards: string[];
-  stack: string[];
-  startingChar?: string;
-
-  // TODO refactor this constructor to take an object instead
-  constructor({
-    channelID,
-    p1,
-    p2,
-    p1Cards,
-    p2Cards,
-    stack,
-  }: ShiritoriGameStateConstructorProps) {
-    super("shiritori", channelID);
-    this.p1 = p1;
-    this.p2 = p2;
-    this.p1Cards = p1Cards;
-    this.p2Cards = p2Cards;
-    this.stack = stack;
-  }
-}
+} from "../../assets";
+import { chika_pink } from "../../constants";
+import { Game } from "../../types/game";
+import { STOP_GAME_RE } from "../utils/constants";
+import { sendGameCrashedError, sendNoTagError } from "../utils/errorSenders";
+import { handleOpponentResponse } from "../utils/handleOpponentResponse";
+import { ShiritoriGameState } from "./types";
 
 class Shiritori extends Game {
   pregame(message: Message) {
@@ -67,7 +32,7 @@ class Shiritori extends Game {
       message,
       opponent,
       () => {
-        this.startGame(message, author, opponent);
+        Shiritori.startGame(message, author, opponent);
       },
       () =>
         channel.send(
@@ -76,8 +41,8 @@ class Shiritori extends Game {
     );
   }
 
-  startGame({ client, channel }: Message, p1: User, p2: User) {
-    const [p1Cards, p2Cards, stack] = this.genInitialCards();
+  static startGame({ client, channel }: Message, p1: User, p2: User) {
+    const [p1Cards, p2Cards, stack] = Shiritori.genInitialCards();
 
     // TODO send some kinda start message
     const gameID = v4();
@@ -94,14 +59,7 @@ class Shiritori extends Game {
     );
 
     const state = client.gameStates.get(gameID) as ShiritoriGameState;
-    channel.send(this.genPlayerCardsEmbed(state));
-
-    console.log(gameID, p1.username, p2.username);
-
-    function endGame() {
-      client.removeListener("message", listener);
-      client.gameStates.delete(gameID);
-    }
+    channel.send(Shiritori.genPlayerCardsEmbed(state));
 
     const listener = async (message: Message) => {
       // this function contains the main 'loop' logic
@@ -138,7 +96,7 @@ class Shiritori extends Game {
         message.react(red_cross);
         return;
       }
-      const isValidWord = await this.checkWord(content);
+      const isValidWord = await Shiritori.checkWord(content);
       if (!isValidWord) {
         message.react(red_cross);
         return;
@@ -155,10 +113,15 @@ class Shiritori extends Game {
         endGame();
         return;
       }
-      channel.send(this.genPlayerCardsEmbed(state));
+      channel.send(Shiritori.genPlayerCardsEmbed(state));
       state.startingChar = lastChar;
       channel.send(`:regional_indicator_${lastChar}:`);
     };
+
+    function endGame() {
+      client.removeListener("message", listener);
+      client.gameStates.delete(gameID);
+    }
 
     function popRandom(arr: string[]) {
       const index = Math.floor(Math.random() * arr.length);
@@ -173,20 +136,21 @@ class Shiritori extends Game {
     client.on("message", listener); // register the new listener
   }
 
-  genInitialCards() {
+  static genInitialCards() {
     // returns an array of 3 arrays
     // first 2 contains 5 cards each for p1 and p2
     // 3rd array contains the remaining 16 alphabets
-    let allChars: string[] = [];
-    for (let i = 0; i < 26; i++) {
+    const allChars: string[] = [];
+    for (let i = 0; i < 26; i += 1) {
       allChars.push(String.fromCharCode(i + 97));
     }
 
-    let cards: string[] = [];
+    const cards: string[] = [];
     while (cards.length < 10) {
       const newChar = String.fromCharCode(97 + Math.floor(Math.random() * 26));
-      if (cards.includes(newChar)) continue;
-      cards.push(newChar);
+      if (!cards.includes(newChar)) {
+        cards.push(newChar);
+      }
     }
 
     return [
@@ -196,14 +160,16 @@ class Shiritori extends Game {
     ];
   }
 
-  genCardsString(chars: string[]): string {
+  static genCardsString(chars: string[]): string {
     // helper function to produce alphabet emojis
     let generated = "";
-    chars.forEach((char) => (generated += `:regional_indicator_${char}: `));
+    chars.forEach((char) => {
+      generated += `:regional_indicator_${char}: `;
+    });
     return generated;
   }
 
-  genPlayerCardsEmbed({ p1, p2, p1Cards, p2Cards }: ShiritoriGameState) {
+  static genPlayerCardsEmbed({ p1, p2, p1Cards, p2Cards }: ShiritoriGameState) {
     return new MessageEmbed()
       .setColor(chika_pink)
       .setThumbnail(chika_rap_png)
@@ -211,16 +177,16 @@ class Shiritori extends Game {
       .addFields([
         {
           name: `**${p1.username}**'s cards`,
-          value: this.genCardsString(p1Cards),
+          value: Shiritori.genCardsString(p1Cards),
         },
         {
           name: `**${p2.username}**'s cards`,
-          value: this.genCardsString(p2Cards),
+          value: Shiritori.genCardsString(p2Cards),
         },
       ]);
   }
 
-  async checkWord(word: string): Promise<boolean> {
+  static async checkWord(word: string): Promise<boolean> {
     const uri = `http://api.datamuse.com/words?sp=${word}&max=1`;
     return axios.get(uri).then((response) => response.data.length === 1);
   }

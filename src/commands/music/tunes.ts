@@ -1,12 +1,12 @@
 import { MessageEmbed } from "discord.js";
+import ytdl from "ytdl-core";
 import { chika_crying_png } from "../../assets";
 import { chika_pink, PREFIX } from "../../constants";
 import { Command } from "../../types/command";
-import ytdl from "ytdl-core";
-import { getVideoByLink, searchOneVideo } from "./utils/youtube";
 import { sendNowPlaying } from "./utils/embeds";
+import { getVideoByLink, searchOneVideo } from "./utils/youtube";
 
-const YOUTUBE_URL_RE = /^(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
+const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
 const tunes: Command = {
   name: "tunes",
@@ -31,17 +31,17 @@ const tunes: Command = {
     let videoData: any;
 
     if (YOUTUBE_URL_RE.test(args[0])) {
-      link = args[0];
-      videoData = (await getVideoByLink(link)).items[0];
+      [link] = args;
+      [videoData] = (await getVideoByLink(link)).items;
       if (!videoData) return; // TODO send invalid link message
     } else {
       const searchString = args.join(" ");
-      videoData = (await searchOneVideo(searchString)).items[0];
+      [videoData] = (await searchOneVideo(searchString)).items;
       if (!videoData) return; // TODO send video not found message
       link = `https://www.youtube.com/watch?v=${videoData.id.videoId}`;
     }
     const connection = await member.voice.channel.join();
-    const dispatcher = connection.play(ytdl(link, { filter: "audioonly" }));
+    connection.play(ytdl(link, { filter: "audioonly" }));
     sendNowPlaying(videoData, channel);
   },
 };
