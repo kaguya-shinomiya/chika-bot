@@ -1,6 +1,6 @@
+import { MessageEmbed } from "discord.js";
 import { genBadCommandEmbed } from "../../shared/genBadCommandEmbed";
 import { Command } from "../../types/command";
-import { MessageEmbed } from "discord.js";
 import { chika_pink, PREFIX } from "../../constants";
 
 const help: Command = {
@@ -18,13 +18,13 @@ const help: Command = {
     }
 
     // return info for a specific command
-    let unknownCommands: string[] = [];
+    const unknownCommands: string[] = [];
     args.forEach((arg) => {
       const match = commands.find(
         (command) => command.name === arg || !!command.aliases?.includes(arg)
       );
       if (match) {
-        let embed = new MessageEmbed()
+        const embed = new MessageEmbed()
           .setColor(chika_pink)
           .addField(match.usage, match.description);
         if (match.aliases) {

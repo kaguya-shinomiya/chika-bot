@@ -7,7 +7,7 @@ const ping: Command = {
   category: "Fun",
   usage: `${PREFIX}hello`,
   argsCount: 0,
-  execute({ channel, author }, _args) {
+  execute({ channel, author }) {
     channel.send(`Yo ${author.toString()}, Love Detective Chika here!`);
   },
 };

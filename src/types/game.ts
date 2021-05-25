@@ -1,5 +1,4 @@
-import { TextChannel, DMChannel, NewsChannel } from "discord.js";
-import { Message } from "discord.js";
+import { DMChannel, NewsChannel, TextChannel } from "discord.js";
 
 export type nextFn = (...args: any[]) => void;
 export type gameType = "single" | "1v1" | "multi";
@@ -8,9 +7,8 @@ export type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
 export class Game {
   name: string;
-  type: gameType;
 
-  pregame?(_message: Message) {}
+  type: gameType;
 
   constructor(name: string, type: gameType) {
     this.name = name;

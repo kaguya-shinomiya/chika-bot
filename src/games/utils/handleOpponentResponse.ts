@@ -22,13 +22,10 @@ export const handleOpponentResponse = async (
 
       return message
         .awaitReactions(
-          (reaction: MessageReaction, user: User) => {
-            return (
-              user.id === opponent.id &&
-              (reaction.emoji.name === white_check_mark ||
-                reaction.emoji.name === red_cross)
-            );
-          },
+          (reaction: MessageReaction, user: User) =>
+            user.id === opponent.id &&
+            (reaction.emoji.name === white_check_mark ||
+              reaction.emoji.name === red_cross),
           { time: 10000, max: 1 }
         )
         .then((collected): Promise<OpponentResponse> => {
@@ -52,6 +49,9 @@ export const handleOpponentResponse = async (
           break;
         case "accepted":
           onAccept();
+          break;
+        default:
+          break;
       }
     })
     .catch(() => {

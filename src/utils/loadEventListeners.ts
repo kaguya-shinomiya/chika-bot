@@ -8,6 +8,7 @@ export const loadEventListeners = (client: Client) => {
     .readdirSync(path.join(__dirname, "..", "events"))
     .filter((filename) => filename.endsWith(".js"));
   eventFiles.forEach((file) => {
+    // eslint-disable-next-line import/no-dynamic-require, global-require
     const event: Event = require(`../events/${file}`).default;
     if (event.once) {
       client.once(event.name, async (...args) =>
