@@ -4,6 +4,7 @@ import { Command } from "../../types/command";
 import {
   sendAddedToQueue,
   sendEmptyQueue,
+  sendNotInGuild,
   sendNotInVoiceChannel,
   sendNoVideo,
   sendNowPlaying,
@@ -19,7 +20,10 @@ const tunes: Command = {
   description: "Let Chika play some music for you.",
   async execute(message, args) {
     const { channel, member, guild, client } = message;
-    if (!guild) return;
+    if (!guild) {
+      sendNotInGuild(channel);
+      return;
+    }
     if (!member?.voice.channel) {
       sendNotInVoiceChannel(channel);
       return;

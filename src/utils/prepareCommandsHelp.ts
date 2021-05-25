@@ -1,6 +1,5 @@
 import { Collection, EmbedFieldData, MessageEmbed } from "discord.js";
-import { chika_detective_png } from "../assets";
-import { chika_pink } from "../constants";
+import { detectiveEmbed } from "../shared/embeds";
 import { Command, commandCategory } from "../types/command";
 
 export const prepareCommandsHelp = (
@@ -21,9 +20,5 @@ export const prepareCommandsHelp = (
     );
     fields.push({ name: category, value: cmds.join(", ") });
   });
-  return new MessageEmbed()
-    .setColor(chika_pink)
-    .setTitle("Chika Commands")
-    .setThumbnail(chika_detective_png)
-    .addFields(fields);
+  return detectiveEmbed().setTitle("Chika Commands").addFields(fields);
 };

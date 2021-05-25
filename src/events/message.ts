@@ -1,8 +1,10 @@
 import { Client } from "discord.js";
 import { PREFIX, PREFIX_RE } from "../constants";
-import { genBadArgsEmbed } from "../shared/genBadArgsEmbed";
-import { genBadCommandEmbed } from "../shared/genBadCommandEmbed";
-import { genericErrorEmbed } from "../shared/genericErrorEmbed";
+import {
+  badCommandsEmbed,
+  badArgsEmbed,
+  genericErrorEmbed,
+} from "../shared/embeds";
 import { Event } from "../types/event";
 
 const message: Event = {
@@ -21,16 +23,16 @@ const message: Event = {
         !!_command.aliases?.includes(sentCommand)
     );
     if (!command) {
-      message.channel.send(genBadCommandEmbed(sentCommand));
+      message.channel.send(badCommandsEmbed(sentCommand));
       return;
     }
 
     if (command.argsCount >= 0 && args.length !== command.argsCount) {
-      message.channel.send(genBadArgsEmbed(command, args.length));
+      message.channel.send(badArgsEmbed(command, args.length));
       return;
     }
     if (command.argsCount === -2 && args.length === 0) {
-      message.channel.send(genBadArgsEmbed(command, args.length));
+      message.channel.send(badArgsEmbed(command, args.length));
     }
 
     try {
@@ -38,7 +40,7 @@ const message: Event = {
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
-      message.channel.send(genericErrorEmbed);
+      message.channel.send(genericErrorEmbed());
     }
   },
 };

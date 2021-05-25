@@ -1,13 +1,8 @@
 import axios from "axios";
-import { Message, MessageEmbed, User } from "discord.js";
+import { Message, User } from "discord.js";
 import { v4 } from "uuid";
-import {
-  chika_beating_yu_gif,
-  chika_crying_png,
-  chika_rap_png,
-  red_cross,
-} from "../../assets";
-import { chika_pink } from "../../constants";
+import { chika_beating_yu_gif, red_cross } from "../../assets";
+import { baseEmbed, lightErrorEmbed, rappingEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
 import { sendGameCrashedError, sendNoTagError } from "../utils/errorSenders";
@@ -35,7 +30,9 @@ export class Shiritori extends Game {
       },
       () =>
         channel.send(
-          `**${opponent.username}** does not want to play Shiritori.`
+          lightErrorEmbed(
+            `**${opponent.username}** does not want to play Shiritori.`
+          )
         )
     );
   }
@@ -58,7 +55,7 @@ export class Shiritori extends Game {
     );
 
     const state = client.gameStates.get(gameID) as ShiritoriGameState;
-    channel.send(Shiritori.genPlayerCardsEmbed(state));
+    channel.send(Shiritori.playerCardsEmbed(state));
 
     const listener = async (message: Message) => {
       // this function contains the main 'loop' logic
@@ -80,10 +77,7 @@ export class Shiritori extends Game {
 
       if (STOP_GAME_RE.test(content)) {
         nowChannel.send(
-          new MessageEmbed()
-            .setColor(chika_pink)
-            .setDescription(`**${author.username}** has stopped the game.`)
-            .setThumbnail(chika_crying_png)
+          lightErrorEmbed(`**${author.username}** has stopped the game.`)
         );
         endGame();
         return;
@@ -110,15 +104,14 @@ export class Shiritori extends Game {
       playerCards.splice(playerCards.indexOf(lastChar), 1);
       if (playerCards.length === 0) {
         nowChannel.send(
-          new MessageEmbed()
-            .setColor(chika_pink)
+          baseEmbed()
             .setTitle(`**${author.username}** wins!`)
             .setImage(chika_beating_yu_gif)
         );
         endGame();
         return;
       }
-      nowChannel.send(Shiritori.genPlayerCardsEmbed(nowState));
+      nowChannel.send(Shiritori.playerCardsEmbed(nowState));
       nowState.startingChar = lastChar;
       nowChannel.send(`:regional_indicator_${lastChar}:`);
     };
@@ -174,10 +167,8 @@ export class Shiritori extends Game {
     return generated;
   }
 
-  static genPlayerCardsEmbed({ p1, p2, p1Cards, p2Cards }: ShiritoriGameState) {
-    return new MessageEmbed()
-      .setColor(chika_pink)
-      .setThumbnail(chika_rap_png)
+  static playerCardsEmbed({ p1, p2, p1Cards, p2Cards }: ShiritoriGameState) {
+    return rappingEmbed()
       .setTitle("Your cards!")
       .addFields([
         {

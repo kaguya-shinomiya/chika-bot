@@ -1,6 +1,6 @@
 import { Message, MessageReaction, User } from "discord.js";
 import { red_cross, white_check_mark } from "../../assets";
-import { genericErrorEmbed } from "../../shared/genericErrorEmbed";
+import { genericErrorEmbed } from "../../shared/embeds";
 import { OpponentResponse } from "../../types/game";
 
 export const handleOpponentResponse = async (
@@ -55,6 +55,6 @@ export const handleOpponentResponse = async (
       }
     })
     .catch(() => {
-      channel.send(genericErrorEmbed);
+      channel.send(genericErrorEmbed());
     });
 };

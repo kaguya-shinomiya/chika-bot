@@ -1,6 +1,4 @@
-import { MessageEmbed } from "discord.js";
-import { chika_crying_png, chika_pointing_png } from "../../../assets";
-import { chika_pink } from "../../../constants";
+import { baseEmbed, lightErrorEmbed } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/game";
 
 interface GenericVideoProps {
@@ -13,9 +11,7 @@ export const sendNowPlaying = async (
   channel: GenericChannel,
   { videoData, title, thumbnailLink }: GenericVideoProps
 ) => {
-  const partialEmbed = new MessageEmbed()
-    .setColor(chika_pink)
-    .setTitle("Now playing...");
+  const partialEmbed = baseEmbed().setTitle("Now playing...");
   if (videoData) {
     channel.send(
       partialEmbed
@@ -29,39 +25,25 @@ export const sendNowPlaying = async (
 
 export const sendNoVideo = async (searched: string, channel: GenericChannel) =>
   channel.send(
-    new MessageEmbed()
-      .setColor(chika_pink)
-      .setTitle("What the heck")
-      .setDescription(`I couldn't find anything at **${searched}**.`)
-      .setThumbnail(chika_pointing_png)
+    lightErrorEmbed(`I couldn't find any songs at **${searched}**.`)
   );
 
 export const sendNotInVoiceChannel = async (channel: GenericChannel) =>
-  channel.send(
-    new MessageEmbed()
-      .setColor(chika_pink)
-      .setThumbnail(chika_crying_png)
-      .setTitle("I can play music for you!")
-      .setDescription("But you must join a voice channel first.")
-  );
+  channel.send(lightErrorEmbed("I can only play music for you in a server!"));
 
 export const sendAddedToQueue = async (
   videoData: any,
   channel: GenericChannel
 ) =>
   channel.send(
-    new MessageEmbed()
-      .setColor(chika_pink)
+    baseEmbed()
       .setTitle("Added to queue!")
       .setDescription(videoData.snippet.title)
       .setThumbnail(videoData.snippet.thumbnails.default.url)
   );
 
 export const sendEmptyQueue = async (channel: GenericChannel) =>
-  channel.send(
-    new MessageEmbed()
-      .setColor(chika_pink)
-      .setTitle("I don't know what song to play!")
-      .setDescription(`Specify a song, or add a song to the queue.`)
-      .setThumbnail(chika_crying_png)
-  );
+  channel.send(lightErrorEmbed(`There are no songs queued for me to play!`));
+
+export const sendNotInGuild = async (channel: GenericChannel) =>
+  channel.send(lightErrorEmbed("I can only play songs for you in a server!"));

@@ -1,7 +1,6 @@
-import { MessageEmbed } from "discord.js";
-import { genBadCommandEmbed } from "../../shared/genBadCommandEmbed";
+import { PREFIX } from "../../constants";
+import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { chika_pink, PREFIX } from "../../constants";
 
 const help: Command = {
   name: "help",
@@ -24,9 +23,7 @@ const help: Command = {
         (command) => command.name === arg || !!command.aliases?.includes(arg)
       );
       if (match) {
-        const embed = new MessageEmbed()
-          .setColor(chika_pink)
-          .addField(match.usage, match.description);
+        const embed = baseEmbed().addField(match.usage, match.description);
         if (match.aliases) {
           const preTag = match.aliases.map((alias) => `\`${alias}\``);
           embed.addField("Aliases", preTag.join(", "));
@@ -37,7 +34,7 @@ const help: Command = {
       unknownCommands.push(arg);
     });
     if (unknownCommands.length) {
-      channel.send(genBadCommandEmbed(...unknownCommands));
+      channel.send(badCommandsEmbed(...unknownCommands));
     }
   },
 };

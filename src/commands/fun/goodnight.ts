@@ -1,7 +1,7 @@
-import { MessageEmbed } from "discord.js";
-import { Command } from "../../types/command";
-import { chika_pink, PREFIX } from "../../constants";
 import { kaguya_sleep_gif } from "../../assets";
+import { PREFIX } from "../../constants";
+import { baseEmbed } from "../../shared/embeds";
+import { Command } from "../../types/command";
 
 const goodnight: Command = {
   name: "goodnight",
@@ -26,11 +26,9 @@ const goodnight: Command = {
             ].toString()} goodnight!`
           : `${author.toString()} wishes ${userNames[0].toString()} goodnight!`;
     }
-    const embed = new MessageEmbed()
-      .setColor(chika_pink)
-      .setDescription(message)
-      .setImage(kaguya_sleep_gif);
-    channel.send(embed);
+    channel.send(
+      baseEmbed().setDescription(message).setImage(kaguya_sleep_gif)
+    );
   },
 };
 

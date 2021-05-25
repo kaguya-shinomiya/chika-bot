@@ -36,7 +36,8 @@
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
     "test": "mocha ",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint --fix"
   },
   "lint-staged": {
     "src/**/*.ts": [
