@@ -1,10 +1,10 @@
-import Discord from "discord.js";
-import { Collection } from "discord.js";
+import Discord, { Collection } from "discord.js";
 import dotenv from "dotenv-safe";
 import { loadCommands } from "./utils/loadCommands";
 import { loadEventListeners } from "./utils/loadEventListeners";
 import { loadGames } from "./utils/loadGames";
 import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
+
 dotenv.config();
 
 // TODO look into Redis for session-related things, or we can store everything on the client
@@ -20,4 +20,5 @@ const main = async () => {
   loadEventListeners(client);
 };
 
+// eslint-disable-next-line no-console
 main().catch((err) => console.log(err));

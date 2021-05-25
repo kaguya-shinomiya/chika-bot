@@ -6,7 +6,7 @@ import { Game } from "../types/game";
 export const loadGames = (): Client["games"] => {
   const gameFiles = fs
     .readdirSync(path.join(__dirname, "..", "games"))
-    .filter((filename) => filename.endsWith(".js"));
+    .filter((filename) => !/utils/.test(filename));
   const games = new Collection<string, Game>();
   gameFiles.forEach((gameFile) => {
     // eslint-disable-next-line import/no-dynamic-require, global-require

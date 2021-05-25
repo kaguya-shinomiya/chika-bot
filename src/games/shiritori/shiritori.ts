@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import axios from "axios";
 import { Message, MessageEmbed, User } from "discord.js";
 import { v4 } from "uuid";
@@ -15,7 +14,7 @@ import { sendGameCrashedError, sendNoTagError } from "../utils/errorSenders";
 import { handleOpponentResponse } from "../utils/handleOpponentResponse";
 import { ShiritoriGameState } from "./types";
 
-class Shiritori extends Game {
+export class Shiritori extends Game {
   pregame(message: Message) {
     const { channel, mentions, author } = message;
     const opponent = mentions.users.first();
@@ -63,18 +62,24 @@ class Shiritori extends Game {
 
     const listener = async (message: Message) => {
       // this function contains the main 'loop' logic
-      const { author, content, channel, client } = message;
-      const state = client.gameStates.get(gameID) as ShiritoriGameState;
-      if (!state) {
-        sendGameCrashedError(channel);
+      const {
+        author,
+        content,
+        channel: nowChannel,
+        client: nowClient,
+      } = message;
+      const nowState = nowClient.gameStates.get(gameID) as ShiritoriGameState;
+      if (!nowState) {
+        sendGameCrashedError(nowChannel);
         endGame();
         return;
       }
-      if (!(channel.id === state.channelID)) return;
-      if (!(state.p1.id === author.id) && !(state.p2.id === author.id)) return;
+      if (!(nowChannel.id === nowState.channelID)) return;
+      if (!(nowState.p1.id === author.id) && !(nowState.p2.id === author.id))
+        return;
 
       if (STOP_GAME_RE.test(content)) {
-        channel.send(
+        nowChannel.send(
           new MessageEmbed()
             .setColor(chika_pink)
             .setDescription(`**${author.username}** has stopped the game.`)
@@ -85,9 +90,9 @@ class Shiritori extends Game {
       }
 
       const playerCards =
-        author.id === state.p1.id ? state.p1Cards : state.p2Cards;
+        author.id === nowState.p1.id ? nowState.p1Cards : nowState.p2Cards;
 
-      if (!content.startsWith(state.startingChar!)) {
+      if (!content.startsWith(nowState.startingChar!)) {
         message.react(red_cross);
         return;
       }
@@ -104,7 +109,7 @@ class Shiritori extends Game {
 
       playerCards.splice(playerCards.indexOf(lastChar), 1);
       if (playerCards.length === 0) {
-        channel.send(
+        nowChannel.send(
           new MessageEmbed()
             .setColor(chika_pink)
             .setTitle(`${author.username} won!`)
@@ -113,9 +118,9 @@ class Shiritori extends Game {
         endGame();
         return;
       }
-      channel.send(Shiritori.genPlayerCardsEmbed(state));
-      state.startingChar = lastChar;
-      channel.send(`:regional_indicator_${lastChar}:`);
+      nowChannel.send(Shiritori.genPlayerCardsEmbed(nowState));
+      nowState.startingChar = lastChar;
+      nowChannel.send(`:regional_indicator_${lastChar}:`);
     };
 
     function endGame() {
@@ -191,5 +196,3 @@ class Shiritori extends Game {
     return axios.get(uri).then((response) => response.data.length === 1);
   }
 }
-
-export default new Shiritori("shiritori", "1v1");
