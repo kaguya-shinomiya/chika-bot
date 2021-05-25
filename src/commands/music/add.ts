@@ -1,5 +1,6 @@
 import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
+import { isWithinQueueLength } from "./utils/checks";
 import { sendAddedToQueue, sendNotInGuild, sendNoVideo } from "./utils/embeds";
 import { checkValidSearch, extractVideoData } from "./utils/youtube";
 
@@ -34,6 +35,9 @@ const add: Command = {
         ],
       });
     } else {
+      const canAdd = isWithinQueueLength(channel, queue);
+      if (!canAdd) return;
+
       queue.queue.unshift({ link, ...extractVideoData(videoData) });
     }
     sendAddedToQueue(videoData, channel);

@@ -1,6 +1,7 @@
 import ytdl from "ytdl-core";
 import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
+import { isWithinQueueLength } from "./utils/checks";
 import {
   sendAddedToQueue,
   sendEmptyQueue,
@@ -31,6 +32,9 @@ const tunes: Command = {
     const queue = client.audioQueues.get(channel.id);
     // TODO handle queue backlog start playing with no args
     if (queue && args.length === 0) {
+      const canAdd = isWithinQueueLength(channel, queue);
+      if (!canAdd) return;
+
       const connection = await member.voice.channel.join();
       const { link, thumbnailLink, title } = queue.queue.pop()!;
       sendNowPlaying(channel, {
