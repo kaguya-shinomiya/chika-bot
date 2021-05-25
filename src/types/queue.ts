@@ -7,5 +7,6 @@ export interface QueueItem {
 }
 export interface Queue {
   dispatcher?: StreamDispatcher;
+  nowPlaying?: QueueItem;
   queue: QueueItem[];
 }

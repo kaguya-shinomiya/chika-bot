@@ -30,7 +30,7 @@ export const sendNoVideo = async (searched: string, channel: GenericChannel) =>
   );
 
 export const sendNotInVoiceChannel = async (channel: GenericChannel) =>
-  channel.send(lightErrorEmbed("I can only play music for you in a server!"));
+  channel.send(lightErrorEmbed("Join a voice channel first!"));
 
 export const sendAddedToQueue = async (
   videoData: any,

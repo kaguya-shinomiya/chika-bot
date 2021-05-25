@@ -13,8 +13,9 @@ import {
 import { createFinishListener } from "./utils/listener";
 import { checkValidSearch, extractVideoData } from "./utils/youtube";
 
-const tunes: Command = {
-  name: "tunes",
+const play: Command = {
+  name: "play",
+  aliases: ["tunes"],
   usage: `${PREFIX}tunes <URL|search_string>`,
   argsCount: -1,
   category: "Music",
@@ -30,13 +31,14 @@ const tunes: Command = {
       return;
     }
     const queue = client.audioQueues.get(channel.id);
-    // TODO handle queue backlog start playing with no args
+
     if (queue && args.length === 0) {
       const canAdd = isWithinQueueLength(channel, queue);
       if (!canAdd) return;
 
       const connection = await member.voice.channel.join();
-      const { link, thumbnailLink, title } = queue.queue.pop()!;
+      queue.nowPlaying = queue.queue.pop()!;
+      const { link, thumbnailLink, title } = queue.nowPlaying;
       sendNowPlaying(channel, {
         title,
         thumbnailLink,
@@ -91,4 +93,4 @@ const tunes: Command = {
   },
 };
 
-export default tunes;
+export default play;

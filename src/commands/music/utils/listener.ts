@@ -23,7 +23,8 @@ export const createFinishListener = ({
       return;
     }
 
-    const { title, thumbnailLink, link: nextLink } = nowQueue.queue.pop()!;
+    nowQueue.nowPlaying = nowQueue.queue.pop()!;
+    const { title, thumbnailLink, link: nextLink } = nowQueue.nowPlaying;
     sendNowPlaying(channel, {
       title,
       thumbnailLink,
