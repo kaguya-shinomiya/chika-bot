@@ -2,9 +2,9 @@ import axios from "axios";
 import { Message, MessageEmbed, User } from "discord.js";
 import { v4 } from "uuid";
 import {
+  chika_beating_yu_gif,
   chika_crying_png,
   chika_rap_png,
-  chika_spin_gif,
   red_cross,
 } from "../../assets";
 import { chika_pink } from "../../constants";
@@ -112,8 +112,8 @@ export class Shiritori extends Game {
         nowChannel.send(
           new MessageEmbed()
             .setColor(chika_pink)
-            .setTitle(`${author.username} won!`)
-            .setImage(chika_spin_gif)
+            .setTitle(`**${author.username}** wins!`)
+            .setImage(chika_beating_yu_gif)
         );
         endGame();
         return;

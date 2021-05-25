@@ -17,6 +17,7 @@ const main = async () => {
   client.games = loadGames();
   client.gameStates = new Collection(); // initialize an empty gameState instance
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
+  client.audioQueues = new Collection();
   loadEventListeners(client);
 };
 

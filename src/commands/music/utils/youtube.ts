@@ -1,17 +1,14 @@
 import axios from "axios";
 
-const YOUTUBE_URL_ID_RE = /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/;
+const YOUTUBE_URL_ID_RE = /youtu(?:.*\/v\/|.*v=|\.be\/)([A-Za-z0-9_-]{11})/;
 
 export const getVideoByLink = (link: string) => {
   const vid = link.match(YOUTUBE_URL_ID_RE)![1];
-  console.log(vid);
   return axios
     .get("https://youtube.googleapis.com/youtube/v3/videos", {
       params: { part: "snippet", id: vid, key: process.env.YOUTUBE_API_KEY },
     })
-    .then((response) => {
-      return response.data;
-    });
+    .then((response) => response.data);
 };
 
 export const searchOneVideo = (title: string) =>
