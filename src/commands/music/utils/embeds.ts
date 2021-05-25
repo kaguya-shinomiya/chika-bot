@@ -43,9 +43,6 @@ export const sendAddedToQueue = async (
       .setThumbnail(videoData.snippet.thumbnails.default.url)
   );
 
-export const sendEmptyQueue = async (channel: GenericChannel) =>
-  channel.send(lightErrorEmbed(`There are no songs queued for me to play!`));
-
 export const sendNotInGuild = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("I can only play songs for you in a server!"));
 

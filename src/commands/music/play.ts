@@ -1,10 +1,10 @@
 import ytdl from "ytdl-core";
 import { PREFIX } from "../../constants";
+import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { isWithinQueueLength } from "./utils/checks";
 import {
   sendAddedToQueue,
-  sendEmptyQueue,
   sendNotInGuild,
   sendNotInVoiceChannel,
   sendNoVideo,
@@ -53,8 +53,8 @@ const play: Command = {
       return;
     }
 
-    if (!queue) {
-      sendEmptyQueue(channel);
+    if (!queue && args.length === 0) {
+      channel.send(lightErrorEmbed("There are no songs for me to play."));
       return;
     }
 

@@ -4,7 +4,6 @@ import { Command } from "../../types/command";
 import { QueueItem } from "../../types/queue";
 import { sendNotInGuild } from "./utils/embeds";
 
-// TODO set max queue length
 const queueEmbed = (tracks: QueueItem[]) => {
   let desc = "";
   tracks.reverse().forEach((track, i) => {

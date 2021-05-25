@@ -4,7 +4,6 @@ import { isWithinQueueLength } from "./utils/checks";
 import { sendAddedToQueue, sendNotInGuild, sendNoVideo } from "./utils/embeds";
 import { checkValidSearch, extractVideoData } from "./utils/youtube";
 
-// TODO add 'added by User' footer
 // TODO convert all titles to hrefs
 
 const add: Command = {

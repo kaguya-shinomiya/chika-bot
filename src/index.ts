@@ -8,7 +8,6 @@ import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 dotenv.config();
 
 // TODO look into Redis for session-related things, or we can store everything on the client
-// TODO look into making some of these setup functions asynchronous
 
 const main = async () => {
   const client = new Discord.Client();
