@@ -56,3 +56,12 @@ export const sendAddedToQueue = async (
       .setDescription(videoData.snippet.title)
       .setThumbnail(videoData.snippet.thumbnails.default.url)
   );
+
+export const sendEmptyQueue = async (channel: GenericChannel) =>
+  channel.send(
+    new MessageEmbed()
+      .setColor(chika_pink)
+      .setTitle("I don't know what song to play!")
+      .setDescription(`Specify a song, or add a song to the queue.`)
+      .setThumbnail(chika_crying_png)
+  );

@@ -3,10 +3,12 @@ import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
 import {
   sendAddedToQueue,
+  sendEmptyQueue,
   sendNotInVoiceChannel,
   sendNoVideo,
   sendNowPlaying,
 } from "./utils/embeds";
+import { createFinishListener } from "./utils/listener";
 import { checkValidSearch } from "./utils/youtube";
 
 const tunes: Command = {
@@ -15,11 +17,34 @@ const tunes: Command = {
   argsCount: -1,
   category: "Music",
   description: "Let Chika play some music for you.",
-  async execute({ channel, guild, member, client }, args) {
+  async execute(message, args) {
+    const { channel, member, guild, client } = message;
     if (!guild) return;
-
     if (!member?.voice.channel) {
       sendNotInVoiceChannel(channel);
+      return;
+    }
+    const queue = client.audioQueues.get(channel.id);
+    // TODO handle queue backlog start playing with no args
+    if (queue && args.length === 0) {
+      const connection = await member.voice.channel.join();
+      const { link, thumbnailLink, title } = queue.queue.pop()!;
+      sendNowPlaying(channel, {
+        title,
+        thumbnailLink,
+      });
+      queue.dispatcher = connection.play(ytdl(link, { filter: "audioonly" }));
+      queue.dispatcher.on(
+        "finish",
+        createFinishListener({ connection, channel, client })
+      );
+      // TODO handle errors for dispatcher
+      // TODO this is the same logic as createFinishListener
+      return;
+    }
+
+    if (!queue) {
+      sendEmptyQueue(channel);
       return;
     }
 
@@ -30,7 +55,6 @@ const tunes: Command = {
     }
     const [link, videoData] = videoInfo;
 
-    const queue = client.audioQueues.get(channel.id);
     if (queue) {
       queue.queue.unshift({
         link,
@@ -42,34 +66,16 @@ const tunes: Command = {
     }
 
     // TODO check if we're already in a voice channel?
+    // TODO self disconnect if no one in VC for some time
     const connection = await member.voice.channel.join();
-
     const dispatcher = connection.play(ytdl(link, { filter: "audioonly" }));
     client.audioQueues.set(channel.id, { dispatcher, queue: [] });
     sendNowPlaying(channel, { videoData });
 
-    const songFinishListener = () => {
-      const nowQueue = client.audioQueues.get(channel.id)!;
-      if (!nowQueue.queue.length) {
-        nowQueue.dispatcher.destroy();
-        connection.disconnect();
-        client.audioQueues.delete(channel.id);
-        return;
-      }
-
-      const { title, thumbnailLink, link: nextLink } = nowQueue.queue.pop()!;
-      sendNowPlaying(channel, {
-        title,
-        thumbnailLink,
-      });
-      nowQueue.dispatcher = connection.play(
-        ytdl(nextLink, { filter: "audioonly" })
-      );
-      nowQueue.dispatcher.on("finish", songFinishListener); // another one
-      // TODO handle errors for dispatcher
-    };
-
-    dispatcher.on("finish", songFinishListener); // register a listener
+    dispatcher.on(
+      "finish",
+      createFinishListener({ channel, client, connection })
+    ); // register a listener
 
     // TODO error handling
     connection.on("disconnect", () => {
