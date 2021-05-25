@@ -1,3 +1,4 @@
+import he from "he";
 import { baseEmbed, lightErrorEmbed } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/game";
 
@@ -15,7 +16,7 @@ export const sendNowPlaying = async (
   if (videoData) {
     channel.send(
       partialEmbed
-        .setDescription(videoData.snippet.title)
+        .setDescription(he.decode(videoData.snippet.title))
         .setThumbnail(videoData.snippet.thumbnails.default.url)
     );
     return;
@@ -38,7 +39,7 @@ export const sendAddedToQueue = async (
   channel.send(
     baseEmbed()
       .setTitle("Added to queue!")
-      .setDescription(videoData.snippet.title)
+      .setDescription(he.decode(videoData.snippet.title))
       .setThumbnail(videoData.snippet.thumbnails.default.url)
   );
 

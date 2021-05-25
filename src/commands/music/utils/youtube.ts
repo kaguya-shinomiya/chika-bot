@@ -1,4 +1,5 @@
 import axios from "axios";
+import he from "he";
 import { QueueItem } from "../../../types/queue";
 
 const YOUTUBE_URL_ID_RE = /youtu(?:.*\/v\/|.*v=|\.be\/)([A-Za-z0-9_-]{11})/;
@@ -48,6 +49,6 @@ export const checkValidSearch = async (
 };
 
 export const extractVideoData = (videoData: any): Omit<QueueItem, "link"> => ({
-  title: videoData.snippet.title,
+  title: he.decode(videoData.snippet.title),
   thumbnailLink: videoData.snippet.thumbnails.default.url,
 });

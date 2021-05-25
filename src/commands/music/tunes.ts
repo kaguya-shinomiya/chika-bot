@@ -10,7 +10,7 @@ import {
   sendNowPlaying,
 } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
-import { checkValidSearch } from "./utils/youtube";
+import { checkValidSearch, extractVideoData } from "./utils/youtube";
 
 const tunes: Command = {
   name: "tunes",
@@ -62,8 +62,7 @@ const tunes: Command = {
     if (queue) {
       queue.queue.unshift({
         link,
-        title: videoData.snippet.title,
-        thumbnailLink: videoData.snippet.thumbnails.default.url,
+        ...extractVideoData(videoData),
       });
       sendAddedToQueue(videoData, channel);
       return;

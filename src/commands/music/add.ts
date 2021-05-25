@@ -1,6 +1,6 @@
 import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
-import { sendAddedToQueue, sendNoVideo } from "./utils/embeds";
+import { sendAddedToQueue, sendNotInGuild, sendNoVideo } from "./utils/embeds";
 import { checkValidSearch, extractVideoData } from "./utils/youtube";
 
 const add: Command = {
@@ -11,7 +11,10 @@ const add: Command = {
   description: "Add a song to the queue.",
   async execute(message, args) {
     const { client, channel, guild } = message;
-    if (!guild) return;
+    if (!guild) {
+      sendNotInGuild(channel);
+      return;
+    }
 
     const videoInfo = await checkValidSearch(args);
     if (!videoInfo) {
