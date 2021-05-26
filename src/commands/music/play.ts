@@ -13,6 +13,10 @@ import {
 import { createFinishListener } from "./utils/listener";
 import { checkValidSearch, extractVideoData } from "./utils/youtube";
 
+// TODO add nowplaying command
+// TODO add repeat command
+// TODO add add-playlist command
+
 const play: Command = {
   name: "play",
   aliases: ["tunes"],
