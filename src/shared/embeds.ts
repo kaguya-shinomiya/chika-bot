@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, User } from "discord.js";
 import {
   chika_crying_png,
   chika_detective_png,
@@ -54,3 +54,9 @@ export const genericErrorEmbed = () =>
   cryingEmbed()
     .setTitle("Oh no!")
     .setDescription("I ran into an unknown error while running your request.");
+
+export const withAuthorEmbed = (author: User) =>
+  baseEmbed().setFooter(
+    `Requested by ${author.username}`,
+    author.displayAvatarURL({ size: 32, dynamic: false })
+  );

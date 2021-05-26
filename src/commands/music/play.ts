@@ -26,9 +26,9 @@ const play: Command = {
   usage: `${PREFIX}tunes <URL|search_string>`,
   argsCount: -1,
   category: "Music",
-  description: "Let Chika play some music for you.",
+  description: "Let Chika play some music from YouTube for you.",
   async execute(message, args) {
-    const { channel, member, guild, client } = message;
+    const { channel, member, guild, client, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
@@ -49,6 +49,7 @@ const play: Command = {
       sendNowPlaying(channel, {
         title,
         thumbnailLink,
+        link,
       });
       queue.dispatcher = playFromYt(connection, link);
       queue.dispatcher.on(
@@ -77,7 +78,7 @@ const play: Command = {
         link,
         ...extractVideoData(videoData),
       });
-      sendAddedToQueue(videoData, channel);
+      sendAddedToQueue({ videoData, author, channel, link });
       return;
     }
 
@@ -86,7 +87,7 @@ const play: Command = {
     const connection = await member.voice.channel.join();
     const dispatcher = playFromYt(connection, link);
     client.audioQueues.set(guild.id, { dispatcher, queue: [] });
-    sendNowPlaying(channel, { videoData });
+    sendNowPlaying(channel, { videoData, link });
 
     dispatcher.on(
       "finish",

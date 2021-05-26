@@ -11,9 +11,9 @@ const add: Command = {
   argsCount: -2,
   category: "Music",
   usage: `${PREFIX}add <url|search_string>`,
-  description: "Add a song to the queue.",
+  description: "Adds a track to the queue.",
   async execute(message, args) {
-    const { client, channel, guild } = message;
+    const { client, channel, guild, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
@@ -42,7 +42,7 @@ const add: Command = {
 
       queue.queue.unshift({ link, ...extractVideoData(videoData) });
     }
-    sendAddedToQueue(videoData, channel);
+    sendAddedToQueue({ videoData, channel, author, link });
   },
 };
 

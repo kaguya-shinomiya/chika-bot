@@ -33,6 +33,7 @@ const message: Event = {
     }
     if (command.argsCount === -2 && args.length === 0) {
       message.channel.send(badArgsEmbed(command, args.length));
+      return;
     }
 
     try {

@@ -1,7 +1,7 @@
 import { PREFIX } from "../../constants";
-import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
+import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild } from "./utils/embeds";
+import { sendNotInGuild, toUrlString } from "./utils/embeds";
 
 const resume: Command = {
   name: "resume",
@@ -10,7 +10,7 @@ const resume: Command = {
   description: "Resume playback.",
   usage: `${PREFIX}resume`,
   execute(message) {
-    const { client, channel, guild } = message;
+    const { client, channel, guild, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
@@ -24,11 +24,12 @@ const resume: Command = {
     }
 
     queue.dispatcher.resume();
+    const { title, link, thumbnailLink } = queue.nowPlaying!;
     channel.send(
-      baseEmbed()
+      withAuthorEmbed(author)
         .setTitle("Track Resumed")
-        .setDescription(queue.nowPlaying!.title)
-        .setThumbnail(queue.nowPlaying!.thumbnailLink)
+        .setDescription(toUrlString(title, link))
+        .setThumbnail(thumbnailLink)
     );
   },
 };

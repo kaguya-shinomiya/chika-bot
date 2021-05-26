@@ -1,7 +1,7 @@
 import { PREFIX } from "../../constants";
-import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
+import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild } from "./utils/embeds";
+import { sendNotInGuild, toUrlString } from "./utils/embeds";
 
 const pause: Command = {
   name: "pause",
@@ -11,7 +11,7 @@ const pause: Command = {
   usage: `${PREFIX}pause`,
   category: "Music",
   execute(message) {
-    const { client, channel, guild } = message;
+    const { client, channel, guild, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
@@ -30,11 +30,12 @@ const pause: Command = {
     }
 
     queue.dispatcher.pause();
+    const { title, link, thumbnailLink } = queue.nowPlaying!;
     channel.send(
-      baseEmbed()
+      withAuthorEmbed(author)
         .setTitle("Track Paused")
-        .setDescription(queue.nowPlaying!.title)
-        .setThumbnail(queue.nowPlaying!.thumbnailLink)
+        .setDescription(toUrlString(title, link))
+        .setThumbnail(thumbnailLink)
     );
   },
 };

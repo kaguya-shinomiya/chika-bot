@@ -2,14 +2,12 @@ import { PREFIX } from "../../constants";
 import { detectiveEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { QueueItem } from "../../types/queue";
-import { sendNotInGuild } from "./utils/embeds";
+import { sendNotInGuild, toUrlString } from "./utils/embeds";
 
 const queueEmbed = (tracks: QueueItem[]) => {
   let desc = "";
   tracks.reverse().forEach((track, i) => {
-    desc += `\`${i + 1}\` [${track.title.substring(0, 40)}${
-      track.title.length > 40 ? " ..." : ""
-    }](${track.link})\n`;
+    desc += `\`${i + 1}\` ${toUrlString(track.title, track.link, 40)}\n`;
   });
   return detectiveEmbed().setTitle("Tracks Queued").setDescription(desc);
 };

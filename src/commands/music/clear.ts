@@ -1,5 +1,5 @@
 import { PREFIX } from "../../constants";
-import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
+import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendNotInGuild } from "./utils/embeds";
 
@@ -10,7 +10,7 @@ const clear: Command = {
   category: "Music",
   usage: `${PREFIX}clear`,
   execute(message) {
-    const { guild, client, channel } = message;
+    const { guild, client, channel, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
@@ -30,7 +30,7 @@ const clear: Command = {
       client.audioQueues.delete(guild.id);
     }
 
-    channel.send(baseEmbed().setDescription("Queue has been cleared!"));
+    channel.send(withAuthorEmbed(author).setTitle("Queue has been cleared!"));
   },
 };
 

@@ -30,6 +30,7 @@ export const createFinishListener = ({
     sendNowPlaying(channel, {
       title,
       thumbnailLink,
+      link: nextLink,
     });
     nowQueue.dispatcher = playFromYt(connection, nextLink);
     nowQueue.dispatcher.on("finish", songFinishListener); // another one

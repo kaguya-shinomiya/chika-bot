@@ -1,7 +1,7 @@
 import { PREFIX } from "../../constants";
-import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
+import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild } from "./utils/embeds";
+import { sendNotInGuild, toUrlString } from "./utils/embeds";
 
 const skip: Command = {
   name: "skip",
@@ -10,7 +10,7 @@ const skip: Command = {
   argsCount: 0,
   category: "Music",
   execute(message) {
-    const { channel, guild, client } = message;
+    const { channel, guild, client, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
@@ -26,7 +26,9 @@ const skip: Command = {
     const { nowPlaying, dispatcher } = queue;
 
     channel.send(
-      baseEmbed().setDescription(`Skipping **${nowPlaying!.title}**`)
+      withAuthorEmbed(author).setDescription(
+        `Skipping **${toUrlString(nowPlaying!.title, nowPlaying!.link)}**`
+      )
     );
     dispatcher.end();
   },
