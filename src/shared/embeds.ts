@@ -9,7 +9,6 @@ import {
 import { chika_pink, PREFIX } from "../constants";
 import { Command } from "../types/command";
 
-// TODO add with user footer embed
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);
 
 export const cryingEmbed = () => baseEmbed().setThumbnail(chika_crying_png);

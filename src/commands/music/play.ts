@@ -44,7 +44,7 @@ const play: Command = {
       if (!canAdd) return;
 
       const connection = await member.voice.channel.join();
-      queue.nowPlaying = queue.queue.pop()!;
+      queue.nowPlaying = queue.queue.shift()!;
       const { link, thumbnailLink, title } = queue.nowPlaying;
       sendNowPlaying(channel, {
         title,
@@ -74,7 +74,7 @@ const play: Command = {
     const [link, videoData] = videoInfo;
 
     if (queue) {
-      queue.queue.unshift({
+      queue.queue.push({
         link,
         ...extractVideoData(videoData),
       });
@@ -82,11 +82,22 @@ const play: Command = {
       return;
     }
 
-    // TODO check if we're already in a voice channel?
     // TODO self disconnect if no one in VC for some time
+
+    // TODO abstract this to a higher order function
+    // there are 2 scenarios for playing a song - from scratch, or with a queue
+
     const connection = await member.voice.channel.join();
     const dispatcher = playFromYt(connection, link);
-    client.audioQueues.set(guild.id, { dispatcher, queue: [] });
+    client.audioQueues.set(guild.id, {
+      dispatcher,
+      queue: [],
+      nowPlaying: {
+        link,
+        title: videoData.snippet.title,
+        thumbnailLink: videoData.snippet.thumbnails.default.url,
+      },
+    });
     sendNowPlaying(channel, { videoData, link });
 
     dispatcher.on(

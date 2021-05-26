@@ -6,6 +6,7 @@ import {
   withAuthorEmbed,
 } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
+import { QueueItem } from "../../../types/queue";
 
 export const toUrlString = (
   title: string,
@@ -81,3 +82,40 @@ export const sendNotInGuild = async (channel: GenericChannel) =>
 
 export const sendMaxTracksQueued = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("Maximum number of tracks queued!"));
+
+export const sendQueued = async (
+  tracks: QueueItem[],
+  channel: GenericChannel
+) => {
+  let desc = "";
+  tracks.forEach((track, i) => {
+    desc += `\`${i + 1}\` ${toUrlString(track.title, track.link, 40)}\n`;
+  });
+  channel.send(
+    baseEmbed()
+      .setTitle("Tracks Queued")
+      .setDescription(desc)
+      .setThumbnail(tracks[0].thumbnailLink)
+  );
+};
+
+interface sendRepeatProps {
+  channel: GenericChannel;
+  author: User;
+  title: string;
+  link: string;
+  thumbnailLink: string;
+}
+export const sendRepeat = async ({
+  channel,
+  author,
+  title,
+  link,
+  thumbnailLink,
+}: sendRepeatProps) =>
+  channel.send(
+    withAuthorEmbed(author)
+      .setTitle("Track will repeat!")
+      .setDescription(toUrlString(title, link))
+      .setThumbnail(thumbnailLink)
+  );

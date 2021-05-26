@@ -1,16 +1,7 @@
 import { PREFIX } from "../../constants";
-import { detectiveEmbed, lightErrorEmbed } from "../../shared/embeds";
+import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { QueueItem } from "../../types/queue";
-import { sendNotInGuild, toUrlString } from "./utils/embeds";
-
-const queueEmbed = (tracks: QueueItem[]) => {
-  let desc = "";
-  tracks.reverse().forEach((track, i) => {
-    desc += `\`${i + 1}\` ${toUrlString(track.title, track.link, 40)}\n`;
-  });
-  return detectiveEmbed().setTitle("Tracks Queued").setDescription(desc);
-};
+import { sendNotInGuild, sendQueued } from "./utils/embeds";
 
 const queue: Command = {
   name: "queue",
@@ -19,19 +10,19 @@ const queue: Command = {
   argsCount: 0,
   category: "Music",
   usage: `${PREFIX}queue`,
-  execute({ channel, client, guild }) {
+  async execute({ channel, client, guild }) {
     if (!guild) {
       sendNotInGuild(channel);
       return;
     }
 
     const nowQueue = client.audioQueues.get(guild.id);
-    if (!nowQueue) {
+    if (!nowQueue || nowQueue.queue.length === 0) {
       channel.send(lightErrorEmbed("There are no tracks queued."));
       return;
     }
 
-    channel.send(queueEmbed(nowQueue.queue));
+    sendQueued(nowQueue.queue, channel);
   },
 };
 

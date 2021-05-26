@@ -9,14 +9,13 @@ const clear: Command = {
   argsCount: 0,
   category: "Music",
   usage: `${PREFIX}clear`,
-  execute(message) {
+  async execute(message) {
     const { guild, client, channel, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
     }
 
-    // TODO check if there is a dispatcher
     const queue = client.audioQueues.get(guild.id);
     if (!queue) {
       channel.send(lightErrorEmbed("Queue is already empty."));
@@ -30,7 +29,7 @@ const clear: Command = {
       client.audioQueues.delete(guild.id);
     }
 
-    channel.send(withAuthorEmbed(author).setTitle("Queue has been cleared!"));
+    channel.send(withAuthorEmbed(author).setTitle("Queue has been cleared."));
   },
 };
 

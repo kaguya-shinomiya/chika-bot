@@ -10,7 +10,7 @@ const goodnight: Command = {
   usage: `${PREFIX}goodnight [user ...]`,
   aliases: ["gn"],
   argsCount: -1,
-  execute({ channel, mentions, author }) {
+  async execute({ channel, mentions, author }) {
     let message;
     if (!mentions.users.size) {
       message = `Goodnight!`;

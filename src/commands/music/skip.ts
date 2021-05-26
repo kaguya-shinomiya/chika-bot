@@ -9,7 +9,7 @@ const skip: Command = {
   usage: `${PREFIX}skip`,
   argsCount: 0,
   category: "Music",
-  execute(message) {
+  async execute(message) {
     const { channel, guild, client, author } = message;
     if (!guild) {
       sendNotInGuild(channel);

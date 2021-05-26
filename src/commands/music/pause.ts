@@ -10,7 +10,7 @@ const pause: Command = {
   argsCount: 0,
   usage: `${PREFIX}pause`,
   category: "Music",
-  execute(message) {
+  async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
       sendNotInGuild(channel);

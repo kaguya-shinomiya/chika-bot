@@ -4,12 +4,12 @@ import { isWithinQueueLength } from "./utils/checks";
 import { sendAddedToQueue, sendNotInGuild, sendNoVideo } from "./utils/embeds";
 import { checkValidSearch, extractVideoData } from "./utils/youtube";
 
-const add: Command = {
-  name: "add",
+const addd: Command = {
+  name: "addd",
   argsCount: -2,
   category: "Music",
-  usage: `${PREFIX}add <url|search_string>`,
-  description: "Adds a track to the queue.",
+  usage: `${PREFIX}addd <url|search_string>`,
+  description: "Inserts a track to the front of the queue.",
   async execute(message, args) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -38,10 +38,10 @@ const add: Command = {
       const canAdd = isWithinQueueLength(channel, queue);
       if (!canAdd) return;
 
-      queue.queue.push({ link, ...extractVideoData(videoData) });
+      queue.queue.unshift({ link, ...extractVideoData(videoData) });
     }
     sendAddedToQueue({ videoData, channel, author, link });
   },
 };
 
-export default add;
+export default addd;

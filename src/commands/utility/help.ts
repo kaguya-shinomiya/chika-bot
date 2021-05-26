@@ -9,7 +9,7 @@ const help: Command = {
   category: "Utility",
   argsCount: -1,
   aliases: ["h"],
-  execute({ channel, client: { commands, commandsHelp } }, args) {
+  async execute({ channel, client: { commands, commandsHelp } }, args) {
     if (!args.length || /all/i.test(args[0])) {
       // send a list of all commands
       channel.send(commandsHelp);
