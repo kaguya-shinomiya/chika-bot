@@ -16,14 +16,16 @@ export const getVideoByLink = (link: string) => {
     .then((response) => response.data);
 };
 
-export const searchOneVideo = (title: string) =>
+// returns an object with `item` property, which is an array
+// of objects with the `snippet` property
+export const searchVideo = (title: string, maxResults = 1) =>
   axios
     .get("https://youtube.googleapis.com/youtube/v3/search", {
       params: {
         key: process.env.YOUTUBE_API_KEY,
         part: "snippet",
         q: title,
-        maxResults: 1,
+        maxResults,
       },
     })
     .then((response) => response.data);
@@ -41,7 +43,7 @@ export const checkValidSearch = async (
     }
   } else {
     const searchString = args.join(" ");
-    [videoData] = (await searchOneVideo(searchString)).items;
+    [videoData] = (await searchVideo(searchString)).items;
     if (!videoData) {
       return null;
     }
@@ -61,3 +63,6 @@ export const playFromYt = (
 ): StreamDispatcher =>
   // eslint-disable-next-line no-bitwise
   connection.play(ytdl(link, { filter: "audioonly", highWaterMark: 1 << 25 }));
+
+export const linkFromVideoData = (vd: any) =>
+  `https://www.youtube.com/watch?v=${vd.id.videoId}`;

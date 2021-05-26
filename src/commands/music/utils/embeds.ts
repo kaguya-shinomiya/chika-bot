@@ -1,5 +1,6 @@
 import { User } from "discord.js";
 import he from "he";
+import { chika_detective_png } from "../../../assets";
 import {
   baseEmbed,
   lightErrorEmbed,
@@ -7,6 +8,7 @@ import {
 } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
+import { linkFromVideoData } from "./youtube";
 
 export const toUrlString = (
   title: string,
@@ -83,18 +85,24 @@ export const sendNotInGuild = async (channel: GenericChannel) =>
 export const sendMaxTracksQueued = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("Maximum number of tracks queued!"));
 
+export const listEmbed = (arr: string[]) => {
+  let desc = "";
+  arr.forEach((item, i) => {
+    desc += `\`${i + 1}\` ${item}\n`;
+  });
+  return baseEmbed().setDescription(desc);
+};
+
 export const sendQueued = async (
   tracks: QueueItem[],
   channel: GenericChannel
 ) => {
-  let desc = "";
-  tracks.forEach((track, i) => {
-    desc += `\`${i + 1}\` ${toUrlString(track.title, track.link, 40)}\n`;
-  });
+  const urlTracks = tracks.map((track) =>
+    toUrlString(track.title, track.link, 40)
+  );
   channel.send(
-    baseEmbed()
+    listEmbed(urlTracks)
       .setTitle("Tracks Queued")
-      .setDescription(desc)
       .setThumbnail(tracks[0].thumbnailLink)
   );
 };
@@ -119,3 +127,15 @@ export const sendRepeat = async ({
       .setDescription(toUrlString(title, link))
       .setThumbnail(thumbnailLink)
   );
+
+export const sendSearchResults = (res: any[], channel: GenericChannel) => {
+  const urlTitles = res.map((videoData) =>
+    toUrlString(videoData.snippet.title, linkFromVideoData(videoData), 40)
+  );
+
+  channel.send(
+    listEmbed(urlTitles)
+      .setTitle("I found these tracks")
+      .setThumbnail(chika_detective_png)
+  );
+};
