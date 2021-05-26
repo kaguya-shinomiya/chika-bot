@@ -39,7 +39,8 @@
     "watch": "tsc -w",
     "test": "mocha ",
     "prepare": "husky install",
-    "lint": "eslint --fix"
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix"
   },
   "lint-staged": {
     "src/**/*.ts": [

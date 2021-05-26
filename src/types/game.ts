@@ -1,17 +1,18 @@
-import { DMChannel, NewsChannel, TextChannel } from "discord.js";
+import { Message } from "discord.js";
 
 export type nextFn = (...args: any[]) => void;
-export type gameType = "single" | "1v1" | "multi";
+// eslint-disable-next-line no-shadow
+export enum GameType {
+  Single,
+  Versus,
+  Multi,
+}
 export type OpponentResponse = "timeout" | "rejected" | "accepted";
-export type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
-export class Game {
-  name: string;
+export abstract class Game {
+  static title: string;
 
-  type: gameType;
+  static type: GameType;
 
-  constructor(name: string, type: gameType) {
-    this.name = name;
-    this.type = type;
-  }
+  static pregame?(message: Message): void;
 }

@@ -1,4 +1,4 @@
-import { GenericChannel } from "../../../types/game";
+import { GenericChannel } from "../../../types/command";
 import { Queue } from "../../../types/queue";
 import { sendMaxTracksQueued } from "./embeds";
 

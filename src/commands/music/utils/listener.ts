@@ -1,6 +1,6 @@
 import { Client, VoiceConnection } from "discord.js";
 import ytdl from "ytdl-core";
-import { GenericChannel } from "../../../types/game";
+import { GenericChannel } from "../../../types/command";
 import { sendNowPlaying } from "./embeds";
 
 interface CreateFinishListenerProps {

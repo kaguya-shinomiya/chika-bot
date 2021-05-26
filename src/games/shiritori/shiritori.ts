@@ -3,18 +3,22 @@ import { Message, User } from "discord.js";
 import { v4 } from "uuid";
 import { chika_beating_yu_gif, red_cross } from "../../assets";
 import { baseEmbed, lightErrorEmbed, rappingEmbed } from "../../shared/embeds";
-import { Game } from "../../types/game";
+import { Game, GameType } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
 import { sendGameCrashedError, sendNoTagError } from "../utils/errorSenders";
 import { handleOpponentResponse } from "../utils/handleOpponentResponse";
 import { ShiritoriGameState } from "./types";
 
 export class Shiritori extends Game {
-  pregame(message: Message) {
+  static title = "shiritori";
+
+  static type = GameType.Versus;
+
+  static pregame(message: Message) {
     const { channel, mentions, author } = message;
     const opponent = mentions.users.first();
     if (!opponent) {
-      sendNoTagError(this.name, channel, true);
+      sendNoTagError(Shiritori.title, channel, true);
       return;
     }
     // if (author.id === opponent.id) {

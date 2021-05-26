@@ -3,7 +3,7 @@ import {
   lightErrorEmbed,
   peekingEmbed,
 } from "../../shared/embeds";
-import { GenericChannel } from "../../types/game";
+import { GenericChannel } from "../../types/command";
 
 export const sendNoGameSelectedError = async (channel: GenericChannel) => {
   channel.send(lightErrorEmbed("Tell me which game you wanna play, yo."));

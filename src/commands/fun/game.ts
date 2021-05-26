@@ -20,7 +20,7 @@ export const game: Command = {
       return;
     }
     const toPlay = message.client.games.find(
-      (_game) => _game.name === requestedGame.toLowerCase()
+      (_game) => _game.title === requestedGame.toLowerCase()
     );
     if (!toPlay) {
       sendUnknownGameError(requestedGame, message.channel);

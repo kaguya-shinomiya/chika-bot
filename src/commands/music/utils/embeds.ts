@@ -1,6 +1,6 @@
 import he from "he";
 import { baseEmbed, lightErrorEmbed } from "../../../shared/embeds";
-import { GenericChannel } from "../../../types/game";
+import { GenericChannel } from "../../../types/command";
 
 interface GenericVideoProps {
   videoData?: any;
