@@ -16,7 +16,7 @@ const resume: Command = {
       return;
     }
 
-    const queue = client.audioQueues.get(channel.id);
+    const queue = client.audioQueues.get(guild.id);
 
     if (!queue?.dispatcher?.paused) {
       channel.send(lightErrorEmbed("There is nothing to resume..."));

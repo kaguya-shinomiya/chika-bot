@@ -10,6 +10,6 @@ declare module "discord.js" {
     games: Discord.Collection<string, typeof Game>;
     gameStates: Discord.Collection<string, GameState>; // the key is a uuid
     commandsHelp: Discord.MessageEmbed;
-    audioQueues: Discord.Collection<string, Queue>; // maps channelID to a Queue
+    audioQueues: Discord.Collection<string, Queue>; // maps guildID to a Queue
   }
 }

@@ -26,9 +26,9 @@ const add: Command = {
     }
     if (!videoInfo) return;
     const [link, videoData] = videoInfo;
-    const queue = client.audioQueues.get(channel.id);
+    const queue = client.audioQueues.get(guild.id);
     if (!queue) {
-      client.audioQueues.set(channel.id, {
+      client.audioQueues.set(guild.id, {
         queue: [
           {
             link,

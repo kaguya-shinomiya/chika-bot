@@ -27,7 +27,7 @@ const queue: Command = {
       return;
     }
 
-    const nowQueue = client.audioQueues.get(channel.id);
+    const nowQueue = client.audioQueues.get(guild.id);
     if (!nowQueue) {
       channel.send(lightErrorEmbed("There are no tracks queued."));
       return;

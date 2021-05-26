@@ -17,7 +17,7 @@ const pause: Command = {
       return;
     }
 
-    const queue = client.audioQueues.get(channel.id);
+    const queue = client.audioQueues.get(guild.id);
     if (!queue?.dispatcher) {
       channel.send(
         lightErrorEmbed("There isn't anything playing right now...")

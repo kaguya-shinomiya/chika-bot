@@ -1,25 +1,27 @@
-import { Client, VoiceConnection } from "discord.js";
-import ytdl from "ytdl-core";
+import { Client, Guild, VoiceConnection } from "discord.js";
 import { GenericChannel } from "../../../types/command";
 import { sendNowPlaying } from "./embeds";
+import { playFromYt } from "./youtube";
 
 interface CreateFinishListenerProps {
   connection: VoiceConnection;
   channel: GenericChannel;
+  guild: Guild;
   client: Client;
 }
 
 export const createFinishListener = ({
   connection,
   channel,
+  guild,
   client,
 }: CreateFinishListenerProps) => {
   const songFinishListener = () => {
-    const nowQueue = client.audioQueues.get(channel.id)!;
+    const nowQueue = client.audioQueues.get(guild.id)!;
     if (!nowQueue.queue.length) {
       nowQueue.dispatcher!.destroy();
       connection.disconnect();
-      client.audioQueues.delete(channel.id);
+      client.audioQueues.delete(guild.id);
       return;
     }
 
@@ -29,9 +31,7 @@ export const createFinishListener = ({
       title,
       thumbnailLink,
     });
-    nowQueue.dispatcher = connection.play(
-      ytdl(nextLink, { filter: "audioonly" })
-    );
+    nowQueue.dispatcher = playFromYt(connection, nextLink);
     nowQueue.dispatcher.on("finish", songFinishListener); // another one
     // TODO handle errors for dispatcher
   };

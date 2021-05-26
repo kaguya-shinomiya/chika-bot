@@ -17,7 +17,7 @@ const clear: Command = {
     }
 
     // TODO check if there is a dispatcher
-    const queue = client.audioQueues.get(channel.id);
+    const queue = client.audioQueues.get(guild.id);
     if (!queue) {
       channel.send(lightErrorEmbed("Queue is already empty."));
       return;
@@ -27,7 +27,7 @@ const clear: Command = {
       queue.queue = [];
       queue.dispatcher.end();
     } else {
-      client.audioQueues.delete(channel.id);
+      client.audioQueues.delete(guild.id);
     }
 
     channel.send(baseEmbed().setDescription("Queue has been cleared!"));

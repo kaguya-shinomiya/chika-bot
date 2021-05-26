@@ -1,5 +1,7 @@
 import axios from "axios";
+import { StreamDispatcher, VoiceConnection } from "discord.js";
 import he from "he";
+import ytdl from "ytdl-core";
 import { QueueItem } from "../../../types/queue";
 
 const YOUTUBE_URL_ID_RE = /youtu(?:.*\/v\/|.*v=|\.be\/)([A-Za-z0-9_-]{11})/;
@@ -52,3 +54,10 @@ export const extractVideoData = (videoData: any): Omit<QueueItem, "link"> => ({
   title: he.decode(videoData.snippet.title),
   thumbnailLink: videoData.snippet.thumbnails.default.url,
 });
+
+export const playFromYt = (
+  connection: VoiceConnection,
+  link: string
+): StreamDispatcher =>
+  // eslint-disable-next-line no-bitwise
+  connection.play(ytdl(link, { filter: "audioonly", highWaterMark: 1 << 25 }));

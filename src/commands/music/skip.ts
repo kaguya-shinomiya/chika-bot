@@ -17,7 +17,7 @@ const skip: Command = {
     }
 
     // TODO check if there is a nowPlaying
-    const queue = client.audioQueues.get(channel.id);
+    const queue = client.audioQueues.get(guild.id);
     if (!queue?.dispatcher) {
       channel.send(lightErrorEmbed("There is no track to skip."));
       return;

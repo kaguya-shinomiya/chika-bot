@@ -1,4 +1,3 @@
-import ytdl from "ytdl-core";
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -11,7 +10,11 @@ import {
   sendNowPlaying,
 } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
-import { checkValidSearch, extractVideoData } from "./utils/youtube";
+import {
+  checkValidSearch,
+  extractVideoData,
+  playFromYt,
+} from "./utils/youtube";
 
 // TODO add nowplaying command
 // TODO add repeat command
@@ -34,7 +37,7 @@ const play: Command = {
       sendNotInVoiceChannel(channel);
       return;
     }
-    const queue = client.audioQueues.get(channel.id);
+    const queue = client.audioQueues.get(guild.id);
 
     if (queue && args.length === 0) {
       const canAdd = isWithinQueueLength(channel, queue);
@@ -47,10 +50,10 @@ const play: Command = {
         title,
         thumbnailLink,
       });
-      queue.dispatcher = connection.play(ytdl(link, { filter: "audioonly" }));
+      queue.dispatcher = playFromYt(connection, link);
       queue.dispatcher.on(
         "finish",
-        createFinishListener({ connection, channel, client })
+        createFinishListener({ connection, channel, client, guild })
       );
       // TODO handle errors for dispatcher
       // TODO this is the same logic as createFinishListener
@@ -81,18 +84,18 @@ const play: Command = {
     // TODO check if we're already in a voice channel?
     // TODO self disconnect if no one in VC for some time
     const connection = await member.voice.channel.join();
-    const dispatcher = connection.play(ytdl(link, { filter: "audioonly" }));
-    client.audioQueues.set(channel.id, { dispatcher, queue: [] });
+    const dispatcher = playFromYt(connection, link);
+    client.audioQueues.set(guild.id, { dispatcher, queue: [] });
     sendNowPlaying(channel, { videoData });
 
     dispatcher.on(
       "finish",
-      createFinishListener({ channel, client, connection })
+      createFinishListener({ channel, client, connection, guild })
     ); // register a listener
 
     // TODO error handling
     connection.on("disconnect", () => {
-      client.audioQueues.delete(channel.id);
+      client.audioQueues.delete(guild.id);
     });
   },
 };
