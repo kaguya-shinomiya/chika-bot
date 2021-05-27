@@ -30,12 +30,11 @@ const pause: Command = {
     }
 
     queue.dispatcher.pause();
-    const { title, link, thumbnailLink } = queue.nowPlaying!;
+    const { title, link } = queue.nowPlaying!;
     channel.send(
       withAuthorEmbed(author)
-        .setTitle("Track Paused")
+        .setTitle(`:pause_button: Paused`)
         .setDescription(toUrlString(title, link))
-        .setThumbnail(thumbnailLink)
     );
   },
 };

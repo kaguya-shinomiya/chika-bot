@@ -22,7 +22,7 @@ const add: Command = {
       sendNoVideo(args.join(" "), channel);
       return;
     }
-    if (!videoInfo) return;
+
     const [link, videoData] = videoInfo;
     const queue = client.audioQueues.get(guild.id);
     if (!queue) {

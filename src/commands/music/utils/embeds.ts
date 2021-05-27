@@ -98,7 +98,7 @@ export const sendQueued = async (
   channel: GenericChannel
 ) => {
   const urlTracks = tracks.map((track) =>
-    toUrlString(track.title, track.link, 40)
+    toUrlString(track.title, track.link, 50)
   );
   channel.send(
     listEmbed(urlTracks)
@@ -130,7 +130,7 @@ export const sendRepeat = async ({
 
 export const sendSearchResults = (res: any[], channel: GenericChannel) => {
   const urlTitles = res.map((videoData) =>
-    toUrlString(videoData.snippet.title, linkFromVideoData(videoData), 40)
+    toUrlString(videoData.snippet.title, linkFromVideoData(videoData), 50)
   );
 
   channel.send(

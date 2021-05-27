@@ -17,8 +17,10 @@ import {
 } from "./utils/youtube";
 
 // TODO add nowplaying command
-// TODO add repeat command
 // TODO add add-playlist command
+
+// TODO use ytdl.getInfo if url is given
+// TODO optimize GET calls to only return fields we want
 
 const play: Command = {
   name: "play",
@@ -39,10 +41,18 @@ const play: Command = {
     }
     const queue = client.audioQueues.get(guild.id);
 
+    // case 1: there is a queue obj + no args
     if (queue && args.length === 0) {
+      // case 1a: but the queue is empty
+      if (queue.queue.length === 0) {
+        channel.send(lightErrorEmbed("There are no songs for me to play."));
+        return;
+      }
+      // case 1b: queue is alr at max length
       const canAdd = isWithinQueueLength(channel, queue);
       if (!canAdd) return;
 
+      // case 1c: can add to queue
       const connection = await member.voice.channel.join();
       queue.nowPlaying = queue.queue.shift()!;
       const { link, thumbnailLink, title } = queue.nowPlaying;
@@ -61,11 +71,13 @@ const play: Command = {
       return;
     }
 
+    // case 2: no queue + no args
     if (!queue && args.length === 0) {
       channel.send(lightErrorEmbed("There are no songs for me to play."));
       return;
     }
 
+    // case 3: no queue + args
     const videoInfo = await checkValidSearch(args);
     if (!videoInfo) {
       sendNoVideo(args.join(" "), channel);

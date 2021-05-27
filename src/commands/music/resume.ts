@@ -24,12 +24,11 @@ const resume: Command = {
     }
 
     queue.dispatcher.resume();
-    const { title, link, thumbnailLink } = queue.nowPlaying!;
+    const { title, link } = queue.nowPlaying!;
     channel.send(
       withAuthorEmbed(author)
-        .setTitle("Track Resumed")
+        .setTitle(`:arrow_forward: Resumed`)
         .setDescription(toUrlString(title, link))
-        .setThumbnail(thumbnailLink)
     );
   },
 };
