@@ -5,7 +5,6 @@ import { sendNotInGuild, sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
 
-// TODO send add message to add
 export const search: Command = {
   name: "search",
   description: "Search for a track on YouTube",
@@ -15,7 +14,6 @@ export const search: Command = {
   async execute(message, args) {
     const { channel, client, guild } = message;
 
-    // TODO refactor to ytsr
     const results = await searchVideo(args.join(" "));
     if (!results) {
       channel.send(lightErrorEmbed("Your search received no results."));
@@ -27,8 +25,6 @@ export const search: Command = {
       sendNotInGuild(channel);
       return;
     }
-    // TODO select to add to queue
-    // TODO create a queue if it doesn't already exist
     let queue = client.audioQueues.get(guild.id);
     if (!queue) {
       queue = client.audioQueues.set(guild.id, { queue: [] }).get(guild.id)!;
@@ -47,7 +43,7 @@ export const search: Command = {
     };
 
     client.on("message", resultSelectListener);
-    client.setTimeout(timeoutCallback, 1000 * 15);
+    client.setTimeout(timeoutCallback, 1000 * 20);
   },
 };
 

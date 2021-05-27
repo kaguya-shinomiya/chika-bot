@@ -16,9 +16,6 @@ import { playFromYt, validateArgs } from "./utils/youtube";
 // TODO add nowplaying command
 // TODO add add-playlist command
 
-// TODO use ytdl.getInfo if url is given
-// TODO optimize GET calls to only return fields we want
-
 const play: Command = {
   name: "play",
   aliases: ["tunes"],
@@ -62,7 +59,6 @@ const play: Command = {
         queue.dispatcher.on("finish", finishListener);
       } catch (err) {
         sendCannotPlay(title, url, channel);
-        // TODO check if there's a next item in the queue
         finishListener();
         return;
       }

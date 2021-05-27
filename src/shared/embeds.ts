@@ -24,7 +24,6 @@ export const lightOkEmbed = (msg: string) =>
   baseEmbed().setDescription(`:magic_wand: ${msg}`);
 
 export const badArgsEmbed = (command: Command, provided: number) =>
-  // TODO display help message for the command
   cryingEmbed()
     .setDescription(
       `Command \`${command.name}\` expected ${

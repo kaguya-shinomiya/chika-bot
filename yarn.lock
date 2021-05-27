@@ -3285,10 +3285,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-ytdl-core@^4.8.0:
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.8.0.tgz#d9f037a370a4b984f1f937e7a11b4531e8959443"
-  integrity sha512-LFhhwqFojReoaME17VpsFeiamygM0W/YNG8O02mrmS2O6Em5LjCPiJYdq7Af3CmJtBEOCdptSZ3Ql+3LGWDGvg==
+ytdl-core@^4.8.1:
+  version "4.8.1"
+  resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.8.1.tgz#47d3009fda741f797f32826f617d9ba233d1f583"
+  integrity sha512-NC4yNqoHAfO5ufX28qrB1qQ9E57DkuqDYj4kCL28QUucyRvySBtjxdwNr1EFnoABqwtG8zFVMQrkN2OEgv8RPQ==
   dependencies:
     m3u8stream "^0.8.3"
     miniget "^4.0.0"
