@@ -1,8 +1,7 @@
 import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
-import { isWithinQueueLength } from "./utils/checks";
 import { sendAddedToQueue, sendNotInGuild, sendNoVideo } from "./utils/embeds";
-import { checkValidSearch, extractVideoData } from "./utils/youtube";
+import { validateArgs } from "./utils/youtube";
 
 const addd: Command = {
   name: "addd",
@@ -17,30 +16,21 @@ const addd: Command = {
       return;
     }
 
-    const videoInfo = await checkValidSearch(args);
-    if (!videoInfo) {
+    const videoData = await validateArgs(args);
+    if (!videoData) {
       sendNoVideo(args.join(" "), channel);
       return;
     }
 
-    const [link, videoData] = videoInfo;
     const queue = client.audioQueues.get(guild.id);
     if (!queue) {
       client.audioQueues.set(guild.id, {
-        queue: [
-          {
-            link,
-            ...extractVideoData(videoData),
-          },
-        ],
+        queue: [videoData],
       });
     } else {
-      const canAdd = isWithinQueueLength(channel, queue);
-      if (!canAdd) return;
-
-      queue.queue.unshift({ link, ...extractVideoData(videoData) });
+      queue.queue.unshift(videoData);
     }
-    sendAddedToQueue({ videoData, channel, author, link });
+    sendAddedToQueue({ videoData, channel, author });
   },
 };
 

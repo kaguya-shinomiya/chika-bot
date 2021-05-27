@@ -1,20 +1,17 @@
+import { StreamDispatcher } from "discord.js";
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { isWithinQueueLength } from "./utils/checks";
 import {
   sendAddedToQueue,
+  sendCannotPlay,
   sendNotInGuild,
   sendNotInVoiceChannel,
   sendNoVideo,
   sendNowPlaying,
 } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
-import {
-  checkValidSearch,
-  extractVideoData,
-  playFromYt,
-} from "./utils/youtube";
+import { playFromYt, validateArgs } from "./utils/youtube";
 
 // TODO add nowplaying command
 // TODO add add-playlist command
@@ -48,27 +45,27 @@ const play: Command = {
         channel.send(lightErrorEmbed("There are no songs for me to play."));
         return;
       }
-      // case 1b: queue is alr at max length
-      const canAdd = isWithinQueueLength(channel, queue);
-      if (!canAdd) return;
 
-      // case 1c: can add to queue
+      // case 1b: queue has something
       const connection = await member.voice.channel.join();
       queue.nowPlaying = queue.queue.shift()!;
-      const { link, thumbnailLink, title } = queue.nowPlaying;
-      sendNowPlaying(channel, {
-        title,
-        thumbnailLink,
-        link,
+      const finishListener = createFinishListener({
+        connection,
+        channel,
+        guild,
+        client,
       });
-      queue.dispatcher = playFromYt(connection, link);
-      queue.dispatcher.on(
-        "finish",
-        createFinishListener({ connection, channel, client, guild })
-      );
-      // TODO handle errors for dispatcher
-      // TODO this is the same logic as createFinishListener
-      return;
+      const { title, url } = queue.nowPlaying;
+      try {
+        queue.dispatcher = await playFromYt(connection, url);
+        sendNowPlaying(channel, queue.nowPlaying);
+        queue.dispatcher.on("finish", finishListener);
+      } catch (err) {
+        sendCannotPlay(title, url, channel);
+        // TODO check if there's a next item in the queue
+        finishListener();
+        return;
+      }
     }
 
     // case 2: no queue + no args
@@ -78,44 +75,39 @@ const play: Command = {
     }
 
     // case 3: no queue + args
-    const videoInfo = await checkValidSearch(args);
-    if (!videoInfo) {
+    const videoData = await validateArgs(args);
+    if (!videoData) {
       sendNoVideo(args.join(" "), channel);
       return;
     }
-    const [link, videoData] = videoInfo;
 
     if (queue) {
-      queue.queue.push({
-        link,
-        ...extractVideoData(videoData),
-      });
-      sendAddedToQueue({ videoData, author, channel, link });
+      queue.queue.push(videoData);
+      sendAddedToQueue({ videoData, author, channel });
       return;
     }
 
     // TODO self disconnect if no one in VC for some time
 
-    // TODO abstract this to a higher order function
-    // there are 2 scenarios for playing a song - from scratch, or with a queue
-
     const connection = await member.voice.channel.join();
-    const dispatcher = playFromYt(connection, link);
+    let dispatcher: StreamDispatcher;
+    try {
+      dispatcher = await playFromYt(connection, videoData.url);
+    } catch (err) {
+      sendCannotPlay(videoData.title, videoData.url, channel);
+      return;
+    }
     client.audioQueues.set(guild.id, {
       dispatcher,
       queue: [],
-      nowPlaying: {
-        link,
-        title: videoData.snippet.title,
-        thumbnailLink: videoData.snippet.thumbnails.default.url,
-      },
+      nowPlaying: videoData,
     });
-    sendNowPlaying(channel, { videoData, link });
 
+    sendNowPlaying(channel, videoData);
     dispatcher.on(
       "finish",
       createFinishListener({ channel, client, connection, guild })
-    ); // register a listener
+    );
 
     // TODO error handling
     connection.on("disconnect", () => {

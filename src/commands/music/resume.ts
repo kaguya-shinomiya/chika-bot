@@ -24,7 +24,7 @@ const resume: Command = {
     }
 
     queue.dispatcher.resume();
-    const { title, link } = queue.nowPlaying!;
+    const { title, url: link } = queue.nowPlaying!;
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:arrow_forward: Resumed`)

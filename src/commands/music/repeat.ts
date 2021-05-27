@@ -22,8 +22,7 @@ const repeat: Command = {
       channel.send(lightErrorEmbed("Nothing is playing now!"));
       return;
     }
-    const { link, title, thumbnailLink } = queue.nowPlaying!;
-    sendRepeat({ channel, author, title, link, thumbnailLink });
+    sendRepeat({ channel, videoData: queue.nowPlaying!, author });
     queue.queue.unshift(queue.nowPlaying!);
   },
 };

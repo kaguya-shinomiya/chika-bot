@@ -3,12 +3,12 @@ import he from "he";
 import { chika_detective_png } from "../../../assets";
 import {
   baseEmbed,
+  cryingEmbed,
   lightErrorEmbed,
   withAuthorEmbed,
 } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
-import { linkFromVideoData } from "./youtube";
 
 export const toUrlString = (
   title: string,
@@ -24,59 +24,58 @@ export const toUrlString = (
   }](${link})`;
 };
 
-interface GenericVideoProps {
-  videoData?: any;
-  title?: string;
-  thumbnailLink?: string;
-  link: string;
-}
-
 export const sendNowPlaying = async (
   channel: GenericChannel,
-  { videoData, title, thumbnailLink, link }: GenericVideoProps
-) => {
-  const partialEmbed = baseEmbed().setTitle("Now playing...");
-  if (videoData) {
-    channel.send(
-      partialEmbed
-        .setDescription(toUrlString(videoData.snippet.title, link))
-        .setThumbnail(videoData.snippet.thumbnails.default.url)
-    );
-    return;
-  }
+  { title, thumbnailURL, url }: QueueItem
+) =>
   channel.send(
-    partialEmbed
-      .setDescription(toUrlString(title!, link))
-      .setThumbnail(thumbnailLink!)
+    baseEmbed()
+      .setTitle("Now playing...")
+      .setDescription(toUrlString(title, url))
+      .setThumbnail(thumbnailURL)
   );
-};
 
 export const sendNoVideo = async (searched: string, channel: GenericChannel) =>
   channel.send(
-    lightErrorEmbed(`I couldn't find any songs at **${searched}**.`)
+    cryingEmbed()
+      .setTitle("Sorry...")
+      .setDescription(
+        `I couldn't find anything at **${searched}**! It might be a restricted video.`
+      )
+  );
+
+export const sendCannotPlay = async (
+  title: string,
+  url: string,
+  channel: GenericChannel
+) =>
+  channel.send(
+    cryingEmbed()
+      .setTitle("Sorry...")
+      .setDescription(
+        `I couldn't play [${title}](${url})! Maybe it's a restricted video?`
+      )
   );
 
 export const sendNotInVoiceChannel = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("Join a voice channel first!"));
 
 interface sendAddedToQueueProps {
-  videoData: any;
-  link: string;
+  videoData: QueueItem;
   channel: GenericChannel;
   author: User;
 }
 
 export const sendAddedToQueue = async ({
   videoData,
-  link,
   channel,
   author,
 }: sendAddedToQueueProps) =>
   channel.send(
     withAuthorEmbed(author)
       .setTitle("Added to queue!")
-      .setDescription(toUrlString(videoData.snippet.title, link))
-      .setThumbnail(videoData.snippet.thumbnails.default.url)
+      .setDescription(toUrlString(videoData.title, videoData.url))
+      .setThumbnail(videoData.thumbnailURL)
   );
 
 export const sendNotInGuild = async (channel: GenericChannel) =>
@@ -98,39 +97,38 @@ export const sendQueued = async (
   channel: GenericChannel
 ) => {
   const urlTracks = tracks.map((track) =>
-    toUrlString(track.title, track.link, 50)
+    toUrlString(track.title, track.url, 50)
   );
   channel.send(
     listEmbed(urlTracks)
       .setTitle("Tracks Queued")
-      .setThumbnail(tracks[0].thumbnailLink)
+      .setThumbnail(tracks[0].thumbnailURL)
   );
 };
 
 interface sendRepeatProps {
   channel: GenericChannel;
   author: User;
-  title: string;
-  link: string;
-  thumbnailLink: string;
+  videoData: QueueItem;
 }
 export const sendRepeat = async ({
   channel,
   author,
-  title,
-  link,
-  thumbnailLink,
+  videoData: { title, url, thumbnailURL },
 }: sendRepeatProps) =>
   channel.send(
     withAuthorEmbed(author)
       .setTitle("Track will repeat!")
-      .setDescription(toUrlString(title, link))
-      .setThumbnail(thumbnailLink)
+      .setDescription(toUrlString(title, url))
+      .setThumbnail(thumbnailURL)
   );
 
-export const sendSearchResults = (res: any[], channel: GenericChannel) => {
+export const sendSearchResults = (
+  res: QueueItem[],
+  channel: GenericChannel
+) => {
   const urlTitles = res.map((videoData) =>
-    toUrlString(videoData.snippet.title, linkFromVideoData(videoData), 50)
+    toUrlString(videoData.title, videoData.url, 50)
   );
 
   channel.send(

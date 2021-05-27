@@ -1,9 +1,10 @@
 import { StreamDispatcher } from "discord.js";
 
 export interface QueueItem {
-  link: string;
+  url: string;
   title: string;
-  thumbnailLink: string;
+  thumbnailURL: string;
+  duration: string;
 }
 export interface Queue {
   dispatcher?: StreamDispatcher;

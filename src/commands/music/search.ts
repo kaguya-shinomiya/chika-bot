@@ -4,6 +4,7 @@ import { Command } from "../../types/command";
 import { sendSearchResults } from "./utils/embeds";
 import { searchVideo } from "./utils/youtube";
 
+// TODO send add message to add
 export const search: Command = {
   name: "search",
   description: "Search for a track on YouTube",
@@ -13,8 +14,9 @@ export const search: Command = {
   async execute(message, args) {
     const { channel } = message;
 
-    const results = (await searchVideo(args.join(" "), 5)).items;
-    if (results.length === 0) {
+    // TODO refactor to ytsr
+    const results = await searchVideo(args.join(" "));
+    if (!results) {
       channel.send(lightErrorEmbed("Your search received no results."));
       return;
     }

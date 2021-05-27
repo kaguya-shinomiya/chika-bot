@@ -30,7 +30,8 @@
     "ffmpeg-static": "^4.3.0",
     "he": "^1.2.0",
     "uuid": "^8.3.2",
-    "ytdl-core": "^4.8.0"
+    "ytdl-core": "^4.8.0",
+    "ytsr": "^3.5.0"
   },
   "scripts": {
     "start": "node dist/index.js",
