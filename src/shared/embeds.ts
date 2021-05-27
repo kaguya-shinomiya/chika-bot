@@ -35,7 +35,10 @@ export const badArgsEmbed = (command: Command, provided: number) =>
           : `arguments`
       }, but ${provided} ${provided === 1 ? `was` : `were`} provided.`
     )
-    .addField("\u200b", `Run \`${PREFIX}help ${command.name}\` for more info.`);
+    .addField(
+      "Further Help",
+      `For more info, you may run \`${PREFIX}help ${command.name}\`.`
+    );
 
 export const badCommandsEmbed = (...badCommands: string[]) =>
   cryingEmbed()
@@ -45,8 +48,8 @@ export const badCommandsEmbed = (...badCommands: string[]) =>
         .join(", ")}.`
     )
     .addField(
-      "\u200b",
-      `Run \`${PREFIX}help\` to get a list of all the commands I know.`
+      "Further Help",
+      `To get a list of all the commands I know, run \`${PREFIX}help\`.`
     );
 
 export const genericErrorEmbed = () =>

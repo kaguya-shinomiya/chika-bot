@@ -138,5 +138,9 @@ export const sendSearchResults = (
     listEmbed(urlTitles)
       .setTitle("I found these tracks:")
       .setThumbnail(chika_detective_png)
+      .addField(
+        "\u200b",
+        "Send me the track's number and I'll add it to the queue!"
+      )
   );
 };

@@ -1,6 +1,7 @@
-import { Client, Guild, VoiceConnection } from "discord.js";
+import { Client, Guild, Message, VoiceConnection } from "discord.js";
 import { GenericChannel } from "../../../types/command";
-import { sendCannotPlay, sendNowPlaying } from "./embeds";
+import { Queue, QueueItem } from "../../../types/queue";
+import { sendAddedToQueue, sendCannotPlay, sendNowPlaying } from "./embeds";
 import { playFromYt } from "./youtube";
 
 interface CreateFinishListenerProps {
@@ -39,4 +40,31 @@ export const createFinishListener = ({
     // TODO handle errors for dispatcher
   };
   return songFinishListener;
+};
+
+interface createResultSelectListenerProps {
+  maxNum: number;
+  results: QueueItem[];
+  queue: Queue;
+  channelID: string;
+}
+
+export const createResultSelectListener = ({
+  maxNum,
+  results,
+  queue,
+  channelID,
+}: createResultSelectListenerProps) => {
+  const resultSelectListener = async (message: Message) => {
+    const { content, channel: nowChannel, author } = message;
+    if (channelID !== nowChannel.id) return;
+    const index = parseInt(content, 10);
+    if (Number.isNaN(index) || index > maxNum) return;
+
+    const selectedTrack = results[index - 1];
+    queue.queue.push(selectedTrack);
+    sendAddedToQueue({ videoData: selectedTrack, channel: nowChannel, author });
+  };
+
+  return resultSelectListener;
 };
