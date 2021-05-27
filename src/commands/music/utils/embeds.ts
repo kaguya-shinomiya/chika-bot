@@ -17,11 +17,14 @@ export const toUrlString = (
 ): string => {
   const decodedTitle = he.decode(title);
   if (!truncate) {
-    return `[${decodedTitle}](${link})`;
+    return `[${decodedTitle
+      .replace("[", "\uFF3B")
+      .replace("]", "\uFF3D")}](${link})`;
   }
-  return `[${decodedTitle.substring(0, truncate)} ${
-    title.length > truncate ? "..." : ""
-  }](${link})`;
+  return `[${decodedTitle
+    .substring(0, truncate)
+    .replace("[", "\uFF3B")
+    .replace("]", "\uFF3D")} ${title.length > truncate ? "..." : ""}](${link})`;
 };
 
 export const sendNowPlaying = async (
@@ -133,7 +136,7 @@ export const sendSearchResults = (
 
   channel.send(
     listEmbed(urlTitles)
-      .setTitle("I found these tracks")
+      .setTitle("I found these tracks:")
       .setThumbnail(chika_detective_png)
   );
 };
