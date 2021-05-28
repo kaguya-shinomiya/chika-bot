@@ -22,8 +22,13 @@ export const boot: Command = {
       return;
     }
     queue.connection.disconnect();
-    queue.connection = undefined;
     channel.send(lightErrorEmbed(`I've left the voice channel.`));
+    if (queue.queue.length === 0) {
+      client.audioQueues.delete(guild.id);
+      return;
+    }
+    queue.connection = undefined;
+    queue.nowPlaying = undefined;
   },
 };
 
