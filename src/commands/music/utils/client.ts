@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import { Client, VoiceChannel, VoiceConnection } from "discord.js";
 import { Queue } from "../../../types/queue";
 
 export const createQueueIfNotExists = (
@@ -12,3 +12,11 @@ export const createQueueIfNotExists = (
   }
   return queue;
 };
+
+export const tryToConnect = async (
+  channel: VoiceChannel
+): Promise<VoiceConnection | null> =>
+  channel
+    .join()
+    .then((conn) => conn)
+    .catch(() => null);

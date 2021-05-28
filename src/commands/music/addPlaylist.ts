@@ -3,13 +3,13 @@ import { PREFIX } from "../../constants";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendNotInGuild, toUrlString } from "./utils/embeds";
-import { createQueueIfNotExists } from "./utils/queue";
+import { createQueueIfNotExists } from "./utils/client";
 import { parsePlaylist } from "./utils/youtube";
 
 const addPlaylist: Command = {
   name: "add-playlist",
   argsCount: 1,
-  aliases: ["addp"],
+  aliases: ["ap"],
   category: "Music",
   description: "Add a YouTube playlist to the queue.",
   usage: `${PREFIX}addp <url>`,

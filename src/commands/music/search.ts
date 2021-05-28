@@ -3,7 +3,7 @@ import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendNotInGuild, sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
-import { createQueueIfNotExists } from "./utils/queue";
+import { createQueueIfNotExists } from "./utils/client";
 import { searchVideo } from "./utils/youtube";
 
 export const search: Command = {

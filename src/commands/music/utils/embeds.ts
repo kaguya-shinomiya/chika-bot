@@ -107,7 +107,7 @@ export const sendQueued = async (
       .setTitle("Tracks Queued")
       .setThumbnail(tracks[0].thumbnailURL)
       .setFooter(
-        `${tracks.length} tracks queued ${
+        `${tracks.length} ${tracks.length > 1 ? "tracks" : "track"} queued ${
           tracks.length > 10 ? "(showing first 10)" : ""
         }`
       )
@@ -149,3 +149,8 @@ export const sendSearchResults = (
       )
   );
 };
+
+export const sendNoVoicePermissions = (channel: GenericChannel) =>
+  channel.send(
+    lightErrorEmbed(`Please give me permissions to join your voice chat.`)
+  );

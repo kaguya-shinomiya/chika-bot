@@ -5,7 +5,7 @@ import { sendNotInGuild, sendNowPlaying } from "./utils/embeds";
 
 const nowPlaying: Command = {
   name: "now-playing",
-  aliases: ["nowp"],
+  aliases: ["np"],
   argsCount: 0,
   description: "Show the currently playing track.",
   category: "Music",

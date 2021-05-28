@@ -2,19 +2,18 @@ import { StreamDispatcher } from "discord.js";
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { tryToConnect } from "./utils/client";
 import {
   sendAddedToQueue,
   sendCannotPlay,
   sendNotInGuild,
   sendNotInVoiceChannel,
   sendNoVideo,
+  sendNoVoicePermissions,
   sendNowPlaying,
 } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
 import { playFromYt, validateArgs } from "./utils/youtube";
-
-// TODO add nowplaying command
-// TODO add add-playlist command
 
 const play: Command = {
   name: "play",
@@ -44,7 +43,11 @@ const play: Command = {
       }
 
       // case 1b: queue has something
-      const connection = await member.voice.channel.join();
+      const connection = await tryToConnect(member.voice.channel);
+      if (!connection) {
+        sendNoVoicePermissions(channel);
+        return;
+      }
       queue.nowPlaying = queue.queue.shift()!;
       const finishListener = createFinishListener({
         connection,
@@ -83,9 +86,11 @@ const play: Command = {
       return;
     }
 
-    // TODO self disconnect if no one in VC for some time
-
-    const connection = await member.voice.channel.join();
+    const connection = await tryToConnect(member.voice.channel);
+    if (!connection) {
+      sendNoVoicePermissions(channel);
+      return;
+    }
     let dispatcher: StreamDispatcher;
     try {
       dispatcher = await playFromYt(connection, videoData.url);
