@@ -1,12 +1,15 @@
 import axios from "axios";
 import { Message, User } from "discord.js";
-import { chika_beating_yu_gif, red_cross } from "../../assets";
-import { baseEmbed, lightErrorEmbed, rappingEmbed } from "../../shared/embeds";
+import {
+  chika_beating_yu_gif,
+  red_cross,
+  shiritori_rules_png,
+} from "../../assets";
+import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game, GameType } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
-import { sendGameCrashedError } from "../utils/errorSenders";
+import { sendGameCrashedError, sendGameStartsIn } from "../utils/embeds";
 import { handleOpponentResponse } from "../utils/handleOpponentResponse";
-import { shiritoriInfo } from "./info";
 import { ShiritoriGameState } from "./types";
 
 export class Shiritori extends Game {
@@ -17,7 +20,6 @@ export class Shiritori extends Game {
   static pregame(message: Message) {
     const { channel, mentions, author } = message;
     const opponent = mentions.users.first()!;
-    channel.send(shiritoriInfo);
 
     // if (author.id === opponent.id) {
     //   sendTaggedSelfError(channel);
@@ -57,9 +59,14 @@ export class Shiritori extends Game {
       )
       .get(channel.id)! as ShiritoriGameState;
 
-    channel.send(Shiritori.playerCardsEmbed(state));
+    sendGameStartsIn({
+      channel,
+      title: "shiritori",
+      timeout: 5,
+      message: "I'll reveal the first card in 5 seconds.",
+    }).then(() => channel.send(Shiritori.playerCardsEmbed(state)));
 
-    const listener = async (message: Message) => {
+    const shiritoriListener = async (message: Message) => {
       // this function contains the main 'loop' logic
       const {
         author,
@@ -115,13 +122,14 @@ export class Shiritori extends Game {
         endGame();
         return;
       }
-      nowChannel.send(Shiritori.playerCardsEmbed(nowState));
+      nowChannel
+        .send(Shiritori.playerCardsEmbed(nowState))
+        .then(() => nowChannel.send(`:regional_indicator_${lastChar}:`));
       nowState.startingChar = lastChar;
-      nowChannel.send(`:regional_indicator_${lastChar}:`);
     };
 
     function endGame() {
-      client.removeListener("message", listener);
+      client.removeListener("message", shiritoriListener);
       client.gameStates.delete(channel.id);
     }
 
@@ -130,12 +138,13 @@ export class Shiritori extends Game {
       return arr.splice(index, 1);
     }
 
-    // TODO some kinda countdown timer...
     const [firstChar] = popRandom(state.stack);
     state.startingChar = firstChar;
-    channel.send(`:regional_indicator_${firstChar}:`);
+    setTimeout(() => {
+      channel.send(`:regional_indicator_${firstChar}:`);
+    }, 5000);
 
-    client.on("message", listener); // register the new listener
+    client.on("message", shiritoriListener); // register the new listener
   }
 
   static genInitialCards() {
@@ -172,7 +181,7 @@ export class Shiritori extends Game {
   }
 
   static playerCardsEmbed({ p1, p2, p1Cards, p2Cards }: ShiritoriGameState) {
-    return rappingEmbed()
+    return baseEmbed()
       .setTitle("Your cards!")
       .addFields([
         {
@@ -189,6 +198,31 @@ export class Shiritori extends Game {
   static async checkWord(word: string): Promise<boolean> {
     const uri = `http://api.datamuse.com/words?sp=${word}&max=1`;
     // TODO catch errors
-    return axios.get(uri).then((response) => response.data.length === 1);
+    return axios
+      .get(uri)
+      .then((response) => response.data.length === 1)
+      .catch(() => false);
   }
+
+  static rules = baseEmbed()
+    .setTitle("Shiritori :u556b:")
+    .addFields([
+      {
+        name: "How it works",
+        value: `
+      Each player is issued 5 cards.
+      
+      You must form a word which a) starts 
+      with the last played card, and b) ends
+      on one of your cards.
+      
+      The game will start with a random card.
+      `,
+      },
+      {
+        name: "To win",
+        value: `Be the first to clear all 5 cards!`,
+      },
+    ])
+    .setImage(shiritori_rules_png);
 }

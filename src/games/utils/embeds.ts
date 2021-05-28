@@ -1,9 +1,12 @@
+import { PREFIX } from "../../constants";
 import {
   cryingEmbed,
   lightErrorEmbed,
   peekingEmbed,
+  pointingEmbed,
 } from "../../shared/embeds";
 import { GenericChannel } from "../../types/command";
+import { capitalize } from "../../utils/text";
 
 export const sendNoGameSelectedError = async (channel: GenericChannel) => {
   channel.send(lightErrorEmbed("Tell me which game you wanna play, yo."));
@@ -52,4 +55,32 @@ export const sendInGame = async (channel: GenericChannel) =>
     lightErrorEmbed(
       "There is a game being played in this channel! Please wait till the current game is finished."
     )
+  );
+
+interface sendGameStartsInParams {
+  channel: GenericChannel;
+  title: string;
+  timeout?: number;
+  message?: string;
+}
+
+export const sendGameStartsIn = async ({
+  channel,
+  title,
+  timeout,
+  message,
+}: sendGameStartsInParams) =>
+  channel.send(
+    pointingEmbed()
+      .setTitle("Alright!")
+      .setDescription(message || `I'll start the game in ${timeout} seconds.`)
+      .addField(
+        "More Info",
+        `
+        To review the rules of **${capitalize(
+          title
+        )}**, use \`${PREFIX}rules ${title}\`.
+        \`!stop\` will stop the game at anytime.
+        `
+      )
   );

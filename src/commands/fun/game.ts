@@ -3,7 +3,7 @@ import {
   sendInGame,
   sendNoGameSelectedError,
   sendUnknownGameError,
-} from "../../games/utils/errorSenders";
+} from "../../games/utils/embeds";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { GameType } from "../../types/game";

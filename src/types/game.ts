@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 
 export type nextFn = (...args: any[]) => void;
 // eslint-disable-next-line no-shadow
@@ -15,4 +15,6 @@ export abstract class Game {
   static type: GameType;
 
   static pregame?(message: Message): void;
+
+  static rules: MessageEmbed;
 }
