@@ -166,3 +166,8 @@ export const sendNoVoicePermissions = (channel: GenericChannel) =>
   channel.send(
     lightErrorEmbed(`Please give me permissions to join your voice chat.`)
   );
+
+export const sendFinishedAllTracks = (channel: GenericChannel) =>
+  channel.send(
+    baseEmbed().setDescription(`All requested tracks have finished playing.`)
+  );

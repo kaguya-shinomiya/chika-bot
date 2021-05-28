@@ -14,7 +14,7 @@ const main = async () => {
   const client = new Discord.Client();
   client.login(process.env.APP_TOKEN);
   client.commands = loadCommands();
-  client.games = loadGames();
+  [client.games, client.gamesList] = loadGames();
   client.gameStates = new Collection(); // initialize an empty gameState instance
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   client.audioQueues = new Collection();

@@ -1,7 +1,12 @@
 import { Client, Guild, Message } from "discord.js";
 import { GenericChannel } from "../../../types/command";
 import { Queue, QueueItem } from "../../../types/queue";
-import { sendAddedToQueue, sendCannotPlay, sendNowPlaying } from "./embeds";
+import {
+  sendAddedToQueue,
+  sendCannotPlay,
+  sendFinishedAllTracks,
+  sendNowPlaying,
+} from "./embeds";
 import { playFromYt } from "./youtube";
 
 interface CreateFinishListenerProps {
@@ -18,6 +23,7 @@ export const createFinishListener = ({
   const songFinishListener = async () => {
     const nowQueue = client.audioQueues.get(guild.id)!;
     if (!nowQueue.queue.length) {
+      sendFinishedAllTracks(channel);
       nowQueue.dispatcher?.destroy();
       nowQueue.connection!.disconnect();
       client.audioQueues.delete(guild.id);
