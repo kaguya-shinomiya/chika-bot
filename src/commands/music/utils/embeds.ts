@@ -9,6 +9,7 @@ import {
 } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
+import { minToSec, secToMin } from "./helpers";
 
 export const toUrlString = (
   title: string,
@@ -39,14 +40,37 @@ export const trackLinkAndDuration = ({
   duration: string;
 }) => `${toUrlString(title, url)} [${duration}]`;
 
-export const sendNowPlaying = async (
-  channel: GenericChannel,
-  { title, thumbnailURL, url, duration }: QueueItem
-) =>
+export const genPlayBar = (current: number, total: string) => {
+  // current is in milliseconds
+  const totalMillis = minToSec(total) * 1000;
+  const currentMin = secToMin(Math.floor(current / 1000));
+  const cursor = Math.floor((current / totalMillis) * 29);
+  return `${currentMin} ${"-".repeat(cursor)}o${"-".repeat(
+    29 - cursor
+  )} ${total}`;
+};
+
+interface sendNowPlayingParams {
+  channel: GenericChannel;
+  videoData: QueueItem;
+  streamTime: number;
+  withBar?: boolean;
+}
+
+export const sendNowPlaying = async ({
+  channel,
+  videoData: { title, duration, thumbnailURL, url },
+  streamTime,
+  withBar,
+}: sendNowPlayingParams) =>
   channel.send(
     baseEmbed()
       .setTitle("Now playing...")
-      .setDescription(trackLinkAndDuration({ title, url, duration }))
+      .setDescription(
+        `${toUrlString(title, url)}${
+          withBar ? `\n${genPlayBar(streamTime!, duration)}` : ""
+        }`
+      )
       .setThumbnail(thumbnailURL)
   );
 

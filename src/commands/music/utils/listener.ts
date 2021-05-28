@@ -39,7 +39,7 @@ export const createFinishListener = ({
       return;
     }
     nowQueue.dispatcher = dispatcher;
-    sendNowPlaying(channel, nowQueue.nowPlaying);
+    sendNowPlaying({ channel, streamTime: 0, videoData: nowQueue.nowPlaying });
     nowQueue.dispatcher.on("finish", songFinishListener);
     // TODO handle errors for dispatcher
   };

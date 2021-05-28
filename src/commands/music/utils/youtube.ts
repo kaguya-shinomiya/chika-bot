@@ -4,6 +4,7 @@ import ytdl from "ytdl-core";
 import ytpl from "ytpl";
 import ytsr, { Video } from "ytsr";
 import { QueueItem } from "../../../types/queue";
+import { secToMin } from "./helpers";
 
 const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
@@ -49,8 +50,6 @@ export const playFromYt = async (
       )
     )
     .catch(() => null);
-
-const secToMin = (sec: number): string => `${Math.floor(sec / 60)}:${sec % 60}`;
 
 export const validateArgs = async (
   args: string[]

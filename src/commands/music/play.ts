@@ -63,7 +63,7 @@ const play: Command = {
       }
       queue.dispatcher = dispatcher;
       queue.connection = connection;
-      sendNowPlaying(channel, queue.nowPlaying);
+      sendNowPlaying({ channel, streamTime: 0, videoData: queue.nowPlaying });
       queue.dispatcher.on("finish", finishListener);
       return;
     }
@@ -105,7 +105,7 @@ const play: Command = {
       nowPlaying: videoData,
     });
 
-    sendNowPlaying(channel, videoData);
+    sendNowPlaying({ channel, videoData, streamTime: 0 });
     dispatcher.on("finish", createFinishListener({ channel, client, guild }));
   },
 };

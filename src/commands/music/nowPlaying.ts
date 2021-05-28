@@ -3,6 +3,7 @@ import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendNotInGuild, sendNowPlaying } from "./utils/embeds";
 
+// TODO add playtime
 const nowPlaying: Command = {
   name: "now-playing",
   aliases: ["np"],
@@ -22,7 +23,12 @@ const nowPlaying: Command = {
       channel.send(lightErrorEmbed("The sound of silence."));
       return;
     }
-    sendNowPlaying(channel, queue.nowPlaying);
+    sendNowPlaying({
+      channel,
+      videoData: queue.nowPlaying,
+      streamTime: queue.dispatcher!.streamTime,
+      withBar: true,
+    });
   },
 };
 
