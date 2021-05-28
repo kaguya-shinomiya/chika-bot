@@ -8,7 +8,7 @@ import {
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game, GameType } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
-import { sendGameStartsIn } from "../utils/embeds";
+import { sendGameStartsIn, sendTaggedSelfError } from "../utils/embeds";
 import { handleOpponentResponse } from "../utils/handleOpponentResponse";
 import { ShiritoriGameState } from "./types";
 
@@ -21,10 +21,10 @@ export class Shiritori extends Game {
     const { channel, mentions, author } = message;
     const opponent = mentions.users.first()!;
 
-    // if (author.id === opponent.id) {
-    //   sendTaggedSelfError(channel);
-    //   return;
-    // }
+    if (author.id === opponent.id) {
+      sendTaggedSelfError(channel);
+      return;
+    }
 
     handleOpponentResponse(
       message,
