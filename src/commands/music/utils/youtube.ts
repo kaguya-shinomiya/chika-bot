@@ -36,16 +36,19 @@ export const extractVideoData = (
 export const playFromYt = async (
   connection: VoiceConnection,
   url: string
-): Promise<StreamDispatcher> => {
-  const trackInfo = await ytdl.getInfo(url); // throws error if the info is restricted
-  return connection.play(
-    ytdl.downloadFromInfo(trackInfo, {
-      filter: "audioonly",
-      // eslint-disable-next-line no-bitwise
-      highWaterMark: 1 << 25,
-    })
-  );
-};
+): Promise<StreamDispatcher | null> =>
+  ytdl
+    .getInfo(url)
+    .then((info) =>
+      connection.play(
+        ytdl.downloadFromInfo(info, {
+          filter: "audioonly",
+          // eslint-disable-next-line no-bitwise
+          highWaterMark: 1 << 25,
+        })
+      )
+    )
+    .catch(() => null);
 
 const secToMin = (sec: number): string => `${Math.floor(sec / 60)}:${sec % 60}`;
 

@@ -1,4 +1,4 @@
-import { StreamDispatcher } from "discord.js";
+import { StreamDispatcher, VoiceConnection } from "discord.js";
 
 export interface QueueItem {
   url: string;
@@ -7,6 +7,7 @@ export interface QueueItem {
   duration: string;
 }
 export interface Queue {
+  connection?: VoiceConnection;
   dispatcher?: StreamDispatcher;
   nowPlaying?: QueueItem;
   queue: QueueItem[];

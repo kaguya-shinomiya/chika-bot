@@ -1,7 +1,7 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, toUrlString } from "./utils/embeds";
+import { sendNotInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const resume: Command = {
   name: "resume",
@@ -24,11 +24,11 @@ const resume: Command = {
     }
 
     queue.dispatcher.resume();
-    const { title, url: link } = queue.nowPlaying!;
+    const { title, url, duration } = queue.nowPlaying!;
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:arrow_forward: Resumed`)
-        .setDescription(toUrlString(title, link))
+        .setDescription(trackLinkAndDuration({ title, url, duration }))
     );
   },
 };

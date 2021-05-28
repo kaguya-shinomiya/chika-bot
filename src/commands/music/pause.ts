@@ -1,7 +1,7 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, toUrlString } from "./utils/embeds";
+import { sendNotInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const pause: Command = {
   name: "pause",
@@ -30,11 +30,11 @@ const pause: Command = {
     }
 
     queue.dispatcher.pause();
-    const { title, url } = queue.nowPlaying!;
+    const { title, url, duration } = queue.nowPlaying!;
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:pause_button: Paused`)
-        .setDescription(toUrlString(title, url))
+        .setDescription(trackLinkAndDuration({ title, url, duration }))
     );
   },
 };

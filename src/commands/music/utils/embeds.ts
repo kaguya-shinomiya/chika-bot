@@ -18,23 +18,35 @@ export const toUrlString = (
   const decodedTitle = he.decode(title);
   if (!truncate) {
     return `[${decodedTitle
-      .replace("[", "\uFF3B")
-      .replace("]", "\uFF3D")}](${link})`;
+      .replace(/\[/g, "\uFF3B")
+      .replace(/\]/g, "\uFF3D")}](${link})`;
   }
   return `[${decodedTitle
     .substring(0, truncate)
-    .replace("[", "\uFF3B")
-    .replace("]", "\uFF3D")} ${title.length > truncate ? "..." : ""}](${link})`;
+    .replace(/\[/g, "\uFF3B")
+    .replace(/\]/g, "\uFF3D")} ${
+    title.length > truncate ? "..." : ""
+  }](${link})`;
 };
+
+export const trackLinkAndDuration = ({
+  title,
+  url,
+  duration,
+}: {
+  title: string;
+  url: string;
+  duration: string;
+}) => `${toUrlString(title, url)} [${duration}]`;
 
 export const sendNowPlaying = async (
   channel: GenericChannel,
-  { title, thumbnailURL, url }: QueueItem
+  { title, thumbnailURL, url, duration }: QueueItem
 ) =>
   channel.send(
     baseEmbed()
       .setTitle("Now playing...")
-      .setDescription(toUrlString(title, url))
+      .setDescription(trackLinkAndDuration({ title, url, duration }))
       .setThumbnail(thumbnailURL)
   );
 
@@ -70,15 +82,15 @@ interface sendAddedToQueueProps {
 }
 
 export const sendAddedToQueue = async ({
-  videoData,
+  videoData: { title, url, duration, thumbnailURL },
   channel,
   author,
 }: sendAddedToQueueProps) =>
   channel.send(
     withAuthorEmbed(author)
       .setTitle("Added to queue!")
-      .setDescription(toUrlString(videoData.title, videoData.url))
-      .setThumbnail(videoData.thumbnailURL)
+      .setDescription(trackLinkAndDuration({ title, url, duration }))
+      .setThumbnail(thumbnailURL)
   );
 
 export const sendNotInGuild = async (channel: GenericChannel) =>
@@ -101,7 +113,7 @@ export const sendQueued = async (
 ) => {
   const urlTracks = tracks
     .slice(0, 10)
-    .map((track) => toUrlString(track.title, track.url, 50));
+    .map((track) => toUrlString(track.title, track.url, 40));
   channel.send(
     listEmbed(urlTracks)
       .setTitle("Tracks Queued")
@@ -122,12 +134,12 @@ interface sendRepeatProps {
 export const sendRepeat = async ({
   channel,
   author,
-  videoData: { title, url, thumbnailURL },
+  videoData: { title, url, thumbnailURL, duration },
 }: sendRepeatProps) =>
   channel.send(
     withAuthorEmbed(author)
       .setTitle("Track will repeat!")
-      .setDescription(toUrlString(title, url))
+      .setDescription(trackLinkAndDuration({ title, url, duration }))
       .setThumbnail(thumbnailURL)
   );
 
@@ -136,7 +148,7 @@ export const sendSearchResults = (
   channel: GenericChannel
 ) => {
   const urlTitles = res.map((videoData) =>
-    toUrlString(videoData.title, videoData.url, 50)
+    toUrlString(videoData.title, videoData.url, 40)
   );
 
   channel.send(

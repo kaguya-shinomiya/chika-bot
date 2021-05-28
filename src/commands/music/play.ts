@@ -1,4 +1,3 @@
-import { StreamDispatcher } from "discord.js";
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -43,6 +42,7 @@ const play: Command = {
       }
 
       // case 1b: queue has something
+      // TODO handle disconnect and errors
       const connection = await tryToConnect(member.voice.channel);
       if (!connection) {
         sendNoVoicePermissions(channel);
@@ -50,21 +50,22 @@ const play: Command = {
       }
       queue.nowPlaying = queue.queue.shift()!;
       const finishListener = createFinishListener({
-        connection,
         channel,
         guild,
         client,
       });
       const { title, url } = queue.nowPlaying;
-      try {
-        queue.dispatcher = await playFromYt(connection, url);
-        sendNowPlaying(channel, queue.nowPlaying);
-        queue.dispatcher.on("finish", finishListener);
-      } catch (err) {
+      const dispatcher = await playFromYt(connection, url);
+      if (!dispatcher) {
         sendCannotPlay(title, url, channel);
         finishListener();
         return;
       }
+      queue.dispatcher = dispatcher;
+      queue.connection = connection;
+      sendNowPlaying(channel, queue.nowPlaying);
+      queue.dispatcher.on("finish", finishListener);
+      return;
     }
 
     // case 2: no queue + no args
@@ -91,29 +92,20 @@ const play: Command = {
       sendNoVoicePermissions(channel);
       return;
     }
-    let dispatcher: StreamDispatcher;
-    try {
-      dispatcher = await playFromYt(connection, videoData.url);
-    } catch (err) {
+    const dispatcher = await playFromYt(connection, videoData.url);
+    if (!dispatcher) {
       sendCannotPlay(videoData.title, videoData.url, channel);
       return;
     }
     client.audioQueues.set(guild.id, {
+      connection,
       dispatcher,
       queue: [],
       nowPlaying: videoData,
     });
 
     sendNowPlaying(channel, videoData);
-    dispatcher.on(
-      "finish",
-      createFinishListener({ channel, client, connection, guild })
-    );
-
-    // TODO error handling
-    connection.on("disconnect", () => {
-      client.audioQueues.delete(guild.id);
-    });
+    dispatcher.on("finish", createFinishListener({ channel, client, guild }));
   },
 };
 

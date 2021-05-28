@@ -1,18 +1,16 @@
-import { Client, Guild, Message, VoiceConnection } from "discord.js";
+import { Client, Guild, Message } from "discord.js";
 import { GenericChannel } from "../../../types/command";
 import { Queue, QueueItem } from "../../../types/queue";
 import { sendAddedToQueue, sendCannotPlay, sendNowPlaying } from "./embeds";
 import { playFromYt } from "./youtube";
 
 interface CreateFinishListenerProps {
-  connection: VoiceConnection;
   channel: GenericChannel;
   guild: Guild;
   client: Client;
 }
 
 export const createFinishListener = ({
-  connection,
   channel,
   guild,
   client,
@@ -21,22 +19,22 @@ export const createFinishListener = ({
     const nowQueue = client.audioQueues.get(guild.id)!;
     if (!nowQueue.queue.length) {
       nowQueue.dispatcher?.destroy();
-      connection.disconnect();
+      nowQueue.connection!.disconnect();
       client.audioQueues.delete(guild.id);
       return;
     }
 
     nowQueue.nowPlaying = nowQueue.queue.shift()!;
     const { url, title } = nowQueue.nowPlaying;
-    try {
-      nowQueue.dispatcher = await playFromYt(connection, url);
-    } catch (err) {
+    const dispatcher = await playFromYt(nowQueue.connection!, url);
+    if (!dispatcher) {
       sendCannotPlay(title, url, channel);
       songFinishListener();
       return;
     }
+    nowQueue.dispatcher = dispatcher;
     sendNowPlaying(channel, nowQueue.nowPlaying);
-    nowQueue.dispatcher.on("finish", songFinishListener); // another one
+    nowQueue.dispatcher.on("finish", songFinishListener);
     // TODO handle errors for dispatcher
   };
   return songFinishListener;

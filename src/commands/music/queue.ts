@@ -22,7 +22,6 @@ const queue: Command = {
       return;
     }
 
-    // BUG square brackets
     sendQueued(nowQueue.queue, channel);
   },
 };
