@@ -74,19 +74,20 @@ const play: Command = {
       return;
     }
 
-    // case 3: no queue + args
     const videoData = await validateArgs(args);
     if (!videoData) {
       sendNoVideo(args.join(" "), channel);
       return;
     }
 
+    // case 3: queue + args
     if (queue) {
       queue.queue.push(videoData);
       sendAddedToQueue({ videoData, author, channel });
       return;
     }
 
+    // case 4: no queue + args
     const connection = await tryToConnect(member.voice.channel);
     if (!connection) {
       sendNoVoicePermissions(channel);

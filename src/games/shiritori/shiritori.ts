@@ -21,9 +21,11 @@ export class Shiritori extends Game {
     const { channel, mentions, author } = message;
     const opponent = mentions.users.first()!;
 
-    if (author.id === opponent.id) {
-      sendTaggedSelfError(channel);
-      return;
+    if (!(process.env.NODE_ENV === "development")) {
+      if (author.id === opponent.id) {
+        sendTaggedSelfError(channel);
+        return;
+      }
     }
 
     handleOpponentResponse(
@@ -63,6 +65,12 @@ export class Shiritori extends Game {
           lightErrorEmbed(`**${author.username}** has stopped the game.`)
         );
         endGame();
+        return;
+      }
+
+      if (content.length < 4) {
+        message.react(red_cross);
+        client.once("message", noChange);
         return;
       }
 
@@ -142,10 +150,9 @@ export class Shiritori extends Game {
     const [firstChar] = Shiritori.popRandom(state.stack);
     state.startingChar = firstChar;
     setTimeout(() => {
+      client.once("message", Shiritori.createOnceListener(state)); // register the new listener
       channel.send(`:regional_indicator_${firstChar}:`);
     }, 5000);
-
-    client.once("message", Shiritori.createOnceListener(state)); // register the new listener
   }
 
   static popRandom(arr: string[]) {
@@ -216,8 +223,9 @@ export class Shiritori extends Game {
       Each player is issued 5 cards.
       
       You must form a word which a) starts 
-      with the last played card, and b) ends
-      on one of your cards.
+      with the last played card, b) ends
+      on one of your cards, and c) be at
+      least 4 characters long.
       
       The game will start with a random card.
       `,

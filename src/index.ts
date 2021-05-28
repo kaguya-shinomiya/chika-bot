@@ -7,13 +7,14 @@ import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 
 dotenv.config();
 
+// TODO need to register only 1 listener per command type
 // TODO look into Redis for session-related things, or we can store everything on the client
 
 const main = async () => {
   const client = new Discord.Client();
   client.login(process.env.APP_TOKEN);
   client.commands = loadCommands();
-  client.games = loadGames();
+  [client.games, client.gamesList] = loadGames();
   client.gameStates = new Collection(); // initialize an empty gameState instance
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   client.audioQueues = new Collection();
