@@ -120,30 +120,44 @@ export const sendAddedToQueue = async ({
 export const sendNotInGuild = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("I can only play music for you in a server!"));
 
-export const sendMaxTracksQueued = async (channel: GenericChannel) =>
-  channel.send(lightErrorEmbed("Maximum number of tracks queued!"));
-
-export const listEmbed = (arr: string[]) => {
+export const toListString = (arr: string[]): string => {
   let desc = "";
   arr.forEach((item, i) => {
     desc += `\`${i + 1}\` ${item}\n`;
   });
-  return baseEmbed().setDescription(desc);
+  return desc;
 };
 
-export const sendQueued = async (
-  tracks: QueueItem[],
-  channel: GenericChannel
-) => {
+interface sendQueuedParams {
+  tracks: QueueItem[];
+  channel: GenericChannel;
+  nowPlaying?: QueueItem;
+  current?: number;
+}
+
+export const sendQueued = async ({
+  tracks,
+  channel,
+  nowPlaying,
+  current,
+}: sendQueuedParams) => {
   const urlTracks = tracks
     .slice(0, 10)
     .map((track) => toUrlString(track.title, track.url, 40));
+  const now = nowPlaying
+    ? `:arrow_forward: ${toUrlString(
+        nowPlaying.title,
+        nowPlaying.url,
+        30
+      )} [${secToMin(Math.floor(current! / 1000))} / ${nowPlaying.duration}]\n`
+    : "";
   channel.send(
-    listEmbed(urlTracks)
+    baseEmbed()
       .setTitle("Tracks Queued")
-      .setThumbnail(tracks[0].thumbnailURL)
+      .setDescription(`${now}${toListString(urlTracks)}`)
+      .setThumbnail(tracks[0]?.thumbnailURL || nowPlaying!.thumbnailURL)
       .setFooter(
-        `${tracks.length} ${tracks.length > 1 ? "tracks" : "track"} queued ${
+        `${tracks.length} ${tracks.length === 1 ? "track" : "tracks"} queued ${
           tracks.length > 10 ? "(showing first 10)" : ""
         }`
       )
@@ -176,8 +190,9 @@ export const sendSearchResults = (
   );
 
   channel.send(
-    listEmbed(urlTitles)
+    baseEmbed()
       .setTitle("I found these tracks:")
+      .setDescription(toListString(urlTitles))
       .setThumbnail(chika_detective_png)
       .addField(
         "\u200b",

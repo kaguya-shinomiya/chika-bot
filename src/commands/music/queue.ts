@@ -17,12 +17,17 @@ const queue: Command = {
     }
 
     const nowQueue = client.audioQueues.get(guild.id);
-    if (!nowQueue || nowQueue.queue.length === 0) {
+    if (!nowQueue || (nowQueue.queue.length === 0 && !nowQueue.nowPlaying)) {
       channel.send(lightErrorEmbed("There are no tracks queued."));
       return;
     }
 
-    sendQueued(nowQueue.queue, channel);
+    sendQueued({
+      channel,
+      tracks: nowQueue.queue,
+      nowPlaying: nowQueue.nowPlaying,
+      current: nowQueue.dispatcher?.streamTime,
+    });
   },
 };
 
