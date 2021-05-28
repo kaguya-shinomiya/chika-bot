@@ -1,6 +1,7 @@
-import { Message } from "discord.js";
+import { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 
-export type commandCategory = "Fun" | "Utility";
+export type commandCategory = "Fun" | "Utility" | "Music";
+export type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
 export interface Command {
   name: string;

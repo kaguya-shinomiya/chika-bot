@@ -12,6 +12,7 @@ export const loadCommands = (): Client["commands"] => {
       .filter((filename) => filename.endsWith(".js"));
     commandFiles.forEach((filename) => {
       const command: Command =
+        // eslint-disable-next-line import/no-dynamic-require, global-require
         require(`../commands/${folder}/${filename}`).default;
       commands.set(command.name, command);
     });

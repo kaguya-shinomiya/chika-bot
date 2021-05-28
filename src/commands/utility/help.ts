@@ -1,16 +1,15 @@
-import { genBadCommandEmbed } from "../../shared/genBadCommandEmbed";
+import { PREFIX } from "../../constants";
+import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { MessageEmbed } from "discord.js";
-import { chika_pink } from "../../constants";
 
 const help: Command = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
-  usage: "ck!help [command ...]",
+  usage: `${PREFIX}help [command ...]`,
   category: "Utility",
   argsCount: -1,
   aliases: ["h"],
-  execute({ channel, client: { commands, commandsHelp } }, args) {
+  async execute({ channel, client: { commands, commandsHelp } }, args) {
     if (!args.length || /all/i.test(args[0])) {
       // send a list of all commands
       channel.send(commandsHelp);
@@ -18,15 +17,13 @@ const help: Command = {
     }
 
     // return info for a specific command
-    let unknownCommands: string[] = [];
+    const unknownCommands: string[] = [];
     args.forEach((arg) => {
       const match = commands.find(
         (command) => command.name === arg || !!command.aliases?.includes(arg)
       );
       if (match) {
-        let embed = new MessageEmbed()
-          .setColor(chika_pink)
-          .addField(match.usage, match.description);
+        const embed = baseEmbed().addField(match.usage, match.description);
         if (match.aliases) {
           const preTag = match.aliases.map((alias) => `\`${alias}\``);
           embed.addField("Aliases", preTag.join(", "));
@@ -37,7 +34,7 @@ const help: Command = {
       unknownCommands.push(arg);
     });
     if (unknownCommands.length) {
-      channel.send(genBadCommandEmbed(...unknownCommands));
+      channel.send(badCommandsEmbed(...unknownCommands));
     }
   },
 };

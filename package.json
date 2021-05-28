@@ -1,24 +1,53 @@
 {
   "devDependencies": {
     "@types/chai": "^4.2.18",
+    "@types/dotenv-safe": "^8.1.1",
+    "@types/ffmpeg-static": "^3.0.0",
+    "@types/he": "^1.1.1",
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.3.0",
     "@types/ws": "^7.4.4",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
     "chai": "^4.3.4",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.3",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
     "mocha": "^8.4.0",
     "nodemon": "^2.0.7",
+    "prettier": "^2.3.0",
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@types/dotenv-safe": "^8.1.1",
+    "@discordjs/opus": "^0.5.0",
+    "axios": "^0.21.1",
     "discord.js": "^12.5.3",
-    "dotenv-safe": "^8.2.0"
+    "dotenv-safe": "^8.2.0",
+    "ffmpeg-static": "^4.3.0",
+    "he": "^1.2.0",
+    "ytdl-core": "^4.8.1",
+    "ytpl": "^2.2.1",
+    "ytsr": "^3.5.0"
   },
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc",
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
-    "test": "mocha "
-  }
+    "test": "mocha ",
+    "prepare": "husky install",
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "yarn eslint",
+      "yarn prettier --write"
+    ]
+  },
+  "license": "MIT",
+  "version": "0.2.0"
 }

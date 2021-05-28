@@ -1,28 +1,26 @@
-import { User } from "discord.js";
-import { MessageEmbed } from "discord.js";
-import { chika_pink } from "../../constants";
+import { MessageEmbed, User } from "discord.js";
+import { PREFIX } from "../../constants";
+import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 
-const genAvatarEmbed = (user: User): MessageEmbed =>
-  new MessageEmbed()
-    .setColor(chika_pink)
+const avatarEmbed = (user: User): MessageEmbed =>
+  baseEmbed()
     .setImage(user.displayAvatarURL({ dynamic: true }))
     .setFooter(`${user.username}'s avatar`);
 
-// TODO change to using embeds
 const avatar: Command = {
   name: "avatar",
   description: "Retrieves users' avatars.",
   category: "Fun",
-  usage: "ck!avatar [user ...]",
+  usage: `${PREFIX}avatar [user ...]`,
   argsCount: -1,
-  execute({ mentions, author, channel }, _args) {
+  async execute({ mentions, author, channel }) {
     if (!mentions.users.size) {
-      channel.send(genAvatarEmbed(author));
+      channel.send(avatarEmbed(author));
       return;
     }
     mentions.users.forEach((user) => {
-      channel.send(genAvatarEmbed(user));
+      channel.send(avatarEmbed(user));
     });
   },
 };

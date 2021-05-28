@@ -1,11 +1,11 @@
-import { Command, commandCategory } from "../types/command";
 import { Collection, EmbedFieldData, MessageEmbed } from "discord.js";
-import { chika_detective_jpg, chika_pink } from "../constants";
+import { detectiveEmbed } from "../shared/embeds";
+import { Command, commandCategory } from "../types/command";
 
 export const prepareCommandsHelp = (
   commands: Collection<string, Command>
 ): MessageEmbed => {
-  let categoryMap: Record<commandCategory, Command[]> = {} as any;
+  const categoryMap: Record<commandCategory, Command[]> = {} as any;
   commands.forEach((command) => {
     if (categoryMap[command.category]) {
       categoryMap[command.category].push(command);
@@ -13,16 +13,12 @@ export const prepareCommandsHelp = (
       categoryMap[command.category] = [command];
     }
   });
-  let fields: EmbedFieldData[] = [];
+  const fields: EmbedFieldData[] = [];
   Object.keys(categoryMap).forEach((category) => {
-    const commands = categoryMap[category as commandCategory].map(
+    const cmds = categoryMap[category as commandCategory].map(
       (command) => `\`${command.name}\``
     );
-    fields.push({ name: category, value: commands.join(", ") });
+    fields.push({ name: category, value: cmds.join(", ") });
   });
-  return new MessageEmbed()
-    .setColor(chika_pink)
-    .setTitle("Chika Commands")
-    .setThumbnail(chika_detective_jpg)
-    .addFields(fields);
+  return detectiveEmbed().setTitle("Chika Commands").addFields(fields);
 };
