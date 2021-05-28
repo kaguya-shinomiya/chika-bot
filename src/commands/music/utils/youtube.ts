@@ -1,6 +1,7 @@
 import { StreamDispatcher, VoiceConnection } from "discord.js";
 import he from "he";
 import ytdl from "ytdl-core";
+import ytpl from "ytpl";
 import ytsr, { Video } from "ytsr";
 import { QueueItem } from "../../../types/queue";
 
@@ -73,4 +74,28 @@ export const validateArgs = async (
   const res = await searchVideo(args.join(" "), 1);
   if (!res) return null;
   return { ...res[0] };
+};
+
+interface PlaylistMetadata {
+  title: string;
+  thumbnailURL: string;
+  url: string;
+}
+export const parsePlaylist = (
+  res: ytpl.Result
+): [PlaylistMetadata, QueueItem[]] => {
+  const metadata: PlaylistMetadata = {
+    title: res.title,
+    url: res.url,
+    thumbnailURL: res.bestThumbnail.url!,
+  };
+  const items = res.items.map(
+    (item): QueueItem => ({
+      url: item.shortUrl,
+      title: item.title,
+      thumbnailURL: item.bestThumbnail.url!,
+      duration: item.duration!,
+    })
+  );
+  return [metadata, items];
 };

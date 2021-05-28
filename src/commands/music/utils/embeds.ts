@@ -99,13 +99,18 @@ export const sendQueued = async (
   tracks: QueueItem[],
   channel: GenericChannel
 ) => {
-  const urlTracks = tracks.map((track) =>
-    toUrlString(track.title, track.url, 50)
-  );
+  const urlTracks = tracks
+    .slice(0, 10)
+    .map((track) => toUrlString(track.title, track.url, 50));
   channel.send(
     listEmbed(urlTracks)
       .setTitle("Tracks Queued")
       .setThumbnail(tracks[0].thumbnailURL)
+      .setFooter(
+        `${tracks.length} tracks queued ${
+          tracks.length > 10 ? "(showing first 10)" : ""
+        }`
+      )
   );
 };
 

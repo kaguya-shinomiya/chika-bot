@@ -26,7 +26,7 @@ const skip: Command = {
 
     channel.send(
       withAuthorEmbed(author).setDescription(
-        `Skipping **${toUrlString(nowPlaying!.title, nowPlaying!.url)}**`
+        `Skipping **${toUrlString(nowPlaying!.title, nowPlaying!.url, 40)}**`
       )
     );
     dispatcher.end();

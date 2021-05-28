@@ -3,6 +3,7 @@ import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendNotInGuild, sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
+import { createQueueIfNotExists } from "./utils/queue";
 import { searchVideo } from "./utils/youtube";
 
 export const search: Command = {
@@ -25,10 +26,7 @@ export const search: Command = {
       sendNotInGuild(channel);
       return;
     }
-    let queue = client.audioQueues.get(guild.id);
-    if (!queue) {
-      queue = client.audioQueues.set(guild.id, { queue: [] }).get(guild.id)!;
-    }
+    const queue = createQueueIfNotExists(client, guild.id);
     const resultSelectListener = createResultSelectListener({
       maxNum: results.length,
       results,

@@ -3,9 +3,9 @@ import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendNotInGuild, sendNowPlaying } from "./utils/embeds";
 
-const np: Command = {
-  name: "np",
-  aliases: ["now-playing"],
+const nowPlaying: Command = {
+  name: "now-playing",
+  aliases: ["nowp"],
   argsCount: 0,
   description: "Show the currently playing track.",
   category: "Music",
@@ -26,4 +26,4 @@ const np: Command = {
   },
 };
 
-export default np;
+export default nowPlaying;
