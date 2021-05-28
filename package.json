@@ -47,5 +47,7 @@
       "yarn eslint",
       "yarn prettier --write"
     ]
-  }
+  },
+  "license": "MIT",
+  "version": "0.2.0"
 }
