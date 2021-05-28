@@ -82,7 +82,7 @@ export const sendAddedToQueue = async ({
   );
 
 export const sendNotInGuild = async (channel: GenericChannel) =>
-  channel.send(lightErrorEmbed("I can only play songs for you in a server!"));
+  channel.send(lightErrorEmbed("I can only play music for you in a server!"));
 
 export const sendMaxTracksQueued = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("Maximum number of tracks queued!"));

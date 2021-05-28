@@ -7,6 +7,7 @@ const clear: Command = {
   name: "clear",
   description: "Clears all tracks from the queue.",
   argsCount: 0,
+  aliases: ["c"],
   category: "Music",
   usage: `${PREFIX}clear`,
   async execute(message) {

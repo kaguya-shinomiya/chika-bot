@@ -3,8 +3,9 @@ import { Command } from "../../types/command";
 import { sendAddedToQueue, sendNotInGuild, sendNoVideo } from "./utils/embeds";
 import { validateArgs } from "./utils/youtube";
 
-const addd: Command = {
-  name: "addd",
+const insert: Command = {
+  name: "insert",
+  aliases: ["addd"],
   argsCount: -2,
   category: "Music",
   usage: `${PREFIX}addd <url|search_string>`,
@@ -34,4 +35,4 @@ const addd: Command = {
   },
 };
 
-export default addd;
+export default insert;
