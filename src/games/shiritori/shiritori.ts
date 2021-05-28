@@ -205,7 +205,7 @@ export class Shiritori extends Game {
   }
 
   static rules = baseEmbed()
-    .setTitle("Shiritori :u556b:")
+    .setTitle("Shiritori :u55b6:")
     .addFields([
       {
         name: "How it works",
