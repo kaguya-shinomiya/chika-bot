@@ -46,3 +46,10 @@ export const sendGameCrashedError = async (channel: GenericChannel) => {
       .setDescription("The game crashed for some reason.")
   );
 };
+
+export const sendInGame = async (channel: GenericChannel) =>
+  channel.send(
+    lightErrorEmbed(
+      "There is a game being played in this channel! Please wait till the current game is finished."
+    )
+  );

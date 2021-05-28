@@ -6,7 +6,6 @@
     "@types/he": "^1.1.1",
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.3.0",
-    "@types/uuid": "^8.3.0",
     "@types/ws": "^7.4.4",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
@@ -29,7 +28,6 @@
     "dotenv-safe": "^8.2.0",
     "ffmpeg-static": "^4.3.0",
     "he": "^1.2.0",
-    "uuid": "^8.3.2",
     "ytdl-core": "^4.8.1",
     "ytpl": "^2.2.1",
     "ytsr": "^3.5.0"

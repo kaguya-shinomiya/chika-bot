@@ -1,5 +1,6 @@
 import { PREFIX } from "../../constants";
 import {
+  sendInGame,
   sendNoGameSelectedError,
   sendUnknownGameError,
 } from "../../games/utils/errorSenders";
@@ -15,6 +16,12 @@ export const game: Command = {
   argsCount: -1,
   async execute(message, args) {
     const { mentions, channel, client } = message;
+
+    if (client.gameStates.get(channel.id)) {
+      sendInGame(channel);
+      return;
+    }
+
     const [requestedGame] = args;
     if (!requestedGame) {
       sendNoGameSelectedError(message.channel);

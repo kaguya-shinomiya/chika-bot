@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Message, User } from "discord.js";
-import { v4 } from "uuid";
 import { chika_beating_yu_gif, red_cross } from "../../assets";
 import { baseEmbed, lightErrorEmbed, rappingEmbed } from "../../shared/embeds";
 import { Game, GameType } from "../../types/game";
@@ -44,20 +43,20 @@ export class Shiritori extends Game {
     const [p1Cards, p2Cards, stack] = Shiritori.genInitialCards();
 
     // TODO send some kinda start message
-    const gameID = v4();
-    client.gameStates.set(
-      gameID,
-      new ShiritoriGameState({
-        channelID: channel.id,
-        p1,
-        p2,
-        p1Cards,
-        p2Cards,
-        stack,
-      })
-    );
+    const state = client.gameStates
+      .set(
+        channel.id,
+        new ShiritoriGameState({
+          channelID: channel.id,
+          p1,
+          p2,
+          p1Cards,
+          p2Cards,
+          stack,
+        })
+      )
+      .get(channel.id)! as ShiritoriGameState;
 
-    const state = client.gameStates.get(gameID) as ShiritoriGameState;
     channel.send(Shiritori.playerCardsEmbed(state));
 
     const listener = async (message: Message) => {
@@ -68,7 +67,9 @@ export class Shiritori extends Game {
         channel: nowChannel,
         client: nowClient,
       } = message;
-      const nowState = nowClient.gameStates.get(gameID) as ShiritoriGameState;
+      const nowState = nowClient.gameStates.get(
+        nowChannel.id
+      ) as ShiritoriGameState;
       if (!nowState) {
         sendGameCrashedError(nowChannel);
         endGame();
@@ -121,7 +122,7 @@ export class Shiritori extends Game {
 
     function endGame() {
       client.removeListener("message", listener);
-      client.gameStates.delete(gameID);
+      client.gameStates.delete(channel.id);
     }
 
     function popRandom(arr: string[]) {
