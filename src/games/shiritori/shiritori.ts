@@ -5,8 +5,9 @@ import { chika_beating_yu_gif, red_cross } from "../../assets";
 import { baseEmbed, lightErrorEmbed, rappingEmbed } from "../../shared/embeds";
 import { Game, GameType } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
-import { sendGameCrashedError, sendNoTagError } from "../utils/errorSenders";
+import { sendGameCrashedError } from "../utils/errorSenders";
 import { handleOpponentResponse } from "../utils/handleOpponentResponse";
+import { shiritoriInfo } from "./info";
 import { ShiritoriGameState } from "./types";
 
 export class Shiritori extends Game {
@@ -16,11 +17,9 @@ export class Shiritori extends Game {
 
   static pregame(message: Message) {
     const { channel, mentions, author } = message;
-    const opponent = mentions.users.first();
-    if (!opponent) {
-      sendNoTagError(Shiritori.title, channel, true);
-      return;
-    }
+    const opponent = mentions.users.first()!;
+    channel.send(shiritoriInfo);
+
     // if (author.id === opponent.id) {
     //   sendTaggedSelfError(channel);
     //   return;
@@ -188,6 +187,7 @@ export class Shiritori extends Game {
 
   static async checkWord(word: string): Promise<boolean> {
     const uri = `http://api.datamuse.com/words?sp=${word}&max=1`;
+    // TODO catch errors
     return axios.get(uri).then((response) => response.data.length === 1);
   }
 }

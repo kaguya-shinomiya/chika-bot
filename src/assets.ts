@@ -8,5 +8,7 @@ export const chika_beating_yu_gif = "https://i.imgur.com/kYTIHbE.gif";
 export const kaguya_sleep_gif = "https://i.imgur.com/4y1lORB.gif";
 export const chika_spin_gif = "https://i.imgur.com/xMDHNDz.gif";
 
+export const shiritori_rules_png = "https://i.imgur.com/rzgelx8.jpg";
+
 export const white_check_mark = "✅";
 export const red_cross = "❌";
