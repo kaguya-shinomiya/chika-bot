@@ -1,17 +1,17 @@
-import { Client } from "discord.js";
 import { PREFIX, PREFIX_RE } from "../constants";
 import {
-  badCommandsEmbed,
   badArgsEmbed,
+  badCommandsEmbed,
   genericErrorEmbed,
 } from "../shared/embeds";
 import { Event } from "../types/event";
+import { RedisPrefix } from "../types/redis";
 
 const message: Event = {
   name: "message",
   once: false,
   // eslint-disable-next-line no-shadow
-  listener(client: Client, message) {
+  listener({ client, redis }, message) {
     if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);
@@ -37,7 +37,24 @@ const message: Event = {
     }
 
     try {
-      command.execute(message, args);
+      if (!command.redis) {
+        command.execute(message, args);
+        return;
+      }
+      switch (command.redis) {
+        case RedisPrefix.default:
+          command.execute(message, args, redis.defaultRedis);
+          break;
+        case RedisPrefix.games:
+          command.execute(message, args, redis.gamesRedis);
+          break;
+        case RedisPrefix.tracks:
+          command.execute(message, args, redis.tracksRedis);
+          break;
+        default:
+          command.execute(message, args);
+          break;
+      }
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);

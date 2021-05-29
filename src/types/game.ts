@@ -1,9 +1,10 @@
 import { Message, MessageEmbed } from "discord.js";
+import { Redis } from "ioredis";
 
 export type nextFn = (...args: any[]) => void;
 // eslint-disable-next-line no-shadow
 export enum GameType {
-  Single,
+  Single = 1,
   Versus,
   Multi,
 }
@@ -14,7 +15,7 @@ export abstract class Game {
 
   static type: GameType;
 
-  static pregame?(message: Message): void;
+  static pregame?(message: Message, redis: Redis): void;
 
   static rules: MessageEmbed;
 }

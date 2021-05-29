@@ -1,7 +1,12 @@
 import { Client, ClientEvents } from "discord.js";
+import { RedisPrefixed } from "./redis";
 
+interface ListenerParams {
+  client: Client;
+  redis: RedisPrefixed;
+}
 export interface Event {
   name: keyof ClientEvents;
   once: boolean;
-  listener: (client: Client, ...args: any[]) => void;
+  listener: ({ client, redis }: ListenerParams, ...args: any[]) => void;
 }

@@ -7,17 +7,19 @@ import {
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { GameType } from "../../types/game";
+import { RedisPrefix } from "../../types/redis";
 
 export const game: Command = {
   name: "game",
   description: "Play a game with Pro Gamer Chika.",
   category: "Fun",
+  redis: RedisPrefix.games,
   usage: `${PREFIX}game <game_title>`,
   argsCount: -1,
-  async execute(message, args) {
+  async execute(message, args, redis) {
     const { mentions, channel, client } = message;
 
-    if (client.gameStates.get(channel.id)) {
+    if (await redis!.get(channel.id)) {
       sendInGame(channel);
       return;
     }
@@ -69,7 +71,7 @@ export const game: Command = {
     }
 
     if (toPlay.pregame) {
-      toPlay.pregame(message);
+      toPlay.pregame(message, redis!);
     }
   },
 };

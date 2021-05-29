@@ -26,6 +26,7 @@ const queue: Command = {
       channel,
       tracks: nowQueue.queue,
       nowPlaying: nowQueue.nowPlaying,
+      isPaused: nowQueue.dispatcher?.paused,
       current: nowQueue.dispatcher?.streamTime,
     });
   },
