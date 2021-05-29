@@ -7,7 +7,10 @@ const ready: Event = {
     const { defaultRedis } = redis;
     // eslint-disable-next-line no-console
     console.log("Chika bot is ready!");
-    defaultRedis.set("ping", "Redis is up!");
+    defaultRedis.set(
+      "ping",
+      `Redis is up and running on port ${process.env.REDIS_PORT}!`
+    );
     // eslint-disable-next-line no-console
     defaultRedis.get("ping").then((res) => console.log(res));
   },

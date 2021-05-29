@@ -21,19 +21,21 @@ const main = async () => {
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   client.audioQueues = new Collection();
 
+  const port = parseInt(process.env.REDIS_PORT, 10);
+  const host = process.env.REDIS_HOST;
   const defaultRedis = new Redis({
-    port: 6379,
-    host: "127.0.0.1",
+    port,
+    host,
   });
   const tracksRedis = new Redis({
     keyPrefix: "tracks",
-    port: 6379,
-    host: "127.0.0.1",
+    port,
+    host,
   });
   const gamesRedis = new Redis({
     keyPrefix: "game",
-    port: 6379,
-    host: "127.0.0.1",
+    port,
+    host,
   });
 
   const redis: RedisPrefixed = { defaultRedis, tracksRedis, gamesRedis };
