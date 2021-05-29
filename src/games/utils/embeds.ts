@@ -53,7 +53,7 @@ export const sendGameCrashedError = async (channel: GenericChannel) => {
 export const sendInGame = async (channel: GenericChannel) =>
   channel.send(
     lightErrorEmbed(
-      "There is a game being played in this channel! Please wait till the current game is finished."
+      "There is a game being played in this channel!\nPlease wait till the current game is finished."
     )
   );
 

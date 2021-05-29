@@ -1,10 +1,7 @@
 import axios from "axios";
 import { Message, User } from "discord.js";
-import {
-  chika_beating_yu_gif,
-  red_cross,
-  shiritori_rules_png,
-} from "../../assets";
+import { Redis } from "ioredis";
+import { chika_beating_yu_gif, shiritori_rules_png } from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game, GameType } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
@@ -12,12 +9,19 @@ import { sendGameStartsIn, sendTaggedSelfError } from "../utils/embeds";
 import { handleOpponentResponse } from "../utils/handleOpponentResponse";
 import { ShiritoriGameState } from "./types";
 
+interface startShiritoriGameParams {
+  message: Message;
+  p1: User;
+  p2: User;
+  redis: Redis;
+}
+
 export class Shiritori extends Game {
   static title = "shiritori";
 
   static type = GameType.Versus;
 
-  static pregame(message: Message) {
+  static pregame(message: Message, redis: Redis) {
     const { channel, mentions, author } = message;
     const opponent = mentions.users.first()!;
 
@@ -32,7 +36,7 @@ export class Shiritori extends Game {
       message,
       opponent,
       () => {
-        Shiritori.startGame(message, author, opponent);
+        Shiritori.startGame({ message, p1: author, p2: opponent, redis });
       },
       () =>
         channel.send(
@@ -43,20 +47,48 @@ export class Shiritori extends Game {
     );
   }
 
-  static createOnceListener(gameState: ShiritoriGameState) {
+  static startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
+    const { channel, client } = message;
+    const { p1Cards, p2Cards, startingChar } = Shiritori.genInitialCards();
+
+    const initState = new ShiritoriGameState({
+      p1,
+      p2,
+      p1Cards,
+      p2Cards,
+      startingChar,
+      channelID: channel.id,
+    });
+
+    redis.set(channel.id, "true");
+
+    sendGameStartsIn({
+      channel,
+      title: "shiritori",
+      timeout: 5,
+      message: "I'll reveal the first card in 5 seconds.",
+    }).then(() => channel.send(Shiritori.playerCardsEmbed(initState)));
+
+    setTimeout(() => {
+      client.once("message", Shiritori.createOnceListener(initState, redis)); // register the new listener
+      channel.send(`:regional_indicator_${initState.startingChar}:`);
+    }, 5000);
+  }
+
+  static createOnceListener(state: ShiritoriGameState, redis: Redis) {
     const shiritoriListener = async (message: Message) => {
       const { author, content, channel, client } = message;
-      const noChange = Shiritori.createOnceListener(gameState);
+      const onRejectListener = Shiritori.createOnceListener(state, redis);
+      const reject = () => client.once("message", onRejectListener);
 
-      if (
-        !(gameState.p1.id === author.id) &&
-        !(gameState.p2.id === author.id)
-      ) {
-        client.once("message", noChange);
+      // 1. only accept from those 2 players
+      if (!(state.p1.id === author.id) && !(state.p2.id === author.id)) {
+        reject();
         return;
       }
-      if (!(channel.id === gameState.channelID)) {
-        client.once("message", noChange);
+      // 2. and they must be sending from the right channel
+      if (!(channel.id === state.channelID)) {
+        reject();
         return;
       }
 
@@ -64,101 +96,73 @@ export class Shiritori extends Game {
         channel.send(
           lightErrorEmbed(`**${author.username}** has stopped the game.`)
         );
-        endGame();
+        stopGame();
         return;
       }
 
       if (content.length < 4) {
-        message.react(red_cross);
-        client.once("message", noChange);
+        // message.react(red_cross);
+        reject();
         return;
       }
 
-      const playerCards =
-        author.id === gameState.p1.id ? gameState.p1Cards : gameState.p2Cards;
+      const thisPlayerCards =
+        author.id === state.p1.id ? state.p1Cards : state.p2Cards;
 
-      if (!content.startsWith(gameState.startingChar!)) {
-        message.react(red_cross);
-        client.once("message", noChange);
+      if (!content.startsWith(state.startingChar!)) {
+        // message.react(red_cross);
+        reject();
         return;
       }
 
       const lastChar = content[content.length - 1];
-      if (!playerCards.includes(content[content.length - 1])) {
-        message.react(red_cross);
-        client.once("message", noChange);
+      if (!thisPlayerCards.includes(content[content.length - 1])) {
+        // message.react(red_cross);
+        reject();
         return;
       }
 
       const isValidWord = await Shiritori.checkWord(content);
       if (!isValidWord) {
-        message.react(red_cross);
-        client.once("message", noChange);
+        // message.react(red_cross);
+        reject();
+        return;
+      }
+      channel.send(`I accept **${content}**!`);
+      thisPlayerCards.splice(thisPlayerCards.indexOf(lastChar), 1); // it's valid, pop that word out
+
+      if (thisPlayerCards.length === 0) {
+        channel.send(
+          baseEmbed()
+            .setDescription(
+              `**${author.username}** defeats **${state.p2.username}!**`
+            )
+            .setImage(chika_beating_yu_gif)
+        );
+        stopGame();
         return;
       }
 
-      playerCards.splice(playerCards.indexOf(lastChar), 1);
-      if (playerCards.length === 0) {
-        channel.send(
-          baseEmbed()
-            .setTitle(`**${author.username}** wins!`)
-            .setImage(chika_beating_yu_gif)
-        );
-        endGame();
-        return;
-      }
-      client.once("message", Shiritori.createOnceListener(gameState));
+      client.once("message", Shiritori.createOnceListener(state, redis));
       channel
-        .send(Shiritori.playerCardsEmbed(gameState))
+        .send(Shiritori.playerCardsEmbed(state))
         .then(() => channel.send(`:regional_indicator_${lastChar}:`));
 
       // eslint-disable-next-line no-param-reassign
-      gameState.startingChar = lastChar;
+      state.startingChar = lastChar;
 
-      function endGame() {
-        client.gameStates.delete(channel.id);
+      function stopGame() {
+        redis.del(channel.id);
       }
     };
 
     return shiritoriListener;
   }
 
-  static startGame({ client, channel }: Message, p1: User, p2: User) {
-    const [p1Cards, p2Cards, stack] = Shiritori.genInitialCards();
-
-    const state = client.gameStates
-      .set(
-        channel.id,
-        new ShiritoriGameState({
-          channelID: channel.id,
-          p1,
-          p2,
-          p1Cards,
-          p2Cards,
-          stack,
-        })
-      )
-      .get(channel.id)! as ShiritoriGameState;
-
-    sendGameStartsIn({
-      channel,
-      title: "shiritori",
-      timeout: 5,
-      message: "I'll reveal the first card in 5 seconds.",
-    }).then(() => channel.send(Shiritori.playerCardsEmbed(state)));
-
-    const [firstChar] = Shiritori.popRandom(state.stack);
-    state.startingChar = firstChar;
-    setTimeout(() => {
-      client.once("message", Shiritori.createOnceListener(state)); // register the new listener
-      channel.send(`:regional_indicator_${firstChar}:`);
-    }, 5000);
-  }
-
-  static popRandom(arr: string[]) {
-    const index = Math.floor(Math.random() * arr.length);
-    return arr.splice(index, 1);
-  }
+  // static popRandom(arr: string[]) {
+  //   const index = Math.floor(Math.random() * arr.length);
+  //   return arr.splice(index, 1);
+  // }
 
   static genInitialCards() {
     const allChars: string[] = [];
@@ -167,18 +171,18 @@ export class Shiritori extends Game {
     }
 
     const cards: string[] = [];
-    while (cards.length < 10) {
+    while (cards.length < 11) {
       const newChar = String.fromCharCode(97 + Math.floor(Math.random() * 26));
       if (!cards.includes(newChar)) {
         cards.push(newChar);
       }
     }
 
-    return [
-      cards.slice(0, 5),
-      cards.slice(5, 10),
-      allChars.filter((char) => !cards.includes(char)),
-    ];
+    return {
+      p1Cards: cards.slice(0, 5),
+      p2Cards: cards.slice(5, 10),
+      startingChar: cards.pop()!,
+    };
   }
 
   static genCardsString(chars: string[]): string {

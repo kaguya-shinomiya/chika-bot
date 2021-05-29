@@ -17,7 +17,7 @@ const main = async () => {
   client.login(process.env.APP_TOKEN);
   client.commands = loadCommands();
   [client.games, client.gamesList] = loadGames();
-  client.gameStates = new Collection(); // initialize an empty gameState instance
+  // client.gameStates = new Collection(); // initialize an empty gameState instance
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   client.audioQueues = new Collection();
 
@@ -28,12 +28,12 @@ const main = async () => {
     host,
   });
   const tracksRedis = new Redis({
-    keyPrefix: "tracks",
+    keyPrefix: "tracks:",
     port,
     host,
   });
   const gamesRedis = new Redis({
-    keyPrefix: "game",
+    keyPrefix: "game:",
     port,
     host,
   });
