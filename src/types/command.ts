@@ -1,4 +1,6 @@
 import { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
+import { Redis } from "ioredis";
+import { RedisPrefix } from "./redis";
 
 export type commandCategory = "Fun" | "Utility" | "Music";
 export type GenericChannel = TextChannel | DMChannel | NewsChannel;
@@ -10,5 +12,6 @@ export interface Command {
   usage: string;
   aliases?: string[];
   argsCount: number; // set to -1 for any
-  execute: (message: Message, args: string[]) => void;
+  redis?: RedisPrefix;
+  execute: (message: Message, args: string[], redis?: Redis) => void;
 }

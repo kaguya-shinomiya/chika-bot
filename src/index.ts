@@ -1,7 +1,7 @@
 import Discord, { Collection } from "discord.js";
 import dotenv from "dotenv-safe";
 import Redis from "ioredis";
-import { RedisPrefixed } from "./types/client";
+import { RedisPrefixed } from "./types/redis";
 import { loadCommands } from "./utils/loadCommands";
 import { loadEventListeners } from "./utils/loadEventListeners";
 import { loadGames } from "./utils/loadGames";

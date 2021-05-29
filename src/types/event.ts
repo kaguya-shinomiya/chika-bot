@@ -1,5 +1,5 @@
 import { Client, ClientEvents } from "discord.js";
-import { RedisPrefixed } from "./client";
+import { RedisPrefixed } from "./redis";
 
 interface ListenerParams {
   client: Client;

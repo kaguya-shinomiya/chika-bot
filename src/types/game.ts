@@ -3,7 +3,7 @@ import { Message, MessageEmbed } from "discord.js";
 export type nextFn = (...args: any[]) => void;
 // eslint-disable-next-line no-shadow
 export enum GameType {
-  Single,
+  Single = 1,
   Versus,
   Multi,
 }

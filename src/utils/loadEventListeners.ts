@@ -1,7 +1,7 @@
 import { Client } from "discord.js";
 import fs from "fs";
 import path from "path";
-import { RedisPrefixed } from "../types/client";
+import { RedisPrefixed } from "../types/redis";
 import { Event } from "../types/event";
 
 export const loadEventListeners = (client: Client, redis: RedisPrefixed) => {

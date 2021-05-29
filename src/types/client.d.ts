@@ -1,11 +1,10 @@
 import Discord from "discord.js";
-import { Redis } from "ioredis";
 import { Command } from "./command";
 import { Game } from "./game";
 import { GameState } from "./gameState";
 import { AudioUtils, Queue } from "./queue";
 
-interface ClientCache {
+interface DiscordClientCache {
   audioQueues: Discord.Collection<string, AudioUtils>;
 }
 
@@ -16,15 +15,9 @@ declare module "discord.js" {
     gamesList: string[];
     commandsHelp: Discord.MessageEmbed;
 
-    cache: ClientCache;
+    cache: DiscordClientCache;
 
     gameStates: Discord.Collection<string, GameState>; // the key is channel id
     audioQueues: Discord.Collection<string, Queue>; // maps guildID to a Queue
   }
-}
-
-export interface RedisPrefixed {
-  defaultRedis: Redis;
-  tracksRedis: Redis;
-  gamesRedis: Redis;
 }
