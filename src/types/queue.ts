@@ -12,3 +12,8 @@ export interface Queue {
   nowPlaying?: QueueItem;
   queue: QueueItem[];
 }
+
+export interface AudioUtils {
+  connection?: VoiceConnection;
+  dispatcher?: StreamDispatcher;
+}

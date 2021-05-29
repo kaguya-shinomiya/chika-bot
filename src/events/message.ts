@@ -1,8 +1,7 @@
-import { Client } from "discord.js";
 import { PREFIX, PREFIX_RE } from "../constants";
 import {
-  badCommandsEmbed,
   badArgsEmbed,
+  badCommandsEmbed,
   genericErrorEmbed,
 } from "../shared/embeds";
 import { Event } from "../types/event";
@@ -11,7 +10,7 @@ const message: Event = {
   name: "message",
   once: false,
   // eslint-disable-next-line no-shadow
-  listener(client: Client, message) {
+  listener({ client }, message) {
     if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);

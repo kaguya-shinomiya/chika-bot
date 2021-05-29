@@ -1,5 +1,7 @@
 import Discord, { Collection } from "discord.js";
 import dotenv from "dotenv-safe";
+import Redis from "ioredis";
+import { RedisPrefixed } from "./types/client";
 import { loadCommands } from "./utils/loadCommands";
 import { loadEventListeners } from "./utils/loadEventListeners";
 import { loadGames } from "./utils/loadGames";
@@ -18,7 +20,24 @@ const main = async () => {
   client.gameStates = new Collection(); // initialize an empty gameState instance
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   client.audioQueues = new Collection();
-  loadEventListeners(client);
+
+  const defaultRedis = new Redis({
+    port: 6379,
+    host: "127.0.0.1",
+  });
+  const tracksRedis = new Redis({
+    keyPrefix: "tracks",
+    port: 6379,
+    host: "127.0.0.1",
+  });
+  const gamesRedis = new Redis({
+    keyPrefix: "game",
+    port: 6379,
+    host: "127.0.0.1",
+  });
+
+  const redis: RedisPrefixed = { defaultRedis, tracksRedis, gamesRedis };
+  loadEventListeners(client, redis);
 };
 
 // eslint-disable-next-line no-console
