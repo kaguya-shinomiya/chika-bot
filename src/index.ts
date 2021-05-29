@@ -10,7 +10,6 @@ import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 dotenv.config();
 
 // TODO need to register only 1 listener per command type?
-// TODO look into Redis for session-related things, or we can store everything on the client
 
 const main = async () => {
   const client = new Discord.Client();
@@ -22,21 +21,12 @@ const main = async () => {
   client.cache = { audioUtils: new Collection() };
   // client.audioQueues = new Collection();
 
-  const port = parseInt(process.env.REDIS_PORT, 10);
-  const host = process.env.REDIS_HOST;
-  const defaultRedis = new Redis({
-    port,
-    host,
-  });
-  const tracksRedis = new Redis({
+  const defaultRedis = new Redis(process.env.REDISCLOUD_URL);
+  const tracksRedis = new Redis(process.env.REDISCLOUD_URL, {
     keyPrefix: "tracks:",
-    port,
-    host,
   });
-  const gamesRedis = new Redis({
+  const gamesRedis = new Redis(process.env.REDISCLOUD_URL, {
     keyPrefix: "game:",
-    port,
-    host,
   });
 
   const redis: RedisPrefixed = { defaultRedis, tracksRedis, gamesRedis };

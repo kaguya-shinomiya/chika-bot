@@ -9,7 +9,7 @@ const ready: Event = {
     console.log("Chika bot is ready!");
     defaultRedis.set(
       "ping",
-      `Redis is up and running on port ${process.env.REDIS_PORT}!`
+      `Redis is up and running at ${process.env.REDISCLOUD_URL}!`
     );
     // eslint-disable-next-line no-console
     defaultRedis.get("ping").then((res) => console.log(res));
