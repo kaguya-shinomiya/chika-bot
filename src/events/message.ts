@@ -37,10 +37,6 @@ const message: Event = {
     }
 
     try {
-      if (!command.redis) {
-        command.execute(message, args);
-        return;
-      }
       switch (command.redis) {
         case RedisPrefix.default:
           command.execute(message, args, redis.defaultRedis);
@@ -52,7 +48,7 @@ const message: Event = {
           command.execute(message, args, redis.tracksRedis);
           break;
         default:
-          command.execute(message, args);
+          command.execute(message, args, redis.defaultRedis);
           break;
       }
     } catch (err) {

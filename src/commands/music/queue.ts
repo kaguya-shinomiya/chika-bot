@@ -1,7 +1,8 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, sendQueued } from "./utils/embeds";
+import { RedisPrefix } from "../../types/redis";
+import { sendMusicOnlyInGuild, sendQueued } from "./utils/embeds";
 
 const queue: Command = {
   name: "queue",
@@ -10,24 +11,31 @@ const queue: Command = {
   argsCount: 0,
   category: "Music",
   usage: `${PREFIX}queue`,
-  async execute({ channel, client, guild }) {
+  redis: RedisPrefix.tracks,
+  async execute(message, _args, redis) {
+    const { channel, client, guild } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
 
-    const nowQueue = client.audioQueues.get(guild.id);
-    if (!nowQueue || (nowQueue.queue.length === 0 && !nowQueue.nowPlaying)) {
-      channel.send(lightErrorEmbed("There are no tracks queued."));
-      return;
-    }
-
-    sendQueued({
-      channel,
-      tracks: nowQueue.queue,
-      nowPlaying: nowQueue.nowPlaying,
-      isPaused: nowQueue.dispatcher?.paused,
-      current: nowQueue.dispatcher?.streamTime,
+    redis.lrange(guild.id, 0, -1).then((tracks) => {
+      const audioUtils = client.cache.audioUtils.get(guild.id);
+      if (!tracks && !audioUtils) {
+        channel.send(
+          lightErrorEmbed(
+            "There are no tracks queued, and nothing is playing now."
+          )
+        );
+        return;
+      }
+      sendQueued({
+        channel,
+        tracks: tracks.map((track) => JSON.parse(track)),
+        nowPlaying: audioUtils?.nowPlaying,
+        isPaused: audioUtils?.dispatcher.paused,
+        current: audioUtils?.dispatcher.streamTime,
+      });
     });
   },
 };

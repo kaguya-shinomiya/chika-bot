@@ -12,6 +12,6 @@ export interface Command {
   usage: string;
   argsCount: number; // set to -1 for any, -2 for at least one
   aliases?: string[];
-  redis?: RedisPrefix;
-  execute: (message: Message, args: string[], redis?: Redis) => void;
+  redis: RedisPrefix;
+  execute: (message: Message, args: string[], redis: Redis) => void;
 }

@@ -35,7 +35,7 @@ export const badArgsEmbed = (command: Command, provided: number) =>
       }, but ${provided} ${provided === 1 ? `was` : `were`} provided.`
     )
     .addField(
-      "Further Help",
+      "Further help",
       `For more info, you may run \`${PREFIX}help ${command.name}\`.`
     );
 
@@ -47,7 +47,7 @@ export const badCommandsEmbed = (...badCommands: string[]) =>
         .join(", ")}.`
     )
     .addField(
-      "Further Help",
+      "Further help",
       `To get a list of all the commands I know, run \`${PREFIX}help\`.`
     );
 

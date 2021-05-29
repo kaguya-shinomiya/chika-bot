@@ -1,7 +1,8 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, trackLinkAndDuration } from "./utils/embeds";
+import { RedisPrefix } from "../../types/redis";
+import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const pause: Command = {
   name: "pause",
@@ -10,27 +11,28 @@ const pause: Command = {
   argsCount: 0,
   usage: `${PREFIX}pause`,
   category: "Music",
+  redis: RedisPrefix.tracks,
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
 
-    const queue = client.audioQueues.get(guild.id);
-    if (!queue?.dispatcher) {
+    const audioUtils = client.cache.audioUtils.get(guild.id);
+    if (!audioUtils?.dispatcher) {
       channel.send(
         lightErrorEmbed("There isn't anything playing right now...")
       );
       return;
     }
-    if (queue.dispatcher.paused) {
+    if (audioUtils.dispatcher.paused) {
       channel.send(lightErrorEmbed("Playback is already paused!"));
       return;
     }
 
-    queue.dispatcher.pause();
-    const { title, url, duration } = queue.nowPlaying!;
+    audioUtils.dispatcher.pause();
+    const { title, url, duration } = audioUtils.nowPlaying!;
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:pause_button: Paused`)

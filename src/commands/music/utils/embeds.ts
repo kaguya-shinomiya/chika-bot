@@ -117,8 +117,11 @@ export const sendAddedToQueue = async ({
       .setThumbnail(thumbnailURL)
   );
 
-export const sendNotInGuild = async (channel: GenericChannel) =>
+export const sendMusicOnlyInGuild = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("I can only play music for you in a server!"));
+
+export const sendNotInGuild = async (channel: GenericChannel) =>
+  channel.send(lightErrorEmbed("This command can only be used in a server!"));
 
 export const toListString = (arr: string[]): string => {
   const withCount = arr.map((item, i) => `\`${i + 1}\` ${item}`);

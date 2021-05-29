@@ -1,7 +1,8 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, trackLinkAndDuration } from "./utils/embeds";
+import { RedisPrefix } from "../../types/redis";
+import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const resume: Command = {
   name: "resume",
@@ -9,22 +10,21 @@ const resume: Command = {
   category: "Music",
   description: "Resume playback.",
   usage: `${PREFIX}resume`,
+  redis: RedisPrefix.tracks,
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
-
-    const queue = client.audioQueues.get(guild.id);
-
-    if (!queue?.dispatcher?.paused) {
+    const audioUtils = client.cache.audioUtils.get(guild.id);
+    if (!audioUtils?.dispatcher.paused) {
       channel.send(lightErrorEmbed("There is nothing to resume..."));
       return;
     }
 
-    queue.dispatcher.resume();
-    const { title, url, duration } = queue.nowPlaying!;
+    audioUtils.dispatcher.resume();
+    const { title, url, duration } = audioUtils.nowPlaying!;
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:arrow_forward: Resumed`)

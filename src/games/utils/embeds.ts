@@ -75,7 +75,7 @@ export const sendGameStartsIn = async ({
       .setTitle("Alright!")
       .setDescription(message || `I'll start the game in ${timeout} seconds.`)
       .addField(
-        "More Info",
+        "More info",
         `
         To review the rules of **${capitalize(
           title

@@ -1,6 +1,7 @@
 import { PREFIX } from "../../constants";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { RedisPrefix } from "../../types/redis";
 
 const help: Command = {
   name: "help",
@@ -9,6 +10,7 @@ const help: Command = {
   category: "Utility",
   argsCount: -1,
   aliases: ["h"],
+  redis: RedisPrefix.default,
   async execute({ channel, client: { commands, commandsHelp } }, args) {
     if (!args.length || /all/i.test(args[0])) {
       // send a list of all commands

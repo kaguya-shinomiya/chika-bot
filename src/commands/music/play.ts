@@ -1,18 +1,18 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { QueueItem } from "../../types/queue";
+import { RedisPrefix } from "../../types/redis";
 import { tryToConnect } from "./utils/client";
 import {
   sendAddedToQueue,
-  sendCannotPlay,
-  sendNotInGuild,
+  sendMusicOnlyInGuild,
   sendNotInVoiceChannel,
   sendNoVideo,
   sendNoVoicePermissions,
-  sendNowPlaying,
 } from "./utils/embeds";
-import { createFinishListener } from "./utils/listener";
-import { playFromYt, validateArgs } from "./utils/youtube";
+import { createFinishListener, playThis } from "./utils/listener";
+import { validateArgs } from "./utils/youtube";
 
 const play: Command = {
   name: "play",
@@ -21,56 +21,50 @@ const play: Command = {
   argsCount: -1,
   category: "Music",
   description: "Let Chika play some music from YouTube for you.",
-  async execute(message, args) {
+  redis: RedisPrefix.tracks,
+  async execute(message, args, redis) {
     const { channel, member, guild, client, author } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
     if (!member?.voice.channel) {
       sendNotInVoiceChannel(channel);
       return;
     }
-    const queue = client.audioQueues.get(guild.id);
 
-    // case 1: there is a queue obj + no args
-    if (queue && args.length === 0) {
-      // case 1a: but the queue is empty
-      if (queue.queue.length === 0) {
-        channel.send(lightErrorEmbed("There are no songs for me to play."));
+    const next = await redis.lpop(guild.id);
+    const audioUtils = client.cache.audioUtils.get(guild.id);
+
+    // they called ck;play with no args
+    if (args.length === 0) {
+      if (!next) {
+        channel.send(
+          lightErrorEmbed("There are no songs in the queue for me to play.")
+        );
         return;
       }
-
-      // case 1b: queue has something
-      // TODO handle disconnect and errors
+      if (audioUtils) {
+        channel.send(lightErrorEmbed("I'm already playing some music!"));
+        return;
+      }
       const connection = await tryToConnect(member.voice.channel);
       if (!connection) {
         sendNoVoicePermissions(channel);
         return;
       }
-      queue.nowPlaying = queue.queue.shift()!;
-      const finishListener = createFinishListener({
+      connection.on("disconnect", () =>
+        client.cache.audioUtils.delete(guild.id)
+      );
+      const nextData = JSON.parse(next) as QueueItem;
+      playThis({
+        videoData: nextData,
+        connection,
         channel,
-        guild,
         client,
+        guildID: guild.id,
+        onFinish: createFinishListener({ channel, client, guild, redis }),
       });
-      const { title, url } = queue.nowPlaying;
-      const dispatcher = await playFromYt(connection, url);
-      if (!dispatcher) {
-        sendCannotPlay(title, url, channel);
-        finishListener();
-        return;
-      }
-      queue.dispatcher = dispatcher;
-      queue.connection = connection;
-      sendNowPlaying({ channel, streamTime: 0, videoData: queue.nowPlaying });
-      queue.dispatcher.on("finish", finishListener);
-      return;
-    }
-
-    // case 2: no queue + no args
-    if (!queue && args.length === 0) {
-      channel.send(lightErrorEmbed("There are no songs for me to play."));
       return;
     }
 
@@ -80,33 +74,30 @@ const play: Command = {
       return;
     }
 
-    // case 3: queue + args
-    if (queue) {
-      queue.queue.push(videoData);
+    // there's a song playing
+    // push to the redis queue
+    if (audioUtils) {
+      redis.rpush(guild.id, JSON.stringify(videoData));
       sendAddedToQueue({ videoData, author, channel });
       return;
     }
 
-    // case 4: no queue + args
+    // nothing is playing now
+    // start playing
     const connection = await tryToConnect(member.voice.channel);
     if (!connection) {
       sendNoVoicePermissions(channel);
       return;
     }
-    const dispatcher = await playFromYt(connection, videoData.url);
-    if (!dispatcher) {
-      sendCannotPlay(videoData.title, videoData.url, channel);
-      return;
-    }
-    client.audioQueues.set(guild.id, {
+    connection.on("disconnect", () => client.cache.audioUtils.delete(guild.id));
+    playThis({
+      videoData,
+      channel,
+      client,
       connection,
-      dispatcher,
-      queue: [],
-      nowPlaying: videoData,
+      guildID: guild.id,
+      onFinish: createFinishListener({ channel, client, guild, redis }),
     });
-
-    sendNowPlaying({ channel, videoData, streamTime: 0 });
-    dispatcher.on("finish", createFinishListener({ channel, client, guild }));
   },
 };
 

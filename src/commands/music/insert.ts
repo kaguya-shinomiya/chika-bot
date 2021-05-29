@@ -1,6 +1,11 @@
 import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
-import { sendAddedToQueue, sendNotInGuild, sendNoVideo } from "./utils/embeds";
+import { RedisPrefix } from "../../types/redis";
+import {
+  sendAddedToQueue,
+  sendMusicOnlyInGuild,
+  sendNoVideo,
+} from "./utils/embeds";
 import { validateArgs } from "./utils/youtube";
 
 const insert: Command = {
@@ -10,10 +15,11 @@ const insert: Command = {
   category: "Music",
   usage: `${PREFIX}addd <url|search_string>`,
   description: "Inserts a track to the front of the queue.",
-  async execute(message, args) {
-    const { client, channel, guild, author } = message;
+  redis: RedisPrefix.tracks,
+  async execute(message, args, redis) {
+    const { channel, guild, author } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
 
@@ -23,14 +29,7 @@ const insert: Command = {
       return;
     }
 
-    const queue = client.audioQueues.get(guild.id);
-    if (!queue) {
-      client.audioQueues.set(guild.id, {
-        queue: [videoData],
-      });
-    } else {
-      queue.queue.unshift(videoData);
-    }
+    redis.lpush(guild.id, JSON.stringify(videoData));
     sendAddedToQueue({ videoData, channel, author });
   },
 };

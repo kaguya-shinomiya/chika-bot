@@ -1,10 +1,10 @@
 import Discord from "discord.js";
 import { Command } from "./command";
 import { Game } from "./game";
-import { AudioUtils, Queue } from "./queue";
+import { AudioUtils } from "./queue";
 
 interface DiscordClientCache {
-  audioQueues: Discord.Collection<string, AudioUtils>;
+  audioUtils: Discord.Collection<string, AudioUtils>;
 }
 
 declare module "discord.js" {
@@ -17,6 +17,6 @@ declare module "discord.js" {
     cache: DiscordClientCache;
 
     // gameStates: Discord.Collection<string, GameState>; // the key is channel id
-    audioQueues: Discord.Collection<string, Queue>; // maps guildID to a Queue
+    // audioQueues: Discord.Collection<string, Queue>; // maps guildID to a Queue
   }
 }

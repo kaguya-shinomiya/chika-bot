@@ -2,6 +2,7 @@ import { MessageEmbed, User } from "discord.js";
 import { PREFIX } from "../../constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { RedisPrefix } from "../../types/redis";
 
 const avatarEmbed = (user: User): MessageEmbed =>
   baseEmbed()
@@ -14,6 +15,7 @@ const avatar: Command = {
   category: "Fun",
   usage: `${PREFIX}avatar [user ...]`,
   argsCount: -1,
+  redis: RedisPrefix.default,
   async execute({ mentions, author, channel }) {
     if (!mentions.users.size) {
       channel.send(avatarEmbed(author));

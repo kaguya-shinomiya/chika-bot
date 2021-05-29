@@ -1,9 +1,9 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, sendNowPlaying } from "./utils/embeds";
+import { RedisPrefix } from "../../types/redis";
+import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
 
-// TODO add playtime
 const nowPlaying: Command = {
   name: "now-playing",
   aliases: ["np"],
@@ -11,22 +11,24 @@ const nowPlaying: Command = {
   description: "Show the currently playing track.",
   category: "Music",
   usage: `${PREFIX}np`,
+  redis: RedisPrefix.tracks,
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
 
-    const queue = client.audioQueues.get(guild.id);
-    if (!queue?.nowPlaying) {
+    const audioUtils = client.cache.audioUtils.get(guild.id);
+    if (!audioUtils?.nowPlaying) {
       channel.send(lightErrorEmbed("The sound of silence."));
       return;
     }
+
     sendNowPlaying({
       channel,
-      videoData: queue.nowPlaying,
-      streamTime: queue.dispatcher!.streamTime,
+      videoData: audioUtils.nowPlaying,
+      streamTime: audioUtils.dispatcher.streamTime,
       withBar: true,
     });
   },

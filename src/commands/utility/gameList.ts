@@ -2,6 +2,7 @@ import { chika_detective_png } from "../../assets";
 import { PREFIX } from "../../constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { RedisPrefix } from "../../types/redis";
 import { capitalize } from "../../utils/text";
 
 export const gameList: Command = {
@@ -11,6 +12,7 @@ export const gameList: Command = {
   description: "See what games Chika can play.",
   category: "Utility",
   usage: `${PREFIX}game-list`,
+  redis: RedisPrefix.default,
   execute(message) {
     const { channel, client } = message;
     channel.send(
@@ -20,7 +22,7 @@ export const gameList: Command = {
         .setThumbnail(chika_detective_png)
         .addField(
           "\u200b",
-          `You may run \`${PREFIX}game\` to start a game, or \`${PREFIX}rules\` to check rules.`
+          `Please use \`${PREFIX}game\` to start a game, or \`${PREFIX}rules\` to check rules.`
         )
     );
   },

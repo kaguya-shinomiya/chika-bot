@@ -19,7 +19,8 @@ const main = async () => {
   [client.games, client.gamesList] = loadGames();
   // client.gameStates = new Collection(); // initialize an empty gameState instance
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
-  client.audioQueues = new Collection();
+  client.cache = { audioUtils: new Collection() };
+  // client.audioQueues = new Collection();
 
   const port = parseInt(process.env.REDIS_PORT, 10);
   const host = process.env.REDIS_HOST;
