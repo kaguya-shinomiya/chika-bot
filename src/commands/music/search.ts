@@ -6,6 +6,10 @@ import { createResultSelectListener } from "./utils/listener";
 import { createQueueIfNotExists } from "./utils/client";
 import { searchVideo } from "./utils/youtube";
 
+const SEARCH_COOLDOWN = 1000 * 10;
+
+// TODO add a cooldown for this
+
 export const search: Command = {
   name: "search",
   description: "Search for a track on YouTube",
@@ -41,7 +45,7 @@ export const search: Command = {
     };
 
     client.on("message", resultSelectListener);
-    client.setTimeout(timeoutCallback, 1000 * 20);
+    client.setTimeout(timeoutCallback, SEARCH_COOLDOWN);
   },
 };
 

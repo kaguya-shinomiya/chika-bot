@@ -7,7 +7,7 @@ import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
 
 dotenv.config();
 
-// TODO need to register only 1 listener per command type
+// TODO need to register only 1 listener per command type?
 // TODO look into Redis for session-related things, or we can store everything on the client
 
 const main = async () => {

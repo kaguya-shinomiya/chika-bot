@@ -9,8 +9,9 @@ declare module "discord.js" {
     commands: Discord.Collection<string, Command>;
     games: Discord.Collection<string, typeof Game>;
     gamesList: string[];
-    gameStates: Discord.Collection<string, GameState>; // the key is a uuid
     commandsHelp: Discord.MessageEmbed;
+
+    gameStates: Discord.Collection<string, GameState>; // the key is channel id
     audioQueues: Discord.Collection<string, Queue>; // maps guildID to a Queue
   }
 }

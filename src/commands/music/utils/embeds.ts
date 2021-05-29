@@ -121,17 +121,15 @@ export const sendNotInGuild = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("I can only play music for you in a server!"));
 
 export const toListString = (arr: string[]): string => {
-  let desc = "";
-  arr.forEach((item, i) => {
-    desc += `\`${i + 1}\` ${item}\n`;
-  });
-  return desc;
+  const withCount = arr.map((item, i) => `\`${i + 1}\` ${item}`);
+  return withCount.join(`\n`);
 };
 
 interface sendQueuedParams {
   tracks: QueueItem[];
   channel: GenericChannel;
   nowPlaying?: QueueItem;
+  isPaused?: boolean;
   current?: number;
 }
 
@@ -139,29 +137,37 @@ export const sendQueued = async ({
   tracks,
   channel,
   nowPlaying,
+  isPaused,
   current,
 }: sendQueuedParams) => {
   const urlTracks = tracks
     .slice(0, 10)
     .map((track) => toUrlString(track.title, track.url, 40));
   const now = nowPlaying
-    ? `:arrow_forward: ${toUrlString(
+    ? `${isPaused ? ":pause_button:" : ":arrow_forward:"} ${toUrlString(
         nowPlaying.title,
         nowPlaying.url,
         30
-      )} [${secToMin(Math.floor(current! / 1000))} / ${nowPlaying.duration}]\n`
+      )} [${secToMin(Math.floor(current! / 1000))} / ${nowPlaying.duration}]`
     : "";
-  channel.send(
-    baseEmbed()
-      .setTitle("Tracks Queued")
-      .setDescription(`${now}${toListString(urlTracks)}`)
-      .setThumbnail(tracks[0]?.thumbnailURL || nowPlaying!.thumbnailURL)
-      .setFooter(
-        `${tracks.length} ${tracks.length === 1 ? "track" : "tracks"} queued ${
-          tracks.length > 10 ? "(showing first 10)" : ""
-        }`
-      )
-  );
+  const partialEmbed = baseEmbed()
+    .setTitle("Tracks Queued")
+    .setDescription(toListString(urlTracks))
+    .setThumbnail(tracks[0]?.thumbnailURL || nowPlaying!.thumbnailURL)
+    .setFooter(
+      `${tracks.length} ${tracks.length === 1 ? "track" : "tracks"} queued ${
+        tracks.length > 10 ? "(showing first 10)" : ""
+      } | ${
+        nowPlaying
+          ? `One track ${isPaused ? "paused" : "playing"}`
+          : `Nothing playing now`
+      }`
+    );
+  if (nowPlaying) {
+    channel.send(partialEmbed.addField(`\u200b`, now));
+    return;
+  }
+  channel.send(partialEmbed);
 };
 
 interface sendRepeatProps {
