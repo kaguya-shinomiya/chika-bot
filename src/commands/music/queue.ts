@@ -21,7 +21,7 @@ const queue: Command = {
 
     redis.lrange(guild.id, 0, -1).then((tracks) => {
       const audioUtils = client.cache.audioUtils.get(guild.id);
-      if (!tracks && !audioUtils) {
+      if (tracks.length === 0 && !audioUtils) {
         channel.send(
           lightErrorEmbed(
             "There are no tracks queued, and nothing is playing now."
@@ -31,7 +31,7 @@ const queue: Command = {
       }
       sendQueued({
         channel,
-        tracks: tracks.map((track) => JSON.parse(track)),
+        tracks: tracks.map((track) => JSON.parse(track)) || [],
         nowPlaying: audioUtils?.nowPlaying,
         isPaused: audioUtils?.dispatcher.paused,
         current: audioUtils?.dispatcher.streamTime,
