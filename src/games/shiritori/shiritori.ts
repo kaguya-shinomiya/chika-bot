@@ -1,7 +1,11 @@
 import axios from "axios";
 import { Message, User } from "discord.js";
 import { Redis } from "ioredis";
-import { chika_beating_yu_gif, shiritori_rules_png } from "../../assets";
+import {
+  chika_beating_yu_gif,
+  shiritori_rules_png,
+  white_check_mark,
+} from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game, GameType } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
@@ -20,6 +24,8 @@ export class Shiritori extends Game {
   static title = "shiritori";
 
   static type = GameType.Versus;
+
+  static sessionDuration = 60 * 10;
 
   static pregame(message: Message, redis: Redis) {
     const { channel, mentions, author } = message;
@@ -60,7 +66,7 @@ export class Shiritori extends Game {
       channelID: channel.id,
     });
 
-    redis.set(channel.id, "true");
+    redis.set(channel.id, "true", "ex", Shiritori.sessionDuration);
 
     sendGameStartsIn({
       channel,
@@ -78,6 +84,7 @@ export class Shiritori extends Game {
   static createOnceListener(state: ShiritoriGameState, redis: Redis) {
     const shiritoriListener = async (message: Message) => {
       const { author, content, channel, client } = message;
+
       const onRejectListener = Shiritori.createOnceListener(state, redis);
       const reject = () => client.once("message", onRejectListener);
 
@@ -128,7 +135,7 @@ export class Shiritori extends Game {
         reject();
         return;
       }
-      channel.send(`I accept **${content}**!`);
+      channel.send(`I accept **${content}**! ${white_check_mark}`);
       thisPlayerCards.splice(thisPlayerCards.indexOf(lastChar), 1); // it's valid, pop that word out
 
       if (thisPlayerCards.length === 0) {
