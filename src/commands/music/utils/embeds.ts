@@ -9,6 +9,7 @@ import {
 } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
+import { minToSec, secToMin } from "./helpers";
 
 export const toUrlString = (
   title: string,
@@ -39,14 +40,37 @@ export const trackLinkAndDuration = ({
   duration: string;
 }) => `${toUrlString(title, url)} [${duration}]`;
 
-export const sendNowPlaying = async (
-  channel: GenericChannel,
-  { title, thumbnailURL, url, duration }: QueueItem
-) =>
+export const genPlayBar = (current: number, total: string) => {
+  // current is in milliseconds
+  const totalMillis = minToSec(total) * 1000;
+  const currentMin = secToMin(Math.floor(current / 1000));
+  const cursor = Math.floor((current / totalMillis) * 29);
+  return `${currentMin} ${"-".repeat(cursor)}o${"-".repeat(
+    29 - cursor
+  )} ${total}`;
+};
+
+interface sendNowPlayingParams {
+  channel: GenericChannel;
+  videoData: QueueItem;
+  streamTime: number;
+  withBar?: boolean;
+}
+
+export const sendNowPlaying = async ({
+  channel,
+  videoData: { title, duration, thumbnailURL, url },
+  streamTime,
+  withBar,
+}: sendNowPlayingParams) =>
   channel.send(
     baseEmbed()
       .setTitle("Now playing...")
-      .setDescription(trackLinkAndDuration({ title, url, duration }))
+      .setDescription(
+        `${toUrlString(title, url)}${
+          withBar ? `\n${genPlayBar(streamTime!, duration)}` : ""
+        }`
+      )
       .setThumbnail(thumbnailURL)
   );
 
@@ -93,37 +117,60 @@ export const sendAddedToQueue = async ({
       .setThumbnail(thumbnailURL)
   );
 
-export const sendNotInGuild = async (channel: GenericChannel) =>
+export const sendMusicOnlyInGuild = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("I can only play music for you in a server!"));
 
-export const sendMaxTracksQueued = async (channel: GenericChannel) =>
-  channel.send(lightErrorEmbed("Maximum number of tracks queued!"));
+export const sendNotInGuild = async (channel: GenericChannel) =>
+  channel.send(lightErrorEmbed("This command can only be used in a server!"));
 
-export const listEmbed = (arr: string[]) => {
-  let desc = "";
-  arr.forEach((item, i) => {
-    desc += `\`${i + 1}\` ${item}\n`;
-  });
-  return baseEmbed().setDescription(desc);
+export const toListString = (arr: string[]): string => {
+  const withCount = arr.map((item, i) => `\`${i + 1}\` ${item}`);
+  return withCount.join(`\n`);
 };
 
-export const sendQueued = async (
-  tracks: QueueItem[],
-  channel: GenericChannel
-) => {
+interface sendQueuedParams {
+  tracks: QueueItem[];
+  channel: GenericChannel;
+  nowPlaying?: QueueItem;
+  isPaused?: boolean;
+  current?: number;
+}
+
+export const sendQueued = async ({
+  tracks,
+  channel,
+  nowPlaying,
+  isPaused,
+  current,
+}: sendQueuedParams) => {
   const urlTracks = tracks
     .slice(0, 10)
     .map((track) => toUrlString(track.title, track.url, 40));
-  channel.send(
-    listEmbed(urlTracks)
-      .setTitle("Tracks Queued")
-      .setThumbnail(tracks[0].thumbnailURL)
-      .setFooter(
-        `${tracks.length} ${tracks.length > 1 ? "tracks" : "track"} queued ${
-          tracks.length > 10 ? "(showing first 10)" : ""
-        }`
-      )
-  );
+  const now = nowPlaying
+    ? `${isPaused ? ":pause_button:" : ":arrow_forward:"} ${toUrlString(
+        nowPlaying.title,
+        nowPlaying.url,
+        30
+      )} [${secToMin(Math.floor(current! / 1000))} / ${nowPlaying.duration}]`
+    : "";
+  const partialEmbed = baseEmbed()
+    .setTitle("Tracks Queued")
+    .setDescription(toListString(urlTracks))
+    .setThumbnail(tracks[0]?.thumbnailURL || nowPlaying!.thumbnailURL)
+    .setFooter(
+      `${tracks.length} ${tracks.length === 1 ? "track" : "tracks"} queued ${
+        tracks.length > 10 ? "(showing first 10)" : ""
+      } | ${
+        nowPlaying
+          ? `One track ${isPaused ? "paused" : "playing"}`
+          : `Nothing playing now`
+      }`
+    );
+  if (nowPlaying) {
+    channel.send(partialEmbed.addField(`\u200b`, now));
+    return;
+  }
+  channel.send(partialEmbed);
 };
 
 interface sendRepeatProps {
@@ -152,8 +199,9 @@ export const sendSearchResults = (
   );
 
   channel.send(
-    listEmbed(urlTitles)
+    baseEmbed()
       .setTitle("I found these tracks:")
+      .setDescription(toListString(urlTitles))
       .setThumbnail(chika_detective_png)
       .addField(
         "\u200b",

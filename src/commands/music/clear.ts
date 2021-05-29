@@ -1,7 +1,8 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild } from "./utils/embeds";
+import { RedisPrefix } from "../../types/redis";
+import { sendMusicOnlyInGuild } from "./utils/embeds";
 
 const clear: Command = {
   name: "clear",
@@ -10,27 +11,21 @@ const clear: Command = {
   aliases: ["c"],
   category: "Music",
   usage: `${PREFIX}clear`,
-  async execute(message) {
-    const { guild, client, channel, author } = message;
+  redis: RedisPrefix.tracks,
+  async execute(message, _args, redis) {
+    const { guild, channel, author } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
 
-    const queue = client.audioQueues.get(guild.id);
-    if (!queue) {
-      channel.send(lightErrorEmbed("Queue is already empty."));
-      return;
-    }
-
-    if (queue.dispatcher) {
-      queue.queue = [];
-      queue.dispatcher.end();
-    } else {
-      client.audioQueues.delete(guild.id);
-    }
-
-    channel.send(withAuthorEmbed(author).setTitle("Queue has been cleared."));
+    redis.del(guild.id).then((res) => {
+      if (!res) {
+        channel.send(lightErrorEmbed("Queue is already empty."));
+        return;
+      }
+      channel.send(withAuthorEmbed(author).setTitle("Queue has been cleared."));
+    });
   },
 };
 

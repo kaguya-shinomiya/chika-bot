@@ -2,8 +2,8 @@ import ytpl from "ytpl";
 import { PREFIX } from "../../constants";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, toUrlString } from "./utils/embeds";
-import { createQueueIfNotExists } from "./utils/client";
+import { RedisPrefix } from "../../types/redis";
+import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { parsePlaylist } from "./utils/youtube";
 
 const addPlaylist: Command = {
@@ -13,16 +13,18 @@ const addPlaylist: Command = {
   category: "Music",
   description: "Add a YouTube playlist to the queue.",
   usage: `${PREFIX}addp <url>`,
-  execute(message, args) {
-    const { guild, channel, client, author } = message;
+  redis: RedisPrefix.tracks,
+  execute(message, args, redis) {
+    const { guild, channel, author } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
     const [playlistURL] = args;
     ytpl(playlistURL)
       .then((res) => {
         const [playlistMetadata, videos] = parsePlaylist(res);
+        redis.rpush(guild.id, ...videos.map((video) => JSON.stringify(video)));
         channel.send(
           withAuthorEmbed(author)
             .setTitle("Added Playlist")
@@ -31,9 +33,6 @@ const addPlaylist: Command = {
             )
             .setThumbnail(playlistMetadata.thumbnailURL)
         );
-
-        const queue = createQueueIfNotExists(client, guild.id);
-        queue.queue.push(...videos);
       })
       .catch(() =>
         channel.send(

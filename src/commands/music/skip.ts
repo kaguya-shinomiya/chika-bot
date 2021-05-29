@@ -1,7 +1,8 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { sendNotInGuild, toUrlString } from "./utils/embeds";
+import { RedisPrefix } from "../../types/redis";
+import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 
 const skip: Command = {
   name: "skip",
@@ -9,27 +10,28 @@ const skip: Command = {
   usage: `${PREFIX}skip`,
   argsCount: 0,
   category: "Music",
+  redis: RedisPrefix.tracks,
   async execute(message) {
     const { channel, guild, client, author } = message;
     if (!guild) {
-      sendNotInGuild(channel);
+      sendMusicOnlyInGuild(channel);
       return;
     }
-
-    const queue = client.audioQueues.get(guild.id);
-    if (!queue?.dispatcher) {
+    const audioUtils = client.cache.audioUtils.get(guild.id);
+    if (!audioUtils) {
       channel.send(lightErrorEmbed("There is no track to skip."));
       return;
     }
-
-    const { nowPlaying, dispatcher } = queue;
-
     channel.send(
       withAuthorEmbed(author).setDescription(
-        `Skipping **${toUrlString(nowPlaying!.title, nowPlaying!.url, 40)}**`
+        `Skipping **${toUrlString(
+          audioUtils.nowPlaying.title,
+          audioUtils.nowPlaying.url,
+          40
+        )}**`
       )
     );
-    dispatcher.end();
+    audioUtils.dispatcher.end();
   },
 };
 

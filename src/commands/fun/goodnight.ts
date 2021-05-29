@@ -2,6 +2,7 @@ import { kaguya_sleep_gif } from "../../assets";
 import { PREFIX } from "../../constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { RedisPrefix } from "../../types/redis";
 
 const goodnight: Command = {
   name: "goodnight",
@@ -10,6 +11,7 @@ const goodnight: Command = {
   usage: `${PREFIX}goodnight [user ...]`,
   aliases: ["gn"],
   argsCount: -1,
+  redis: RedisPrefix.default,
   async execute({ channel, mentions, author }) {
     let message;
     if (!mentions.users.size) {

@@ -1,6 +1,7 @@
 import { PREFIX } from "../../constants";
 import { sendUnknownGameError } from "../../games/utils/embeds";
 import { Command } from "../../types/command";
+import { RedisPrefix } from "../../types/redis";
 
 export const rules: Command = {
   name: "rules",
@@ -8,6 +9,7 @@ export const rules: Command = {
   argsCount: -2,
   category: "Utility",
   usage: `${PREFIX}rules <game>`,
+  redis: RedisPrefix.default,
   execute(message, args) {
     const { channel, client } = message;
     const gameRequested = args.join(" ").toLowerCase();

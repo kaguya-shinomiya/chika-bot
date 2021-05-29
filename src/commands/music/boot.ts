@@ -1,6 +1,8 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { RedisPrefix } from "../../types/redis";
+import { sendNotInGuild } from "./utils/embeds";
 
 export const boot: Command = {
   name: "boot",
@@ -8,27 +10,21 @@ export const boot: Command = {
   argsCount: 0,
   category: "Music",
   usage: `${PREFIX}boot`,
+  redis: RedisPrefix.tracks,
   execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
-      channel.send(
-        lightErrorEmbed(`This command can only be used in a server.`)
-      );
+      sendNotInGuild(channel);
       return;
     }
-    const queue = client.audioQueues.get(guild.id);
-    if (!queue?.connection) {
+    const audioUtils = client.cache.audioUtils.get(guild.id);
+    if (!audioUtils?.connection) {
       channel.send(lightErrorEmbed(`Bruv I'm not even in a voice channel.`));
       return;
     }
-    queue.connection.disconnect();
+    audioUtils.connection.disconnect();
     channel.send(lightErrorEmbed(`I've left the voice channel.`));
-    if (queue.queue.length === 0) {
-      client.audioQueues.delete(guild.id);
-      return;
-    }
-    queue.connection = undefined;
-    queue.nowPlaying = undefined;
+    client.cache.audioUtils.delete(guild.id);
   },
 };
 

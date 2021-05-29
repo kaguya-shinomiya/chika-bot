@@ -1,9 +1,9 @@
 import { StreamDispatcher, VoiceConnection } from "discord.js";
-import he from "he";
 import ytdl from "ytdl-core";
 import ytpl from "ytpl";
 import ytsr, { Video } from "ytsr";
 import { QueueItem } from "../../../types/queue";
+import { secToMin } from "./helpers";
 
 const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
@@ -26,13 +26,6 @@ export const searchVideo = async (
   );
 };
 
-export const extractVideoData = (
-  videoData: any
-): Omit<QueueItem, "url" | "duration"> => ({
-  title: he.decode(videoData.snippet.title),
-  thumbnailURL: videoData.snippet.thumbnails.default.url,
-});
-
 export const playFromYt = async (
   connection: VoiceConnection,
   url: string
@@ -49,8 +42,6 @@ export const playFromYt = async (
       )
     )
     .catch(() => null);
-
-const secToMin = (sec: number): string => `${Math.floor(sec / 60)}:${sec % 60}`;
 
 export const validateArgs = async (
   args: string[]
@@ -84,6 +75,7 @@ interface PlaylistMetadata {
   thumbnailURL: string;
   url: string;
 }
+
 export const parsePlaylist = (
   res: ytpl.Result
 ): [PlaylistMetadata, QueueItem[]] => {

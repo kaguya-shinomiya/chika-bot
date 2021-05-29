@@ -53,7 +53,7 @@ export const sendGameCrashedError = async (channel: GenericChannel) => {
 export const sendInGame = async (channel: GenericChannel) =>
   channel.send(
     lightErrorEmbed(
-      "There is a game being played in this channel! Please wait till the current game is finished."
+      "There is a game being played in this channel!\nPlease wait till the current game is finished."
     )
   );
 
@@ -75,7 +75,7 @@ export const sendGameStartsIn = async ({
       .setTitle("Alright!")
       .setDescription(message || `I'll start the game in ${timeout} seconds.`)
       .addField(
-        "More Info",
+        "More info",
         `
         To review the rules of **${capitalize(
           title
