@@ -1,8 +1,7 @@
 import { Collection, Message, Snowflake, User } from "discord.js";
 import { Redis } from "ioredis";
 import { baseEmbed } from "../../shared/embeds";
-import { Game, GameType } from "../../types/game";
-import { collectPlayers } from "../utils/collectPlayers";
+import { Game } from "../../types/game";
 import { sendParticipants } from "../utils/embeds";
 
 interface gameProps {
@@ -14,19 +13,18 @@ interface gameProps {
 export class HappyLife extends Game {
   title = "happylife";
 
-  displayTitle = "Happy Life";
+  minPlayerCount = 1;
 
-  type = GameType.Indie;
+  maxPlayerCount = 6;
+
+  displayTitle = "Happy Life";
 
   rules = baseEmbed().setTitle("Happy Life :airplane_departure:");
 
   // eslint-disable-next-line class-methods-use-this
   pregame(message: Message, redis: Redis) {
     // TODO send start message
-    collectPlayers({
-      gameTitle: "Happy Life",
-      maxResponses: 6,
-      minResponses: 1,
+    this.collectPlayers({
       message,
       onTimeoutAccept: (players: Collection<Snowflake, User>) =>
         HappyLife.startGame({ message, players, redis }),
@@ -43,7 +41,7 @@ export class HappyLife extends Game {
     sendParticipants({
       channel,
       gameTitle: "Happy Life",
-      participants: players,
+      participants: players.map((player) => player),
     });
   }
 }

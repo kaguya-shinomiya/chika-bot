@@ -1,4 +1,4 @@
-import { Collection, Snowflake, User } from "discord.js";
+import { User } from "discord.js";
 import { toListString } from "../../commands/music/utils/embeds";
 import { PREFIX } from "../../constants";
 import {
@@ -97,7 +97,7 @@ export const sendParticipants = async ({
   gameTitle: String;
   startsIn?: string;
   channel: GenericChannel;
-  participants: Collection<Snowflake, User>;
+  participants: User[];
 }) => {
   const players = participants.map((user) => user.toString());
   channel.send(

@@ -7,10 +7,10 @@ import {
   white_check_mark,
 } from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Game, GameType } from "../../types/game";
+import { Game } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
-import { sendGameStartsIn, sendTaggedSelfError } from "../utils/embeds";
-import { handleOpponentResponse } from "../utils/handleOpponentResponse";
+import { sendParticipants } from "../utils/embeds";
+import { getOpponentResponse } from "../utils/getOpponentResponse";
 import { ShiritoriGameState } from "./types";
 
 interface startShiritoriGameParams {
@@ -25,36 +25,41 @@ export class Shiritori extends Game {
 
   displayTitle = "Shiritori";
 
-  type = GameType.Versus;
+  minPlayerCount = 2;
+
+  maxPlayerCount = 2;
 
   static sessionDuration = 60 * 10;
 
   // eslint-disable-next-line class-methods-use-this
   pregame(message: Message, redis: Redis) {
     const { channel, mentions, author } = message;
-    const opponent = mentions.users.first()!;
+    const taggedOpponent = mentions.users.first();
 
-    if (!(process.env.NODE_ENV === "development")) {
-      if (author.id === opponent.id) {
-        sendTaggedSelfError(channel);
-        return;
-      }
+    if (!taggedOpponent) {
+      this.collectPlayers({
+        message,
+        onTimeoutAccept: (players) => {
+          const [p1, p2] = players.map((player) => player);
+          Shiritori.startGame({ message, p1, p2, redis });
+        },
+      });
+      return;
     }
 
-    handleOpponentResponse(
+    getOpponentResponse({
+      gameTitle: "Shiritori",
       message,
-      "Shiritori",
-      opponent,
-      () => {
-        Shiritori.startGame({ message, p1: author, p2: opponent, redis });
-      },
-      () =>
+      taggedOpponent,
+      onAccept: () =>
+        Shiritori.startGame({ message, p1: author, p2: taggedOpponent, redis }),
+      onReject: () =>
         channel.send(
           lightErrorEmbed(
-            `**${opponent.username}** does not want to play Shiritori.`
+            `**${taggedOpponent.username}** does not want to play Shiritori.`
           )
-        )
-    );
+        ),
+    });
   }
 
   static startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
@@ -73,11 +78,11 @@ export class Shiritori extends Game {
     // BUG this ttl doesn't affect anything
     redis.set(channel.id, "true", "ex", Shiritori.sessionDuration);
 
-    sendGameStartsIn({
+    sendParticipants({
       channel,
-      title: "shiritori",
-      timeout: 5,
-      message: "I'll reveal the first card in 5 seconds.",
+      gameTitle: "Shiritori",
+      startsIn: `I'll reveal the first card in 5 seconds.`,
+      participants: [p1, p2],
     }).then(() => channel.send(Shiritori.playerCardsEmbed(initState)));
 
     setTimeout(() => {
