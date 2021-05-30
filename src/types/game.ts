@@ -7,7 +7,7 @@ import {
   User,
 } from "discord.js";
 import { Redis } from "ioredis";
-import { white_check_mark } from "../assets";
+import { red_cross, white_check_mark } from "../assets";
 import {
   baseEmbed,
   genericErrorEmbed,
@@ -26,6 +26,13 @@ interface collectPlayersParams {
   message: Message;
   onTimeoutAccept: (players: Collection<Snowflake, User>) => void;
   onTimeoutReject?: () => void;
+}
+
+interface getOpponentResponseParams {
+  message: Message;
+  onAccept: () => void;
+  onReject: () => void;
+  opponent: User;
 }
 
 export abstract class Game {
@@ -99,6 +106,40 @@ export abstract class Game {
         // eslint-disable-next-line no-console
         console.error(err);
         channel.send(genericErrorEmbed());
+      });
+  }
+
+  getOpponentResponse(opts: getOpponentResponseParams) {
+    const {
+      message: { author, channel },
+      onAccept,
+      onReject,
+      opponent,
+    } = opts;
+    channel
+      .send(
+        `${opponent.toString()}! **${
+          author.username
+        }** has challenged you to a game of ${
+          this.displayTitle
+        }!\nDo you accept this challenge?`
+      )
+      .then(async (message) => {
+        await message
+          .react(white_check_mark)
+          .then(() => message.react(red_cross));
+
+        message
+          .awaitReactions(
+            (reaction: MessageReaction, user: User) =>
+              user.id === opponent.id &&
+              (reaction.emoji.name === white_check_mark ||
+                reaction.emoji.name === red_cross),
+            { time: 10000, max: 1 }
+          )
+          .then((collected) => {
+            const reaction = collected.first;
+          });
       });
   }
 }
