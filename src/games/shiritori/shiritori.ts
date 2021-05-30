@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Message, User } from "discord.js";
+import { Collection, Message, Snowflake, User } from "discord.js";
 import { Redis } from "ioredis";
 import {
   chika_beating_yu_gif,
@@ -64,11 +64,14 @@ export class Shiritori extends Game {
     const { channel, client } = message;
     const { p1Cards, p2Cards, startingChar } = Shiritori.genInitialCards();
 
+    const cards = new Collection<Snowflake, string[]>();
+    cards.set(p1.id, p1Cards);
+    cards.set(p2.id, p2Cards);
+
     const initState = new ShiritoriGameState({
       p1,
       p2,
-      p1Cards,
-      p2Cards,
+      cards,
       startingChar,
       channelID: channel.id,
     });
@@ -97,7 +100,7 @@ export class Shiritori extends Game {
       const reject = () => client.once("message", onRejectListener);
 
       // 1. only accept from those 2 players
-      if (!(state.p1.id === author.id) && !(state.p2.id === author.id)) {
+      if (author.id !== state.p1.id && author.id !== state.p2.id) {
         reject();
         return;
       }
@@ -106,7 +109,6 @@ export class Shiritori extends Game {
         reject();
         return;
       }
-
       if (STOP_GAME_RE.test(content)) {
         channel.send(
           lightErrorEmbed(`**${author.username}** has stopped the game.`)
@@ -116,37 +118,32 @@ export class Shiritori extends Game {
       }
 
       if (content.length < 4) {
-        // message.react(red_cross);
         reject();
         return;
       }
-
-      const thisPlayerCards =
-        author.id === state.p1.id ? state.p1Cards : state.p2Cards;
-
       if (!content.startsWith(state.startingChar!)) {
-        // message.react(red_cross);
         reject();
         return;
       }
+
+      const playerCards = state.cards.get(author.id)!;
 
       const lastChar = content[content.length - 1];
-      if (!thisPlayerCards.includes(content[content.length - 1])) {
-        // message.react(red_cross);
+      if (!playerCards.includes(content[content.length - 1])) {
         reject();
         return;
       }
 
       const isValidWord = await Shiritori.checkWord(content);
       if (!isValidWord) {
-        // message.react(red_cross);
         reject();
         return;
       }
-      channel.send(`I accept **${content}**! ${white_check_mark}`);
-      thisPlayerCards.splice(thisPlayerCards.indexOf(lastChar), 1); // it's valid, pop that word out
 
-      if (thisPlayerCards.length === 0) {
+      channel.send(`I accept **${content}**! ${white_check_mark}`);
+      playerCards.splice(playerCards.indexOf(lastChar), 1); // it's valid, pop that word out
+
+      if (playerCards.length === 0) {
         channel.send(
           baseEmbed()
             .setDescription(
@@ -208,17 +205,17 @@ export class Shiritori extends Game {
     return generated;
   }
 
-  static playerCardsEmbed({ p1, p2, p1Cards, p2Cards }: ShiritoriGameState) {
+  static playerCardsEmbed({ p1, p2, cards }: ShiritoriGameState) {
     return baseEmbed()
       .setTitle("Your cards!")
       .addFields([
         {
           name: `**${p1.username}**'s cards`,
-          value: Shiritori.genCardsString(p1Cards),
+          value: Shiritori.genCardsString(cards.get(p1.id)!),
         },
         {
           name: `**${p2.username}**'s cards`,
-          value: Shiritori.genCardsString(p2Cards),
+          value: Shiritori.genCardsString(cards.get(p2.id)!),
         },
       ]);
   }
