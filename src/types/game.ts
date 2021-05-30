@@ -32,7 +32,7 @@ interface getOpponentResponseParams {
   message: Message;
   onAccept: () => void;
   onReject: () => void;
-  opponent: User;
+  taggedOpponent: User;
 }
 
 export abstract class Game {
@@ -114,7 +114,7 @@ export abstract class Game {
       message: { author, channel },
       onAccept,
       onReject,
-      opponent,
+      taggedOpponent: opponent,
     } = opts;
     channel
       .send(
@@ -138,8 +138,26 @@ export abstract class Game {
             { time: 10000, max: 1 }
           )
           .then((collected) => {
-            const reaction = collected.first;
+            const reaction = collected.first();
+            switch (reaction?.emoji.name) {
+              case white_check_mark:
+                onAccept();
+                break;
+              case red_cross:
+                onReject();
+                break;
+              default:
+                channel.send(
+                  lightErrorEmbed(`No response from **${opponent.username}**.`)
+                );
+                break;
+            }
           });
+      })
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error(err);
+        channel.send(genericErrorEmbed());
       });
   }
 }

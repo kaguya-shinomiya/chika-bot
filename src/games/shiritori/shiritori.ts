@@ -10,7 +10,6 @@ import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
 import { sendParticipants } from "../utils/embeds";
-import { getOpponentResponse } from "../utils/getOpponentResponse";
 import { ShiritoriGameState } from "./types";
 
 interface startShiritoriGameParams {
@@ -47,8 +46,7 @@ export class Shiritori extends Game {
       return;
     }
 
-    getOpponentResponse({
-      gameTitle: "Shiritori",
+    this.getOpponentResponse({
       message,
       taggedOpponent,
       onAccept: () =>
