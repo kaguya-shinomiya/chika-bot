@@ -51,7 +51,7 @@ export const handleOpponentResponse = async (
           onAccept();
           break;
         default:
-          break;
+          throw new Error("nani?");
       }
     })
     .catch(() => {

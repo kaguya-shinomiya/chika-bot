@@ -21,13 +21,14 @@ interface startShiritoriGameParams {
 }
 
 export class Shiritori extends Game {
-  static title = "shiritori";
+  title = "shiritori";
 
-  static type = GameType.Versus;
+  type = GameType.Versus;
 
   static sessionDuration = 60 * 10;
 
-  static pregame(message: Message, redis: Redis) {
+  // eslint-disable-next-line class-methods-use-this
+  pregame(message: Message, redis: Redis) {
     const { channel, mentions, author } = message;
     const opponent = mentions.users.first()!;
 
@@ -66,6 +67,7 @@ export class Shiritori extends Game {
       channelID: channel.id,
     });
 
+    // BUG this ttl doesn't affect anything
     redis.set(channel.id, "true", "ex", Shiritori.sessionDuration);
 
     sendGameStartsIn({
@@ -170,11 +172,6 @@ export class Shiritori extends Game {
     return shiritoriListener;
   }
 
-  // static popRandom(arr: string[]) {
-  //   const index = Math.floor(Math.random() * arr.length);
-  //   return arr.splice(index, 1);
-  // }
-
   static genInitialCards() {
     const allChars: string[] = [];
     for (let i = 0; i < 26; i += 1) {
@@ -229,7 +226,7 @@ export class Shiritori extends Game {
       .catch(() => false);
   }
 
-  static rules = baseEmbed()
+  rules = baseEmbed()
     .setTitle("Shiritori :u55b6:")
     .addFields([
       {

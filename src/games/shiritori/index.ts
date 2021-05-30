@@ -1,1 +1,5 @@
-export { Shiritori as default } from "./shiritori";
+import { Shiritori } from "./shiritori";
+
+const shiritori = new Shiritori();
+
+export default shiritori;

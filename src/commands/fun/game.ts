@@ -47,6 +47,7 @@ export const game: Command = {
           return;
         }
         break;
+      // TODO make it playable w/o tagging anyone
       case GameType.Versus:
         if (taggedCount !== 1) {
           channel.send(

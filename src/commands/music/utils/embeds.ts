@@ -167,7 +167,7 @@ export const sendQueued = async ({
       }`
     );
   if (nowPlaying) {
-    channel.send(partialEmbed.addField(`\u200b`, now));
+    channel.send(partialEmbed.addField(`Now playing`, now));
     return;
   }
   channel.send(partialEmbed);

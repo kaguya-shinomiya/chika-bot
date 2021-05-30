@@ -10,13 +10,10 @@ interface DiscordClientCache {
 declare module "discord.js" {
   export interface Client {
     commands: Discord.Collection<string, Command>;
-    games: Discord.Collection<string, typeof Game>;
+    games: Discord.Collection<string, Game>;
     gamesList: string[];
     commandsHelp: Discord.MessageEmbed;
 
     cache: DiscordClientCache;
-
-    // gameStates: Discord.Collection<string, GameState>; // the key is channel id
-    // audioQueues: Discord.Collection<string, Queue>; // maps guildID to a Queue
   }
 }
