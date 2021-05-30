@@ -142,7 +142,11 @@ export class Shiritori extends Game {
         channel.send(
           baseEmbed()
             .setDescription(
-              `**${author.username}** defeats **${state.p2.username}!**`
+              `**${author.username}** defeats **${
+                author.id === state.p1.id
+                  ? state.p2.username
+                  : state.p1.username
+              }!**`
             )
             .setImage(chika_beating_yu_gif)
         );
