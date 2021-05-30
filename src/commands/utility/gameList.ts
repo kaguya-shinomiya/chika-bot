@@ -3,7 +3,7 @@ import { PREFIX } from "../../constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
-import { capitalize } from "../../utils/text";
+import { toListString } from "../music/utils/embeds";
 
 export const gameList: Command = {
   name: "game-list",
@@ -18,7 +18,7 @@ export const gameList: Command = {
     channel.send(
       baseEmbed()
         .setTitle("I can play these games!")
-        .setDescription(client.gamesList.map((title) => capitalize(title)))
+        .setDescription(toListString(client.gamesList))
         .setThumbnail(chika_detective_png)
         .addField(
           "\u200b",

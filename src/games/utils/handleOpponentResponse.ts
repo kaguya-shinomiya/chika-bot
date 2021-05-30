@@ -5,6 +5,7 @@ import { OpponentResponse } from "../../types/game";
 
 export const handleOpponentResponse = async (
   { channel, author }: Message,
+  gameTitle: string,
   opponent: User,
   onAccept: any,
   onReject: any
@@ -13,7 +14,7 @@ export const handleOpponentResponse = async (
     .send(
       `${opponent.toString()}! **${
         author.username
-      }** has challenged you to a game of Shiritori!\nDo you accept this challenge?`
+      }** has challenged you to a game of ${gameTitle}!\nDo you accept this challenge?`
     )
     .then(async (message) => {
       await message

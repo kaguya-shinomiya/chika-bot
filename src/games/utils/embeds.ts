@@ -1,6 +1,9 @@
+import { Collection, Snowflake, User } from "discord.js";
+import { toListString } from "../../commands/music/utils/embeds";
 import { PREFIX } from "../../constants";
 import {
   cryingEmbed,
+  detectiveEmbed,
   lightErrorEmbed,
   peekingEmbed,
   pointingEmbed,
@@ -84,3 +87,31 @@ export const sendGameStartsIn = async ({
         `
       )
   );
+
+export const sendParticipants = async ({
+  gameTitle,
+  channel,
+  participants,
+  startsIn,
+}: {
+  gameTitle: String;
+  startsIn?: string;
+  channel: GenericChannel;
+  participants: Collection<Snowflake, User>;
+}) => {
+  const players = participants.map((user) => user.toString());
+  channel.send(
+    detectiveEmbed()
+      .setTitle(gameTitle)
+      .addField(`Players:`, toListString(players))
+      .addField(
+        `More info`,
+        `
+        To review the rules of **${gameTitle}**, use \`${PREFIX}rules ${gameTitle.toLowerCase()}\`.
+      \`!stop\` will stop the game at anytime.
+      
+      ${startsIn || "I'll start the game in 5 seconds!"}
+      `
+      )
+  );
+};

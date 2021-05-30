@@ -13,6 +13,8 @@ export type OpponentResponse = "timeout" | "rejected" | "accepted";
 export abstract class Game {
   abstract title: string;
 
+  abstract displayTitle: string;
+
   abstract type: GameType;
 
   abstract pregame(message: Message, redis: Redis): void;

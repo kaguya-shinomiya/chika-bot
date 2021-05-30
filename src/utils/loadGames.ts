@@ -13,7 +13,7 @@ export const loadGames = (): [Client["games"], string[]] => {
     // eslint-disable-next-line import/no-dynamic-require, global-require
     const game: Game = require(`../games/${gameFile}`).default;
     games.set(game.title, game);
-    gameTitles.push(game.title);
+    gameTitles.push(game.displayTitle);
   });
   return [games, gameTitles];
 };

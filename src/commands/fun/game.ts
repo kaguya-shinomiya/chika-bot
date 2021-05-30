@@ -24,7 +24,7 @@ export const game: Command = {
       return;
     }
 
-    const [requestedGame] = args;
+    const requestedGame = args.join("").toLowerCase();
     if (!requestedGame) {
       sendNoGameSelectedError(message.channel);
       return;
@@ -68,7 +68,7 @@ export const game: Command = {
         }
         break;
       default:
-        throw new Error("Game has no type");
+        break;
     }
 
     if (toPlay.pregame) {

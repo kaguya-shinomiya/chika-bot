@@ -23,6 +23,8 @@ interface startShiritoriGameParams {
 export class Shiritori extends Game {
   title = "shiritori";
 
+  displayTitle = "Shiritori";
+
   type = GameType.Versus;
 
   static sessionDuration = 60 * 10;
@@ -41,6 +43,7 @@ export class Shiritori extends Game {
 
     handleOpponentResponse(
       message,
+      "Shiritori",
       opponent,
       () => {
         Shiritori.startGame({ message, p1: author, p2: opponent, redis });
