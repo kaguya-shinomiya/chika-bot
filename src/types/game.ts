@@ -91,16 +91,24 @@ export abstract class Game {
             { maxUsers: this.maxPlayerCount - 1, time: 10000 }
           )
           .then(async (collected) => {
-            const reactors = await collected.first()!.users.fetch();
-            if (reactors.size < this.minPlayerCount) {
+            const reactors =
+              (await collected.first()?.users.fetch()) ||
+              new Collection<Snowflake, User>();
+
+            const players = reactors
+              .filter((user) => !user.bot)
+              .set(author.id, author);
+            if (players.size < this.minPlayerCount) {
               return Promise.reject(new Error(`Insufficient players.`));
             }
-            return reactors.filter((user) => !user.bot).set(author.id, author);
+            return Promise.resolve(players);
           });
       })
       .then(
         (players) => onTimeoutAccept(players),
-        () => {
+        (err) => {
+          // eslint-disable-next-line no-console
+          console.error(err);
           redis.del(channel.id);
           if (onTimeoutReject) {
             onTimeoutReject();
@@ -166,6 +174,7 @@ export abstract class Game {
                 }
                 break;
               default:
+                redis.del(channel.id);
                 channel.send(
                   lightErrorEmbed(`No response from **${opponent.username}**.`)
                 );

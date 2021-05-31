@@ -1,9 +1,6 @@
-import { User } from "discord.js";
-import { toListString } from "../../commands/music/utils/embeds";
 import { PREFIX } from "../../constants";
 import {
   cryingEmbed,
-  detectiveEmbed,
   lightErrorEmbed,
   peekingEmbed,
   pointingEmbed,
@@ -88,33 +85,3 @@ export const sendGameStartsIn = async ({
         `
       )
   );
-
-export const sendParticipants = async ({
-  gameTitle,
-  displayTitle,
-  channel,
-  participants,
-  startsIn,
-}: {
-  gameTitle: String;
-  displayTitle: String;
-  startsIn?: string;
-  channel: GenericChannel;
-  participants: User[];
-}) => {
-  const players = participants.map((user) => user.toString());
-  channel.send(
-    detectiveEmbed()
-      .setTitle(gameTitle)
-      .addField(`Players:`, toListString(players))
-      .addField(
-        `More info`,
-        `
-        To review the rules of **${displayTitle}**, use \`${PREFIX}rules ${gameTitle}\`.
-      \`${STOP_GAME}\` will stop the game at anytime.
-      
-      ${startsIn || "I'll start the game in 5 seconds!"}
-      `
-      )
-  );
-};
