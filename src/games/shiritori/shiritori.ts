@@ -9,7 +9,6 @@ import {
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
 import { STOP_GAME_RE } from "../utils/constants";
-import { sendParticipants } from "../utils/embeds";
 import { ShiritoriGameState } from "./types";
 
 interface startShiritoriGameParams {
@@ -28,7 +27,7 @@ export class Shiritori extends Game {
 
   maxPlayerCount = 2;
 
-  static sessionDuration = 60 * 10;
+  sessionDuration = 1000 * 60 * 10; // 10 min in ms
 
   // eslint-disable-next-line class-methods-use-this
   pregame(message: Message, redis: Redis) {
@@ -40,17 +39,19 @@ export class Shiritori extends Game {
         message,
         onTimeoutAccept: (players) => {
           const [p1, p2] = players.map((player) => player);
-          Shiritori.startGame({ message, p1, p2, redis });
+          this.startGame({ message, p1, p2, redis });
         },
+        redis,
       });
       return;
     }
 
     this.getOpponentResponse({
+      redis,
       message,
       taggedOpponent,
       onAccept: () =>
-        Shiritori.startGame({ message, p1: author, p2: taggedOpponent, redis }),
+        this.startGame({ message, p1: author, p2: taggedOpponent, redis }),
       onReject: () =>
         channel.send(
           lightErrorEmbed(
@@ -60,7 +61,7 @@ export class Shiritori extends Game {
     });
   }
 
-  static startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
+  startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
     const { channel, client } = message;
     const { p1Cards, p2Cards, startingChar } = Shiritori.genInitialCards();
 
@@ -76,14 +77,8 @@ export class Shiritori extends Game {
       channelID: channel.id,
     });
 
-    // BUG this ttl doesn't affect anything
-    redis.set(channel.id, "true", "ex", Shiritori.sessionDuration);
-
-    sendParticipants({
-      channel,
-      gameTitle: "Shiritori",
-      startsIn: `I'll reveal the first card in 5 seconds.`,
-      participants: [p1, p2],
+    this.sendParticipants(channel, [p1, p2], {
+      startsInMessage: `I'll reveal the first card in 5 seconds!`,
     }).then(() => channel.send(Shiritori.playerCardsEmbed(initState)));
 
     setTimeout(() => {

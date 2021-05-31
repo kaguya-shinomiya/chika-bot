@@ -10,6 +10,7 @@ import {
 } from "../../shared/embeds";
 import { GenericChannel } from "../../types/command";
 import { capitalize } from "../../utils/text";
+import { STOP_GAME } from "./constants";
 
 export const sendNoGameSelectedError = async (channel: GenericChannel) => {
   channel.send(lightErrorEmbed("Tell me which game you wanna play, yo."));
@@ -83,18 +84,20 @@ export const sendGameStartsIn = async ({
         To review the rules of **${capitalize(
           title
         )}**, use \`${PREFIX}rules ${title}\`.
-        \`!stop\` will stop the game at anytime.
+        \`${STOP_GAME}\` will stop the game at anytime.
         `
       )
   );
 
 export const sendParticipants = async ({
   gameTitle,
+  displayTitle,
   channel,
   participants,
   startsIn,
 }: {
   gameTitle: String;
+  displayTitle: String;
   startsIn?: string;
   channel: GenericChannel;
   participants: User[];
@@ -107,8 +110,8 @@ export const sendParticipants = async ({
       .addField(
         `More info`,
         `
-        To review the rules of **${gameTitle}**, use \`${PREFIX}rules ${gameTitle.toLowerCase()}\`.
-      \`!stop\` will stop the game at anytime.
+        To review the rules of **${displayTitle}**, use \`${PREFIX}rules ${gameTitle}\`.
+      \`${STOP_GAME}\` will stop the game at anytime.
       
       ${startsIn || "I'll start the game in 5 seconds!"}
       `

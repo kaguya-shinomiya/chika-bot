@@ -2,13 +2,6 @@ import { Collection, Message, Snowflake, User } from "discord.js";
 import { Redis } from "ioredis";
 import { baseEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
-import { sendParticipants } from "../utils/embeds";
-
-interface gameProps {
-  message: Message;
-  redis: Redis;
-  players: Collection<Snowflake, User>;
-}
 
 export class HappyLife extends Game {
   title = "happylife";
@@ -19,29 +12,21 @@ export class HappyLife extends Game {
 
   displayTitle = "Happy Life";
 
+  sessionDuration = 1000 * 60 * 20; // 20 min
+
   rules = baseEmbed().setTitle("Happy Life :airplane_departure:");
 
-  // eslint-disable-next-line class-methods-use-this
   pregame(message: Message, redis: Redis) {
-    // TODO send start message
+    // TODO collect players
     this.collectPlayers({
+      redis,
       message,
-      onTimeoutAccept: (players: Collection<Snowflake, User>) =>
-        HappyLife.startGame({ message, players, redis }),
-      // eslint-disable-next-line no-console
-      onTimeoutReject: () => console.log("rejected"),
+      onTimeoutAccept: (players) => this.startGame(players, message),
     });
   }
 
-  static startGame(startGameParams: gameProps) {
-    const {
-      message: { channel },
-      players,
-    } = startGameParams;
-    sendParticipants({
-      channel,
-      gameTitle: "Happy Life",
-      participants: players.map((player) => player),
-    });
+  startGame(players: Collection<Snowflake, User>, message: Message) {
+    const { channel } = message;
+    this.sendParticipants(channel, players.array());
   }
 }

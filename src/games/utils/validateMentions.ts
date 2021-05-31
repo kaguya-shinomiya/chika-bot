@@ -25,7 +25,7 @@ export const validateMentions = ({
   }
   if (!isTwoPlayer && taggedCount > 0) {
     channel.send(
-      lightErrorEmbed(`You can only tag another player for a 2-player game.`)
+      lightErrorEmbed(`You can only tag another player for 2-player games.`)
     );
     return false;
   }

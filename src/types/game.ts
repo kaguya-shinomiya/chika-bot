@@ -8,11 +8,16 @@ import {
 } from "discord.js";
 import { Redis } from "ioredis";
 import { red_cross, white_check_mark } from "../assets";
+import { toListString } from "../commands/music/utils/embeds";
+import { PREFIX } from "../constants";
+import { STOP_GAME } from "../games/utils/constants";
 import {
   baseEmbed,
+  detectiveEmbed,
   genericErrorEmbed,
   lightErrorEmbed,
 } from "../shared/embeds";
+import { GenericChannel } from "./command";
 
 // eslint-disable-next-line no-shadow
 export enum GameType {
@@ -26,13 +31,15 @@ interface collectPlayersParams {
   message: Message;
   onTimeoutAccept: (players: Collection<Snowflake, User>) => void;
   onTimeoutReject?: () => void;
+  redis: Redis;
 }
 
 interface getOpponentResponseParams {
   message: Message;
   onAccept: () => void;
-  onReject: () => void;
+  onReject?: () => void;
   taggedOpponent: User;
+  redis: Redis;
 }
 
 export abstract class Game {
@@ -44,20 +51,23 @@ export abstract class Game {
 
   abstract maxPlayerCount: number;
 
-  abstract pregame(message: Message, redis: Redis): void;
-
   abstract rules: MessageEmbed;
+
+  abstract sessionDuration: number; // in milliseconds
+
+  abstract pregame(message: Message, redis: Redis): void;
 
   collectPlayers(opts: collectPlayersParams) {
     const {
       message: { author, channel },
       onTimeoutAccept,
       onTimeoutReject,
+      redis,
     } = opts;
 
     const partialEmbed = baseEmbed()
       .setDescription(
-        `**${author.username}** wants to start a round of **${this.displayTitle}**!`
+        `**${author.username}** wants to play **${this.displayTitle}**!`
       )
       .addField(`To join`, `React to this message with the green check-mark.`);
 
@@ -91,6 +101,7 @@ export abstract class Game {
       .then(
         (players) => onTimeoutAccept(players),
         () => {
+          redis.del(channel.id);
           if (onTimeoutReject) {
             onTimeoutReject();
             return;
@@ -115,6 +126,7 @@ export abstract class Game {
       onAccept,
       onReject,
       taggedOpponent: opponent,
+      redis,
     } = opts;
     channel
       .send(
@@ -144,7 +156,14 @@ export abstract class Game {
                 onAccept();
                 break;
               case red_cross:
-                onReject();
+                redis.del(channel.id);
+                if (onReject) {
+                  onReject();
+                } else {
+                  channel.send(
+                    `**${opponent.username}** does not want to play ${this.displayTitle}`
+                  );
+                }
                 break;
               default:
                 channel.send(
@@ -159,5 +178,29 @@ export abstract class Game {
         console.error(err);
         channel.send(genericErrorEmbed());
       });
+  }
+
+  async sendParticipants(
+    channel: GenericChannel,
+    participants: User[],
+    options?: { startsInMessage: String }
+  ) {
+    const players = participants.map((user) => user.toString());
+    return channel.send(
+      detectiveEmbed()
+        .setTitle(this.displayTitle)
+        .addField(`Players:`, toListString(players))
+        .addField(
+          `More info`,
+          `
+          To review the rules of **${
+            this.displayTitle
+          }**, use \`${PREFIX}rules ${this.title}\`.
+        \`${STOP_GAME}\` will stop the game at anytime.
+        
+        ${options?.startsInMessage || "I'll start the game in 5 seconds!"}
+        `
+        )
+    );
   }
 }
