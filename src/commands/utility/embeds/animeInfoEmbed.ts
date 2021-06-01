@@ -70,7 +70,7 @@ export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
         inline: true,
       },
       {
-        name: ":ramen: Source",
+        name: ":ramen: Sauce",
         value: source
           ? capitalize(source.replace(/_/g, " ").toLowerCase())
           : questionMark,

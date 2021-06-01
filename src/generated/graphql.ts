@@ -4345,6 +4345,35 @@ export type SearchAnimeQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type SearchCharQueryVariables = Exact<{
+  charName?: Maybe<Scalars["String"]>;
+}>;
+
+export type SearchCharQuery = { __typename?: "Query" } & {
+  Character?: Maybe<
+    { __typename?: "Character" } & Pick<
+      Character,
+      "description" | "age" | "gender"
+    > & {
+        name?: Maybe<
+          { __typename?: "CharacterName" } & Pick<
+            CharacterName,
+            "full" | "native"
+          >
+        >;
+        image?: Maybe<
+          { __typename?: "CharacterImage" } & Pick<CharacterImage, "large">
+        >;
+        dateOfBirth?: Maybe<
+          { __typename?: "FuzzyDate" } & Pick<
+            FuzzyDate,
+            "year" | "month" | "day"
+          >
+        >;
+      }
+  >;
+};
+
 export type SearchMangaQueryVariables = Exact<{
   search?: Maybe<Scalars["String"]>;
   type?: Maybe<MediaType>;
@@ -4404,6 +4433,27 @@ export const SearchAnimeDocument = gql`
     }
   }
 `;
+export const SearchCharDocument = gql`
+  query searchChar($charName: String) {
+    Character(search: $charName) {
+      name {
+        full
+        native
+      }
+      image {
+        large
+      }
+      description(asHtml: true)
+      age
+      gender
+      dateOfBirth {
+        year
+        month
+        day
+      }
+    }
+  }
+`;
 export const SearchMangaDocument = gql`
   query searchManga($search: String, $type: MediaType) {
     Media(search: $search, type: $type) {
@@ -4457,6 +4507,19 @@ export function getSdk(
             ...wrappedRequestHeaders,
           }),
         "searchAnime"
+      );
+    },
+    searchChar(
+      variables?: SearchCharQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<SearchCharQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<SearchCharQuery>(SearchCharDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "searchChar"
       );
     },
     searchManga(

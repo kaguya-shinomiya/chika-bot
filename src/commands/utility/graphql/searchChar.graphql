@@ -1,0 +1,19 @@
+query searchChar($charName: String) {
+  Character(search: $charName) {
+    name {
+      full
+      native
+    }
+    image {
+      large
+    }
+    description(asHtml: true)
+    age
+    gender
+    dateOfBirth {
+      year
+      month
+      day
+    }
+  }
+}

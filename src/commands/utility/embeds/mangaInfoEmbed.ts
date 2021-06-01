@@ -9,7 +9,7 @@ import { baseEmbed } from "../../../shared/embeds";
 import { capitalize, parseHtml } from "../../../utils/text";
 import { questionMark } from "./animeInfoEmbed";
 
-interface animeEmbedParams {
+interface mangaEmbedParams {
   title: string | null | undefined;
   description: string | null | undefined;
   status: MediaStatus | null | undefined;
@@ -24,14 +24,17 @@ interface animeEmbedParams {
 }
 
 export function parseFuzzyDate(date?: FuzzyDate | null): string {
-  if (!date || !date.day || !date.month || !date.year) {
-    return "?";
+  if (!date) {
+    return questionMark;
   }
   const { year, month, day } = date;
-  return `${day}-${month}-${year}`;
+  if (!year && !month && !date) {
+    return questionMark;
+  }
+  return `${day || "?"}-${month || "?"}-${year || "?"}`;
 }
 
-export const genMangaInfoEmbed = (info: animeEmbedParams) => {
+export const genMangaInfoEmbed = (info: mangaEmbedParams) => {
   const {
     coverImage,
     title,
@@ -49,7 +52,7 @@ export const genMangaInfoEmbed = (info: animeEmbedParams) => {
     .setThumbnail(coverImage || unknown_png)
     .setTitle(title)
     .setDescription(
-      description ? parseHtml(description) : `*No description for this anime.*`
+      description ? parseHtml(description) : `*No description for this manga.*`
     )
     .addFields([
       {
@@ -65,7 +68,7 @@ export const genMangaInfoEmbed = (info: animeEmbedParams) => {
         inline: true,
       },
       {
-        name: ":ramen: Source",
+        name: ":ramen: Sauce",
         value: source
           ? capitalize(source.replace(/_/g, " ").toLowerCase())
           : questionMark,
