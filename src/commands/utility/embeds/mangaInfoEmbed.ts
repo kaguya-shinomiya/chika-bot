@@ -28,7 +28,8 @@ export function parseFuzzyDate(date?: FuzzyDate | null): string {
     return questionMark;
   }
   const { year, month, day } = date;
-  if (!year && !month && !date) {
+  console.log(JSON.stringify(date));
+  if (!year && !month && !day) {
     return questionMark;
   }
   return `${day || "?"}-${month || "?"}-${year || "?"}`;
