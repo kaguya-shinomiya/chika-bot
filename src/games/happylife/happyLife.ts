@@ -6,18 +6,17 @@ import { Game } from "../../types/game";
 export class HappyLife extends Game {
   title = "happylife";
 
+  displayTitle = "Happy Life";
+
   minPlayerCount = 1;
 
   maxPlayerCount = 6;
-
-  displayTitle = "Happy Life";
 
   sessionDuration = 1000 * 60 * 20; // 20 min
 
   rules = baseEmbed().setTitle("Happy Life :airplane_departure:");
 
   pregame(message: Message, redis: Redis) {
-    // TODO collect players
     this.collectPlayers({
       redis,
       message,

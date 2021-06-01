@@ -1,5 +1,3 @@
-import { baseEmbed } from "../../shared/embeds";
-
 /* eslint-disable no-underscore-dangle */
 export class HappyLifeStats {
   username: string;
@@ -17,9 +15,5 @@ export class HappyLifeStats {
   constructor(username: string) {
     this.username = username;
     this._netWorth = 10000;
-  }
-
-  embed() {
-    return baseEmbed().setTitle(`${this.username}'s stats`);
   }
 }
