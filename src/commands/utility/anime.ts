@@ -1,9 +1,9 @@
 import { PREFIX } from "../../constants";
 import { getSdk, MediaType } from "../../generated/graphql";
-import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
 import { genAnimeInfoEmbed } from "./embeds/animeInfoEmbed";
+import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
 export const anime: Command = {
@@ -18,42 +18,47 @@ export const anime: Command = {
     const search = args.join(" ");
 
     const sdk = getSdk(client);
-    const result = await sdk.searchAnime({ search, type: MediaType.Anime });
+    sdk
+      .searchAnime({ search, type: MediaType.Anime })
+      .then((result) => {
+        if (!result.Media) {
+          sendNotFoundError(search, channel);
+          return;
+        }
 
-    if (!result.Media) {
-      channel.send(
-        lightErrorEmbed(`I couldn't find any info on **${search}**.`)
-      );
-      return;
-    }
+        const {
+          averageScore,
+          coverImage,
+          description,
+          source,
+          episodes,
+          genres,
+          status,
+          season,
+          seasonYear,
+          title,
+        } = result.Media;
 
-    const {
-      averageScore,
-      coverImage,
-      description,
-      source,
-      episodes,
-      genres,
-      status,
-      season,
-      seasonYear,
-      title,
-    } = result.Media;
-
-    channel.send(
-      genAnimeInfoEmbed({
-        coverImage: coverImage?.medium,
-        title: title?.userPreferred,
-        description: description!,
-        episodes,
-        status,
-        genres,
-        source,
-        averageScore,
-        season,
-        seasonYear,
+        channel.send(
+          genAnimeInfoEmbed({
+            coverImage: coverImage?.medium,
+            title: title?.userPreferred,
+            description: description!,
+            episodes,
+            status,
+            genres,
+            source,
+            averageScore,
+            season,
+            seasonYear,
+          })
+        );
       })
-    );
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        sendNotFoundError(search, channel);
+      });
   },
 };
 

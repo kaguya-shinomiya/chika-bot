@@ -1,8 +1,8 @@
 import { PREFIX } from "../../constants";
 import { getSdk, MediaType } from "../../generated/graphql";
-import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
+import { sendNotFoundError } from "./embeds/errors";
 import { genMangaInfoEmbed } from "./embeds/mangaInfoEmbed";
 import { client } from "./graphql/aniListClient";
 
@@ -18,44 +18,48 @@ export const manga: Command = {
     const search = args.join(" ");
 
     const sdk = getSdk(client);
-    const result = await sdk.searchManga({ search, type: MediaType.Manga });
+    sdk
+      .searchManga({ search, type: MediaType.Manga })
+      .then((result) => {
+        if (!result.Media) {
+          sendNotFoundError(search, channel);
+          return;
+        }
 
-    if (!result.Media) {
-      channel.send(
-        lightErrorEmbed(`I couldn't find any info on **${search}**.`)
-      );
-      return;
-    }
-
-    const {
-      averageScore,
-      coverImage,
-      description,
-      genres,
-      status,
-      title,
-      source,
-      startDate,
-      endDate,
-      volumes,
-      chapters,
-    } = result.Media;
-
-    channel.send(
-      genMangaInfoEmbed({
-        coverImage: coverImage?.medium,
-        title: title?.userPreferred,
-        description: description!,
-        status,
-        genres,
-        averageScore,
-        startDate,
-        endDate,
-        source,
-        volumes,
-        chapters,
+        const {
+          averageScore,
+          coverImage,
+          description,
+          genres,
+          status,
+          title,
+          source,
+          startDate,
+          endDate,
+          volumes,
+          chapters,
+        } = result.Media;
+        channel.send(
+          genMangaInfoEmbed({
+            coverImage: coverImage?.medium,
+            title: title?.userPreferred,
+            description: description!,
+            status,
+            genres,
+            averageScore,
+            startDate,
+            endDate,
+            source,
+            volumes,
+            chapters,
+          })
+        );
       })
-    );
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.log(err);
+        sendNotFoundError(search, channel);
+      });
   },
 };
 
