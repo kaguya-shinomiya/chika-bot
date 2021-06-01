@@ -12,3 +12,5 @@ export const shiritori_rules_png = "https://i.imgur.com/rzgelx8.jpg";
 
 export const white_check_mark = "✅";
 export const red_cross = "❌";
+export const right_arrow = "➡️";
+export const left_arrow = "⬅️";
