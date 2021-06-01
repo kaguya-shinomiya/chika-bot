@@ -140,9 +140,9 @@ export abstract class Game {
       .send(
         `${opponent.toString()}! **${
           author.username
-        }** has challenged you to a game of ${
+        }** has challenged you to a game of **${
           this.displayTitle
-        }!\nDo you accept this challenge?`
+        }**!\nDo you accept this challenge?`
       )
       .then(async (message) => {
         await message
@@ -192,7 +192,7 @@ export abstract class Game {
   async sendParticipants(
     channel: GenericChannel,
     participants: User[],
-    options?: { startsInMessage: String }
+    options?: { startsInMessage: string }
   ) {
     const players = participants.map((user) => user.toString());
     return channel.send(
