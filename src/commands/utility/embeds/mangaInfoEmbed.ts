@@ -1,40 +1,49 @@
 import { unknown_png } from "../../../assets";
 import {
+  FuzzyDate,
   Maybe,
-  MediaSeason,
   MediaSource,
   MediaStatus,
 } from "../../../generated/graphql";
 import { baseEmbed } from "../../../shared/embeds";
 import { capitalize, parseHtml } from "../../../utils/text";
-
-export const questionMark = ":grey_question:";
+import { questionMark } from "./animeInfoEmbed";
 
 interface animeEmbedParams {
   title: string | null | undefined;
   description: string | null | undefined;
   status: MediaStatus | null | undefined;
   averageScore: number | null | undefined;
-  episodes: number | null | undefined;
   coverImage: string | null | undefined;
   genres: Maybe<String>[] | null | undefined;
-  season: MediaSeason | null | undefined;
-  seasonYear: number | null | undefined;
   source: MediaSource | null | undefined;
+  startDate: FuzzyDate | null | undefined;
+  endDate: FuzzyDate | null | undefined;
+  volumes: number | null | undefined;
+  chapters: number | null | undefined;
 }
 
-export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
+export function parseFuzzyDate(date?: FuzzyDate | null): string {
+  if (!date || !date.day || !date.month || !date.year) {
+    return "?";
+  }
+  const { year, month, day } = date;
+  return `${day}-${month}-${year}`;
+}
+
+export const genMangaInfoEmbed = (info: animeEmbedParams) => {
   const {
     coverImage,
     title,
     description,
-    episodes,
     status,
     genres,
     source,
     averageScore,
-    season,
-    seasonYear,
+    startDate,
+    endDate,
+    chapters,
+    volumes,
   } = info;
   return baseEmbed()
     .setThumbnail(coverImage || unknown_png)
@@ -44,29 +53,15 @@ export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
     )
     .addFields([
       {
-        name: ":film_frames: Status",
+        name: ":pencil: Status",
         value: status ? capitalize(status.toLowerCase()) : questionMark,
         inline: true,
       },
       {
-        name: ":cherry_blossom: Season",
-        value:
-          seasonYear && season
-            ? `${capitalize(season.toLowerCase())} ${seasonYear}`
-            : questionMark,
-        inline: true,
-      },
-    ])
-    .addField(":shinto_shrine: Genres", genres?.join(", ") || ":question:")
-    .addFields([
-      {
-        name: ":tv: Episodes",
-        value: `${episodes || questionMark}`,
-        inline: true,
-      },
-      {
-        name: ":star: Rating",
-        value: averageScore ? `${averageScore}/100` : questionMark,
+        name: ":calendar: Published",
+        value: `From **${parseFuzzyDate(startDate)}** to **${parseFuzzyDate(
+          endDate
+        )}**`,
         inline: true,
       },
       {
@@ -74,6 +69,20 @@ export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
         value: source
           ? capitalize(source.replace(/_/g, " ").toLowerCase())
           : questionMark,
+        inline: true,
+      },
+    ])
+    .addField(":shinto_shrine: Genres", genres?.join(", ") || ":question:")
+    .addFields([
+      { name: ":books: Volumes", value: volumes || questionMark, inline: true },
+      {
+        name: ":newspaper2: Chapters",
+        value: chapters || questionMark,
+        inline: true,
+      },
+      {
+        name: ":star: Rating",
+        value: averageScore ? `${averageScore}/100` : questionMark,
         inline: true,
       },
     ]);

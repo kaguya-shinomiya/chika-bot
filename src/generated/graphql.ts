@@ -4332,7 +4332,7 @@ export type SearchAnimeQuery = { __typename?: "Query" } & {
       | "status"
       | "averageScore"
       | "episodes"
-      | "duration"
+      | "source"
       | "genres"
     > & {
         title?: Maybe<
@@ -4345,8 +4345,47 @@ export type SearchAnimeQuery = { __typename?: "Query" } & {
   >;
 };
 
+export type SearchMangaQueryVariables = Exact<{
+  search?: Maybe<Scalars["String"]>;
+  type?: Maybe<MediaType>;
+}>;
+
+export type SearchMangaQuery = { __typename?: "Query" } & {
+  Media?: Maybe<
+    { __typename?: "Media" } & Pick<
+      Media,
+      | "description"
+      | "status"
+      | "averageScore"
+      | "genres"
+      | "chapters"
+      | "volumes"
+      | "source"
+    > & {
+        title?: Maybe<
+          { __typename?: "MediaTitle" } & Pick<MediaTitle, "userPreferred">
+        >;
+        startDate?: Maybe<
+          { __typename?: "FuzzyDate" } & Pick<
+            FuzzyDate,
+            "year" | "month" | "day"
+          >
+        >;
+        endDate?: Maybe<
+          { __typename?: "FuzzyDate" } & Pick<
+            FuzzyDate,
+            "year" | "month" | "day"
+          >
+        >;
+        coverImage?: Maybe<
+          { __typename?: "MediaCoverImage" } & Pick<MediaCoverImage, "medium">
+        >;
+      }
+  >;
+};
+
 export const SearchAnimeDocument = gql`
-  query SearchAnime($search: String, $type: MediaType) {
+  query searchAnime($search: String, $type: MediaType) {
     Media(search: $search, type: $type) {
       title {
         userPreferred
@@ -4357,11 +4396,40 @@ export const SearchAnimeDocument = gql`
       status
       averageScore
       episodes
-      duration
+      source
       coverImage {
         medium
       }
       genres
+    }
+  }
+`;
+export const SearchMangaDocument = gql`
+  query searchManga($search: String, $type: MediaType) {
+    Media(search: $search, type: $type) {
+      title {
+        userPreferred
+      }
+      description(asHtml: true)
+      startDate {
+        year
+        month
+        day
+      }
+      endDate {
+        year
+        month
+        day
+      }
+      status
+      averageScore
+      coverImage {
+        medium
+      }
+      genres
+      chapters
+      volumes
+      source
     }
   }
 `;
@@ -4378,7 +4446,7 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper
 ) {
   return {
-    SearchAnime(
+    searchAnime(
       variables?: SearchAnimeQueryVariables,
       requestHeaders?: Dom.RequestInit["headers"]
     ): Promise<SearchAnimeQuery> {
@@ -4388,7 +4456,20 @@ export function getSdk(
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        "SearchAnime"
+        "searchAnime"
+      );
+    },
+    searchManga(
+      variables?: SearchMangaQueryVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<SearchMangaQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<SearchMangaQuery>(SearchMangaDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        "searchManga"
       );
     },
   };

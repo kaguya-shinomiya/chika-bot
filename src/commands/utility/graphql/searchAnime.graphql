@@ -1,4 +1,4 @@
-query SearchAnime($search: String, $type: MediaType) {
+query searchAnime($search: String, $type: MediaType) {
   Media(search: $search, type: $type) {
     title {
       userPreferred
@@ -9,7 +9,7 @@ query SearchAnime($search: String, $type: MediaType) {
     status
     averageScore
     episodes
-    duration
+    source
     coverImage {
       medium
     }
