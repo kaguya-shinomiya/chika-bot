@@ -1,7 +1,6 @@
 import { unknown_png } from "../../../assets";
 import { FuzzyDate } from "../../../generated/graphql";
 import { baseEmbed } from "../../../shared/embeds";
-import { questionMark } from "./animeInfoEmbed";
 import { parseFuzzyDate } from "./mangaInfoEmbed";
 
 interface charInfoEmbedParams {
@@ -32,7 +31,7 @@ export const genCharInfoEmbed = (info: charInfoEmbedParams) => {
   return baseEmbed()
     .setTitle(`${englishName || "?"} ${genderEmoji}\n${japName || "?"}`)
     .addFields([
-      { name: ":calendar: Age", value: age || questionMark, inline: true },
+      { name: ":calendar: Age", value: age || "?", inline: true },
       {
         name: ":cake: Birthday",
         value: parseFuzzyDate(dateOfBirth),

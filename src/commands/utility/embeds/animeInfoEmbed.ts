@@ -8,8 +8,6 @@ import {
 import { baseEmbed } from "../../../shared/embeds";
 import { capitalize, parseHtml } from "../../../utils/text";
 
-export const questionMark = ":grey_question:";
-
 interface animeEmbedParams {
   title: string | null | undefined;
   description: string | null | undefined;
@@ -45,7 +43,11 @@ export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
     .addFields([
       {
         name: ":film_frames: Status",
-        value: status ? capitalize(status.toLowerCase()) : questionMark,
+        value: status
+          ? capitalize(status.replace(/_/g, " ").toLowerCase(), {
+              onlyFirst: true,
+            })
+          : "?",
         inline: true,
       },
       {
@@ -53,7 +55,7 @@ export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
         value:
           seasonYear && season
             ? `${capitalize(season.toLowerCase())} ${seasonYear}`
-            : questionMark,
+            : "?",
         inline: true,
       },
     ])
@@ -61,19 +63,19 @@ export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
     .addFields([
       {
         name: ":tv: Episodes",
-        value: `${episodes || questionMark}`,
+        value: `${episodes || "?"}`,
         inline: true,
       },
       {
         name: ":star: Rating",
-        value: averageScore ? `${averageScore}/100` : questionMark,
+        value: averageScore ? `${averageScore}/100` : "?",
         inline: true,
       },
       {
         name: ":ramen: Sauce",
         value: source
           ? capitalize(source.replace(/_/g, " ").toLowerCase())
-          : questionMark,
+          : "?",
         inline: true,
       },
     ]);
