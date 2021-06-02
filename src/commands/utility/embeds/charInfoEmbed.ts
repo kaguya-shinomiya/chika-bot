@@ -30,7 +30,7 @@ export const genCharInfoEmbed = (info: charInfoEmbedParams) => {
   }
 
   return baseEmbed()
-    .setTitle(`${englishName || "?"} | ${japName || "?"} ${genderEmoji}`)
+    .setTitle(`${englishName || "?"} ${genderEmoji}\n${japName || "?"}`)
     .addFields([
       { name: ":calendar: Age", value: age || questionMark, inline: true },
       {

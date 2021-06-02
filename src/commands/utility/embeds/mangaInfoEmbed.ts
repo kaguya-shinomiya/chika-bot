@@ -25,12 +25,11 @@ interface mangaEmbedParams {
 
 export function parseFuzzyDate(date?: FuzzyDate | null): string {
   if (!date) {
-    return questionMark;
+    return "?";
   }
   const { year, month, day } = date;
-  console.log(JSON.stringify(date));
   if (!year && !month && !day) {
-    return questionMark;
+    return "?";
   }
   return `${day || "?"}-${month || "?"}-${year || "?"}`;
 }
