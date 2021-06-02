@@ -7,7 +7,6 @@ import {
 } from "../../../generated/graphql";
 import { baseEmbed } from "../../../shared/embeds";
 import { capitalize, parseHtml } from "../../../utils/text";
-import { questionMark } from "./animeInfoEmbed";
 
 interface mangaEmbedParams {
   title: string | null | undefined;
@@ -57,7 +56,11 @@ export const genMangaInfoEmbed = (info: mangaEmbedParams) => {
     .addFields([
       {
         name: ":pencil: Status",
-        value: status ? capitalize(status.toLowerCase()) : questionMark,
+        value: status
+          ? capitalize(status.replace(/_/g, " ").toLowerCase(), {
+              onlyFirst: true,
+            })
+          : "?",
         inline: true,
       },
       {
@@ -71,21 +74,21 @@ export const genMangaInfoEmbed = (info: mangaEmbedParams) => {
         name: ":ramen: Sauce",
         value: source
           ? capitalize(source.replace(/_/g, " ").toLowerCase())
-          : questionMark,
+          : "?",
         inline: true,
       },
     ])
     .addField(":shinto_shrine: Genres", genres?.join(", ") || ":question:")
     .addFields([
-      { name: ":books: Volumes", value: volumes || questionMark, inline: true },
+      { name: ":books: Volumes", value: volumes || "?", inline: true },
       {
         name: ":newspaper2: Chapters",
-        value: chapters || questionMark,
+        value: chapters || "?",
         inline: true,
       },
       {
         name: ":star: Rating",
-        value: averageScore ? `${averageScore}/100` : questionMark,
+        value: averageScore ? `${averageScore}/100` : "?",
         inline: true,
       },
     ]);
