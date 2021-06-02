@@ -12,7 +12,7 @@ export const rules: Command = {
   redis: RedisPrefix.default,
   execute(message, args) {
     const { channel, client } = message;
-    const gameRequested = args.join(" ").toLowerCase();
+    const gameRequested = args.join("").toLowerCase();
     const game = client.games.find((_game) => _game.title === gameRequested);
     if (!game) {
       sendUnknownGameError(gameRequested, channel);

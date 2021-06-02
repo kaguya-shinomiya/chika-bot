@@ -10,5 +10,9 @@ export const chika_spin_gif = "https://i.imgur.com/xMDHNDz.gif";
 
 export const shiritori_rules_png = "https://i.imgur.com/rzgelx8.jpg";
 
+export const unknown_png = "https://i.imgur.com/odkVxpH.png";
+
 export const white_check_mark = "✅";
 export const red_cross = "❌";
+export const right_arrow = "➡️";
+export const left_arrow = "⬅️";

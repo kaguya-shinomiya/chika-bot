@@ -6,12 +6,6 @@ export interface QueueItem {
   thumbnailURL: string;
   duration: string;
 }
-export interface Queue {
-  connection?: VoiceConnection;
-  dispatcher?: StreamDispatcher;
-  nowPlaying?: QueueItem;
-  queue: QueueItem[];
-}
 
 export interface AudioUtils {
   connection: VoiceConnection;

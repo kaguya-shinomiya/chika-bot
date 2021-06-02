@@ -1,10 +1,10 @@
 export class GameState {
-  name: string; // name of the game
+  gameTitle: string; // name of the game
 
   channelID: string;
 
   constructor(name: string, channelID: string) {
-    this.name = name;
+    this.gameTitle = name;
     this.channelID = channelID;
   }
 }

@@ -4,9 +4,8 @@ import {
   sendNoGameSelectedError,
   sendUnknownGameError,
 } from "../../games/utils/embeds";
-import { lightErrorEmbed } from "../../shared/embeds";
+import { validateMentions } from "../../games/utils/validateMentions";
 import { Command } from "../../types/command";
-import { GameType } from "../../types/game";
 import { RedisPrefix } from "../../types/redis";
 
 export const game: Command = {
@@ -17,7 +16,7 @@ export const game: Command = {
   usage: `${PREFIX}game <game_title>`,
   argsCount: -1,
   async execute(message, args, redis) {
-    const { mentions, channel, client } = message;
+    const { channel, client, mentions, author } = message;
 
     if (await redis!.get(channel.id)) {
       sendInGame(channel);
@@ -37,42 +36,19 @@ export const game: Command = {
       return;
     }
 
-    const taggedCount = mentions.users.size;
-    switch (toPlay.type) {
-      case GameType.Single:
-        if (taggedCount !== 0) {
-          channel.send(
-            lightErrorEmbed(`**${toPlay.title}** is a single player game.`)
-          );
-          return;
-        }
-        break;
-      case GameType.Versus:
-        if (taggedCount !== 1) {
-          channel.send(
-            lightErrorEmbed(
-              `You must tag one friend to play **${toPlay.title}** with.`
-            )
-          );
-          return;
-        }
-        break;
-      case GameType.Multi:
-        if (taggedCount < 1) {
-          channel.send(
-            lightErrorEmbed(
-              `Tag at least one friend to play **${toPlay.title}** with.`
-            )
-          );
-        }
-        break;
-      default:
-        throw new Error("Game has no type");
-    }
+    if (
+      !validateMentions({
+        author,
+        mentions,
+        isTwoPlayer: toPlay.minPlayerCount === 2 && toPlay.maxPlayerCount === 2,
+        channel,
+        gameTitle: toPlay.displayTitle,
+      })
+    )
+      return;
 
-    if (toPlay.pregame) {
-      toPlay.pregame(message, redis!);
-    }
+    redis.set(channel.id, "true", "px", toPlay.sessionDuration); // block other ck;game calls for now
+    toPlay.pregame(message, redis!);
   },
 };
 

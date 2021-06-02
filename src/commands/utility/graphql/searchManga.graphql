@@ -1,0 +1,27 @@
+query searchManga($search: String, $type: MediaType) {
+  Media(search: $search, type: $type) {
+    title {
+      userPreferred
+    }
+    description(asHtml: true)
+    startDate {
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      month
+      day
+    }
+    status
+    averageScore
+    coverImage {
+      medium
+    }
+    genres
+    chapters
+    volumes
+    source
+  }
+}

@@ -7,6 +7,7 @@ import {
 } from "../../shared/embeds";
 import { GenericChannel } from "../../types/command";
 import { capitalize } from "../../utils/text";
+import { STOP_GAME } from "./constants";
 
 export const sendNoGameSelectedError = async (channel: GenericChannel) => {
   channel.send(lightErrorEmbed("Tell me which game you wanna play, yo."));
@@ -80,7 +81,7 @@ export const sendGameStartsIn = async ({
         To review the rules of **${capitalize(
           title
         )}**, use \`${PREFIX}rules ${title}\`.
-        \`!stop\` will stop the game at anytime.
+        \`${STOP_GAME}\` will stop the game at anytime.
         `
       )
   );

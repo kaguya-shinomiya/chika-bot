@@ -1,0 +1,18 @@
+query searchAnime($search: String, $type: MediaType) {
+  Media(search: $search, type: $type) {
+    title {
+      userPreferred
+    }
+    description(asHtml: false)
+    season
+    seasonYear
+    status
+    averageScore
+    episodes
+    source
+    coverImage {
+      medium
+    }
+    genres
+  }
+}
