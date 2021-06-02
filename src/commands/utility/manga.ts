@@ -1,5 +1,7 @@
+import { TextChannel } from "discord.js";
 import { PREFIX } from "../../constants";
 import { getSdk, MediaType } from "../../generated/graphql";
+import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
 import { sendNotFoundError } from "./embeds/errors";
@@ -24,6 +26,17 @@ export const manga: Command = {
         if (!result.Media) {
           sendNotFoundError(search, channel);
           return;
+        }
+        if (channel.isText()) {
+          const textChannel = channel as TextChannel;
+          if (!textChannel.nsfw && result.Media.isAdult) {
+            channel.send(
+              lightErrorEmbed(
+                `This manga is marked as 18+! I can't show this in a NSFW channel.`
+              )
+            );
+            return;
+          }
         }
 
         const {

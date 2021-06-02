@@ -23,5 +23,6 @@ query searchManga($search: String, $type: MediaType) {
     chapters
     volumes
     source
+    isAdult
   }
 }

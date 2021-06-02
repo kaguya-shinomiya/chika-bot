@@ -4334,6 +4334,7 @@ export type SearchAnimeQuery = { __typename?: "Query" } & {
       | "episodes"
       | "source"
       | "genres"
+      | "isAdult"
     > & {
         title?: Maybe<
           { __typename?: "MediaTitle" } & Pick<MediaTitle, "userPreferred">
@@ -4390,6 +4391,7 @@ export type SearchMangaQuery = { __typename?: "Query" } & {
       | "chapters"
       | "volumes"
       | "source"
+      | "isAdult"
     > & {
         title?: Maybe<
           { __typename?: "MediaTitle" } & Pick<MediaTitle, "userPreferred">
@@ -4430,6 +4432,7 @@ export const SearchAnimeDocument = gql`
         medium
       }
       genres
+      isAdult
     }
   }
 `;
@@ -4480,6 +4483,7 @@ export const SearchMangaDocument = gql`
       chapters
       volumes
       source
+      isAdult
     }
   }
 `;
