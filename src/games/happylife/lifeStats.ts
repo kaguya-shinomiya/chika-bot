@@ -2,6 +2,16 @@
 export class HappyLifeStats {
   username: string;
 
+  _cursor: number; // 'position' of the player
+
+  get cursor() {
+    return this._cursor;
+  }
+
+  set cursor(value) {
+    this._cursor = value;
+  }
+
   _netWorth: number;
 
   get netWorth() {
@@ -15,5 +25,6 @@ export class HappyLifeStats {
   constructor(username: string) {
     this.username = username;
     this._netWorth = 10000;
+    this._cursor = 0;
   }
 }

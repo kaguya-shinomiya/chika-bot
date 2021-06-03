@@ -2,6 +2,7 @@ import { Collection, Message, Snowflake, User } from "discord.js";
 import { Redis } from "ioredis";
 import { baseEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
+import { pingRedis, registerStopListener } from "../utils/listeners";
 import { next } from "./cards/types";
 import { HappyLifeGameState } from "./gameState";
 
@@ -22,12 +23,19 @@ export class HappyLife extends Game {
     this.collectPlayers({
       redis,
       message,
-      onTimeoutAccept: (players) => this.startGame(players, message),
+      onTimeoutAccept: (players) => this.startGame(players, message, redis),
     });
   }
 
-  startGame(players: Collection<Snowflake, User>, message: Message) {
+  async startGame(
+    players: Collection<Snowflake, User>,
+    message: Message,
+    redis: Redis
+  ) {
+    registerStopListener(message.client, message.channel.id, redis);
+
     const { channel } = message;
+
     this.sendParticipants(channel, players.array());
 
     const state = new HappyLifeGameState({
@@ -35,6 +43,8 @@ export class HappyLife extends Game {
       players,
     });
 
-    setTimeout(() => next(state, message), 5000);
+    if (!(await pingRedis(redis, channel.id))) return;
+
+    setTimeout(() => next(state, message, redis), 5000);
   }
 }
