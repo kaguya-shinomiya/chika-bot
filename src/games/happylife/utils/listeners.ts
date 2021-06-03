@@ -1,7 +1,7 @@
 import { Client, Message } from "discord.js";
 import { Redis } from "ioredis";
 import { validateMessage } from "../../../shared/validateMessage";
-import { pingRedis } from "../../utils/listeners";
+import { pingRedis } from "../../utils/helpers";
 import type { HappyLifeGameState } from "../gameState";
 
 export const registerRollListener = (

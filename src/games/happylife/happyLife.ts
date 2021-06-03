@@ -2,7 +2,7 @@ import { Collection, Message, Snowflake, User } from "discord.js";
 import { Redis } from "ioredis";
 import { baseEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
-import { pingRedis, registerStopListener } from "../utils/listeners";
+import { pingRedis } from "../utils/helpers";
 import { next } from "./cards/types";
 import { HappyLifeGameState } from "./gameState";
 
@@ -32,8 +32,6 @@ export class HappyLife extends Game {
     message: Message,
     redis: Redis
   ) {
-    registerStopListener(message.client, message.channel.id, redis);
-
     const { channel } = message;
 
     this.sendParticipants(channel, players.array());
