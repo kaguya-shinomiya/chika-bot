@@ -2,6 +2,8 @@ import { Collection, Message, Snowflake, User } from "discord.js";
 import { Redis } from "ioredis";
 import { baseEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
+import { next } from "./cards/types";
+import { HappyLifeGameState } from "./gameState";
 
 export class HappyLife extends Game {
   title = "happylife";
@@ -27,5 +29,12 @@ export class HappyLife extends Game {
   startGame(players: Collection<Snowflake, User>, message: Message) {
     const { channel } = message;
     this.sendParticipants(channel, players.array());
+
+    const state = new HappyLifeGameState({
+      channelID: channel.id,
+      players,
+    });
+
+    setTimeout(() => next(state, message), 5000);
   }
 }

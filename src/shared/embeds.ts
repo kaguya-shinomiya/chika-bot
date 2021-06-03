@@ -22,6 +22,8 @@ export const lightErrorEmbed = (msg: string) =>
   baseEmbed().setDescription(`:broken_heart: ${msg}`);
 export const lightOkEmbed = (msg: string) =>
   baseEmbed().setDescription(`:magic_wand: ${msg}`);
+export const lightGoodEmbed = (msg: string) =>
+  baseEmbed().setDescription(`:sparkles: ${msg}`);
 
 export const badArgsEmbed = (command: Command, provided: number) =>
   cryingEmbed()

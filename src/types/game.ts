@@ -195,7 +195,7 @@ export abstract class Game {
     options?: { startsInMessage: string }
   ) {
     const players = participants.map((user) => user.toString());
-    return channel.send(
+    channel.send(
       detectiveEmbed()
         .setTitle(this.displayTitle)
         .addField(`Players:`, toListString(players))

@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 export function shuffle<T>(arr: T[]): T[] {
   let currentIndex = arr.length;
 

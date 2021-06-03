@@ -155,7 +155,6 @@ export class Shiritori extends Game {
         .send(Shiritori.playerCardsEmbed(state))
         .then(() => channel.send(`:regional_indicator_${lastChar}:`));
 
-      // eslint-disable-next-line no-param-reassign
       state.startingChar = lastChar;
 
       function stopGame() {
