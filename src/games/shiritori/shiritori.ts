@@ -8,7 +8,7 @@ import {
 } from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
-import { pingRedis, registerStopListener } from "../utils/listeners";
+import { pingRedis } from "../utils/helpers";
 import { ShiritoriGameState } from "./types";
 
 interface startShiritoriGameParams {
@@ -62,10 +62,10 @@ export class Shiritori extends Game {
   }
 
   async startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
+    if (!(await pingRedis(redis, message.channel.id))) return;
+
     const { channel, client } = message;
     const { p1Cards, p2Cards, startingChar } = Shiritori.genInitialCards();
-
-    registerStopListener(client, channel.id, redis);
 
     const cards = new Collection<Snowflake, string[]>();
     cards.set(p1.id, p1Cards);
