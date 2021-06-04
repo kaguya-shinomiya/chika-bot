@@ -27,7 +27,7 @@ export class HappyLifeGameState extends GameState {
 
     this.stats = new Collection<Snowflake, HappyLifeStats>();
     players.forEach((player) =>
-      this.stats.set(player.id, new HappyLifeStats(player.username))
+      this.stats.set(player.id, new HappyLifeStats(player.id, player.username))
     );
 
     this.playOrder = shuffle(players.array());

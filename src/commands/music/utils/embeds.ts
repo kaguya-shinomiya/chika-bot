@@ -9,6 +9,7 @@ import {
 } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
+import { toListString } from "../../../utils/text";
 import { minToSec, secToMin } from "./helpers";
 
 export const toUrlString = (
@@ -122,11 +123,6 @@ export const sendMusicOnlyInGuild = async (channel: GenericChannel) =>
 
 export const sendNotInGuild = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("This command can only be used in a server!"));
-
-export const toListString = (arr: string[]): string => {
-  const withCount = arr.map((item, i) => `\`${i + 1}\` ${item}`);
-  return withCount.join(`\n`);
-};
 
 interface sendQueuedParams {
   tracks: QueueItem[];

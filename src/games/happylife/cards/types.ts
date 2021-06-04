@@ -2,7 +2,7 @@ import { Message } from "discord.js";
 import { Redis } from "ioredis";
 import type { HappyLifeGameState } from "../gameState";
 
-type LifeCardType = "Bad luck" | "Lucky";
+type LifeCardType = "Bad Luck" | "Lucky" | "Pet" | "Career";
 
 export interface LifeCardInfo {
   type: LifeCardType;

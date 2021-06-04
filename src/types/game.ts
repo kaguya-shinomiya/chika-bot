@@ -8,7 +8,6 @@ import {
 } from "discord.js";
 import { Redis } from "ioredis";
 import { red_cross, white_check_mark } from "../assets";
-import { toListString } from "../commands/music/utils/embeds";
 import { PREFIX } from "../constants";
 import { STOP_GAME } from "../games/utils/constants";
 import {
@@ -17,6 +16,7 @@ import {
   genericErrorEmbed,
   lightErrorEmbed,
 } from "../shared/embeds";
+import { toListString } from "../utils/text";
 import { GenericChannel } from "./command";
 
 // eslint-disable-next-line no-shadow

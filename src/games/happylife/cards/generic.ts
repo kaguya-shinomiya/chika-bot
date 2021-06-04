@@ -3,24 +3,27 @@ import { LifeCardInfo } from "./types";
 
 export const genericCards: LifeCardInfo[] = [
   {
-    type: "Bad luck",
-    name: "Instant death",
+    type: "Bad Luck",
+    name: "Instant Death",
     description: "Die and take the last place.",
     onLand: (state, message, redis) => {
       const thisPlayer = state.playOrder[state.toPlay];
+      const thisPlayerStats = state.stats.get(thisPlayer.id)!;
 
       message.channel.send(
-        `**${thisPlayer.username}** dies from unknown causes. GG.`
+        `
+In Chika's original game, **${thisPlayer.username}** would have just died and been booted from the game.
+In this version, you are just reset to the first card.`
       );
 
-      // state.playOrder.splice(state.toPlay, 1);
+      thisPlayerStats.cursor = 0;
 
       next(state, message, redis);
     },
   },
   {
-    type: "Bad luck",
-    name: "Traffic accident",
+    type: "Bad Luck",
+    name: "Traffic Accident",
     description: "You run into a traffic accident!",
     onLand: (state, message, redis) => {
       const thisPlayer = state.playOrder[state.toPlay];
@@ -35,8 +38,22 @@ export const genericCards: LifeCardInfo[] = [
   },
   {
     type: "Lucky",
-    name: "Win a lucky draw.",
+    name: "Win a Lucky Draw",
     description: "You win a lucky draw!",
+    onLand: (state, message, redis) => {
+      const thisPlayer = state.playOrder[state.toPlay];
+      const thisPlayerStats = state.stats.get(thisPlayer.id)!;
+      const cash = Math.floor(Math.random() * 10000);
+      thisPlayerStats.netWorth += cash;
+      message.channel.send(`**${thisPlayer.username}** won $${cash}!`);
+
+      next(state, message, redis);
+    },
+  },
+  {
+    type: "Pet",
+    name: "Adopt a Pet",
+    description: "You go to the local shelter and adopt a pet.",
     onLand: (state, message, redis) => {
       const thisPlayer = state.playOrder[state.toPlay];
       const thisPlayerStats = state.stats.get(thisPlayer.id)!;

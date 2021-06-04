@@ -22,3 +22,8 @@ export const truncate = (s: string, maxLen: number) => {
   }
   return `${s.substring(0, maxLen)} ...`;
 };
+
+export const toListString = (arr: string[]): string => {
+  const withCount = arr.map((item, i) => `\`${i + 1}\` ${item}`);
+  return withCount.join(`\n`);
+};

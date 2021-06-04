@@ -3,7 +3,7 @@ import { PREFIX } from "../../constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
-import { toListString } from "../music/utils/embeds";
+import { toListString } from "../../utils/text";
 
 export const gameList: Command = {
   name: "game-list",
