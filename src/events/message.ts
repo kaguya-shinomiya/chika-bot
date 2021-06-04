@@ -7,12 +7,13 @@ import {
 } from "../shared/embeds";
 import { Event } from "../types/event";
 import { RedisPrefix } from "../types/redis";
+import { isOnCooldown } from "../utils/validateCooldowns";
 
 const message: Event = {
   name: "message",
   once: false,
   // eslint-disable-next-line no-shadow
-  listener({ client, redis }, message: Message) {
+  async listener({ client, redis }, message: Message) {
     if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);
@@ -36,6 +37,8 @@ const message: Event = {
       message.channel.send(badArgsEmbed(command, args.length));
       return;
     }
+
+    if (await isOnCooldown(message, command)) return;
 
     try {
       switch (command.redis) {

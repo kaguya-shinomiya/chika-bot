@@ -6,8 +6,6 @@ import { sendNotInGuild, sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
 
-const SEARCH_COOLDOWN = 1000 * 10;
-
 // TODO add a cooldown for this
 
 export const search: Command = {
@@ -17,12 +15,19 @@ export const search: Command = {
   category: "Music",
   usage: `${PREFIX}search <search_string>`,
   redis: RedisPrefix.tracks,
+  channelCooldown: 15,
   async execute(message, args, redis) {
     const { channel, client, guild } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
     }
+
+    client.cooldownManager.setCooldown(
+      channel.id,
+      this.name,
+      this.channelCooldown!
+    );
 
     const results = await searchVideo(args.join(" "));
     if (!results) {
@@ -42,7 +47,7 @@ export const search: Command = {
       client.removeListener("message", resultSelectListener);
     };
     client.on("message", resultSelectListener);
-    client.setTimeout(timeoutCallback, SEARCH_COOLDOWN);
+    client.setTimeout(timeoutCallback, this.channelCooldown!);
   },
 };
 

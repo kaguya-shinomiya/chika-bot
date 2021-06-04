@@ -28,6 +28,22 @@ const main = async () => {
   const gamesRedis = new Redis(process.env.REDISCLOUD_URL, {
     keyPrefix: "game:",
   });
+  const cooldownRedis = new Redis(process.env.REDISCLOUD_URL, {
+    keyPrefix: "cooldown:",
+  });
+
+  client.cooldownManager = {
+    setCooldown(id, command, time) {
+      return cooldownRedis.set(`${id}${command}`, command, "ex", time);
+    },
+    async getCooldown(id, command) {
+      const ttl = await cooldownRedis.ttl(`${id}${command}`);
+      if (ttl <= 0) {
+        return 0;
+      }
+      return ttl;
+    },
+  };
 
   const redis: RedisPrefixed = { defaultRedis, tracksRedis, gamesRedis };
   loadEventListeners(client, redis);
