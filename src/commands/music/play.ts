@@ -68,6 +68,8 @@ const play: Command = {
       return;
     }
 
+    if (next) redis.lpush(guild.id, next); // push next track back
+
     const videoData = await validateArgs(args);
     if (!videoData) {
       sendNoVideo(args.join(" "), channel);

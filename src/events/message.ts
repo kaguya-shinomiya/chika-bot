@@ -1,3 +1,4 @@
+import { Message } from "discord.js";
 import { PREFIX, PREFIX_RE } from "../constants";
 import {
   badArgsEmbed,
@@ -11,7 +12,7 @@ const message: Event = {
   name: "message",
   once: false,
   // eslint-disable-next-line no-shadow
-  listener({ client, redis }, message) {
+  listener({ client, redis }, message: Message) {
     if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);

@@ -14,5 +14,6 @@ query searchAnime($search: String, $type: MediaType) {
       medium
     }
     genres
+    isAdult
   }
 }

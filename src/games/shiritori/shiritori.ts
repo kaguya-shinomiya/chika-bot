@@ -8,7 +8,7 @@ import {
 } from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
-import { STOP_GAME_RE } from "../utils/constants";
+import { pingRedis } from "../utils/helpers";
 import { ShiritoriGameState } from "./types";
 
 interface startShiritoriGameParams {
@@ -61,7 +61,9 @@ export class Shiritori extends Game {
     });
   }
 
-  startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
+  async startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
+    if (!(await pingRedis(redis, message.channel.id))) return;
+
     const { channel, client } = message;
     const { p1Cards, p2Cards, startingChar } = Shiritori.genInitialCards();
 
@@ -81,6 +83,8 @@ export class Shiritori extends Game {
       startsInMessage: `I'll reveal the first card in 5 seconds!`,
     }).then(() => channel.send(Shiritori.playerCardsEmbed(initState)));
 
+    if (!(await pingRedis(redis, channel.id))) return;
+
     setTimeout(() => {
       client.once("message", Shiritori.createOnceListener(initState, redis)); // register the new listener
       channel.send(`:regional_indicator_${initState.startingChar}:`);
@@ -89,6 +93,8 @@ export class Shiritori extends Game {
 
   static createOnceListener(state: ShiritoriGameState, redis: Redis) {
     const shiritoriListener = async (message: Message) => {
+      if (!(await pingRedis(redis, state.channelID))) return;
+
       const { author, content, channel, client } = message;
 
       const onRejectListener = Shiritori.createOnceListener(state, redis);
@@ -102,13 +108,6 @@ export class Shiritori extends Game {
       // 2. and they must be sending from the right channel
       if (!(channel.id === state.channelID)) {
         reject();
-        return;
-      }
-      if (STOP_GAME_RE.test(content)) {
-        channel.send(
-          lightErrorEmbed(`**${author.username}** has stopped the game.`)
-        );
-        stopGame();
         return;
       }
 

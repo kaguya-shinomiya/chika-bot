@@ -48,6 +48,7 @@ export const game: Command = {
       return;
 
     redis.set(channel.id, "true", "px", toPlay.sessionDuration); // block other ck;game calls for now
+
     toPlay.pregame(message, redis!);
   },
 };
