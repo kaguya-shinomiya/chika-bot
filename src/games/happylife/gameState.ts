@@ -31,7 +31,7 @@ export class HappyLifeGameState extends GameState {
     );
 
     this.playOrder = shuffle(players.array());
-    this.toPlay = -1; // start from -1
+    this.toPlay = -1; // start from -1, since we'll add one in `next`
 
     this.cards = shuffleCards();
   }

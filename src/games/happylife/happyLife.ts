@@ -2,9 +2,8 @@ import { Collection, Message, Snowflake, User } from "discord.js";
 import { Redis } from "ioredis";
 import { baseEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
-import { pingRedis } from "../utils/helpers";
-import { next } from "./cards/types";
 import { HappyLifeGameState } from "./gameState";
+import { next } from "./utils/next";
 
 export class HappyLife extends Game {
   title = "happylife";
@@ -40,8 +39,6 @@ export class HappyLife extends Game {
       channelID: channel.id,
       players,
     });
-
-    if (!(await pingRedis(redis, channel.id))) return;
 
     setTimeout(() => next(state, message, redis), 5000);
   }

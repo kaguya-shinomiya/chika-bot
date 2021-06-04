@@ -12,7 +12,9 @@ export const registerRollListener = (
   const { channelID, playOrder, toPlay, cards, stats } = state;
   const rollListener = async (message: Message) => {
     if (!(await pingRedis(redis, channelID))) return;
+
     const nextPlayer = playOrder[toPlay];
+
     if (
       !validateMessage(message, {
         channelID,
@@ -24,24 +26,20 @@ export const registerRollListener = (
       return;
     }
 
-    // TODO roll from 1 - 6
-    // change player state to the right tile
-    // remove that tile from play
-    // execute tile's onLand
-
-    const steps = Math.floor(Math.random() * 6 + 1);
+    const steps = Math.floor(Math.random() * 0 + 1);
     message.channel.send(`you moved ${steps}`);
 
-    // shift position
     const currentStats = stats.get(nextPlayer.id)!;
-    const currentIndex = cards.findIndex(
-      (card) => card.id === currentStats?.cursor
-    );
+    const currentIndex =
+      cards.findIndex((card) => card.id > currentStats.cursor) - 1;
 
-    const [cardLanded] = cards.splice(currentIndex + steps);
+    const [cardLanded] = cards.splice(currentIndex + steps, 1);
     message.channel.send(
       `you landed on ${cardLanded.name} - ${cardLanded.description}`
     );
+
+    currentStats.cursor = cardLanded.id;
+
     cardLanded.onLand(state, message, redis);
   };
 

@@ -25,6 +25,6 @@ export class HappyLifeStats {
   constructor(username: string) {
     this.username = username;
     this._netWorth = 10000;
-    this._cursor = 0;
+    this._cursor = -1;
   }
 }
