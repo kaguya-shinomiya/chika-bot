@@ -6,7 +6,7 @@ import {
   pointingEmbed,
 } from "../../shared/embeds";
 import { GenericChannel } from "../../types/command";
-import { capitalize } from "../../utils/text";
+import { capitalize } from "../../utils/typography";
 import { STOP_GAME } from "./constants";
 
 export const sendNoGameSelectedError = async (channel: GenericChannel) => {

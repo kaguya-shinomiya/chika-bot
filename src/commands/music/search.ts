@@ -15,7 +15,7 @@ export const search: Command = {
   category: "Music",
   usage: `${PREFIX}search <search_string>`,
   redis: RedisPrefix.tracks,
-  channelCooldown: 15,
+  channelCooldown: 15000,
   async execute(message, args, redis) {
     const { channel, client, guild } = message;
     if (!guild) {
