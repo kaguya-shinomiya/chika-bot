@@ -41,7 +41,11 @@ export const playFromYt = async (
         })
       )
     )
-    .catch(() => null);
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      return null;
+    });
 
 export const validateArgs = async (
   args: string[]
