@@ -36,12 +36,17 @@ export const playFromYt = async (
       connection.play(
         ytdl.downloadFromInfo(info, {
           filter: "audioonly",
+          quality: "highestaudio",
           // eslint-disable-next-line no-bitwise
           highWaterMark: 1 << 25,
         })
       )
     )
-    .catch(() => null);
+    .catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+      return null;
+    });
 
 export const validateArgs = async (
   args: string[]

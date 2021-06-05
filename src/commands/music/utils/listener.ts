@@ -63,23 +63,28 @@ export function createFinishListener({
 }: createFinishListenerParams) {
   const onFinish = async () => {
     const audioUtils = client.cache.audioUtils.get(guild.id)!;
-    redis.lpop(guild.id).then(async (res) => {
-      if (!res) {
-        sendFinishedAllTracks(channel);
-        audioUtils.dispatcher.destroy();
-        audioUtils.connection.disconnect();
-        return;
-      }
-      const nextData = JSON.parse(res) as QueueItem;
-      playThis({
-        videoData: nextData,
-        channel,
-        client,
-        connection: audioUtils.connection,
-        guildID: guild.id,
-        onFinish,
-      });
-    });
+    if (!audioUtils) return;
+    redis
+      .lpop(guild.id)
+      .then(async (res) => {
+        if (!res) {
+          sendFinishedAllTracks(channel);
+          audioUtils.dispatcher.destroy();
+          audioUtils.connection.disconnect();
+          return;
+        }
+        const nextData = JSON.parse(res) as QueueItem;
+        playThis({
+          videoData: nextData,
+          channel,
+          client,
+          connection: audioUtils.connection,
+          guildID: guild.id,
+          onFinish,
+        });
+      })
+      // eslint-disable-next-line no-console
+      .catch((err) => console.log(err));
   };
   return onFinish;
 }
