@@ -2,9 +2,9 @@ import type { Message, User } from "discord.js";
 import type { GenericChannel } from "../types/command";
 
 interface validateMessageOptions {
-  channel: GenericChannel;
-  author: User;
-  content: RegExp;
+  channel?: GenericChannel;
+  author?: User;
+  content?: RegExp;
 }
 
 export const validateMessage = (
