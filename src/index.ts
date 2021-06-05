@@ -1,11 +1,11 @@
 import Discord, { Collection } from "discord.js";
 import dotenv from "dotenv-safe";
-import Redis from "ioredis";
-import { RedisPrefixed } from "./types/redis";
-import { loadCommands } from "./utils/loadCommands";
-import { loadEventListeners } from "./utils/loadEventListeners";
-import { loadGames } from "./utils/loadGames";
-import { prepareCommandsHelp } from "./utils/prepareCommandsHelp";
+import { initCooldownManager } from "./loading/initCooldownManager";
+import { initRedis } from "./loading/initRedis";
+import { loadCommands } from "./loading/loadCommands";
+import { loadEventListeners } from "./loading/loadEventListeners";
+import { loadGames } from "./loading/loadGames";
+import { prepareCommandsHelp } from "./loading/prepareCommandsHelp";
 
 dotenv.config();
 
@@ -19,18 +19,10 @@ const main = async () => {
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   client.cache = { audioUtils: new Collection() };
 
+  initCooldownManager(client);
+  loadEventListeners(client, initRedis());
+
   client.setMaxListeners(2048);
-
-  const defaultRedis = new Redis(process.env.REDISCLOUD_URL);
-  const tracksRedis = new Redis(process.env.REDISCLOUD_URL, {
-    keyPrefix: "tracks:",
-  });
-  const gamesRedis = new Redis(process.env.REDISCLOUD_URL, {
-    keyPrefix: "game:",
-  });
-
-  const redis: RedisPrefixed = { defaultRedis, tracksRedis, gamesRedis };
-  loadEventListeners(client, redis);
 };
 
 // eslint-disable-next-line no-console

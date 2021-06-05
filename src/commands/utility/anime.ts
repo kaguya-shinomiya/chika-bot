@@ -33,7 +33,7 @@ export const anime: Command = {
           if (!textChannel.nsfw && result.Media.isAdult) {
             channel.send(
               lightErrorEmbed(
-                `This anime is marked as 18+! I can't show this in a NSFW channel.`
+                `This anime is marked as 18+! I can only show this in a NSFW channel.`
               )
             );
             return;

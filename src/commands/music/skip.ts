@@ -3,6 +3,7 @@ import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
+import { createFinishListener } from "./utils/listener";
 
 const skip: Command = {
   name: "skip",
@@ -11,7 +12,7 @@ const skip: Command = {
   argsCount: 0,
   category: "Music",
   redis: RedisPrefix.tracks,
-  async execute(message) {
+  async execute(message, _args, redis) {
     const { channel, guild, client, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
@@ -31,7 +32,19 @@ const skip: Command = {
         )}**`
       )
     );
-    audioUtils.dispatcher.end();
+    if (!audioUtils.dispatcher.paused) {
+      audioUtils.dispatcher.end();
+      return;
+    }
+
+    // a paused track cannot emit 'finish' for some reason
+    // we'll do this manually
+    createFinishListener({
+      channel,
+      guild,
+      client,
+      redis,
+    })();
   },
 };
 

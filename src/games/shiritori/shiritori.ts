@@ -8,7 +8,6 @@ import {
 } from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
-import { pingRedis } from "../utils/helpers";
 import { ShiritoriGameState } from "./types";
 
 interface startShiritoriGameParams {
@@ -62,9 +61,8 @@ export class Shiritori extends Game {
   }
 
   async startGame({ message, p1, p2, redis }: startShiritoriGameParams) {
-    if (!(await pingRedis(redis, message.channel.id))) return;
-
     const { channel, client } = message;
+    if (!(await redis.get(channel.id))) return;
     const { p1Cards, p2Cards, startingChar } = Shiritori.genInitialCards();
 
     const cards = new Collection<Snowflake, string[]>();
@@ -83,7 +81,7 @@ export class Shiritori extends Game {
       startsInMessage: `I'll reveal the first card in 5 seconds!`,
     }).then(() => channel.send(Shiritori.playerCardsEmbed(initState)));
 
-    if (!(await pingRedis(redis, channel.id))) return;
+    if (!(await redis.get(channel.id))) return;
 
     setTimeout(() => {
       client.once("message", Shiritori.createOnceListener(initState, redis)); // register the new listener
@@ -93,9 +91,8 @@ export class Shiritori extends Game {
 
   static createOnceListener(state: ShiritoriGameState, redis: Redis) {
     const shiritoriListener = async (message: Message) => {
-      if (!(await pingRedis(redis, state.channelID))) return;
-
       const { author, content, channel, client } = message;
+      if (!(await redis.get(channel.id))) return;
 
       const onRejectListener = Shiritori.createOnceListener(state, redis);
       const reject = () => client.once("message", onRejectListener);

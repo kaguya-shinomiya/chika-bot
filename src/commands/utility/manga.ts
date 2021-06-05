@@ -32,7 +32,7 @@ export const manga: Command = {
           if (!textChannel.nsfw && result.Media.isAdult) {
             channel.send(
               lightErrorEmbed(
-                `This manga is marked as 18+! I can't show this in a NSFW channel.`
+                `This manga is marked as 18+! I can only show this in a NSFW channel.`
               )
             );
             return;

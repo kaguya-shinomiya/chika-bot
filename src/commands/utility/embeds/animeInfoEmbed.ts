@@ -6,7 +6,7 @@ import {
   MediaStatus,
 } from "../../../generated/graphql";
 import { baseEmbed } from "../../../shared/embeds";
-import { capitalize, parseHtml } from "../../../utils/text";
+import { capitalize, parseHtml } from "../../../utils/typography";
 
 interface animeEmbedParams {
   title: string | null | undefined;
