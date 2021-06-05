@@ -36,6 +36,7 @@ export const playFromYt = async (
       connection.play(
         ytdl.downloadFromInfo(info, {
           filter: "audioonly",
+          quality: "highestaudio",
           // eslint-disable-next-line no-bitwise
           highWaterMark: 1 << 25,
         })
