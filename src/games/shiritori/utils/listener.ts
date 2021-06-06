@@ -22,7 +22,7 @@ export const createOnceShiritoriListener = (
       !filterMessage(message, {
         channelId: state.channelId,
         authors: [state.p1, state.p2],
-        content: new RegExp(`/^${state.startingChar}/i`),
+        content: new RegExp(`^${state.startingChar}`, "i"),
         minLen: 4, // TODO make this a per server setting
       })
     ) {

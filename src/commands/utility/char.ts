@@ -26,7 +26,7 @@ export const char: Command = {
           sendNotFoundError(charName, channel);
           return;
         }
-        const { name, image, age, gender, description, dateOfBirth } =
+        const { name, image, age, gender, description, dateOfBirth, siteUrl } =
           result.Character;
 
         channel.send(
@@ -38,6 +38,7 @@ export const char: Command = {
             description,
             age,
             dateOfBirth,
+            siteUrl,
           })
         );
       })

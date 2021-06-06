@@ -4354,7 +4354,7 @@ export type SearchCharQuery = { __typename?: "Query" } & {
   Character?: Maybe<
     { __typename?: "Character" } & Pick<
       Character,
-      "description" | "age" | "gender"
+      "description" | "age" | "gender" | "siteUrl"
     > & {
         name?: Maybe<
           { __typename?: "CharacterName" } & Pick<
@@ -4454,6 +4454,7 @@ export const SearchCharDocument = gql`
         month
         day
       }
+      siteUrl
     }
   }
 `;

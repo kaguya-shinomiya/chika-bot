@@ -15,5 +15,6 @@ query searchChar($charName: String) {
       month
       day
     }
+    siteUrl
   }
 }
