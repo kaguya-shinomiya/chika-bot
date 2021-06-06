@@ -5,8 +5,9 @@ import {
   chika_peeking_png,
   chika_pointing_png,
   chika_rap_png,
+  chika_pink,
 } from "../assets";
-import { chika_pink, PREFIX } from "../constants";
+import { PREFIX } from "../constants";
 import { Command } from "../types/command";
 
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);

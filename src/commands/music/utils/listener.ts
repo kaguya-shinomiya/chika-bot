@@ -22,7 +22,7 @@ interface playThisParams {
   client: Client;
   connection: VoiceConnection;
   channel: GenericChannel;
-  guildID: string;
+  guildId: string;
   onFinish: ReturnType<typeof createFinishListener>;
 }
 
@@ -31,7 +31,7 @@ export const playThis = async ({
   connection,
   client,
   channel,
-  guildID,
+  guildId,
   onFinish,
 }: playThisParams): Promise<void> => {
   const dispatcher = await playFromYt(connection, videoData.url);
@@ -52,7 +52,7 @@ export const playThis = async ({
     nowPlaying: videoData,
   };
   dispatcher.on("finish", onFinish);
-  client.cache.audioUtils.set(guildID, newAudioUtils);
+  client.cache.audioUtils.set(guildId, newAudioUtils);
 };
 
 export function createFinishListener({
@@ -79,7 +79,7 @@ export function createFinishListener({
           channel,
           client,
           connection: audioUtils.connection,
-          guildID: guild.id,
+          guildId: guild.id,
           onFinish,
         });
       })
@@ -91,25 +91,25 @@ export function createFinishListener({
 
 interface createResultSelectListenerProps {
   results: QueueItem[];
-  channelID: string;
-  guildID: string;
+  channelId: string;
+  guildId: string;
   redis: Redis;
 }
 
 export const createResultSelectListener = ({
   results,
   redis,
-  channelID,
-  guildID,
+  channelId,
+  guildId,
 }: createResultSelectListenerProps) => {
   const resultSelectListener = async (message: Message) => {
     const { content, channel, author } = message;
-    if (channelID !== channel.id) return;
+    if (channelId !== channel.id) return;
     const index = parseInt(content, 10);
     if (Number.isNaN(index) || index > results.length) return;
 
     const selectedTrack = results[index - 1];
-    redis.rpush(guildID, JSON.stringify(selectedTrack));
+    redis.rpush(guildId, JSON.stringify(selectedTrack));
     sendAddedToQueue({ videoData: selectedTrack, channel, author });
   };
 

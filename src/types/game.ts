@@ -1,12 +1,12 @@
-import {
-  Collection,
+import type {
   Message,
   MessageEmbed,
   MessageReaction,
   Snowflake,
   User,
 } from "discord.js";
-import { Redis } from "ioredis";
+import { Collection } from "discord.js";
+import type { Redis } from "ioredis";
 import { red_cross, white_check_mark } from "../assets";
 import { toListString } from "../commands/music/utils/embeds";
 import { PREFIX } from "../constants";
@@ -17,7 +17,7 @@ import {
   genericErrorEmbed,
   lightErrorEmbed,
 } from "../shared/embeds";
-import { GenericChannel } from "./command";
+import type { GenericChannel } from "./command";
 
 // eslint-disable-next-line no-shadow
 export enum GameType {

@@ -1,6 +1,6 @@
-import { Message } from "discord.js";
+import type { Message } from "discord.js";
 import { lightErrorEmbed } from "../shared/embeds";
-import { Command } from "../types/command";
+import type { Command } from "../types/command";
 
 export const isOnCooldown = async (
   message: Message,

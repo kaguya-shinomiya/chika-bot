@@ -16,3 +16,5 @@ export const white_check_mark = "✅";
 export const red_cross = "❌";
 export const right_arrow = "➡️";
 export const left_arrow = "⬅️";
+
+export const chika_pink = "#f2d5da";

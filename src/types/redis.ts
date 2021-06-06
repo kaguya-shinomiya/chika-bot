@@ -1,6 +1,6 @@
-import { Redis } from "ioredis";
+import type { Redis } from "ioredis";
 
-export interface RedisPrefixed {
+interface RedisPrefixed {
   defaultRedis: Redis;
   tracksRedis: Redis;
   gamesRedis: Redis;
@@ -12,3 +12,5 @@ export enum RedisPrefix {
   tracks,
   games,
 }
+
+export type { RedisPrefixed };

@@ -62,7 +62,7 @@ const play: Command = {
         connection,
         channel,
         client,
-        guildID: guild.id,
+        guildId: guild.id,
         onFinish: createFinishListener({ channel, client, guild, redis }),
       });
       return;
@@ -97,7 +97,7 @@ const play: Command = {
       channel,
       client,
       connection,
-      guildID: guild.id,
+      guildId: guild.id,
       onFinish: createFinishListener({ channel, client, guild, redis }),
     });
   },

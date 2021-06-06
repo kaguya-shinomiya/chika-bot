@@ -6,8 +6,6 @@ import { sendNotInGuild, sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
 
-// TODO add a cooldown for this
-
 export const search: Command = {
   name: "search",
   description: "Search for a track on YouTube",
@@ -39,8 +37,8 @@ export const search: Command = {
 
     const resultSelectListener = createResultSelectListener({
       results,
-      channelID: channel.id,
-      guildID: guild.id,
+      channelId: channel.id,
+      guildId: guild.id,
       redis,
     });
     const timeoutCallback = () => {
