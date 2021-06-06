@@ -1,4 +1,4 @@
-import { Collection, EmbedFieldData, MessageEmbed } from "discord.js";
+import type { Collection, EmbedFieldData, MessageEmbed } from "discord.js";
 import { detectiveEmbed } from "../shared/embeds";
 import { Command, commandCategory } from "../types/command";
 

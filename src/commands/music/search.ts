@@ -33,10 +33,9 @@ export const search: Command = {
       return;
     }
 
-    sendSearchResults(results, channel);
+    sendSearchResults(channel, results);
 
-    const resultSelectListener = createResultSelectListener({
-      results,
+    const resultSelectListener = createResultSelectListener(results, {
       channelId: channel.id,
       guildId: guild.id,
       redis,

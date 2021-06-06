@@ -24,7 +24,7 @@ const repeat: Command = {
       return;
     }
 
-    sendRepeat({ channel, videoData: audioUtils.nowPlaying, author });
+    sendRepeat(channel, { videoData: audioUtils.nowPlaying, author });
     redis.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
   },
 };

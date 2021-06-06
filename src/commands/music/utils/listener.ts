@@ -1,66 +1,20 @@
-import { Client, Guild, Message, VoiceConnection } from "discord.js";
+import { Client, Guild, Message } from "discord.js";
 import { Redis } from "ioredis";
 import { GenericChannel } from "../../../types/command";
-import { AudioUtils, QueueItem } from "../../../types/queue";
-import {
-  sendAddedToQueue,
-  sendCannotPlay,
-  sendFinishedAllTracks,
-  sendNowPlaying,
-} from "./embeds";
-import { playFromYt } from "./youtube";
+import { QueueItem } from "../../../types/queue";
+import { sendAddedToQueue, sendFinishedAllTracks } from "./embeds";
+import { playThis } from "./youtube";
 
 interface createFinishListenerParams {
   channel: GenericChannel;
-  guild: Guild;
   client: Client;
   redis: Redis;
 }
 
-interface playThisParams {
-  videoData: QueueItem;
-  client: Client;
-  connection: VoiceConnection;
-  channel: GenericChannel;
-  guildId: string;
-  onFinish: ReturnType<typeof createFinishListener>;
-}
-
-export const playThis = async ({
-  videoData,
-  connection,
-  client,
-  channel,
-  guildId,
-  onFinish,
-}: playThisParams): Promise<void> => {
-  const dispatcher = await playFromYt(connection, videoData.url);
-  if (!dispatcher) {
-    sendCannotPlay(videoData.title, videoData.url, channel);
-    onFinish();
-    return;
-  }
-  sendNowPlaying({
-    channel,
-    streamTime: 0,
-    videoData,
-  });
-
-  const newAudioUtils: AudioUtils = {
-    connection,
-    dispatcher,
-    nowPlaying: videoData,
-  };
-  dispatcher.on("finish", onFinish);
-  client.cache.audioUtils.set(guildId, newAudioUtils);
-};
-
-export function createFinishListener({
-  channel,
-  guild,
-  client,
-  redis,
-}: createFinishListenerParams) {
+export function createFinishListener(
+  guild: Guild,
+  { channel, client, redis }: createFinishListenerParams
+) {
   const onFinish = async () => {
     const audioUtils = client.cache.audioUtils.get(guild.id)!;
     if (!audioUtils) return;
@@ -74,11 +28,9 @@ export function createFinishListener({
           return;
         }
         const nextData = JSON.parse(res) as QueueItem;
-        playThis({
-          videoData: nextData,
+        playThis(audioUtils.connection, nextData, {
           channel,
           client,
-          connection: audioUtils.connection,
           guildId: guild.id,
           onFinish,
         });
@@ -89,19 +41,16 @@ export function createFinishListener({
   return onFinish;
 }
 
-interface createResultSelectListenerProps {
-  results: QueueItem[];
+interface createResultSelectListenerParams {
   channelId: string;
   guildId: string;
   redis: Redis;
 }
 
-export const createResultSelectListener = ({
-  results,
-  redis,
-  channelId,
-  guildId,
-}: createResultSelectListenerProps) => {
+export const createResultSelectListener = (
+  results: QueueItem[],
+  { redis, channelId, guildId }: createResultSelectListenerParams
+) => {
   const resultSelectListener = async (message: Message) => {
     const { content, channel, author } = message;
     if (channelId !== channel.id) return;
@@ -110,7 +59,7 @@ export const createResultSelectListener = ({
 
     const selectedTrack = results[index - 1];
     redis.rpush(guildId, JSON.stringify(selectedTrack));
-    sendAddedToQueue({ videoData: selectedTrack, channel, author });
+    sendAddedToQueue(channel, { videoData: selectedTrack, author });
   };
 
   return resultSelectListener;

@@ -6,7 +6,7 @@ import { Event } from "../types/event";
 const stopGameMessage: Event = {
   name: "message",
   once: false,
-  listener({ redis }, message: Message) {
+  listener(_client, redis, message: Message) {
     const { channel, author, content } = message;
     if (!STOP_GAME_RE.test(content)) return;
 

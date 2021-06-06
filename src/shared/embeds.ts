@@ -1,4 +1,5 @@
-import { MessageEmbed, User } from "discord.js";
+import { MessageEmbed } from "discord.js";
+import type { User } from "discord.js";
 import {
   chika_crying_png,
   chika_detective_png,

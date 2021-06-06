@@ -16,7 +16,7 @@ export const game: Command = {
   usage: `${PREFIX}game <game_title>`,
   argsCount: -1,
   async execute(message, args, redis) {
-    const { channel, client, mentions, author } = message;
+    const { channel, client } = message;
 
     if (await redis!.get(channel.id)) {
       sendInGame(channel);
@@ -37,12 +37,9 @@ export const game: Command = {
     }
 
     if (
-      !validateMentions({
-        author,
-        mentions,
-        isTwoPlayer: toPlay.minPlayerCount === 2 && toPlay.maxPlayerCount === 2,
-        channel,
+      !validateMentions(message, {
         gameTitle: toPlay.displayTitle,
+        isTwoPlayer: toPlay.minPlayerCount === 2 && toPlay.maxPlayerCount === 2,
       })
     )
       return;

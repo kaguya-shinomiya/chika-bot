@@ -1,8 +1,8 @@
-import { Client } from "discord.js";
+import type { Client } from "discord.js";
 import fs from "fs";
 import path from "path";
-import { RedisPrefixed } from "../types/redis";
 import { Event } from "../types/event";
+import { RedisPrefixed } from "../types/redis";
 
 export const loadEventListeners = (client: Client, redis: RedisPrefixed) => {
   const eventFiles = fs
@@ -13,11 +13,11 @@ export const loadEventListeners = (client: Client, redis: RedisPrefixed) => {
     const event: Event = require(`../events/${file}`).default;
     if (event.once) {
       client.once(event.name, async (...args) =>
-        event.listener({ client, redis }, ...args)
+        event.listener(client, redis, ...args)
       );
     } else {
       client.on(event.name, async (...args) =>
-        event.listener({ client, redis }, ...args)
+        event.listener(client, redis, ...args)
       );
     }
   });

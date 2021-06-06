@@ -33,21 +33,18 @@ export class Shiritori extends Game {
     const taggedOpponent = mentions.users.first();
 
     if (!taggedOpponent) {
-      this.collectPlayers({
-        message,
+      this.collectPlayers(message, {
+        redis,
         onTimeoutAccept: (players) => {
           const [p1, p2] = players.map((player) => player);
           this.startGame({ message, p1, p2, redis });
         },
-        redis,
       });
       return;
     }
 
-    this.getOpponentResponse({
+    this.getOpponentResponse(message, taggedOpponent, {
       redis,
-      message,
-      taggedOpponent,
       onAccept: () =>
         this.startGame({ message, p1: author, p2: taggedOpponent, redis }),
       onReject: () =>

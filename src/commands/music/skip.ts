@@ -39,9 +39,8 @@ const skip: Command = {
 
     // a paused track cannot emit 'finish' for some reason
     // we'll do this manually
-    createFinishListener({
+    createFinishListener(guild, {
       channel,
-      guild,
       client,
       redis,
     })();

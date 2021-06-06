@@ -13,7 +13,7 @@ interface charInfoEmbedParams {
   dateOfBirth: FuzzyDate | null | undefined;
 }
 
-export const genCharInfoEmbed = (info: charInfoEmbedParams) => {
+export const charInfoEmbed = (info: charInfoEmbedParams) => {
   const { englishName, japName, image, gender, age, dateOfBirth } = info;
   let genderEmoji;
   switch (gender?.toLowerCase()) {

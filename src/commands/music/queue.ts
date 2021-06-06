@@ -2,7 +2,7 @@ import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
-import { sendMusicOnlyInGuild, sendQueued } from "./utils/embeds";
+import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
 
 const queue: Command = {
   name: "queue",
@@ -29,9 +29,7 @@ const queue: Command = {
         );
         return;
       }
-      sendQueued({
-        channel,
-        tracks: tracks.map((track) => JSON.parse(track)) || [],
+      sendQueue(channel, tracks.map((track) => JSON.parse(track)) || [], {
         nowPlaying: audioUtils?.nowPlaying,
         isPaused: audioUtils?.dispatcher.paused,
         current: audioUtils?.dispatcher.streamTime,

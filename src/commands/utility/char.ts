@@ -2,7 +2,7 @@ import { PREFIX } from "../../constants";
 import { getSdk } from "../../generated/graphql";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
-import { genCharInfoEmbed } from "./embeds/charInfoEmbed";
+import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
@@ -30,7 +30,7 @@ export const char: Command = {
           result.Character;
 
         channel.send(
-          genCharInfoEmbed({
+          charInfoEmbed({
             englishName: name?.full,
             japName: name?.native,
             image: image?.large,

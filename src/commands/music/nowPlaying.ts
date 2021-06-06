@@ -25,11 +25,8 @@ const nowPlaying: Command = {
       return;
     }
 
-    sendNowPlaying({
-      channel,
-      videoData: audioUtils.nowPlaying,
+    sendNowPlaying(channel, audioUtils.nowPlaying, {
       streamTime: audioUtils.dispatcher.streamTime,
-      withBar: true,
     });
   },
 };

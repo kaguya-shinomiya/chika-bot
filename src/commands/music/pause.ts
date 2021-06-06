@@ -36,7 +36,7 @@ const pause: Command = {
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:pause_button: Paused`)
-        .setDescription(trackLinkAndDuration({ title, url, duration }))
+        .setDescription(trackLinkAndDuration(title, url, duration))
     );
   },
 };

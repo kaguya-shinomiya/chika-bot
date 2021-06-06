@@ -11,8 +11,8 @@ import {
   sendNoVideo,
   sendNoVoicePermissions,
 } from "./utils/embeds";
-import { createFinishListener, playThis } from "./utils/listener";
-import { validateArgs } from "./utils/youtube";
+import { createFinishListener } from "./utils/listener";
+import { playThis, validateArgs } from "./utils/youtube";
 
 const play: Command = {
   name: "play",
@@ -57,13 +57,11 @@ const play: Command = {
         client.cache.audioUtils.delete(guild.id)
       );
       const nextData = JSON.parse(next) as QueueItem;
-      playThis({
-        videoData: nextData,
-        connection,
+      playThis(connection, nextData, {
         channel,
         client,
         guildId: guild.id,
-        onFinish: createFinishListener({ channel, client, guild, redis }),
+        onFinish: createFinishListener(guild, { client, channel, redis }),
       });
       return;
     }
@@ -72,7 +70,7 @@ const play: Command = {
 
     const videoData = await validateArgs(args);
     if (!videoData) {
-      sendNoVideo(args.join(" "), channel);
+      sendNoVideo(channel, args.join(" "));
       return;
     }
 
@@ -80,7 +78,7 @@ const play: Command = {
     // push to the redis queue
     if (audioUtils) {
       redis.rpush(guild.id, JSON.stringify(videoData));
-      sendAddedToQueue({ videoData, author, channel });
+      sendAddedToQueue(channel, { videoData, author });
       return;
     }
 
@@ -92,13 +90,11 @@ const play: Command = {
       return;
     }
     connection.on("disconnect", () => client.cache.audioUtils.delete(guild.id));
-    playThis({
-      videoData,
+    playThis(connection, videoData, {
       channel,
       client,
-      connection,
       guildId: guild.id,
-      onFinish: createFinishListener({ channel, client, guild, redis }),
+      onFinish: createFinishListener(guild, { channel, client, redis }),
     });
   },
 };

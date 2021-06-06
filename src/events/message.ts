@@ -13,7 +13,7 @@ const message: Event = {
   name: "message",
   once: false,
   // eslint-disable-next-line no-shadow
-  async listener({ client, redis }, message: Message) {
+  async listener(client, redis, message: Message) {
     if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);

@@ -12,7 +12,7 @@ const help: Command = {
   aliases: ["h"],
   redis: RedisPrefix.default,
   async execute({ channel, client: { commands, commandsHelp } }, args) {
-    if (!args.length || /all/i.test(args[0])) {
+    if (!args.length || /^all$/i.test(args[0])) {
       // send a list of all commands
       channel.send(commandsHelp);
       return;

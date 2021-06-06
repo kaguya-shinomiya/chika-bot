@@ -1,4 +1,5 @@
-import { Client, Collection } from "discord.js";
+import type { Client } from "discord.js";
+import { Collection } from "discord.js";
 import fs from "fs";
 import path from "path";
 import { Game } from "../types/game";

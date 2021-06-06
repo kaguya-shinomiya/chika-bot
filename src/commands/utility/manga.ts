@@ -1,11 +1,11 @@
-import { TextChannel } from "discord.js";
+import type { TextChannel } from "discord.js";
 import { PREFIX } from "../../constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
 import { sendNotFoundError } from "./embeds/errors";
-import { genMangaInfoEmbed } from "./embeds/mangaInfoEmbed";
+import { mangaInfoEmbed } from "./embeds/mangaInfoEmbed";
 import { client } from "./graphql/aniListClient";
 
 export const manga: Command = {
@@ -53,7 +53,7 @@ export const manga: Command = {
           chapters,
         } = result.Media;
         channel.send(
-          genMangaInfoEmbed({
+          mangaInfoEmbed({
             coverImage: coverImage?.medium,
             title: title?.userPreferred,
             description: description!,

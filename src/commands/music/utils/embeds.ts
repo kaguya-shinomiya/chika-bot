@@ -1,4 +1,4 @@
-import { User } from "discord.js";
+import type { User } from "discord.js";
 import he from "he";
 import { chika_detective_png } from "../../../assets";
 import {
@@ -30,15 +30,11 @@ export const toUrlString = (
   }](${link})`;
 };
 
-export const trackLinkAndDuration = ({
-  title,
-  url,
-  duration,
-}: {
-  title: string;
-  url: string;
-  duration: string;
-}) => `${toUrlString(title, url)} [${duration}]`;
+export const trackLinkAndDuration = (
+  title: string,
+  url: string,
+  duration: string
+) => `${toUrlString(title, url)} [${duration}]`;
 
 export const genPlayBar = (current: number, total: string) => {
   // current is in milliseconds
@@ -50,31 +46,29 @@ export const genPlayBar = (current: number, total: string) => {
   )} ${total}`;
 };
 
-interface sendNowPlayingParams {
-  channel: GenericChannel;
-  videoData: QueueItem;
+interface sendNowPlayingOptions {
   streamTime: number;
-  withBar?: boolean;
 }
 
-export const sendNowPlaying = async ({
-  channel,
-  videoData: { title, duration, thumbnailURL, url },
-  streamTime,
-  withBar,
-}: sendNowPlayingParams) =>
+export const sendNowPlaying = async (
+  channel: GenericChannel,
+  videoData: QueueItem,
+  withBar?: sendNowPlayingOptions
+) => {
+  const { title, url, duration, thumbnailURL } = videoData;
   channel.send(
     baseEmbed()
       .setTitle("Now playing...")
       .setDescription(
         `${toUrlString(title, url)}${
-          withBar ? `\n${genPlayBar(streamTime!, duration)}` : ""
+          withBar ? `\n${genPlayBar(withBar.streamTime, duration)}` : ""
         }`
       )
       .setThumbnail(thumbnailURL)
   );
+};
 
-export const sendNoVideo = async (searched: string, channel: GenericChannel) =>
+export const sendNoVideo = async (channel: GenericChannel, searched: string) =>
   channel.send(
     cryingEmbed()
       .setTitle("Sorry...")
@@ -84,9 +78,9 @@ export const sendNoVideo = async (searched: string, channel: GenericChannel) =>
   );
 
 export const sendCannotPlay = async (
+  channel: GenericChannel,
   title: string,
-  url: string,
-  channel: GenericChannel
+  url: string
 ) =>
   channel.send(
     cryingEmbed()
@@ -99,21 +93,22 @@ export const sendCannotPlay = async (
 export const sendNotInVoiceChannel = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("Join a voice channel first!"));
 
-interface sendAddedToQueueProps {
+interface sendAddedToQueueOptions {
   videoData: QueueItem;
-  channel: GenericChannel;
   author: User;
 }
 
-export const sendAddedToQueue = async ({
-  videoData: { title, url, duration, thumbnailURL },
-  channel,
-  author,
-}: sendAddedToQueueProps) =>
+export const sendAddedToQueue = async (
+  channel: GenericChannel,
+  {
+    videoData: { title, url, duration, thumbnailURL },
+    author,
+  }: sendAddedToQueueOptions
+) =>
   channel.send(
     withAuthorEmbed(author)
       .setTitle("Added to queue!")
-      .setDescription(trackLinkAndDuration({ title, url, duration }))
+      .setDescription(trackLinkAndDuration(title, url, duration))
       .setThumbnail(thumbnailURL)
   );
 
@@ -128,21 +123,18 @@ export const toListString = (arr: string[]): string => {
   return withCount.join(`\n`);
 };
 
-interface sendQueuedParams {
-  tracks: QueueItem[];
-  channel: GenericChannel;
+interface sendQueueCurrentTrack {
   nowPlaying?: QueueItem;
   isPaused?: boolean;
   current?: number;
 }
 
-export const sendQueued = async ({
-  tracks,
-  channel,
-  nowPlaying,
-  isPaused,
-  current,
-}: sendQueuedParams) => {
+export const sendQueue = async (
+  channel: GenericChannel,
+  tracks: QueueItem[],
+  info: sendQueueCurrentTrack
+) => {
+  const { current, isPaused, nowPlaying } = info;
   const urlTracks = tracks
     .slice(0, 10)
     .map((track) => toUrlString(track.title, track.url, 40));
@@ -174,25 +166,23 @@ export const sendQueued = async ({
 };
 
 interface sendRepeatProps {
-  channel: GenericChannel;
   author: User;
   videoData: QueueItem;
 }
-export const sendRepeat = async ({
-  channel,
-  author,
-  videoData: { title, url, thumbnailURL, duration },
-}: sendRepeatProps) =>
+export const sendRepeat = async (
+  channel: GenericChannel,
+  { author, videoData: { title, url, thumbnailURL, duration } }: sendRepeatProps
+) =>
   channel.send(
     withAuthorEmbed(author)
       .setTitle("Track will repeat!")
-      .setDescription(trackLinkAndDuration({ title, url, duration }))
+      .setDescription(trackLinkAndDuration(title, url, duration))
       .setThumbnail(thumbnailURL)
   );
 
 export const sendSearchResults = (
-  res: QueueItem[],
-  channel: GenericChannel
+  channel: GenericChannel,
+  res: QueueItem[]
 ) => {
   const urlTitles = res.map((videoData) =>
     toUrlString(videoData.title, videoData.url, 40)

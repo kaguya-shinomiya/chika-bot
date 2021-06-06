@@ -1,11 +1,11 @@
-import { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
-import { Redis } from "ioredis";
+import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
+import type { Redis } from "ioredis";
 import { RedisPrefix } from "./redis";
 
-export type commandCategory = "Fun" | "Utility" | "Music";
-export type GenericChannel = TextChannel | DMChannel | NewsChannel;
+type commandCategory = "Fun" | "Utility" | "Music";
+type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
-export class Command {
+class Command {
   name!: string;
 
   description!: string;
@@ -26,3 +26,5 @@ export class Command {
 
   execute!: (message: Message, args: string[], redis: Redis) => void;
 }
+
+export type { Command, commandCategory, GenericChannel };

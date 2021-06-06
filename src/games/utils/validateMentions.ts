@@ -1,25 +1,19 @@
-import { MessageMentions, User } from "discord.js";
+import type { Message } from "discord.js";
 import { __dev__ } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { GenericChannel } from "../../types/command";
 import { sendTaggedSelfError } from "./embeds";
 
-interface validateMentionsParams {
-  author: User;
-  mentions: MessageMentions;
+interface validateMentionsOptions {
   isTwoPlayer: boolean;
-  channel: GenericChannel;
   gameTitle: string;
 }
 
 // mentions should only work for strictly 2 player games
-export const validateMentions = ({
-  author,
-  mentions,
-  isTwoPlayer,
-  channel,
-  gameTitle,
-}: validateMentionsParams) => {
+export const validateMentions = (
+  message: Message,
+  { isTwoPlayer, gameTitle }: validateMentionsOptions
+) => {
+  const { mentions, channel, author } = message;
   const taggedCount = mentions.users.size;
   if (!taggedCount) {
     return true;

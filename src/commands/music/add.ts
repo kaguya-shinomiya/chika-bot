@@ -23,12 +23,12 @@ const add: Command = {
     }
     const videoData = await validateArgs(args);
     if (!videoData) {
-      sendNoVideo(args.join(" "), channel);
+      sendNoVideo(channel, args.join(" "));
       return;
     }
 
     redis.rpush(guild.id, JSON.stringify(videoData));
-    sendAddedToQueue({ videoData, channel, author });
+    sendAddedToQueue(channel, { videoData, author });
   },
 };
 

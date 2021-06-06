@@ -19,27 +19,16 @@ import {
 } from "../shared/embeds";
 import type { GenericChannel } from "./command";
 
-// eslint-disable-next-line no-shadow
-export enum GameType {
-  Single = 1,
-  Versus,
-  Multi,
-  Indie,
-}
-
-interface collectPlayersParams {
-  message: Message;
+interface collectPlayersOptions {
+  redis: Redis;
   onTimeoutAccept: (players: Collection<Snowflake, User>) => void;
   onTimeoutReject?: () => void;
-  redis: Redis;
 }
 
-interface getOpponentResponseParams {
-  message: Message;
+interface getOpponentResponseOptions {
+  redis: Redis;
   onAccept: () => void;
   onReject?: () => void;
-  taggedOpponent: User;
-  redis: Redis;
 }
 
 export abstract class Game {
@@ -57,13 +46,9 @@ export abstract class Game {
 
   abstract pregame(message: Message, redis: Redis): void;
 
-  collectPlayers(opts: collectPlayersParams) {
-    const {
-      message: { author, channel },
-      onTimeoutAccept,
-      onTimeoutReject,
-      redis,
-    } = opts;
+  collectPlayers(message: Message, options: collectPlayersOptions) {
+    const { author, channel } = message;
+    const { onTimeoutAccept, onTimeoutReject, redis } = options;
 
     const partialEmbed = baseEmbed()
       .setDescription(
@@ -81,10 +66,10 @@ export abstract class Game {
               } to start.`
             )
       )
-      .then(async (message) => {
-        await message.react(white_check_mark);
+      .then(async (_message) => {
+        await _message.react(white_check_mark);
 
-        return message
+        return _message
           .awaitReactions(
             (reaction: MessageReaction, user: User) =>
               user.id !== author.id && reaction.emoji.name === white_check_mark,
@@ -106,9 +91,8 @@ export abstract class Game {
       })
       .then(
         (players) => onTimeoutAccept(players),
-        (err) => {
+        () => {
           // eslint-disable-next-line no-console
-          console.error(err);
           redis.del(channel.id);
           if (onTimeoutReject) {
             onTimeoutReject();
@@ -116,7 +100,7 @@ export abstract class Game {
           }
           channel.send(
             lightErrorEmbed(
-              `We don't have enough players to start ${this.displayTitle}.`
+              `We don't have enough players to start **${this.displayTitle}**.`
             )
           );
         }
@@ -128,14 +112,13 @@ export abstract class Game {
       });
   }
 
-  getOpponentResponse(opts: getOpponentResponseParams) {
-    const {
-      message: { author, channel },
-      onAccept,
-      onReject,
-      taggedOpponent: opponent,
-      redis,
-    } = opts;
+  getOpponentResponse(
+    message: Message,
+    opponent: User,
+    options: getOpponentResponseOptions
+  ) {
+    const { channel, author } = message;
+    const { onAccept, onReject, redis } = options;
     channel
       .send(
         `${opponent.toString()}! **${
@@ -144,12 +127,12 @@ export abstract class Game {
           this.displayTitle
         }**!\nDo you accept this challenge?`
       )
-      .then(async (message) => {
-        await message
+      .then(async (_message) => {
+        await _message
           .react(white_check_mark)
-          .then(() => message.react(red_cross));
+          .then(() => _message.react(red_cross));
 
-        message
+        _message
           .awaitReactions(
             (reaction: MessageReaction, user: User) =>
               user.id === opponent.id &&

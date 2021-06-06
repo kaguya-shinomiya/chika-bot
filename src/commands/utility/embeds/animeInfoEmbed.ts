@@ -21,7 +21,7 @@ interface animeEmbedParams {
   source: MediaSource | null | undefined;
 }
 
-export const genAnimeInfoEmbed = (info: animeEmbedParams) => {
+export const animeInfoEmbed = (info: animeEmbedParams) => {
   const {
     coverImage,
     title,

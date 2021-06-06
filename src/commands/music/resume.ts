@@ -28,7 +28,7 @@ const resume: Command = {
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:arrow_forward: Resumed`)
-        .setDescription(trackLinkAndDuration({ title, url, duration }))
+        .setDescription(trackLinkAndDuration(title, url, duration))
     );
   },
 };

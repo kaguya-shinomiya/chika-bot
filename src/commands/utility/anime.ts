@@ -4,7 +4,7 @@ import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
-import { genAnimeInfoEmbed } from "./embeds/animeInfoEmbed";
+import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
@@ -54,7 +54,7 @@ export const anime: Command = {
         } = result.Media;
 
         channel.send(
-          genAnimeInfoEmbed({
+          animeInfoEmbed({
             coverImage: coverImage?.medium,
             title: title?.userPreferred,
             description: description!,

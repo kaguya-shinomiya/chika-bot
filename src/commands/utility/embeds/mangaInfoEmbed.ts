@@ -33,7 +33,7 @@ export function parseFuzzyDate(date?: FuzzyDate | null): string {
   return `${day || "?"}-${month || "?"}-${year || "?"}`;
 }
 
-export const genMangaInfoEmbed = (info: mangaEmbedParams) => {
+export const mangaInfoEmbed = (info: mangaEmbedParams) => {
   const {
     coverImage,
     title,

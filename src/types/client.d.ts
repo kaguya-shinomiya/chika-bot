@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { Ok } from "ioredis";
+import type { Ok } from "ioredis";
 import { Command } from "./command";
 import { Game } from "./game";
 import { AudioUtils } from "./queue";
@@ -8,7 +8,7 @@ interface CooldownManager {
   setCooldown: (
     id: string,
     command: string,
-    time: number
+    time: number // in ms
   ) => Promise<Ok | null>;
   getCooldown: (id: string, command: string) => Promise<number>; // returns cooldown time, or 0
 }
