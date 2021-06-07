@@ -4,8 +4,6 @@ import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { ChatbotInput } from "./utils/types";
 
-const MAX_HISTORY = 3;
-
 const chat: Command = {
   name: "chat",
   argsCount: -2,
@@ -20,7 +18,6 @@ const chat: Command = {
   ) {
     const { channel, author } = message;
 
-    // TODO get past response n inputs
     const generated_responses = (
       await responseRedis.lrange(author.id, 0, -1)
     ).reverse();
@@ -35,18 +32,20 @@ const chat: Command = {
 
     axios
       .post(process.env.HUGGING_FACE_API_URL, data, {
-        headers: { Authorization: `Bearer ${process.env.HUGGIN_FACE_API_KEY}` },
+        headers: {
+          Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
+        },
       })
       .then((res) => {
         const reply = res.data.generated_text;
         channel.send(reply);
-        // TODO store msg and response in redis
         inputRedis
-          .ltrim(author.id, 0, MAX_HISTORY - 1)
-          .then(() => inputRedis.lpush(author.id, text));
+          .lpush(author.id, text)
+          .then(() => inputRedis.ltrim(author.id, 0, 2));
+
         responseRedis
-          .ltrim(author.id, 0, MAX_HISTORY - 1)
-          .then(() => responseRedis.lpush(author.id, reply));
+          .lpush(author.id, reply)
+          .then(() => responseRedis.ltrim(author.id, 0, 2));
       })
       .catch((err) => {
         if (err.response?.data?.error?.includes(`is currently loading`)) {

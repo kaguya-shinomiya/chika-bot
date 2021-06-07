@@ -5,6 +5,6 @@ declare namespace NodeJS {
     NODE_ENV: string;
     REDISCLOUD_URL: string;
     HUGGING_FACE_API_URL: string;
-    HUGGIN_FACE_API_KEY: string;
+    HUGGING_FACE_API_KEY: string;
   }
 }
