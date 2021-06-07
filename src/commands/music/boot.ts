@@ -1,8 +1,7 @@
 import { PREFIX } from "../../constants";
-import { lightErrorEmbed } from "../../shared/embeds";
+import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
-import { sendNotInGuild } from "./utils/embeds";
 
 export const boot: Command = {
   name: "boot",

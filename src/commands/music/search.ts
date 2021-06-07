@@ -1,8 +1,8 @@
 import { PREFIX } from "../../constants";
-import { lightErrorEmbed } from "../../shared/embeds";
+import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { RedisPrefix } from "../../types/redis";
-import { sendNotInGuild, sendSearchResults } from "./utils/embeds";
+import { sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
 

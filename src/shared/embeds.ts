@@ -9,7 +9,7 @@ import {
   chika_pink,
 } from "../assets";
 import { PREFIX } from "../constants";
-import { Command } from "../types/command";
+import { Command, GenericChannel } from "../types/command";
 
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);
 
@@ -63,3 +63,6 @@ export const withAuthorEmbed = (author: User) =>
     `Requested by ${author.username}`,
     author.displayAvatarURL({ size: 32, dynamic: false })
   );
+
+export const sendNotInGuild = async (channel: GenericChannel) =>
+  channel.send(lightErrorEmbed("This command can only be used in a server!"));
