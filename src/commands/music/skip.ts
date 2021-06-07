@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
 
@@ -11,8 +10,7 @@ const skip: Command = {
   usage: `${PREFIX}skip`,
   argsCount: 0,
   category: "Music",
-  redis: RedisPrefix.tracks,
-  async execute(message, _args, redis) {
+  async execute(message, _args, { tracksRedis: redis }) {
     const { channel, guild, client, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

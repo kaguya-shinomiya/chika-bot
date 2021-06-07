@@ -3,7 +3,6 @@ import { PREFIX } from "../../constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
@@ -13,7 +12,6 @@ export const anime: Command = {
   description: "Look up info for an anime.",
   argsCount: -2,
   category: "Utility",
-  redis: RedisPrefix.default,
   usage: `${PREFIX}anime <anime_title>`,
   async execute(message, args) {
     const { channel } = message;

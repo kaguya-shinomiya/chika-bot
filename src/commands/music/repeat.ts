@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 
 const repeat: Command = {
@@ -11,8 +10,7 @@ const repeat: Command = {
   category: "Music",
   usage: `${PREFIX}repeat`,
   description: "Repeats the current track once.",
-  redis: RedisPrefix.tracks,
-  async execute(message, _args, redis) {
+  async execute(message, _args, { tracksRedis: redis }) {
     const { client, channel, guild, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

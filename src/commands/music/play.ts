@@ -2,7 +2,6 @@ import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { QueueItem } from "../../types/queue";
-import { RedisPrefix } from "../../types/redis";
 import { tryToConnect } from "./utils/client";
 import {
   sendAddedToQueue,
@@ -21,8 +20,7 @@ const play: Command = {
   argsCount: -1,
   category: "Music",
   description: "Let Chika play some music from YouTube for you.",
-  redis: RedisPrefix.tracks,
-  async execute(message, args, redis) {
+  async execute(message, args, { tracksRedis: redis }) {
     const { channel, member, guild, client, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

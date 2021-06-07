@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { sendMusicOnlyInGuild } from "./utils/embeds";
 
 const clear: Command = {
@@ -11,8 +10,7 @@ const clear: Command = {
   aliases: ["c"],
   category: "Music",
   usage: `${PREFIX}clear`,
-  redis: RedisPrefix.tracks,
-  async execute(message, _args, redis) {
+  async execute(message, _args, { tracksRedis: redis }) {
     const { guild, channel, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

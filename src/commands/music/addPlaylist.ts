@@ -2,7 +2,6 @@ import ytpl from "ytpl";
 import { PREFIX } from "../../constants";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { parsePlaylist } from "./utils/youtube";
 
@@ -13,8 +12,7 @@ const addPlaylist: Command = {
   category: "Music",
   description: "Add a YouTube playlist to the queue.",
   usage: `${PREFIX}addp <url>`,
-  redis: RedisPrefix.tracks,
-  execute(message, args, redis) {
+  execute(message, args, { tracksRedis: redis }) {
     const { guild, channel, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

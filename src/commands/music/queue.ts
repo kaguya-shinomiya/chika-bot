@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
 
 const queue: Command = {
@@ -11,8 +10,7 @@ const queue: Command = {
   argsCount: 0,
   category: "Music",
   usage: `${PREFIX}queue`,
-  redis: RedisPrefix.tracks,
-  async execute(message, _args, redis) {
+  async execute(message, _args, { tracksRedis: redis }) {
     const { channel, client, guild } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

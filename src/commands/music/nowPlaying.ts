@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
 
 const nowPlaying: Command = {
@@ -11,7 +10,6 @@ const nowPlaying: Command = {
   description: "Show the currently playing track.",
   category: "Music",
   usage: `${PREFIX}np`,
-  redis: RedisPrefix.tracks,
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {

@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { getSdk } from "../../generated/graphql";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
@@ -13,7 +12,6 @@ export const char: Command = {
   category: "Utility",
   usage: `${PREFIX}char <character_name>`,
   description: "Search for an animanga character.",
-  redis: RedisPrefix.default,
   execute(message, args) {
     const { channel } = message;
     const charName = args.join(" ");

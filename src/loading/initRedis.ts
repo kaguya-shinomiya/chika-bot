@@ -9,4 +9,10 @@ export const initRedis = (): RedisPrefixed => ({
   gamesRedis: new Redis(process.env.REDISCLOUD_URL, {
     keyPrefix: "game:",
   }),
+  chatbotInputRedis: new Redis(process.env.REDISCLOUD_URL, {
+    keyPrefix: "chatbotInput:",
+  }),
+  chatbotResponseRedis: new Redis(process.env.REDISCLOUD_URL, {
+    keyPrefix: "chatbotResponse:",
+  }),
 });

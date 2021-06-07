@@ -1,6 +1,5 @@
 import { PREFIX } from "../../constants";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import {
   sendAddedToQueue,
   sendMusicOnlyInGuild,
@@ -15,8 +14,7 @@ const insert: Command = {
   category: "Music",
   usage: `${PREFIX}addd <url|search_string>`,
   description: "Inserts a track to the front of the queue.",
-  redis: RedisPrefix.tracks,
-  async execute(message, args, redis) {
+  async execute(message, args, { tracksRedis: redis }) {
     const { channel, guild, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

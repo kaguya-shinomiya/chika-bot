@@ -6,7 +6,6 @@ import {
   genericErrorEmbed,
 } from "../shared/embeds";
 import { Event } from "../types/event";
-import { RedisPrefix } from "../types/redis";
 import { isOnCooldown } from "../utils/validateCooldowns";
 
 const message: Event = {
@@ -41,20 +40,7 @@ const message: Event = {
     if (await isOnCooldown(message, command)) return;
 
     try {
-      switch (command.redis) {
-        case RedisPrefix.default:
-          command.execute(message, args, redis.defaultRedis);
-          break;
-        case RedisPrefix.games:
-          command.execute(message, args, redis.gamesRedis);
-          break;
-        case RedisPrefix.tracks:
-          command.execute(message, args, redis.tracksRedis);
-          break;
-        default:
-          command.execute(message, args, redis.defaultRedis);
-          break;
-      }
+      command.execute(message, args, redis);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);

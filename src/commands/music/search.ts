@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 import { sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
@@ -12,9 +11,8 @@ export const search: Command = {
   argsCount: -2,
   category: "Music",
   usage: `${PREFIX}search <search_string>`,
-  redis: RedisPrefix.tracks,
   channelCooldown: 15000,
-  async execute(message, args, redis) {
+  async execute(message, args, { tracksRedis: redis }) {
     const { channel, client, guild } = message;
     if (!guild) {
       sendNotInGuild(channel);

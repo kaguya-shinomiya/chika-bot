@@ -2,14 +2,12 @@ import { red_cross, white_check_mark } from "../../assets";
 import { PREFIX } from "../../constants";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 
 const poll: Command = {
   name: "poll",
   argsCount: -2,
   category: "Utility",
   description: "Begin a democratic process to collect public opinion.",
-  redis: RedisPrefix.default,
   usage: `${PREFIX}poll <question>`,
   aliases: ["vote"],
   execute(message, args) {

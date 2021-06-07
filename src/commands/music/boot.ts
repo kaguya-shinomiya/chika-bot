@@ -1,7 +1,6 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 
 export const boot: Command = {
   name: "boot",
@@ -9,7 +8,6 @@ export const boot: Command = {
   argsCount: 0,
   category: "Music",
   usage: `${PREFIX}boot`,
-  redis: RedisPrefix.tracks,
   execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {

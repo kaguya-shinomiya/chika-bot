@@ -6,19 +6,17 @@ import {
 } from "../../games/utils/embeds";
 import { validateMentions } from "../../games/utils/validateMentions";
 import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
 
 export const game: Command = {
   name: "game",
   description: "Play a game with Pro Gamer Chika.",
   category: "Fun",
-  redis: RedisPrefix.games,
   usage: `${PREFIX}game <game_title>`,
   argsCount: -1,
-  async execute(message, args, redis) {
+  async execute(message, args, { gamesRedis: redis }) {
     const { channel, client } = message;
 
-    if (await redis!.get(channel.id)) {
+    if (await redis.get(channel.id)) {
       sendInGame(channel);
       return;
     }
@@ -46,7 +44,7 @@ export const game: Command = {
 
     redis.set(channel.id, "true", "px", toPlay.sessionDuration); // block other ck;game calls for now
 
-    toPlay.pregame(message, redis!);
+    toPlay.pregame(message, redis);
   },
 };
 
