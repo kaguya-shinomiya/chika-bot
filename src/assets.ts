@@ -17,4 +17,7 @@ export const red_cross = "❌";
 export const right_arrow = "➡️";
 export const left_arrow = "⬅️";
 
+export const ribbon_react = "851852767239864320";
+export const ribbon_emoji = "<:chikaribbon:851852767239864320>";
+
 export const chika_pink = "#f2d5da";

@@ -6,6 +6,7 @@ interface RedisPrefixed {
   gamesRedis: Redis;
   chatbotInputRedis: Redis;
   chatbotResponseRedis: Redis;
+  ribbonsRedis: Redis;
 }
 
 export type { RedisPrefixed };

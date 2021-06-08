@@ -3,6 +3,8 @@ import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
 
+// TODO use paginated embed for this
+
 const queue: Command = {
   name: "queue",
   description: "Display tracks in the queue.",

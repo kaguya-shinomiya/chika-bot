@@ -15,7 +15,7 @@ const ping: Command = {
       )
     );
     // eslint-disable-next-line no-console
-    redis?.get("ping").then((res) => console.log("Checking Redis...", res));
+    redis.get("ping").then((res) => console.log("Checking Redis...", res));
   },
 };
 

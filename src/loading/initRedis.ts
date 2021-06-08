@@ -15,4 +15,7 @@ export const initRedis = (): RedisPrefixed => ({
   chatbotResponseRedis: new Redis(process.env.REDISCLOUD_URL, {
     keyPrefix: "chatbotResponse:",
   }),
+  ribbonsRedis: new Redis(process.env.REDISCLOUD_URL, {
+    keyPrefix: "ribbons:",
+  }),
 });

@@ -51,9 +51,7 @@ const chat: Command = {
         if (err.response?.data?.error?.includes(`is currently loading`)) {
           channel.send(
             baseEmbed().setDescription(
-              `Thanks for wanting to chat with me! Please give me about ${Math.round(
-                err.response.data.estimated_time
-              )} seconds to get ready.`
+              `Thanks for wanting to chat with me! Please give me a minute to get ready.`
             )
           );
         }

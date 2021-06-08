@@ -1,6 +1,7 @@
 import type { Message } from "discord.js";
 import { lightErrorEmbed } from "../shared/embeds";
 import type { Command } from "../types/command";
+import { secToWordString } from "./time";
 
 export const isOnCooldown = async (
   message: Message,
@@ -15,7 +16,9 @@ export const isOnCooldown = async (
     if (ttl) {
       channel.send(
         lightErrorEmbed(
-          `Please wait ${ttl} seconds before using **${command.name}** in this channel again.`
+          `Please wait ${secToWordString(ttl)} before using **${
+            command.name
+          }** in this channel again.`
         )
       );
       return true;
@@ -29,7 +32,9 @@ export const isOnCooldown = async (
     if (ttl) {
       message.channel.send(
         lightErrorEmbed(
-          `**${author.username}**, please wait ${ttl} seconds before using **${command.name}** again.`
+          `**${author.username}**, please wait ${secToWordString(
+            ttl
+          )} before using **${command.name}** again.`
         )
       );
       return true;
