@@ -9,7 +9,7 @@ import {
 } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
-import { minToSec, secToMin } from "./helpers";
+import { secToString, stringToSec } from "./helpers";
 
 export const toUrlString = (
   title: string,
@@ -33,13 +33,14 @@ export const toUrlString = (
 export const trackLinkAndDuration = (
   title: string,
   url: string,
-  duration: string
-) => `${toUrlString(title, url)} [${duration}]`;
+  duration: string,
+  options?: { truncate?: number }
+) => `${toUrlString(title, url, options?.truncate)} [${duration}]`;
 
 export const genPlayBar = (current: number, total: string) => {
   // current is in milliseconds
-  const totalMillis = minToSec(total) * 1000;
-  const currentMin = secToMin(Math.floor(current / 1000));
+  const totalMillis = stringToSec(total) * 1000;
+  const currentMin = secToString(Math.floor(current / 1000));
   const cursor = Math.floor((current / totalMillis) * 29);
   return `${currentMin} ${"-".repeat(cursor)}o${"-".repeat(
     29 - cursor
@@ -140,7 +141,7 @@ export const sendQueue = async (
         nowPlaying.title,
         nowPlaying.url,
         30
-      )} [${secToMin(Math.floor(current! / 1000))} / ${nowPlaying.duration}]`
+      )} [${secToString(Math.floor(current! / 1000))} / ${nowPlaying.duration}]`
     : "";
   const partialEmbed = baseEmbed()
     .setTitle("Tracks Queued")
@@ -182,7 +183,7 @@ export const sendSearchResults = (
   res: QueueItem[]
 ) => {
   const urlTitles = res.map((videoData) =>
-    toUrlString(videoData.title, videoData.url, 40)
+    toUrlString(videoData.title, videoData.url, 36)
   );
 
   channel.send(

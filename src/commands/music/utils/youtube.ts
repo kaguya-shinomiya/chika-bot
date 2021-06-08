@@ -5,7 +5,7 @@ import ytsr, { Video } from "ytsr";
 import { GenericChannel } from "../../../types/command";
 import { AudioUtils, QueueItem } from "../../../types/queue";
 import { sendCannotPlay, sendNowPlaying } from "./embeds";
-import { secToMin } from "./helpers";
+import { secToString } from "./helpers";
 import type { createFinishListener } from "./listener";
 
 const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
@@ -67,7 +67,7 @@ export const validateArgs = async (
     if (!videoDetails) return null;
     return {
       title: videoDetails.title,
-      duration: secToMin(parseInt(videoDetails.lengthSeconds, 10)),
+      duration: secToString(parseInt(videoDetails.lengthSeconds, 10)),
       url: videoDetails.video_url,
       thumbnailURL: videoDetails.thumbnails[0].url,
     };
