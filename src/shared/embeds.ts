@@ -7,6 +7,7 @@ import {
   chika_pointing_png,
   chika_rap_png,
   chika_pink,
+  ribbon_emoji,
 } from "../assets";
 import { PREFIX } from "../constants";
 import { Command, GenericChannel } from "../types/command";
@@ -66,3 +67,14 @@ export const withAuthorEmbed = (author: User) =>
 
 export const sendNotInGuild = async (channel: GenericChannel) =>
   channel.send(lightErrorEmbed("This command can only be used in a server!"));
+
+export const sendInsufficientRibbons = (
+  channel: GenericChannel,
+  cost: number,
+  stock: number
+) =>
+  channel.send(
+    lightErrorEmbed(
+      `You don't have enough ribbons! You need ${cost} ${ribbon_emoji}, but only have ${stock} ${ribbon_emoji}.`
+    )
+  );

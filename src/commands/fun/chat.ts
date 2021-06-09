@@ -1,6 +1,6 @@
 import axios from "axios";
 import { PREFIX } from "../../constants";
-import { baseEmbed } from "../../shared/embeds";
+import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { ChatbotInput } from "./utils/types";
 
@@ -9,12 +9,16 @@ const chat: Command = {
   argsCount: -2,
   category: "Fun",
   description:
-    "Chat with Chika. Be careful though, her IQ drops below 3 at times.",
+    "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
   usage: `${PREFIX}chat <message>`,
   async execute(
     message,
     args,
-    { chatbotInputRedis: inputRedis, chatbotResponseRedis: responseRedis }
+    {
+      chatbotInputRedis: inputRedis,
+      chatbotResponseRedis: responseRedis,
+      ribbonsRedis,
+    }
   ) {
     const { channel, author } = message;
 
@@ -25,6 +29,17 @@ const chat: Command = {
       await inputRedis.lrange(author.id, 0, -1)
     ).reverse();
     const text = args.join(" ");
+
+    const ribbonCost = text.length;
+    const ribbonStock = parseInt(
+      (await ribbonsRedis.get(author.id)) || "0",
+      10
+    );
+    if (ribbonCost > ribbonStock) {
+      sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
+      return;
+    }
+
     const input: ChatbotInput = {
       inputs: { text, generated_responses, past_user_inputs },
     };
@@ -46,12 +61,14 @@ const chat: Command = {
         responseRedis
           .lpush(author.id, reply)
           .then(() => responseRedis.ltrim(author.id, 0, 2));
+
+        ribbonsRedis.decrby(author.id, ribbonCost);
       })
       .catch((err) => {
         if (err.response?.data?.error?.includes(`is currently loading`)) {
           channel.send(
             baseEmbed().setDescription(
-              `Thanks for wanting to chat with me! Please give me a minute to get ready.`
+              `Thanks chatting with me! Please give me a minute to get ready.`
             )
           );
         }
