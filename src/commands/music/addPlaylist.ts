@@ -1,5 +1,5 @@
 import ytpl from "ytpl";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -12,7 +12,7 @@ const addPlaylist: Command = {
   aliases: ["ap"],
   category: "Music",
   description: "Add a YouTube playlist to the queue.",
-  usage: `${PREFIX}addp <url>`,
+  usage: `${DEFAULT_PREFIX}addp <url>`,
   execute(message, args) {
     const { guild, channel, author } = message;
     if (!guild) {

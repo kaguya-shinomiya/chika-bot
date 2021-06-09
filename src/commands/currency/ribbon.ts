@@ -1,5 +1,5 @@
 import { Collection, User } from "discord.js";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { ribbons } from "../../data/redisManager";
 import { Command } from "../../types/command";
 import { sendRibbonStock } from "./utils/embeds";
@@ -10,7 +10,7 @@ export const ribbon: Command = {
   argsCount: -1,
   category: "Currency",
   aliases: ["r"],
-  usage: `${PREFIX}ribbon [user ...]`,
+  usage: `${DEFAULT_PREFIX}ribbon [user ...]`,
   async execute(message) {
     const { mentions, author, channel } = message;
     const taggedUsers = mentions.users;

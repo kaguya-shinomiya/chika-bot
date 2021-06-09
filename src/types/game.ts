@@ -8,7 +8,7 @@ import type {
 import { Collection } from "discord.js";
 import { red_cross, white_check_mark } from "../shared/assets";
 import { toListString } from "../commands/music/utils/embeds";
-import { PREFIX } from "./constants";
+import { DEFAULT_PREFIX } from "../shared/constants";
 import { EXIT_GAME } from "../games/utils/constants";
 import { unblock } from "../games/utils/manageState";
 import {
@@ -188,7 +188,7 @@ export abstract class Game {
           `
           To review the rules of **${
             this.displayTitle
-          }**, use \`${PREFIX}rules ${this.title}\`.
+          }**, use \`${DEFAULT_PREFIX}rules ${this.title}\`.
         \`${EXIT_GAME}\` will stop the game at anytime.
         
         ${options?.startsInMessage || "I'll start the game in 5 seconds!"}

@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { setCooldown } from "../../utils/cooldownManager";
@@ -11,7 +11,7 @@ export const search: Command = {
   description: "Search for a track on YouTube",
   argsCount: -2,
   category: "Music",
-  usage: `${PREFIX}search <search_string>`,
+  usage: `${DEFAULT_PREFIX}search <search_string>`,
   channelCooldown: 15000,
   async execute(message, args) {
     const { channel, client, guild } = message;

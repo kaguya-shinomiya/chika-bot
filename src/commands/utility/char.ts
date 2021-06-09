@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk } from "../../generated/graphql";
 import { Command } from "../../types/command";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";
@@ -10,7 +10,7 @@ export const char: Command = {
   aliases: ["character"],
   argsCount: -2,
   category: "Utility",
-  usage: `${PREFIX}char <character_name>`,
+  usage: `${DEFAULT_PREFIX}char <character_name>`,
   description: "Search for an animanga character.",
   execute(message, args) {
     const { channel } = message;

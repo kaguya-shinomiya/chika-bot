@@ -9,7 +9,7 @@ import {
   chika_pink,
   ribbon_emoji,
 } from "./assets";
-import { PREFIX } from "../types/constants";
+import { DEFAULT_PREFIX } from "./constants";
 import { Command, GenericChannel } from "../types/command";
 
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);
@@ -39,7 +39,7 @@ export const badArgsEmbed = (command: Command, provided: number) =>
     )
     .addField(
       "Further help",
-      `For more info, you may run \`${PREFIX}help ${command.name}\`.`
+      `For more info, you may run \`${DEFAULT_PREFIX}help ${command.name}\`.`
     );
 
 export const badCommandsEmbed = (...badCommands: string[]) =>
@@ -51,7 +51,7 @@ export const badCommandsEmbed = (...badCommands: string[]) =>
     )
     .addField(
       "Further help",
-      `To get a list of all the commands I know, run \`${PREFIX}help\`.`
+      `To get a list of all the commands I know, run \`${DEFAULT_PREFIX}help\`.`
     );
 
 export const genericErrorEmbed = () =>
@@ -78,3 +78,6 @@ export const sendInsufficientRibbons = (
       `You don't have enough ribbons! You need ${cost} ${ribbon_emoji}, but only have ${stock} ${ribbon_emoji}.`
     )
   );
+
+export const sendNotAdmin = (channel: GenericChannel) =>
+  channel.send(lightErrorEmbed(`Only admins can  use that command!`));

@@ -1,5 +1,5 @@
 import { ribbon_emoji } from "../../shared/assets";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { ribbons } from "../../data/redisManager";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -11,7 +11,7 @@ const daily: Command = {
   category: "Currency",
   argsCount: 0,
   description: "Collect your daily dose of ribbons.",
-  usage: `${PREFIX}daily`,
+  usage: `${DEFAULT_PREFIX}daily`,
   async execute(message) {
     const { author, channel } = message;
 

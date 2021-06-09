@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
@@ -12,7 +12,7 @@ const queue: Command = {
   aliases: ["q"],
   argsCount: 0,
   category: "Music",
-  usage: `${PREFIX}queue`,
+  usage: `${DEFAULT_PREFIX}queue`,
   async execute(message) {
     const { channel, client, guild } = message;
     if (!guild) {

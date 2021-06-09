@@ -1,5 +1,5 @@
 import { kaguya_sleep_gif } from "../../shared/assets";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 
@@ -7,7 +7,7 @@ const goodnight: Command = {
   name: "goodnight",
   description: "Greets goodnight.",
   category: "Fun",
-  usage: `${PREFIX}goodnight [user ...]`,
+  usage: `${DEFAULT_PREFIX}goodnight [user ...]`,
   aliases: ["gn"],
   argsCount: -1,
   async execute({ channel, mentions, author }) {

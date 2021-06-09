@@ -1,5 +1,5 @@
 import type { TextChannel } from "discord.js";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -12,7 +12,7 @@ export const manga: Command = {
   description: "Look up info for a manga.",
   argsCount: -2,
   category: "Utility",
-  usage: `${PREFIX}manga <manga_title>`,
+  usage: `${DEFAULT_PREFIX}manga <manga_title>`,
   async execute(message, args) {
     const { channel } = message;
     const search = args.join(" ");

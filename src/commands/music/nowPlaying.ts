@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
@@ -9,7 +9,7 @@ const nowPlaying: Command = {
   argsCount: 0,
   description: "Show the currently playing track.",
   category: "Music",
-  usage: `${PREFIX}np`,
+  usage: `${DEFAULT_PREFIX}np`,
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {

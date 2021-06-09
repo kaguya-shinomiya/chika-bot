@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -9,7 +9,7 @@ const repeat: Command = {
   aliases: ["rp"],
   argsCount: 0,
   category: "Music",
-  usage: `${PREFIX}repeat`,
+  usage: `${DEFAULT_PREFIX}repeat`,
   description: "Repeats the current track once.",
   async execute(message) {
     const { client, channel, guild, author } = message;

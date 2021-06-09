@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -17,7 +17,7 @@ import { playThis, validateArgs } from "./utils/youtube";
 const play: Command = {
   name: "play",
   aliases: ["tunes"],
-  usage: `${PREFIX}tunes <URL|search_string>`,
+  usage: `${DEFAULT_PREFIX}tunes <URL|search_string>`,
   argsCount: -1,
   category: "Music",
   description: "Let Chika play some music from YouTube for you.",

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import {
   chatbotInput,
   chatbotResponse,
@@ -15,7 +15,7 @@ const chat: Command = {
   category: "Fun",
   description:
     "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
-  usage: `${PREFIX}chat <message>`,
+  usage: `${DEFAULT_PREFIX}chat <message>`,
   async execute(message, args) {
     const { channel, author } = message;
 

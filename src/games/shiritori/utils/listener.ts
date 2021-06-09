@@ -1,7 +1,7 @@
 import type { Message } from "discord.js";
 import { chika_beating_yu_gif, white_check_mark } from "../../../shared/assets";
 import { baseEmbed } from "../../../shared/embeds";
-import { filterMessage } from "../../../utils/filterMessage";
+import { filterMessage } from "../../../utils/validateMessages";
 import { isGameActive, unblock } from "../../utils/manageState";
 import type { Shiritori } from "../shiritori";
 import { checkWord } from "./checkWord";

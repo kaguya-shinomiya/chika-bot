@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
 
@@ -7,7 +7,7 @@ export const boot: Command = {
   description: "Boot Chika from the voice channel. Queue is not cleared.",
   argsCount: 0,
   category: "Music",
-  usage: `${PREFIX}boot`,
+  usage: `${DEFAULT_PREFIX}boot`,
   execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {

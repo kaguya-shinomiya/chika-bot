@@ -1,5 +1,5 @@
 import { MessageEmbed, User } from "discord.js";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 
@@ -12,7 +12,7 @@ const avatar: Command = {
   name: "avatar",
   description: "Retrieves users' avatars.",
   category: "Fun",
-  usage: `${PREFIX}avatar [user ...]`,
+  usage: `${DEFAULT_PREFIX}avatar [user ...]`,
   argsCount: -1,
   async execute(message) {
     const { mentions, author, channel } = message;

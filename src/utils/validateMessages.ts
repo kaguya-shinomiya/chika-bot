@@ -1,5 +1,6 @@
 import type { Message, User } from "discord.js";
 import { Guild } from "discord.js";
+import { sendNotAdmin, sendNotInGuild } from "../shared/embeds";
 import type { GenericChannel } from "../types/command";
 
 interface validateMessageOptions {
@@ -55,4 +56,17 @@ export const filterMessage = (
   if (guildId && message.guild?.id !== guildId) return null;
 
   return message;
+};
+
+export const isAdmin = (message: Message) => {
+  const { member, channel } = message;
+  if (!member) {
+    sendNotInGuild(channel);
+    return false;
+  }
+  if (!member.hasPermission("ADMINISTRATOR")) {
+    sendNotAdmin(channel);
+    return false;
+  }
+  return true;
 };

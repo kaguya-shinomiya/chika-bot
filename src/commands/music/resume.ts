@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
@@ -8,7 +8,7 @@ const resume: Command = {
   argsCount: 0,
   category: "Music",
   description: "Resume playback.",
-  usage: `${PREFIX}resume`,
+  usage: `${DEFAULT_PREFIX}resume`,
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {

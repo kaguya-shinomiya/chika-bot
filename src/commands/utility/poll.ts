@@ -1,5 +1,5 @@
 import { red_cross, white_check_mark } from "../../shared/assets";
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
 
@@ -8,7 +8,7 @@ const poll: Command = {
   argsCount: -2,
   category: "Utility",
   description: "Begin a democratic process to collect public opinion.",
-  usage: `${PREFIX}poll <question>`,
+  usage: `${DEFAULT_PREFIX}poll <question>`,
   aliases: ["vote"],
   execute(message, args) {
     const { guild, channel, author } = message;

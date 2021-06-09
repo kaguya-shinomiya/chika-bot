@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { shiritoriGame } from "../../games/shiritori";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";
@@ -9,7 +9,7 @@ const shiritori: Command = {
   argsCount: -1,
   category: "Game",
   description: "Play a round of Shiritori.",
-  usage: `${PREFIX}shiritori [opponent]`,
+  usage: `${DEFAULT_PREFIX}shiritori [opponent]`,
   execute(message) {
     const taggedCount = message.mentions.users.size;
     if (taggedCount && taggedCount > 1) {

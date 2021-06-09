@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -10,7 +10,7 @@ const clear: Command = {
   argsCount: 0,
   aliases: ["c"],
   category: "Music",
-  usage: `${PREFIX}clear`,
+  usage: `${DEFAULT_PREFIX}clear`,
   async execute(message) {
     const { guild, channel, author } = message;
     if (!guild) {

@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { PREFIX, PREFIX_RE } from "../types/constants";
+import { DEFAULT_PREFIX, DEFAULT_PREFIX_RE } from "../shared/constants";
 import {
   badArgsEmbed,
   badCommandsEmbed,
@@ -13,10 +13,10 @@ const message: Event = {
   once: false,
   // eslint-disable-next-line no-shadow
   async listener(client, message: Message) {
-    if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
+    if (!DEFAULT_PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);
-    const sentCommand = args.shift()?.toLowerCase().replace(PREFIX, "");
+    const sentCommand = args.shift()?.toLowerCase().replace(DEFAULT_PREFIX, "");
     if (!sentCommand) return;
     const command = client.commands.find(
       (_command) =>

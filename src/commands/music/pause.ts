@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
@@ -8,7 +8,7 @@ const pause: Command = {
   aliases: ["stop"],
   description: "Pause the current playback.",
   argsCount: 0,
-  usage: `${PREFIX}pause`,
+  usage: `${DEFAULT_PREFIX}pause`,
   category: "Music",
   async execute(message) {
     const { client, channel, guild, author } = message;

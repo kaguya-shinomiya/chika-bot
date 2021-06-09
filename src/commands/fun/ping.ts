@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { redis } from "../../data/redisManager";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -7,7 +7,7 @@ const ping: Command = {
   name: "ping",
   description: "Say hello to Chika bot.",
   category: "Fun",
-  usage: `${PREFIX}hello`,
+  usage: `${DEFAULT_PREFIX}hello`,
   argsCount: 0,
   async execute(message) {
     const { channel, author } = message;

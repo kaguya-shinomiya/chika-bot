@@ -1,5 +1,5 @@
 import type { Message } from "discord.js";
-import { filterMessage } from "../../../utils/filterMessage";
+import { filterMessage } from "../../../utils/validateMessages";
 import { postGameBalloon } from "./postGame";
 import type { BalloonState } from "./types";
 

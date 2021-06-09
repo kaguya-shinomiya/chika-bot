@@ -1,11 +1,11 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 
 const help: Command = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
-  usage: `${PREFIX}help [command ...]`,
+  usage: `${DEFAULT_PREFIX}help [command ...]`,
   category: "Utility",
   argsCount: -1,
   aliases: ["h"],

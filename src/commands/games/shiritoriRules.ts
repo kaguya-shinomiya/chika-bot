@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { shiritoriGame } from "../../games/shiritori";
 import { Command } from "../../types/command";
 
@@ -7,7 +7,7 @@ const shiritoriRules: Command = {
   argsCount: 0,
   category: "Game",
   description: "Check the rules for Shiritori.",
-  usage: `${PREFIX}shiritori-rules`,
+  usage: `${DEFAULT_PREFIX}shiritori-rules`,
   execute(message) {
     const { channel } = message;
     channel.send(shiritoriGame.rules);

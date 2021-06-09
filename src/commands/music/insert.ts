@@ -1,4 +1,4 @@
-import { PREFIX } from "../../types/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { Command } from "../../types/command";
 import {
@@ -13,7 +13,7 @@ const insert: Command = {
   aliases: ["addd"],
   argsCount: -2,
   category: "Music",
-  usage: `${PREFIX}addd <url|search_string>`,
+  usage: `${DEFAULT_PREFIX}addd <url|search_string>`,
   description: "Inserts a track to the front of the queue.",
   async execute(message, args) {
     const { channel, guild, author } = message;
