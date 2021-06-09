@@ -13,13 +13,9 @@ export const game: Command = {
   category: "Fun",
   usage: `${PREFIX}game <game_title>`,
   argsCount: -1,
-  async execute(message, args, { gamesRedis: redis }) {
+  async execute(message, args, redis) {
+    const { gamesRedis } = redis;
     const { channel, client } = message;
-
-    if (await redis.get(channel.id)) {
-      sendInGame(channel);
-      return;
-    }
 
     const [requestedGame] = args;
     if (!requestedGame) {
@@ -34,6 +30,11 @@ export const game: Command = {
       return;
     }
 
+    if (!toPlay.nonBlocking && (await gamesRedis.get(channel.id))) {
+      sendInGame(channel);
+      return;
+    }
+
     if (
       !validateMentions(message, {
         gameTitle: toPlay.displayTitle,
@@ -42,7 +43,8 @@ export const game: Command = {
     )
       return;
 
-    redis.set(channel.id, "true", "px", toPlay.sessionDuration); // block other ck;game calls for now
+    if (!toPlay.nonBlocking)
+      gamesRedis.set(channel.id, "true", "px", toPlay.sessionDuration); // block other ck;game calls for now
 
     toPlay.pregame(message, redis);
   },

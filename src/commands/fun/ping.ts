@@ -8,7 +8,7 @@ const ping: Command = {
   category: "Fun",
   usage: `${PREFIX}hello`,
   argsCount: 0,
-  async execute({ channel, author }, _, { gamesRedis: redis }) {
+  async execute({ channel, author }, _, { defaultRedis: redis }) {
     channel.send(
       baseEmbed().setDescription(
         `Yo ${author.username}, Love Detective Chika here!`

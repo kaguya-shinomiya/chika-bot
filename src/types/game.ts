@@ -18,6 +18,7 @@ import {
   lightErrorEmbed,
 } from "../shared/embeds";
 import type { GenericChannel } from "./command";
+import { RedisPrefixed } from "./redis";
 
 interface collectPlayersOptions {
   redis: Redis;
@@ -44,7 +45,9 @@ export abstract class Game {
 
   abstract sessionDuration: number; // in milliseconds
 
-  abstract pregame(message: Message, redis: Redis): void;
+  abstract pregame(message: Message, redis: RedisPrefixed): void;
+
+  nonBlocking?: boolean; // don't mark the channel as in-game
 
   collectPlayers(message: Message, options: collectPlayersOptions) {
     const { author, channel } = message;

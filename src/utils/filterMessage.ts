@@ -1,10 +1,13 @@
 import type { Message, User } from "discord.js";
+import { Guild } from "discord.js";
 import type { GenericChannel } from "../types/command";
 
 interface validateMessageOptions {
   channelId?: string;
   channel?: GenericChannel;
   channels?: GenericChannel[];
+  guild?: Guild;
+  guildId?: string;
   author?: User;
   authors?: User[];
   content?: RegExp;
@@ -20,6 +23,8 @@ export const filterMessage = (
     channel,
     channels,
     channelId,
+    guild,
+    guildId,
     author,
     authors,
     content,
@@ -45,6 +50,9 @@ export const filterMessage = (
   )
     return null;
   if (channelId && message.channel.id !== channelId) return null;
+
+  if (guild && guild.id !== message.guild?.id) return null;
+  if (guildId && message.guild?.id !== guildId) return null;
 
   return message;
 };

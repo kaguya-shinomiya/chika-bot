@@ -4,6 +4,7 @@ import type { Redis } from "ioredis";
 import { shiritori_rules_png } from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Game } from "../../types/game";
+import { RedisPrefixed } from "../../types/redis";
 import { genInitialCards } from "./utils/cards";
 import { shiritoriPlayerCardsEmbed } from "./utils/embeds";
 import { createOnceShiritoriListener } from "./utils/listener";
@@ -28,7 +29,8 @@ export class Shiritori extends Game {
   sessionDuration = 1000 * 60 * 10; // 10 min in ms
 
   // eslint-disable-next-line class-methods-use-this
-  pregame(message: Message, redis: Redis) {
+  pregame(message: Message, redis_: RedisPrefixed) {
+    const { gamesRedis: redis } = redis_;
     const { channel, mentions, author } = message;
     const taggedOpponent = mentions.users.first();
 
