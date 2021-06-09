@@ -47,7 +47,7 @@
     "build": "tsc",
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
-    "test": "ts-mocha -p tsconfig.testing.json src/**/*.test.ts",
+    "test": "ts-mocha -p tsconfig.testing.json 'src/**/*.test.ts'",
     "prepare": "husky install",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
