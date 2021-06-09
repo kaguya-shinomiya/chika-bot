@@ -1,4 +1,5 @@
 import { PREFIX } from "../../constants";
+import { queue } from "../../data/redisManager";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
@@ -23,10 +24,7 @@ const repeat: Command = {
     }
 
     sendRepeat(channel, { videoData: audioUtils.nowPlaying, author });
-    client.redisManager.tracks.lpush(
-      guild.id,
-      JSON.stringify(audioUtils.nowPlaying)
-    );
+    queue.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
   },
 };
 

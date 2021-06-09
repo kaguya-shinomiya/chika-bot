@@ -17,9 +17,8 @@ import {
   genericErrorEmbed,
   lightErrorEmbed,
 } from "../shared/embeds";
-import { BlockingLevel } from "./BlockingLevel";
+import { BlockingLevel } from "./blockingLevel";
 import type { GenericChannel } from "./command";
-import { RedisPrefixed } from "./redis";
 
 interface collectPlayersOptions {
   onTimeoutAccept: (players: Collection<Snowflake, User>) => void;
@@ -44,7 +43,7 @@ export abstract class Game {
 
   abstract sessionDuration: number; // in milliseconds
 
-  abstract pregame(message: Message, redis: RedisPrefixed): void;
+  abstract pregame(message: Message): void;
 
   abstract blockingLevel: BlockingLevel;
 

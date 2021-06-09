@@ -1,5 +1,6 @@
 import ytpl from "ytpl";
 import { PREFIX } from "../../constants";
+import { queue } from "../../data/redisManager";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
@@ -13,7 +14,7 @@ const addPlaylist: Command = {
   description: "Add a YouTube playlist to the queue.",
   usage: `${PREFIX}addp <url>`,
   execute(message, args) {
-    const { guild, channel, author, client } = message;
+    const { guild, channel, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
@@ -22,10 +23,7 @@ const addPlaylist: Command = {
     ytpl(playlistURL)
       .then((res) => {
         const [playlistMetadata, videos] = parsePlaylist(res);
-        client.redisManager.tracks.rpush(
-          guild.id,
-          ...videos.map((video) => JSON.stringify(video))
-        );
+        queue.rpush(guild.id, ...videos.map((video) => JSON.stringify(video)));
         channel.send(
           withAuthorEmbed(author)
             .setTitle("Added Playlist")

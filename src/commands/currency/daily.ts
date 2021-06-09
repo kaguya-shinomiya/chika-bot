@@ -1,7 +1,9 @@
 import { ribbon_emoji } from "../../assets";
 import { PREFIX } from "../../constants";
+import { ribbons } from "../../data/redisManager";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { getCooldown, setCooldown } from "../../utils/cooldownManager";
 import { endOfToday, secToWordString } from "../../utils/time";
 
 const daily: Command = {
@@ -11,12 +13,9 @@ const daily: Command = {
   description: "Collect your daily dose of ribbons.",
   usage: `${PREFIX}daily`,
   async execute(message) {
-    const { author, channel, client } = message;
+    const { author, channel } = message;
 
-    const cooldownDuration = await client.cooldownManager.getCooldown(
-      author.id,
-      this.name
-    );
+    const cooldownDuration = await getCooldown(author.id, this.name);
 
     if (cooldownDuration) {
       channel.send(
@@ -39,9 +38,9 @@ const daily: Command = {
     const nowStamp = Date.now();
     const cooldown = endOfToday() - nowStamp;
 
-    client.cooldownManager.setCooldown(author.id, this.name, cooldown);
+    setCooldown(author.id, this.name, cooldown);
 
-    client.redisManager.ribbons.incrby(author.id, toAward);
+    ribbons.incrby(author.id, toAward);
   },
 };
 

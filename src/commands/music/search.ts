@@ -1,6 +1,7 @@
 import { PREFIX } from "../../constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
+import { setCooldown } from "../../utils/cooldownManager";
 import { sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
@@ -19,11 +20,7 @@ export const search: Command = {
       return;
     }
 
-    client.cooldownManager.setCooldown(
-      channel.id,
-      this.name,
-      this.channelCooldown!
-    );
+    setCooldown(channel.id, this.name, this.channelCooldown!);
 
     const results = await searchVideo(args.join(" "));
     if (!results) {
@@ -36,7 +33,6 @@ export const search: Command = {
     const resultSelectListener = createResultSelectListener(results, {
       channelId: channel.id,
       guildId: guild.id,
-      redis: client.redisManager.tracks,
     });
     const timeoutCallback = () => {
       client.removeListener("message", resultSelectListener);

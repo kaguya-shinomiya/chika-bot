@@ -1,4 +1,5 @@
 import { PREFIX } from "../../constants";
+import { redis } from "../../data/redisManager";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 
@@ -9,13 +10,7 @@ const ping: Command = {
   usage: `${PREFIX}hello`,
   argsCount: 0,
   async execute(message) {
-    const {
-      channel,
-      author,
-      client: {
-        redisManager: { default: redis },
-      },
-    } = message;
+    const { channel, author } = message;
     channel.send(
       baseEmbed().setDescription(
         `Yo ${author.username}, Love Detective Chika here!`

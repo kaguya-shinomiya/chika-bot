@@ -1,6 +1,6 @@
 /* eslint-disable prefer-promise-reject-errors */
 import type { Message } from "discord.js";
-import { BlockingLevel } from "../../types/BlockingLevel";
+import { BlockingLevel } from "../../types/blockingLevel";
 import type { Game } from "../../types/game";
 
 export const checkAndBlock = (game: Game, message: Message): Promise<void> => {

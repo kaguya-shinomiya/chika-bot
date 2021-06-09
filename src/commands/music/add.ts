@@ -1,4 +1,5 @@
 import { PREFIX } from "../../constants";
+import { queue } from "../../data/redisManager";
 import { Command } from "../../types/command";
 import {
   sendAddedToQueue,
@@ -14,7 +15,7 @@ const add: Command = {
   usage: `${PREFIX}add <url|search_string>`,
   description: "Adds a track to the queue.",
   async execute(message, args) {
-    const { channel, guild, author, client } = message;
+    const { channel, guild, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
@@ -25,7 +26,7 @@ const add: Command = {
       return;
     }
 
-    client.redisManager.tracks.rpush(guild.id, JSON.stringify(videoData));
+    queue.rpush(guild.id, JSON.stringify(videoData));
     sendAddedToQueue(channel, { videoData, author });
   },
 };

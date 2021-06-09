@@ -2,6 +2,7 @@ import { PREFIX } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
+import { queue as tracks } from "../../data/redisManager";
 
 // TODO use paginated embed for this
 
@@ -19,9 +20,9 @@ const queue: Command = {
       return;
     }
 
-    client.redisManager.tracks.lrange(guild.id, 0, -1).then((tracks) => {
+    tracks.lrange(guild.id, 0, -1).then((_tracks) => {
       const audioUtils = client.cache.audioUtils.get(guild.id);
-      if (tracks.length === 0 && !audioUtils) {
+      if (_tracks.length === 0 && !audioUtils) {
         channel.send(
           lightErrorEmbed(
             "There are no tracks queued, and nothing is playing now."
@@ -29,7 +30,7 @@ const queue: Command = {
         );
         return;
       }
-      sendQueue(channel, tracks.map((track) => JSON.parse(track)) || [], {
+      sendQueue(channel, _tracks.map((track) => JSON.parse(track)) || [], {
         nowPlaying: audioUtils?.nowPlaying,
         isPaused: audioUtils?.dispatcher.paused,
         current: audioUtils?.dispatcher.streamTime,

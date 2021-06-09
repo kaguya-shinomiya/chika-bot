@@ -1,0 +1,36 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @default(autoincrement()) @id
+  userId    String    @unique 
+  username  String
+}
+
+model Guild {
+  id        Int       @default(autoincrement()) @id
+  prefix    String?
+  shiritori Shiritori?
+  balloon   Balloon?
+}
+
+model Shiritori {
+  id        Int       @default(autoincrement()) @id
+  guild     Guild     @relation(fields: [guildId], references: [id])
+  guildId   Int       @unique
+  handSize  Int
+}
+
+model Balloon {
+  id        Int       @default(autoincrement()) @id
+  guild     Guild     @relation(fields: [guildId], references: [id])
+  guildId   Int       @unique
+  minVol    Int
+  maxVol    Int
+}

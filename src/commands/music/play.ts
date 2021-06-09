@@ -1,4 +1,5 @@
 import { PREFIX } from "../../constants";
+import { queue } from "../../data/redisManager";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { QueueItem } from "../../types/queue";
@@ -22,7 +23,6 @@ const play: Command = {
   description: "Let Chika play some music from YouTube for you.",
   async execute(message, args) {
     const { channel, member, guild, client, author } = message;
-    const { tracks } = client.redisManager;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
@@ -32,7 +32,7 @@ const play: Command = {
       return;
     }
 
-    const next = await tracks.lpop(guild.id);
+    const next = await queue.lpop(guild.id);
     const audioUtils = client.cache.audioUtils.get(guild.id);
 
     // they called ck;play with no args
@@ -68,7 +68,7 @@ const play: Command = {
       return;
     }
 
-    if (next) tracks.lpush(guild.id, next); // push next track back
+    if (next) queue.lpush(guild.id, next); // push next track back
 
     const videoData = await validateArgs(args);
     if (!videoData) {
@@ -79,7 +79,7 @@ const play: Command = {
     // there's a song playing
     // push to the redis queue
     if (audioUtils) {
-      tracks.rpush(guild.id, JSON.stringify(videoData));
+      queue.rpush(guild.id, JSON.stringify(videoData));
       sendAddedToQueue(channel, { videoData, author });
       return;
     }

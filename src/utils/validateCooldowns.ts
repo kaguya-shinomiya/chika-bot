@@ -1,18 +1,16 @@
 import type { Message } from "discord.js";
 import { lightErrorEmbed } from "../shared/embeds";
 import type { Command } from "../types/command";
+import { getCooldown } from "./cooldownManager";
 import { secToWordString } from "./time";
 
 export const isOnCooldown = async (
   message: Message,
   command: Command
 ): Promise<boolean> => {
-  const { channel, author, client } = message;
+  const { channel, author } = message;
   if (command.channelCooldown) {
-    const ttl = await client.cooldownManager.getCooldown(
-      channel.id,
-      command.name
-    );
+    const ttl = await getCooldown(channel.id, command.name);
     if (ttl) {
       channel.send(
         lightErrorEmbed(
@@ -25,10 +23,7 @@ export const isOnCooldown = async (
     }
   }
   if (command.userCooldown) {
-    const ttl = await client.cooldownManager.getCooldown(
-      author.id,
-      command.name
-    );
+    const ttl = await getCooldown(author.id, command.name);
     if (ttl) {
       message.channel.send(
         lightErrorEmbed(

@@ -1,5 +1,5 @@
 import { Client, Guild, Message } from "discord.js";
-import { Redis } from "ioredis";
+import { queue } from "../../../data/redisManager";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
 import { sendAddedToQueue, sendFinishedAllTracks } from "./embeds";
@@ -17,7 +17,7 @@ export function createFinishListener(
   const onFinish = async () => {
     const audioUtils = client.cache.audioUtils.get(guild.id)!;
     if (!audioUtils) return;
-    client.redisManager.tracks
+    queue
       .lpop(guild.id)
       .then(async (res) => {
         if (!res) {
@@ -43,12 +43,11 @@ export function createFinishListener(
 interface createResultSelectListenerParams {
   channelId: string;
   guildId: string;
-  redis: Redis;
 }
 
 export const createResultSelectListener = (
   results: QueueItem[],
-  { redis, channelId, guildId }: createResultSelectListenerParams
+  { channelId, guildId }: createResultSelectListenerParams
 ) => {
   const resultSelectListener = async (message: Message) => {
     const { content, channel, author } = message;
@@ -57,7 +56,7 @@ export const createResultSelectListener = (
     if (Number.isNaN(index) || index > results.length) return;
 
     const selectedTrack = results[index - 1];
-    redis.rpush(guildId, JSON.stringify(selectedTrack));
+    queue.rpush(guildId, JSON.stringify(selectedTrack));
     sendAddedToQueue(channel, { videoData: selectedTrack, author });
   };
 

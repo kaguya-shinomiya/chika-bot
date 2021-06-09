@@ -1,5 +1,10 @@
 import axios from "axios";
 import { PREFIX } from "../../constants";
+import {
+  chatbotInput,
+  chatbotResponse,
+  ribbons,
+} from "../../data/redisManager";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { ChatbotInput } from "./utils/types";
@@ -12,13 +17,7 @@ const chat: Command = {
     "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
   usage: `${PREFIX}chat <message>`,
   async execute(message, args) {
-    const {
-      channel,
-      author,
-      client: {
-        redisManager: { ribbons, chatbotInput, chatbotResponse },
-      },
-    } = message;
+    const { channel, author } = message;
 
     const generated_responses = (
       await chatbotResponse.lrange(author.id, 0, -1)

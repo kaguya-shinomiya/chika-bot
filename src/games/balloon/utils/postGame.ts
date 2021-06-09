@@ -1,17 +1,12 @@
 import { Collection, Message, User } from "discord.js";
+import { ribbons } from "../../../data/redisManager";
 import { sendPopped } from "./embeds";
 
 export const postGameBalloon = async (
   message: Message,
   players: Collection<string, User>
 ) => {
-  const {
-    channel,
-    author: popper,
-    client: {
-      redisManager: { ribbons },
-    },
-  } = message;
+  const { channel, author: popper } = message;
 
   const winners = players.filter((user) => user.id !== popper.id);
   const popperStock = parseInt((await ribbons.get(popper.id)) || "0", 10);

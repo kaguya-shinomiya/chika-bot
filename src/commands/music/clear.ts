@@ -1,4 +1,5 @@
 import { PREFIX } from "../../constants";
+import { queue } from "../../data/redisManager";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild } from "./utils/embeds";
@@ -11,13 +12,13 @@ const clear: Command = {
   category: "Music",
   usage: `${PREFIX}clear`,
   async execute(message) {
-    const { guild, channel, author, client } = message;
+    const { guild, channel, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
     }
 
-    client.redisManager.tracks.del(guild.id).then((res) => {
+    queue.del(guild.id).then((res) => {
       if (!res) {
         channel.send(lightErrorEmbed("Queue is already empty."));
         return;

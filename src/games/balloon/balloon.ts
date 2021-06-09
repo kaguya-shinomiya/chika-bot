@@ -1,6 +1,6 @@
 import type { Client, Collection, Message, User } from "discord.js";
 import { baseEmbed } from "../../shared/embeds";
-import { BlockingLevel } from "../../types/BlockingLevel";
+import { BlockingLevel } from "../../types/blockingLevel";
 import { GenericChannel } from "../../types/command";
 import { Game } from "../../types/game";
 import { createBalloonListener } from "./utils/listener";
