@@ -1,7 +1,7 @@
 import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 import { RedisPrefixed } from "./redis";
 
-type commandCategory = "Fun" | "Utility" | "Music" | "Currency";
+type commandCategory = "Fun" | "Utility" | "Music" | "Currency" | "Game";
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
 class Command {

@@ -30,7 +30,7 @@ export const game: Command = {
       return;
     }
 
-    if (!toPlay.nonBlocking && (await gamesRedis.get(channel.id))) {
+    if (await gamesRedis.get(channel.id)) {
       sendInGame(channel);
       return;
     }
@@ -43,8 +43,7 @@ export const game: Command = {
     )
       return;
 
-    if (!toPlay.nonBlocking)
-      gamesRedis.set(channel.id, "true", "px", toPlay.sessionDuration); // block other ck;game calls for now
+    gamesRedis.set(channel.id, "true", "px", toPlay.sessionDuration); // block other ck;game calls for now
 
     toPlay.pregame(message, redis);
   },

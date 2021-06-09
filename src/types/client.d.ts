@@ -13,8 +13,14 @@ interface CooldownManager {
   getCooldown: (id: string, command: string) => Promise<number>; // returns cooldown time, or 0
 }
 
+interface inGameState {
+  isBlocked?: boolean;
+  games?: string[];
+}
+
 interface DiscordClientCache {
   audioUtils: Discord.Collection<string, AudioUtils>;
+  inGameStates: Discord.Collection<string, string>; // map ID to game title
 }
 
 declare module "discord.js" {

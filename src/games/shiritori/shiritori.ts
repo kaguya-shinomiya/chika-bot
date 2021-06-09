@@ -1,20 +1,17 @@
 import type { Message, Snowflake, User } from "discord.js";
 import { Collection } from "discord.js";
-import type { Redis } from "ioredis";
 import { shiritori_rules_png } from "../../assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
+import { BlockingLevel } from "../../types/BlockingLevel";
 import { Game } from "../../types/game";
-import { RedisPrefixed } from "../../types/redis";
 import { genInitialCards } from "./utils/cards";
 import { shiritoriPlayerCardsEmbed } from "./utils/embeds";
 import { createOnceShiritoriListener } from "./utils/listener";
 import type { ShiritoriState } from "./utils/types";
 
 interface startShiritoriParams {
-  message: Message;
   p1: User;
   p2: User;
-  redis: Redis;
 }
 
 export class Shiritori extends Game {
@@ -28,27 +25,26 @@ export class Shiritori extends Game {
 
   sessionDuration = 1000 * 60 * 10; // 10 min in ms
 
+  blockingLevel = BlockingLevel.channel;
+
   // eslint-disable-next-line class-methods-use-this
-  pregame(message: Message, redis_: RedisPrefixed) {
-    const { gamesRedis: redis } = redis_;
+  pregame(message: Message) {
     const { channel, mentions, author } = message;
     const taggedOpponent = mentions.users.first();
 
     if (!taggedOpponent) {
       this.collectPlayers(message, {
-        redis,
         onTimeoutAccept: (players) => {
           const [p1, p2] = players.map((player) => player);
-          this.startGame({ message, p1, p2, redis });
+          this.startGame(message, { p1, p2 });
         },
       });
       return;
     }
 
     this.getOpponentResponse(message, taggedOpponent, {
-      redis,
       onAccept: () =>
-        this.startGame({ message, p1: author, p2: taggedOpponent, redis }),
+        this.startGame(message, { p1: author, p2: taggedOpponent }),
       onReject: () =>
         channel.send(
           lightErrorEmbed(
@@ -58,7 +54,7 @@ export class Shiritori extends Game {
     });
   }
 
-  async startGame({ message, p1, p2, redis }: startShiritoriParams) {
+  async startGame(message: Message, { p1, p2 }: startShiritoriParams) {
     const { channel, client } = message;
     const { p1Cards, p2Cards, startingChar } = genInitialCards();
 
@@ -80,7 +76,7 @@ export class Shiritori extends Game {
     }).then(() => channel.send(shiritoriPlayerCardsEmbed(initState)));
 
     setTimeout(() => {
-      client.once("message", createOnceShiritoriListener(initState, redis)); // register the new listener
+      client.once("message", createOnceShiritoriListener(initState, this)); // register the new listener
       channel.send(`:regional_indicator_${initState.startingChar}:`);
     }, 5000);
   }

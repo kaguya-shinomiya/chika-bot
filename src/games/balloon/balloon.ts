@@ -2,6 +2,7 @@ import type { Client, Collection, Message, User } from "discord.js";
 import { baseEmbed } from "../../shared/embeds";
 import { GenericChannel } from "../../types/command";
 import { Game } from "../../types/game";
+import { BlockingLevel } from "../../types/BlockingLevel";
 import { RedisPrefixed } from "../../types/redis";
 import { createBalloonListener } from "./utils/listener";
 import { BalloonState } from "./utils/types";
@@ -18,6 +19,8 @@ export class Balloon extends Game {
   sessionDuration = 1000 * 60 * 10;
 
   rules = baseEmbed().setTitle("Balloon");
+
+  blockingLevel = BlockingLevel.guild;
 
   pregame(message: Message, redis: RedisPrefixed) {
     const { channel, client } = message;

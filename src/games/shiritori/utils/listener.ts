@@ -1,21 +1,21 @@
 import type { Message } from "discord.js";
-import type { Redis } from "ioredis";
 import { chika_beating_yu_gif, white_check_mark } from "../../../assets";
 import { baseEmbed } from "../../../shared/embeds";
 import { filterMessage } from "../../../utils/filterMessage";
+import { isGameActive, unblock } from "../../utils/manageState";
+import type { Shiritori } from "../shiritori";
 import { checkWord } from "./checkWord";
 import { shiritoriPlayerCardsEmbed } from "./embeds";
 import type { ShiritoriState } from "./types";
 
 export const createOnceShiritoriListener = (
   state: ShiritoriState,
-  redis: Redis
+  game: Readonly<Shiritori>
 ) => {
   const shiritoriListener = async (message: Message) => {
     const { author, content, channel, client } = message;
-    if (!(await redis.get(channel.id))) return;
 
-    const onRejectListener = createOnceShiritoriListener(state, redis);
+    const onRejectListener = createOnceShiritoriListener(state, game);
     const reject = () => client.once("message", onRejectListener);
 
     if (
@@ -23,12 +23,13 @@ export const createOnceShiritoriListener = (
         channelId: state.channelId,
         authors: [state.p1, state.p2],
         content: new RegExp(`^${state.startingChar}`, "i"),
-        minLen: 4, // TODO make this a per server setting
+        minLen: 1, // TODO make this a per server setting
       })
     ) {
       reject();
       return;
     }
+    if (!isGameActive(game, message)) return;
 
     const playerCards = state.cards.get(author.id)!;
 
@@ -57,21 +58,17 @@ export const createOnceShiritoriListener = (
           )
           .setImage(chika_beating_yu_gif)
       );
-      stopGame();
+      unblock(game, message);
       return;
     }
 
-    client.once("message", createOnceShiritoriListener(state, redis));
+    client.once("message", createOnceShiritoriListener(state, game));
     channel
       .send(shiritoriPlayerCardsEmbed(state))
       .then(() => channel.send(`:regional_indicator_${lastChar}:`));
 
     // eslint-disable-next-line no-param-reassign
     state.startingChar = lastChar;
-
-    function stopGame() {
-      redis.del(channel.id);
-    }
   };
 
   return shiritoriListener;

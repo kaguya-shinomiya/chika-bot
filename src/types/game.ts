@@ -6,28 +6,27 @@ import type {
   User,
 } from "discord.js";
 import { Collection } from "discord.js";
-import type { Redis } from "ioredis";
 import { red_cross, white_check_mark } from "../assets";
 import { toListString } from "../commands/music/utils/embeds";
 import { PREFIX } from "../constants";
-import { STOP_GAME } from "../games/utils/constants";
+import { EXIT_GAME } from "../games/utils/constants";
+import { unblock } from "../games/utils/manageState";
 import {
   baseEmbed,
   detectiveEmbed,
   genericErrorEmbed,
   lightErrorEmbed,
 } from "../shared/embeds";
+import { BlockingLevel } from "./BlockingLevel";
 import type { GenericChannel } from "./command";
 import { RedisPrefixed } from "./redis";
 
 interface collectPlayersOptions {
-  redis: Redis;
   onTimeoutAccept: (players: Collection<Snowflake, User>) => void;
   onTimeoutReject?: () => void;
 }
 
 interface getOpponentResponseOptions {
-  redis: Redis;
   onAccept: () => void;
   onReject?: () => void;
 }
@@ -47,11 +46,11 @@ export abstract class Game {
 
   abstract pregame(message: Message, redis: RedisPrefixed): void;
 
-  nonBlocking?: boolean; // don't mark the channel as in-game
+  abstract blockingLevel: BlockingLevel;
 
   collectPlayers(message: Message, options: collectPlayersOptions) {
     const { author, channel } = message;
-    const { onTimeoutAccept, onTimeoutReject, redis } = options;
+    const { onTimeoutAccept, onTimeoutReject } = options;
 
     const partialEmbed = baseEmbed()
       .setDescription(
@@ -96,7 +95,7 @@ export abstract class Game {
         (players) => onTimeoutAccept(players),
         () => {
           // eslint-disable-next-line no-console
-          redis.del(channel.id);
+          unblock(this, message);
           if (onTimeoutReject) {
             onTimeoutReject();
             return;
@@ -121,7 +120,7 @@ export abstract class Game {
     options: getOpponentResponseOptions
   ) {
     const { channel, author } = message;
-    const { onAccept, onReject, redis } = options;
+    const { onAccept, onReject } = options;
     channel
       .send(
         `${opponent.toString()}! **${
@@ -150,7 +149,7 @@ export abstract class Game {
                 onAccept();
                 break;
               case red_cross:
-                redis.del(channel.id);
+                unblock(this, message);
                 if (onReject) {
                   onReject();
                 } else {
@@ -160,7 +159,7 @@ export abstract class Game {
                 }
                 break;
               default:
-                redis.del(channel.id);
+                unblock(this, message);
                 channel.send(
                   lightErrorEmbed(`No response from **${opponent.username}**.`)
                 );
@@ -191,7 +190,7 @@ export abstract class Game {
           To review the rules of **${
             this.displayTitle
           }**, use \`${PREFIX}rules ${this.title}\`.
-        \`${STOP_GAME}\` will stop the game at anytime.
+        \`${EXIT_GAME}\` will stop the game at anytime.
         
         ${options?.startsInMessage || "I'll start the game in 5 seconds!"}
         `

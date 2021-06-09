@@ -1,5 +1,5 @@
 import { Shiritori } from "./shiritori";
 
-const shiritori = new Shiritori();
+const shiritori: Readonly<Shiritori> = new Shiritori();
 
 export default shiritori;

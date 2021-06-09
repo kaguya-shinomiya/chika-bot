@@ -1,5 +1,4 @@
 import type { Message } from "discord.js";
-import { __dev__ } from "../../constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { sendTaggedSelfError } from "./embeds";
 
@@ -32,7 +31,7 @@ export const validateMentions = (
     );
     return false;
   }
-  if (!__dev__) {
+  if (process.env.NODE_ENV !== "development") {
     if (isTwoPlayer && mentions.users.first()!.id === author.id) {
       sendTaggedSelfError(channel);
       return false;
