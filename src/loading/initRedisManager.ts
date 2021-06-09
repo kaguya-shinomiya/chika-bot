@@ -6,9 +6,6 @@ export const initRedis = (): RedisManager => ({
   tracks: new Redis(process.env.REDISCLOUD_URL, {
     keyPrefix: "tracks:",
   }),
-  games: new Redis(process.env.REDISCLOUD_URL, {
-    keyPrefix: "game:",
-  }),
   chatbotInput: new Redis(process.env.REDISCLOUD_URL, {
     keyPrefix: "chatbotInput:",
   }),

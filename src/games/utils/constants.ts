@@ -1,2 +1,2 @@
-export const EXIT_GAME_RE = /^;exitgame$/i;
-export const EXIT_GAME = ";exitgame";
+export const EXIT_GAME_RE = /^;stopgame$/i;
+export const EXIT_GAME = ";stopgame";

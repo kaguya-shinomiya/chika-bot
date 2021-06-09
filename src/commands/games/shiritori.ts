@@ -1,5 +1,5 @@
 import { PREFIX } from "../../constants";
-import Shiritori from "../../games/shiritori";
+import { shiritoriGame } from "../../games/shiritori";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
@@ -21,8 +21,8 @@ const shiritori: Command = {
       return;
     }
 
-    checkAndBlock(Shiritori, message).then(
-      () => Shiritori.pregame(message),
+    checkAndBlock(shiritoriGame, message).then(
+      () => shiritoriGame.pregame(message),
       (err) => message.channel.send(lightErrorEmbed(err))
     );
   },
