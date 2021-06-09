@@ -10,7 +10,7 @@ const daily: Command = {
   argsCount: 0,
   description: "Collect your daily dose of ribbons.",
   usage: `${PREFIX}daily`,
-  async execute(message, _, { ribbonsRedis: redis }) {
+  async execute(message) {
     const { author, channel, client } = message;
 
     const cooldownDuration = await client.cooldownManager.getCooldown(
@@ -41,7 +41,7 @@ const daily: Command = {
 
     client.cooldownManager.setCooldown(author.id, this.name, cooldown);
 
-    redis.incrby(author.id, toAward);
+    client.redisManager.ribbons.incrby(author.id, toAward);
   },
 };
 

@@ -12,7 +12,7 @@ export const search: Command = {
   category: "Music",
   usage: `${PREFIX}search <search_string>`,
   channelCooldown: 15000,
-  async execute(message, args, { tracksRedis: redis }) {
+  async execute(message, args) {
     const { channel, client, guild } = message;
     if (!guild) {
       sendNotInGuild(channel);
@@ -36,7 +36,7 @@ export const search: Command = {
     const resultSelectListener = createResultSelectListener(results, {
       channelId: channel.id,
       guildId: guild.id,
-      redis,
+      redis: client.redisManager.tracks,
     });
     const timeoutCallback = () => {
       client.removeListener("message", resultSelectListener);

@@ -14,7 +14,8 @@ const avatar: Command = {
   category: "Fun",
   usage: `${PREFIX}avatar [user ...]`,
   argsCount: -1,
-  async execute({ mentions, author, channel }) {
+  async execute(message) {
+    const { mentions, author, channel } = message;
     if (!mentions.users.size) {
       channel.send(avatarEmbed(author));
       return;

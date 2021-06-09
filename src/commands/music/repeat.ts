@@ -10,7 +10,7 @@ const repeat: Command = {
   category: "Music",
   usage: `${PREFIX}repeat`,
   description: "Repeats the current track once.",
-  async execute(message, _args, { tracksRedis: redis }) {
+  async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
@@ -23,7 +23,10 @@ const repeat: Command = {
     }
 
     sendRepeat(channel, { videoData: audioUtils.nowPlaying, author });
-    redis.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
+    client.redisManager.tracks.lpush(
+      guild.id,
+      JSON.stringify(audioUtils.nowPlaying)
+    );
   },
 };
 

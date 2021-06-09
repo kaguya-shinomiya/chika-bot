@@ -10,7 +10,7 @@ const skip: Command = {
   usage: `${PREFIX}skip`,
   argsCount: 0,
   category: "Music",
-  async execute(message, _args, { tracksRedis: redis }) {
+  async execute(message) {
     const { channel, guild, client, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
@@ -40,7 +40,6 @@ const skip: Command = {
     createFinishListener(guild, {
       channel,
       client,
-      redis,
     })();
   },
 };

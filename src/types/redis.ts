@@ -1,12 +1,14 @@
 import type { Redis } from "ioredis";
 
 interface RedisPrefixed {
-  defaultRedis: Redis;
-  tracksRedis: Redis;
-  gamesRedis: Redis;
-  chatbotInputRedis: Redis;
-  chatbotResponseRedis: Redis;
-  ribbonsRedis: Redis;
+  default: Redis;
+  tracks: Redis;
+  games: Redis;
+  chatbotInput: Redis;
+  chatbotResponse: Redis;
+  ribbons: Redis;
 }
 
-export type { RedisPrefixed };
+interface RedisManager extends RedisPrefixed {}
+
+export type { RedisPrefixed, RedisManager };

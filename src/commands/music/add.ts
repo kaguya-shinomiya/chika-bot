@@ -13,8 +13,8 @@ const add: Command = {
   category: "Music",
   usage: `${PREFIX}add <url|search_string>`,
   description: "Adds a track to the queue.",
-  async execute(message, args, { tracksRedis: redis }) {
-    const { channel, guild, author } = message;
+  async execute(message, args) {
+    const { channel, guild, author, client } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
@@ -25,7 +25,7 @@ const add: Command = {
       return;
     }
 
-    redis.rpush(guild.id, JSON.stringify(videoData));
+    client.redisManager.tracks.rpush(guild.id, JSON.stringify(videoData));
     sendAddedToQueue(channel, { videoData, author });
   },
 };

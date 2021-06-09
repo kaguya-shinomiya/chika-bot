@@ -14,8 +14,8 @@ const insert: Command = {
   category: "Music",
   usage: `${PREFIX}addd <url|search_string>`,
   description: "Inserts a track to the front of the queue.",
-  async execute(message, args, { tracksRedis: redis }) {
-    const { channel, guild, author } = message;
+  async execute(message, args) {
+    const { channel, guild, author, client } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
@@ -27,7 +27,7 @@ const insert: Command = {
       return;
     }
 
-    redis.lpush(guild.id, JSON.stringify(videoData));
+    client.redisManager.tracks.lpush(guild.id, JSON.stringify(videoData));
     sendAddedToQueue(channel, { videoData, author });
   },
 };

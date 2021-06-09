@@ -1,5 +1,4 @@
 import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
-import { RedisPrefixed } from "./redis";
 
 type commandCategory = "Fun" | "Utility" | "Music" | "Currency" | "Game";
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
@@ -21,7 +20,7 @@ class Command {
 
   userCooldown?: number;
 
-  execute!: (message: Message, args: string[], redis: RedisPrefixed) => void;
+  execute!: (message: Message, args: string[]) => void;
 }
 
 export type { Command, commandCategory, GenericChannel };

@@ -12,8 +12,8 @@ const addPlaylist: Command = {
   category: "Music",
   description: "Add a YouTube playlist to the queue.",
   usage: `${PREFIX}addp <url>`,
-  execute(message, args, { tracksRedis: redis }) {
-    const { guild, channel, author } = message;
+  execute(message, args) {
+    const { guild, channel, author, client } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
@@ -22,7 +22,10 @@ const addPlaylist: Command = {
     ytpl(playlistURL)
       .then((res) => {
         const [playlistMetadata, videos] = parsePlaylist(res);
-        redis.rpush(guild.id, ...videos.map((video) => JSON.stringify(video)));
+        client.redisManager.tracks.rpush(
+          guild.id,
+          ...videos.map((video) => JSON.stringify(video))
+        );
         channel.send(
           withAuthorEmbed(author)
             .setTitle("Added Playlist")

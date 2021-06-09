@@ -10,14 +10,14 @@ const clear: Command = {
   aliases: ["c"],
   category: "Music",
   usage: `${PREFIX}clear`,
-  async execute(message, _args, { tracksRedis: redis }) {
-    const { guild, channel, author } = message;
+  async execute(message) {
+    const { guild, channel, author, client } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
     }
 
-    redis.del(guild.id).then((res) => {
+    client.redisManager.tracks.del(guild.id).then((res) => {
       if (!res) {
         channel.send(lightErrorEmbed("Queue is already empty."));
         return;

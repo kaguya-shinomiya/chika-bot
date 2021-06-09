@@ -12,7 +12,7 @@ const message: Event = {
   name: "message",
   once: false,
   // eslint-disable-next-line no-shadow
-  async listener(client, redis, message: Message) {
+  async listener(client, message: Message) {
     if (!PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
 
     const args = message.content.split(/ +/);
@@ -40,7 +40,7 @@ const message: Event = {
     if (await isOnCooldown(message, command)) return;
 
     try {
-      command.execute(message, args, redis);
+      command.execute(message, args);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);

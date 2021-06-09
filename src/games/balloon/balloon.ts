@@ -1,9 +1,8 @@
 import type { Client, Collection, Message, User } from "discord.js";
 import { baseEmbed } from "../../shared/embeds";
+import { BlockingLevel } from "../../types/BlockingLevel";
 import { GenericChannel } from "../../types/command";
 import { Game } from "../../types/game";
-import { BlockingLevel } from "../../types/BlockingLevel";
-import { RedisPrefixed } from "../../types/redis";
 import { createBalloonListener } from "./utils/listener";
 import { BalloonState } from "./utils/types";
 
@@ -22,10 +21,9 @@ export class Balloon extends Game {
 
   blockingLevel = BlockingLevel.guild;
 
-  pregame(message: Message, redis: RedisPrefixed) {
+  pregame(message: Message) {
     const { channel, client } = message;
     this.collectPlayers(message, {
-      redis: redis.gamesRedis,
       onTimeoutAccept: (players) => {
         this.sendParticipants(
           channel,
@@ -34,16 +32,16 @@ export class Balloon extends Game {
             startsInMessage: `Carry on with your lives. ʕ•ᴥ•ʔ Each time you send something, the balloon gets pumped. You'll know when it pops.`,
           }
         );
-        this.startGame(players, { channel, client, redis });
+        this.startGame(players, { channel, client });
       },
     });
   }
 
   startGame(
     players: Collection<string, User>,
-    meta: { channel: GenericChannel; client: Client; redis: RedisPrefixed }
+    meta: { channel: GenericChannel; client: Client }
   ) {
-    const { channel, client, redis } = meta;
+    const { channel, client } = meta;
     const tolerance = Math.floor(Math.random() * 500 + 10);
     const initState: BalloonState = {
       gameTitle: this.title,
@@ -53,6 +51,6 @@ export class Balloon extends Game {
       players,
     };
 
-    client.once("message", createBalloonListener(initState, redis));
+    client.once("message", createBalloonListener(initState));
   }
 }

@@ -3,6 +3,7 @@ import type { Ok } from "ioredis";
 import { Command } from "./command";
 import { Game } from "./game";
 import { AudioUtils } from "./queue";
+import { RedisManager } from "./redis";
 
 interface CooldownManager {
   setCooldown: (
@@ -32,6 +33,7 @@ declare module "discord.js" {
     gamesList: string[];
 
     cooldownManager: CooldownManager;
+    redisManager: RedisManager;
 
     cache: DiscordClientCache;
   }

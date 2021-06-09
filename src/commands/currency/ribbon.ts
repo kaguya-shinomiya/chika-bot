@@ -10,8 +10,15 @@ export const ribbon: Command = {
   category: "Currency",
   aliases: ["r"],
   usage: `${PREFIX}ribbon [user ...]`,
-  async execute(message, _args, { ribbonsRedis: redis }) {
-    const { mentions, author, channel } = message;
+  async execute(message) {
+    const {
+      mentions,
+      author,
+      channel,
+      client: {
+        redisManager: { ribbons: redis },
+      },
+    } = message;
     const taggedUsers = mentions.users;
     const ribbonStock = new Collection<User, string | null>();
 

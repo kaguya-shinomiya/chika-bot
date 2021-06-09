@@ -1,7 +1,7 @@
 import Discord from "discord.js";
 import { initCooldownManager } from "./loading/initCooldownManager";
 import { initialClientCache } from "./loading/initialClientCache";
-import { initRedis } from "./loading/initRedis";
+import { initRedis } from "./loading/initRedisManager";
 import { loadCommands } from "./loading/loadCommands";
 import { loadEventListeners } from "./loading/loadEventListeners";
 import { loadGames } from "./loading/loadGames";
@@ -17,8 +17,10 @@ const main = async () => {
   client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
   client.cache = initialClientCache;
 
-  initCooldownManager(client);
-  loadEventListeners(client, initRedis());
+  client.redisManager = initRedis();
+  client.cooldownManager = initCooldownManager();
+
+  loadEventListeners(client);
 
   client.setMaxListeners(2048);
 };

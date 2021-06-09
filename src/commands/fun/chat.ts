@@ -11,30 +11,25 @@ const chat: Command = {
   description:
     "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
   usage: `${PREFIX}chat <message>`,
-  async execute(
-    message,
-    args,
-    {
-      chatbotInputRedis: inputRedis,
-      chatbotResponseRedis: responseRedis,
-      ribbonsRedis,
-    }
-  ) {
-    const { channel, author } = message;
+  async execute(message, args) {
+    const {
+      channel,
+      author,
+      client: {
+        redisManager: { ribbons, chatbotInput, chatbotResponse },
+      },
+    } = message;
 
     const generated_responses = (
-      await responseRedis.lrange(author.id, 0, -1)
+      await chatbotResponse.lrange(author.id, 0, -1)
     ).reverse();
     const past_user_inputs = (
-      await inputRedis.lrange(author.id, 0, -1)
+      await chatbotInput.lrange(author.id, 0, -1)
     ).reverse();
     const text = args.join(" ");
 
     const ribbonCost = text.length;
-    const ribbonStock = parseInt(
-      (await ribbonsRedis.get(author.id)) || "0",
-      10
-    );
+    const ribbonStock = parseInt((await ribbons.get(author.id)) || "0", 10);
     if (ribbonCost > ribbonStock) {
       sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
       return;
@@ -54,15 +49,15 @@ const chat: Command = {
       .then((res) => {
         const reply = res.data.generated_text;
         channel.send(reply);
-        inputRedis
+        chatbotInput
           .lpush(author.id, text)
-          .then(() => inputRedis.ltrim(author.id, 0, 2));
+          .then(() => chatbotInput.ltrim(author.id, 0, 2));
 
-        responseRedis
+        chatbotResponse
           .lpush(author.id, reply)
-          .then(() => responseRedis.ltrim(author.id, 0, 2));
+          .then(() => chatbotResponse.ltrim(author.id, 0, 2));
 
-        ribbonsRedis.decrby(author.id, ribbonCost);
+        ribbons.decrby(author.id, ribbonCost);
       })
       .catch((err) => {
         if (err.response?.data?.error?.includes(`is currently loading`)) {

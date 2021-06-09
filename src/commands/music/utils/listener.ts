@@ -8,17 +8,16 @@ import { playThis } from "./youtube";
 interface createFinishListenerParams {
   channel: GenericChannel;
   client: Client;
-  redis: Redis;
 }
 
 export function createFinishListener(
   guild: Guild,
-  { channel, client, redis }: createFinishListenerParams
+  { channel, client }: createFinishListenerParams
 ) {
   const onFinish = async () => {
     const audioUtils = client.cache.audioUtils.get(guild.id)!;
     if (!audioUtils) return;
-    redis
+    client.redisManager.tracks
       .lpop(guild.id)
       .then(async (res) => {
         if (!res) {

@@ -3,8 +3,10 @@ import { Event } from "../types/event";
 const ready: Event = {
   name: "ready",
   once: true,
-  listener(_client, redis) {
-    const { defaultRedis } = redis;
+  listener(client) {
+    const {
+      redisManager: { default: defaultRedis },
+    } = client;
     // eslint-disable-next-line no-console
     console.log("Chika bot is ready!");
     defaultRedis.set(

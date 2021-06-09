@@ -12,14 +12,14 @@ const queue: Command = {
   argsCount: 0,
   category: "Music",
   usage: `${PREFIX}queue`,
-  async execute(message, _args, { tracksRedis: redis }) {
+  async execute(message) {
     const { channel, client, guild } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
     }
 
-    redis.lrange(guild.id, 0, -1).then((tracks) => {
+    client.redisManager.tracks.lrange(guild.id, 0, -1).then((tracks) => {
       const audioUtils = client.cache.audioUtils.get(guild.id);
       if (tracks.length === 0 && !audioUtils) {
         channel.send(

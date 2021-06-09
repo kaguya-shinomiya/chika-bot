@@ -20,8 +20,9 @@ const play: Command = {
   argsCount: -1,
   category: "Music",
   description: "Let Chika play some music from YouTube for you.",
-  async execute(message, args, { tracksRedis: redis }) {
+  async execute(message, args) {
     const { channel, member, guild, client, author } = message;
+    const { tracks } = client.redisManager;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
       return;
@@ -31,7 +32,7 @@ const play: Command = {
       return;
     }
 
-    const next = await redis.lpop(guild.id);
+    const next = await tracks.lpop(guild.id);
     const audioUtils = client.cache.audioUtils.get(guild.id);
 
     // they called ck;play with no args
@@ -59,12 +60,15 @@ const play: Command = {
         channel,
         client,
         guildId: guild.id,
-        onFinish: createFinishListener(guild, { client, channel, redis }),
+        onFinish: createFinishListener(guild, {
+          client,
+          channel,
+        }),
       });
       return;
     }
 
-    if (next) redis.lpush(guild.id, next); // push next track back
+    if (next) tracks.lpush(guild.id, next); // push next track back
 
     const videoData = await validateArgs(args);
     if (!videoData) {
@@ -75,7 +79,7 @@ const play: Command = {
     // there's a song playing
     // push to the redis queue
     if (audioUtils) {
-      redis.rpush(guild.id, JSON.stringify(videoData));
+      tracks.rpush(guild.id, JSON.stringify(videoData));
       sendAddedToQueue(channel, { videoData, author });
       return;
     }
@@ -92,7 +96,7 @@ const play: Command = {
       channel,
       client,
       guildId: guild.id,
-      onFinish: createFinishListener(guild, { channel, client, redis }),
+      onFinish: createFinishListener(guild, { channel, client }),
     });
   },
 };
