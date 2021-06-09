@@ -6,7 +6,7 @@ import { endOfToday, secToWordString } from "../../utils/time";
 
 const daily: Command = {
   name: "daily",
-  category: "Fun",
+  category: "Currency",
   argsCount: 0,
   description: "Collect your daily dose of ribbons.",
   usage: `${PREFIX}daily`,
@@ -21,7 +21,7 @@ const daily: Command = {
     if (cooldownDuration) {
       channel.send(
         lightErrorEmbed(
-          `You have already collected today's ribbons! Please wait ${secToWordString(
+          `You've already collected today's ribbons! Please wait ${secToWordString(
             cooldownDuration
           )} before collecting again.`
         )
