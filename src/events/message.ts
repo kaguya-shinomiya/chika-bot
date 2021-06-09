@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import { PREFIX, PREFIX_RE } from "../constants";
+import { PREFIX, PREFIX_RE } from "../types/constants";
 import {
   badArgsEmbed,
   badCommandsEmbed,

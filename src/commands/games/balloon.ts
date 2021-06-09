@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { balloonGame } from "../../games/balloon";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";

@@ -1,5 +1,5 @@
 import ytpl from "ytpl";
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { queue } from "../../data/redisManager";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";

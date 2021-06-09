@@ -1,8 +1,8 @@
 import Discord from "discord.js";
-import { initialClientCache } from "./loading/initialClientCache";
-import { loadCommands } from "./loading/loadCommands";
-import { loadEventListeners } from "./loading/loadEventListeners";
-import { prepareCommandsHelp } from "./loading/prepareCommandsHelp";
+import { initialClientCache } from "./init/initialClientCache";
+import { loadCommands } from "./init/loadCommands";
+import { loadEventListeners } from "./init/loadEventListeners";
+import { prepareCommandsHelp } from "./init/prepareCommandsHelp";
 
 require("dotenv-safe").config();
 

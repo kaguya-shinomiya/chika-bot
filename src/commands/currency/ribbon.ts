@@ -1,5 +1,5 @@
 import { Collection, User } from "discord.js";
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { ribbons } from "../../data/redisManager";
 import { Command } from "../../types/command";
 import { sendRibbonStock } from "./utils/embeds";

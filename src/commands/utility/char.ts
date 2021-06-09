@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { getSdk } from "../../generated/graphql";
 import { Command } from "../../types/command";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";

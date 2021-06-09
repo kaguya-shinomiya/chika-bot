@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { shiritoriGame } from "../../games/shiritori";
 import { Command } from "../../types/command";
 

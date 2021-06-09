@@ -1,5 +1,5 @@
 import type { Collection, User } from "discord.js";
-import { ribbon_emoji } from "../../../assets";
+import { ribbon_emoji } from "../../../shared/assets";
 import { baseEmbed } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { toListString } from "../../music/utils/embeds";

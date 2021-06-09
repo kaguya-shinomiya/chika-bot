@@ -1,5 +1,5 @@
-import { ribbon_emoji } from "../../assets";
-import { PREFIX } from "../../constants";
+import { ribbon_emoji } from "../../shared/assets";
+import { PREFIX } from "../../types/constants";
 import { ribbons } from "../../data/redisManager";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";

@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { queue } from "../../data/redisManager";
 import { Command } from "../../types/command";
 import {

@@ -1,6 +1,6 @@
 import type { Message, Snowflake, User } from "discord.js";
 import { Collection } from "discord.js";
-import { shiritori_rules_png } from "../../assets";
+import { shiritori_rules_png } from "../../shared/assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { BlockingLevel } from "../../types/blockingLevel";
 import { Game } from "../../types/game";

@@ -1,6 +1,6 @@
 import type { User } from "discord.js";
 import he from "he";
-import { chika_detective_png } from "../../../assets";
+import { chika_detective_png } from "../../../shared/assets";
 import {
   baseEmbed,
   cryingEmbed,

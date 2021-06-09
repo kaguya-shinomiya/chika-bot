@@ -1,4 +1,4 @@
-import { unknown_png } from "../../../assets";
+import { unknown_png } from "../../../shared/assets";
 import { FuzzyDate } from "../../../generated/graphql";
 import { baseEmbed } from "../../../shared/embeds";
 import { parseHtml, truncate, wrapText } from "../../../utils/typography";

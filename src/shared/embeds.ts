@@ -8,8 +8,8 @@ import {
   chika_rap_png,
   chika_pink,
   ribbon_emoji,
-} from "../assets";
-import { PREFIX } from "../constants";
+} from "./assets";
+import { PREFIX } from "../types/constants";
 import { Command, GenericChannel } from "../types/command";
 
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);

@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";

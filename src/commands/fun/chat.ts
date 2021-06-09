@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import {
   chatbotInput,
   chatbotResponse,

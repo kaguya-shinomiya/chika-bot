@@ -6,9 +6,9 @@ const cooldownRedis = new Redis(process.env.REDISCLOUD_URL, {
 });
 
 export const setCooldown = (id: Snowflake, command: string, time: number) =>
-  cooldownRedis.set(`${id}${command}`, command, "px", time);
+  cooldownRedis.set(`${id}:${command}`, command, "px", time);
 export const getCooldown = async (id: Snowflake, command: string) => {
-  const ttl = await cooldownRedis.ttl(`${id}${command}`);
+  const ttl = await cooldownRedis.ttl(`${id}:${command}`);
   if (ttl <= 0) {
     return 0;
   }

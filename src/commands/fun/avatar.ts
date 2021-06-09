@@ -1,5 +1,5 @@
 import { MessageEmbed, User } from "discord.js";
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 

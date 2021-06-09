@@ -1,5 +1,5 @@
 import type { TextChannel } from "discord.js";
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";

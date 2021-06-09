@@ -1,5 +1,5 @@
-import { red_cross, white_check_mark } from "../../assets";
-import { PREFIX } from "../../constants";
+import { red_cross, white_check_mark } from "../../shared/assets";
+import { PREFIX } from "../../types/constants";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command } from "../../types/command";
 

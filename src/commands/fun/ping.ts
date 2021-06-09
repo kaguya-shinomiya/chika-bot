@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { redis } from "../../data/redisManager";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";

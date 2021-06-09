@@ -6,9 +6,9 @@ import type {
   User,
 } from "discord.js";
 import { Collection } from "discord.js";
-import { red_cross, white_check_mark } from "../assets";
+import { red_cross, white_check_mark } from "../shared/assets";
 import { toListString } from "../commands/music/utils/embeds";
-import { PREFIX } from "../constants";
+import { PREFIX } from "./constants";
 import { EXIT_GAME } from "../games/utils/constants";
 import { unblock } from "../games/utils/manageState";
 import {

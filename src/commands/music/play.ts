@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { queue } from "../../data/redisManager";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";

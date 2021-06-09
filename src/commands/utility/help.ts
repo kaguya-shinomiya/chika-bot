@@ -1,4 +1,4 @@
-import { PREFIX } from "../../constants";
+import { PREFIX } from "../../types/constants";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 

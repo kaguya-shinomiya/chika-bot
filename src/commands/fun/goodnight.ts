@@ -1,5 +1,5 @@
-import { kaguya_sleep_gif } from "../../assets";
-import { PREFIX } from "../../constants";
+import { kaguya_sleep_gif } from "../../shared/assets";
+import { PREFIX } from "../../types/constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 

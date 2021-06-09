@@ -1,4 +1,4 @@
-import { unknown_png } from "../../../assets";
+import { unknown_png } from "../../../shared/assets";
 import {
   Maybe,
   MediaSeason,
