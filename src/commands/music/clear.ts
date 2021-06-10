@@ -1,7 +1,7 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild } from "./utils/embeds";
 
 const clear: Command = {
@@ -9,7 +9,7 @@ const clear: Command = {
   description: "Clears all tracks from the queue.",
   argsCount: 0,
   aliases: ["c"],
-  category: "Music",
+  category: CommandCategory.music,
   usage: `${DEFAULT_PREFIX}clear`,
   async execute(message) {
     const { guild, channel, author } = message;

@@ -1,30 +1,26 @@
-import { Collection, User } from "discord.js";
+import { getRibbons } from "../../data/ribbonsManager";
+import { ribbon_emoji } from "../../shared/assets";
 import { DEFAULT_PREFIX } from "../../shared/constants";
-import { ribbons } from "../../data/redisManager";
-import { Command } from "../../types/command";
-import { sendRibbonStock } from "./utils/embeds";
+import { baseEmbed } from "../../shared/embeds";
+import { Command, CommandCategory } from "../../types/command";
 
 export const ribbon: Command = {
   name: "ribbon",
-  description: "Check how many ribbons you have.",
+  description: "Check how many ribbons you or another user has.",
   argsCount: -1,
-  category: "Currency",
+  category: CommandCategory.currency,
   aliases: ["r"],
-  usage: `${DEFAULT_PREFIX}ribbon [user ...]`,
+  usage: `${DEFAULT_PREFIX}ribbon [user]`,
   async execute(message) {
     const { mentions, author, channel } = message;
-    const taggedUsers = mentions.users;
-    const ribbonStock = new Collection<User, string | null>();
+    const user = mentions.users.first() || author;
 
-    if (!taggedUsers.size) {
-      const authorRibbons = await ribbons.get(author.id);
-      ribbonStock.set(author, authorRibbons);
-    } else {
-      const stocks = await ribbons.mget(taggedUsers.map((_user, id) => id));
-      taggedUsers.forEach((user) => ribbonStock.set(user, stocks.shift()!));
-    }
-
-    sendRibbonStock(channel, ribbonStock);
+    const stock = await getRibbons(user);
+    channel.send(
+      baseEmbed().setDescription(
+        `**${user.tag}** has **${stock}** ${ribbon_emoji}`
+      )
+    );
   },
 };
 

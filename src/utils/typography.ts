@@ -28,3 +28,5 @@ export const truncate = (s: string, max: number, byWord = false) => {
 
 export const wrapText = (s: string) =>
   s.replace(/(?![^\n]{1,40}$)([^\n]{1,40})\s/g, "$1\n");
+
+export const groupNum = new Intl.NumberFormat("en-US", { useGrouping: true });

@@ -1,12 +1,12 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 
 const help: Command = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
   usage: `${DEFAULT_PREFIX}help [command ...]`,
-  category: "Utility",
+  category: CommandCategory.utility,
   argsCount: -1,
   aliases: ["h"],
   async execute({ channel, client: { commands, commandsHelp } }, args) {

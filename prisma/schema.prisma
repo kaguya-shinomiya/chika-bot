@@ -15,7 +15,6 @@ model User {
 
 model Guild {
   id        Int       @default(autoincrement()) @id
-  prefix    String?
   shiritori Shiritori?
   balloon   Balloon?
 }

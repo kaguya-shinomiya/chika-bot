@@ -1,7 +1,7 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { QueueItem } from "../../types/queue";
 import { tryToConnect } from "./utils/client";
 import {
@@ -19,7 +19,7 @@ const play: Command = {
   aliases: ["tunes"],
   usage: `${DEFAULT_PREFIX}tunes <URL|search_string>`,
   argsCount: -1,
-  category: "Music",
+  category: CommandCategory.music,
   description: "Let Chika play some music from YouTube for you.",
   async execute(message, args) {
     const { channel, member, guild, client, author } = message;

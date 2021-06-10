@@ -1,14 +1,14 @@
+import { incrRibbons } from "../../data/ribbonsManager";
 import { ribbon_emoji } from "../../shared/assets";
 import { DEFAULT_PREFIX } from "../../shared/constants";
-import { ribbons } from "../../data/redisManager";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { getCooldown, setCooldown } from "../../utils/cooldownManager";
 import { endOfToday, secToWordString } from "../../utils/time";
 
 const daily: Command = {
   name: "daily",
-  category: "Currency",
+  category: CommandCategory.currency,
   argsCount: 0,
   description: "Collect your daily dose of ribbons.",
   usage: `${DEFAULT_PREFIX}daily`,
@@ -39,8 +39,7 @@ const daily: Command = {
     const cooldown = endOfToday() - nowStamp;
 
     setCooldown(author.id, this.name, cooldown);
-
-    ribbons.incrby(author.id, toAward);
+    incrRibbons(author, toAward);
   },
 };
 

@@ -1,12 +1,12 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const resume: Command = {
   name: "resume",
   argsCount: 0,
-  category: "Music",
+  category: CommandCategory.music,
   description: "Resume playback.",
   usage: `${DEFAULT_PREFIX}resume`,
   async execute(message) {

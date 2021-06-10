@@ -1,6 +1,6 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import {
   sendAddedToQueue,
   sendMusicOnlyInGuild,
@@ -11,7 +11,7 @@ import { validateArgs } from "./utils/youtube";
 const add: Command = {
   name: "add",
   argsCount: -2,
-  category: "Music",
+  category: CommandCategory.music,
   usage: `${DEFAULT_PREFIX}add <url|search_string>`,
   description: "Adds a track to the queue.",
   async execute(message, args) {

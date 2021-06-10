@@ -2,14 +2,15 @@ import { DEFAULT_PREFIX } from "../../shared/constants";
 import { shiritoriGame } from "../../games/shiritori";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 
 const shiritori: Command = {
   name: "shiritori",
   argsCount: -1,
-  category: "Game",
+  category: CommandCategory.game,
   description: "Play a round of Shiritori.",
   usage: `${DEFAULT_PREFIX}shiritori [opponent]`,
+  aliases: ["sh"],
   execute(message) {
     const taggedCount = message.mentions.users.size;
     if (taggedCount && taggedCount > 1) {

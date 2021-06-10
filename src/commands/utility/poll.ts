@@ -1,12 +1,12 @@
 import { red_cross, white_check_mark } from "../../shared/assets";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 
 const poll: Command = {
   name: "poll",
   argsCount: -2,
-  category: "Utility",
+  category: CommandCategory.utility,
   description: "Begin a democratic process to collect public opinion.",
   usage: `${DEFAULT_PREFIX}poll <question>`,
   aliases: ["vote"],

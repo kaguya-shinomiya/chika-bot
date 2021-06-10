@@ -1,5 +1,6 @@
 import { Collection, Message, User } from "discord.js";
 import { ribbons } from "../../../data/redisManager";
+import { getRibbons } from "../../../data/ribbonsManager";
 import { sendPopped } from "./embeds";
 
 export const postGameBalloon = async (
@@ -9,7 +10,7 @@ export const postGameBalloon = async (
   const { channel, author: popper } = message;
 
   const winners = players.filter((user) => user.id !== popper.id);
-  const popperStock = parseInt((await ribbons.get(popper.id)) || "0", 10);
+  const popperStock = await getRibbons(popper);
 
   const winAmt = Math.floor(Math.random() * 20 + 20);
   const isBankrupt = winAmt * winners.size > popperStock;

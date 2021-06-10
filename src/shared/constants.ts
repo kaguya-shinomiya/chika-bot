@@ -3,3 +3,5 @@ export const DEFAULT_PREFIX_RE = /^ck;/i;
 
 // eslint-disable-next-line no-underscore-dangle
 export const __dev__ = process.env.NODE_ENV === "development";
+
+export const GLOBAL_RIBBONS = "global";

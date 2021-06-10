@@ -2,7 +2,7 @@ import Discord from "discord.js";
 import { initialClientCache } from "./init/initialClientCache";
 import { loadCommands } from "./init/loadCommands";
 import { loadEventListeners } from "./init/loadEventListeners";
-import { prepareCommandsHelp } from "./init/prepareCommandsHelp";
+import { fullHelpEmbed } from "./init/fullHelpEmbed";
 
 require("dotenv-safe").config();
 
@@ -11,7 +11,7 @@ const main = async () => {
   client.login(process.env.APP_TOKEN);
 
   client.commands = loadCommands();
-  client.commandsHelp = prepareCommandsHelp(client.commands); // generates full help message
+  client.commandsHelp = fullHelpEmbed(client.commands); // generates full help message
 
   client.cache = initialClientCache;
 

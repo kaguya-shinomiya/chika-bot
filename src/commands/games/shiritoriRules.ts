@@ -1,11 +1,11 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { shiritoriGame } from "../../games/shiritori";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 
 const shiritoriRules: Command = {
   name: "shiritori-rules",
   argsCount: 0,
-  category: "Game",
+  category: CommandCategory.game,
   description: "Check the rules for Shiritori.",
   usage: `${DEFAULT_PREFIX}shiritori-rules`,
   execute(message) {

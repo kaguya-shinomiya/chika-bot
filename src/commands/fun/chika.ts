@@ -6,13 +6,14 @@ import {
   ribbons,
 } from "../../data/redisManager";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { ChatbotInput } from "./utils/types";
 
-const chat: Command = {
-  name: "chat",
+const chika: Command = {
+  name: "chika",
+  aliases: ["ck"],
   argsCount: -2,
-  category: "Fun",
+  category: CommandCategory.fun,
   description:
     "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
   usage: `${DEFAULT_PREFIX}chat <message>`,
@@ -49,12 +50,16 @@ const chat: Command = {
         const reply = res.data.generated_text;
         channel.send(reply);
         chatbotInput
+          .pipeline()
           .lpush(author.id, text)
-          .then(() => chatbotInput.ltrim(author.id, 0, 2));
+          .ltrim(author.id, 0, 2)
+          .exec();
 
         chatbotResponse
+          .pipeline()
           .lpush(author.id, reply)
-          .then(() => chatbotResponse.ltrim(author.id, 0, 2));
+          .ltrim(author.id, 0, 2)
+          .exec();
 
         ribbons.decrby(author.id, ribbonCost);
       })
@@ -70,4 +75,4 @@ const chat: Command = {
   },
 };
 
-export default chat;
+export default chika;

@@ -2,7 +2,7 @@ import type { TextChannel } from "discord.js";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { sendNotFoundError } from "./embeds/errors";
 import { mangaInfoEmbed } from "./embeds/mangaInfoEmbed";
 import { client } from "./graphql/aniListClient";
@@ -11,7 +11,7 @@ export const manga: Command = {
   name: "manga",
   description: "Look up info for a manga.",
   argsCount: -2,
-  category: "Utility",
+  category: CommandCategory.utility,
   usage: `${DEFAULT_PREFIX}manga <manga_title>`,
   async execute(message, args) {
     const { channel } = message;

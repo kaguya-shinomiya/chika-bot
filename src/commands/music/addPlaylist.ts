@@ -2,7 +2,7 @@ import ytpl from "ytpl";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { parsePlaylist } from "./utils/youtube";
 
@@ -10,7 +10,7 @@ const addPlaylist: Command = {
   name: "add-playlist",
   argsCount: 1,
   aliases: ["ap"],
-  category: "Music",
+  category: CommandCategory.music,
   description: "Add a YouTube playlist to the queue.",
   usage: `${DEFAULT_PREFIX}addp <url>`,
   execute(message, args) {

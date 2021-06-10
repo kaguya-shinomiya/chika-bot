@@ -61,7 +61,7 @@ export const genericErrorEmbed = () =>
 
 export const withAuthorEmbed = (author: User) =>
   baseEmbed().setFooter(
-    `Requested by ${author.username}`,
+    `Requested by ${author.tag}`,
     author.displayAvatarURL({ size: 32, dynamic: false })
   );
 

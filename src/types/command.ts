@@ -1,6 +1,15 @@
 import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 
-type commandCategory = "Fun" | "Utility" | "Music" | "Currency" | "Game";
+// eslint-disable-next-line no-shadow
+export enum CommandCategory {
+  fun = ":coffee: Fun",
+  utility = ":satellite: Utility",
+  music = ":headphones: Music",
+  currency = ":moneybag: Currency",
+  game = ":video_game: Game",
+}
+
+// type commandCategory = "Fun" | "Utility" | "Music" | "Currency" | "Game";
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
 class Command {
@@ -8,7 +17,7 @@ class Command {
 
   description!: string;
 
-  category!: commandCategory;
+  category!: CommandCategory;
 
   usage!: string;
 
@@ -23,4 +32,4 @@ class Command {
   execute!: (message: Message, args: string[]) => void;
 }
 
-export type { Command, commandCategory, GenericChannel };
+export type { Command, GenericChannel };

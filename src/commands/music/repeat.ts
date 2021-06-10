@@ -1,14 +1,14 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisManager";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 
 const repeat: Command = {
   name: "repeat",
   aliases: ["rp"],
   argsCount: 0,
-  category: "Music",
+  category: CommandCategory.music,
   usage: `${DEFAULT_PREFIX}repeat`,
   description: "Repeats the current track once.",
   async execute(message) {
