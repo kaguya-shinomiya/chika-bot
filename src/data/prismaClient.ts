@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
-import type { Snowflake } from "discord.js";
-import { guildPrefix } from "./redisClient";
+import type { Snowflake, User } from "discord.js";
+import { GLOBAL_RIBBONS } from "../shared/constants";
+import { guildPrefix, ribbons } from "./redisClient";
 
 class ChikaPrisma extends PrismaClient {
   async getPrefix(guildId: Snowflake) {
@@ -25,6 +26,26 @@ class ChikaPrisma extends PrismaClient {
       update: { prefix },
       where: { guildId },
     });
+  }
+
+  async incrRibbon(user: User, incrby: number) {
+    await this.user
+      .upsert({
+        create: { userId: user.id, username: user.username, ribbons: incrby },
+        update: { ribbons: { increment: incrby } },
+        where: { userId: user.id },
+      })
+      .then((_user) => ribbons.zadd(GLOBAL_RIBBONS, [_user.ribbons, user.tag]));
+  }
+
+  async decrRibbon(user: User, decrby: number) {
+    await this.user
+      .upsert({
+        create: { userId: user.id, username: user.username, ribbons: 0 },
+        update: { ribbons: { decrement: decrby } },
+        where: { userId: user.id },
+      })
+      .then((_user) => ribbons.zadd(GLOBAL_RIBBONS, [_user.ribbons, user.tag]));
   }
 }
 

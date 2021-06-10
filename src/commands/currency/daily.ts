@@ -1,4 +1,4 @@
-import { incrRibbons } from "../../data/ribbonsManager";
+import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
@@ -39,7 +39,7 @@ const daily: Command = {
     const cooldown = endOfToday() - nowStamp;
 
     setCooldown(author.id, this.name, cooldown);
-    incrRibbons(author, toAward);
+    prisma.incrRibbon(author, toAward);
   },
 };
 

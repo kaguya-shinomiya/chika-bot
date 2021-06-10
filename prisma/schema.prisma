@@ -11,6 +11,7 @@ model User {
   id        Int       @default(autoincrement()) @id
   userId    String    @unique 
   username  String
+  ribbons   Int
 }
 
 model Guild {
