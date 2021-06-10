@@ -2,7 +2,7 @@ import type { User } from "discord.js";
 import { Collection } from "discord.js";
 import _ from "lodash";
 import { GLOBAL_RIBBONS } from "../shared/constants";
-import { ribbons } from "./redisManager";
+import { ribbons } from "./redisClient";
 
 export const incrRibbons = (user: User, incrby: number) =>
   ribbons.zincrby(GLOBAL_RIBBONS, incrby, user.tag);

@@ -1,10 +1,7 @@
 import axios from "axios";
+import { chatbotInput, chatbotResponse } from "../../data/redisClient";
+import { decrRibbons, getRibbons } from "../../data/ribbonsManager";
 import { DEFAULT_PREFIX } from "../../shared/constants";
-import {
-  chatbotInput,
-  chatbotResponse,
-  ribbons,
-} from "../../data/redisManager";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { ChatbotInput } from "./utils/types";
@@ -29,7 +26,7 @@ const chika: Command = {
     const text = args.join(" ");
 
     const ribbonCost = text.length;
-    const ribbonStock = parseInt((await ribbons.get(author.id)) || "0", 10);
+    const ribbonStock = await getRibbons(author);
     if (ribbonCost > ribbonStock) {
       sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
       return;
@@ -51,17 +48,17 @@ const chika: Command = {
         channel.send(reply);
         chatbotInput
           .pipeline()
-          .lpush(author.id, text)
-          .ltrim(author.id, 0, 2)
+          .lpush(channel.id, text)
+          .ltrim(channel.id, 0, 2)
           .exec();
 
         chatbotResponse
           .pipeline()
-          .lpush(author.id, reply)
-          .ltrim(author.id, 0, 2)
+          .lpush(channel.id, reply)
+          .ltrim(channel.id, 0, 2)
           .exec();
 
-        ribbons.decrby(author.id, ribbonCost);
+        decrRibbons(author, ribbonCost);
       })
       .catch((err) => {
         if (err.response?.data?.error?.includes(`is currently loading`)) {

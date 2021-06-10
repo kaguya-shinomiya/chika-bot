@@ -1,5 +1,5 @@
+import { redis } from "../../data/redisClient";
 import { DEFAULT_PREFIX } from "../../shared/constants";
-import { redis } from "../../data/redisManager";
 import { baseEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 

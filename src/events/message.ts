@@ -1,5 +1,6 @@
 import { Message } from "discord.js";
-import { DEFAULT_PREFIX, DEFAULT_PREFIX_RE } from "../shared/constants";
+import { prisma } from "../data/prismaClient";
+import { DEFAULT_PREFIX } from "../shared/constants";
 import {
   badArgsEmbed,
   badCommandsEmbed,
@@ -13,10 +14,18 @@ const message: Event = {
   once: false,
   // eslint-disable-next-line no-shadow
   async listener(client, message: Message) {
-    if (!DEFAULT_PREFIX_RE.test(message.content) || message.author.bot) return; // absolute guard conditions
+    const { guild, content, author, channel } = message;
+    if (author.bot) return;
 
-    const args = message.content.split(/ +/);
-    const sentCommand = args.shift()?.toLowerCase().replace(DEFAULT_PREFIX, "");
+    let prefix = DEFAULT_PREFIX;
+    if (guild) {
+      prefix = (await prisma.getPrefix(guild.id)) || DEFAULT_PREFIX;
+    }
+    const prefixRe = new RegExp(`^${prefix}`, "i");
+    if (!prefixRe.test(content)) return;
+
+    const args = content.split(/ +/);
+    const sentCommand = args.shift()?.toLowerCase().replace(prefix, "");
     if (!sentCommand) return;
     const command = client.commands.find(
       (_command) =>
@@ -24,27 +33,28 @@ const message: Event = {
         !!_command.aliases?.includes(sentCommand)
     );
     if (!command) {
-      message.channel.send(badCommandsEmbed(sentCommand));
+      channel.send(badCommandsEmbed(sentCommand));
       return;
     }
 
     if (command.argsCount >= 0 && args.length !== command.argsCount) {
-      message.channel.send(badArgsEmbed(command, args.length));
+      channel.send(badArgsEmbed(command, args.length));
       return;
     }
     if (command.argsCount === -2 && args.length === 0) {
-      message.channel.send(badArgsEmbed(command, args.length));
+      channel.send(badArgsEmbed(command, args.length));
       return;
     }
 
     if (await isOnCooldown(message, command)) return;
 
     try {
+      // TODO make every execute cmd async yo, then use .catch
       command.execute(message, args);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.log(err);
-      message.channel.send(genericErrorEmbed());
+      channel.send(genericErrorEmbed());
     }
   },
 };

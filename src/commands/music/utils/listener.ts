@@ -1,5 +1,5 @@
 import { Client, Guild, Message } from "discord.js";
-import { queue } from "../../../data/redisManager";
+import { queue } from "../../../data/redisClient";
 import { GenericChannel } from "../../../types/command";
 import { QueueItem } from "../../../types/queue";
 import { sendAddedToQueue, sendFinishedAllTracks } from "./embeds";

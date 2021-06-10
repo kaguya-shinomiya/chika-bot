@@ -2,7 +2,7 @@ import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
-import { queue as tracks } from "../../data/redisManager";
+import { queue as tracks } from "../../data/redisClient";
 
 // TODO use paginated embed for this
 

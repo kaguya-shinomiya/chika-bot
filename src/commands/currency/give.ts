@@ -1,4 +1,4 @@
-import { ribbons } from "../../data/redisManager";
+import { ribbons } from "../../data/redisClient";
 import { getRibbons } from "../../data/ribbonsManager";
 import { ribbon_emoji } from "../../shared/assets";
 import { DEFAULT_PREFIX, GLOBAL_RIBBONS } from "../../shared/constants";

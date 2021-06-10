@@ -1,6 +1,7 @@
 import { Collection, Message, User } from "discord.js";
-import { ribbons } from "../../../data/redisManager";
+import { ribbons } from "../../../data/redisClient";
 import { getRibbons } from "../../../data/ribbonsManager";
+import { GLOBAL_RIBBONS } from "../../../shared/constants";
 import { sendPopped } from "./embeds";
 
 export const postGameBalloon = async (
@@ -18,11 +19,11 @@ export const postGameBalloon = async (
   sendPopped(channel, { popper, isBankrupt, winAmt });
 
   const pipeline = ribbons.pipeline();
-  winners.forEach((user) => pipeline.incrby(user.id, winAmt));
+  winners.forEach((user) => pipeline.zincrby(GLOBAL_RIBBONS, winAmt, user.tag));
   if (isBankrupt) {
-    pipeline.set(popper.id, 0);
+    pipeline.zrem(GLOBAL_RIBBONS, popper.tag);
   } else {
-    pipeline.decrby(popper.id, winAmt * winners.size);
+    pipeline.zincrby(GLOBAL_RIBBONS, -(winAmt * winners.size), popper.tag);
   }
   pipeline.exec();
 };

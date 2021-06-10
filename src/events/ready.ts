@@ -1,4 +1,4 @@
-import { redis } from "../data/redisManager";
+import { redis } from "../data/redisClient";
 import { Event } from "../types/event";
 
 const ready: Event = {

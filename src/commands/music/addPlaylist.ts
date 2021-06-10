@@ -1,6 +1,6 @@
 import ytpl from "ytpl";
 import { DEFAULT_PREFIX } from "../../shared/constants";
-import { queue } from "../../data/redisManager";
+import { queue } from "../../data/redisClient";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";

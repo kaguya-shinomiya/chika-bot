@@ -1,5 +1,5 @@
 import { DEFAULT_PREFIX } from "../../shared/constants";
-import { queue } from "../../data/redisManager";
+import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
