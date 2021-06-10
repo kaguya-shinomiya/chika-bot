@@ -1,12 +1,13 @@
-import { unknown_png } from "../../../shared/assets";
+import _ from "lodash";
 import {
   Maybe,
   MediaSeason,
   MediaSource,
   MediaStatus,
 } from "../../../generated/graphql";
+import { unknown_png } from "../../../shared/assets";
 import { baseEmbed } from "../../../shared/embeds";
-import { capitalize, parseHtml } from "../../../utils/typography";
+import { parseHtml } from "../../../utils/typography";
 
 interface animeEmbedParams {
   title: string | null | undefined;
@@ -43,19 +44,13 @@ export const animeInfoEmbed = (info: animeEmbedParams) => {
     .addFields([
       {
         name: ":film_frames: Status",
-        value: status
-          ? capitalize(status.replace(/_/g, " ").toLowerCase(), {
-              onlyFirst: true,
-            })
-          : "?",
+        value: status ? _.capitalize(status.replace(/_/g, " ")) : "?",
         inline: true,
       },
       {
         name: ":cherry_blossom: Season",
         value:
-          seasonYear && season
-            ? `${capitalize(season.toLowerCase())} ${seasonYear}`
-            : "?",
+          seasonYear && season ? `${_.startCase(season)} ${seasonYear}` : "?",
         inline: true,
       },
     ])
@@ -73,9 +68,7 @@ export const animeInfoEmbed = (info: animeEmbedParams) => {
       },
       {
         name: ":ramen: Sauce",
-        value: source
-          ? capitalize(source.replace(/_/g, " ").toLowerCase())
-          : "?",
+        value: source ? _.startCase(source.replace(/_/g, " ")) : "?",
         inline: true,
       },
     ]);

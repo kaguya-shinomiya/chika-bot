@@ -9,6 +9,7 @@
     "@types/ffmpeg-static": "^3.0.0",
     "@types/he": "^1.1.1",
     "@types/ioredis": "^4.26.4",
+    "@types/lodash": "^4.14.170",
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.3.0",
     "@types/ws": "^7.4.4",
@@ -40,6 +41,7 @@
     "graphql-tag": "^2.12.4",
     "he": "^1.2.0",
     "ioredis": "^4.27.5",
+    "lodash": "^4.17.21",
     "ytdl-core": "^4.8.2",
     "ytpl": "^2.2.1",
     "ytsr": "^3.5.0"

@@ -1,5 +1,6 @@
-import { Collection } from "discord.js";
 import type { User } from "discord.js";
+import { Collection } from "discord.js";
+import _ from "lodash";
 import { GLOBAL_RIBBONS } from "../shared/constants";
 import { ribbons } from "./redisManager";
 
@@ -22,3 +23,8 @@ export const mgetRibbons = async (users: User[]) => {
   stock.forEach((_stock) => col.set(users.shift()!, _stock));
   return col;
 };
+
+export const getGlobalTop = (top = 10) =>
+  ribbons
+    .zrevrange(GLOBAL_RIBBONS, 0, top - 1, "WITHSCORES")
+    .then((pairs) => Promise.resolve(_.chunk(pairs, 2)));

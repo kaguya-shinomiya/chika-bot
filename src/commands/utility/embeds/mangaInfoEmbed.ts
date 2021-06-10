@@ -1,12 +1,13 @@
-import { unknown_png } from "../../../shared/assets";
+import _ from "lodash";
 import {
   FuzzyDate,
   Maybe,
   MediaSource,
   MediaStatus,
 } from "../../../generated/graphql";
+import { unknown_png } from "../../../shared/assets";
 import { baseEmbed } from "../../../shared/embeds";
-import { capitalize, parseHtml } from "../../../utils/typography";
+import { parseHtml } from "../../../utils/typography";
 
 interface mangaEmbedParams {
   title: string | null | undefined;
@@ -56,11 +57,7 @@ export const mangaInfoEmbed = (info: mangaEmbedParams) => {
     .addFields([
       {
         name: ":pencil: Status",
-        value: status
-          ? capitalize(status.replace(/_/g, " ").toLowerCase(), {
-              onlyFirst: true,
-            })
-          : "?",
+        value: status ? _.capitalize(status.replace(/_/g, " ")) : "?",
         inline: true,
       },
       {
@@ -72,9 +69,7 @@ export const mangaInfoEmbed = (info: mangaEmbedParams) => {
       },
       {
         name: ":ramen: Sauce",
-        value: source
-          ? capitalize(source.replace(/_/g, " ").toLowerCase())
-          : "?",
+        value: source ? _.capitalize(source.replace(/_/g, " ")) : "?",
         inline: true,
       },
     ])

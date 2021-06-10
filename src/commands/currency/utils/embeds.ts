@@ -15,3 +15,16 @@ export const sendRibbonStock = (
     baseEmbed().setDescription(toListString(lines, { noNum: true }))
   );
 };
+
+export const sendTop = (channel: GenericChannel, top: string[][]) => {
+  const lines = top.map((pair) => {
+    const [tag, rb] = pair;
+    return `**${tag}** - ${rb} ${ribbon_emoji}`;
+  });
+  channel.send(
+    baseEmbed()
+      .setTitle(`Economic Inequalities in the 21st Century :coin:`)
+      .setDescription(toListString(lines))
+      .setFooter(`Showing top ${lines.length}`)
+  );
+};
