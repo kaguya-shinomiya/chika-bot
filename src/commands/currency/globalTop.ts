@@ -1,4 +1,4 @@
-import { getGlobalTop } from "../../data/ribbonsManager";
+import { getGlobalTop } from "../../data/redisRibbonManager";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { Command, CommandCategory } from "../../types/command";
 import { sendTop } from "./utils/embeds";

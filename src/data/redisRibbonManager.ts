@@ -4,12 +4,6 @@ import _ from "lodash";
 import { GLOBAL_RIBBONS } from "../shared/constants";
 import { ribbons } from "./redisClient";
 
-export const incrRibbons = (user: User, incrby: number) =>
-  ribbons.zincrby(GLOBAL_RIBBONS, incrby, user.tag);
-
-export const decrRibbons = (user: User, decrby: number) =>
-  ribbons.zincrby(GLOBAL_RIBBONS, -decrby, user.tag);
-
 export const getRibbons = (user: User) =>
   ribbons.zscore(GLOBAL_RIBBONS, user.tag).then((res) => {
     if (!res) return Promise.resolve(0);

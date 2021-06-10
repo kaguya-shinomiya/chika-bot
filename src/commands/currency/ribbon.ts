@@ -1,4 +1,4 @@
-import { getRibbons } from "../../data/ribbonsManager";
+import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
@@ -15,7 +15,7 @@ export const ribbon: Command = {
     const { mentions, author, channel } = message;
     const user = mentions.users.first() || author;
 
-    const stock = await getRibbons(user);
+    const stock = await prisma.getRibbons(user);
     channel.send(
       baseEmbed().setDescription(
         `**${user.tag}** has **${stock}** ${ribbon_emoji}`

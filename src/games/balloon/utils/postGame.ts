@@ -1,6 +1,6 @@
 import { Collection, Message, User } from "discord.js";
 import { ribbons } from "../../../data/redisClient";
-import { getRibbons } from "../../../data/ribbonsManager";
+import { getRibbons } from "../../../data/redisRibbonManager";
 import { GLOBAL_RIBBONS } from "../../../shared/constants";
 import { sendPopped } from "./embeds";
 

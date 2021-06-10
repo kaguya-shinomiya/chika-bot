@@ -28,7 +28,25 @@ class ChikaPrisma extends PrismaClient {
     });
   }
 
-  async incrRibbon(user: User, incrby: number) {
+  async getRibbons(user: User) {
+    const ping = await ribbons.zscore(GLOBAL_RIBBONS, user.tag);
+    if (ping) return parseInt(ping, 10);
+    return this.user
+      .findUnique({
+        where: { userId: user.id },
+        select: { ribbons: true },
+      })
+      .then((res) => {
+        if (!res?.ribbons) {
+          ribbons.zadd(GLOBAL_RIBBONS, [0, user.tag]);
+          return 0;
+        }
+        ribbons.zadd(GLOBAL_RIBBONS, [res.ribbons, user.tag]);
+        return res.ribbons;
+      });
+  }
+
+  async incrRibbons(user: User, incrby: number) {
     await this.user
       .upsert({
         create: { userId: user.id, username: user.username, ribbons: incrby },
@@ -38,7 +56,7 @@ class ChikaPrisma extends PrismaClient {
       .then((_user) => ribbons.zadd(GLOBAL_RIBBONS, [_user.ribbons, user.tag]));
   }
 
-  async decrRibbon(user: User, decrby: number) {
+  async decrRibbons(user: User, decrby: number) {
     await this.user
       .upsert({
         create: { userId: user.id, username: user.username, ribbons: 0 },

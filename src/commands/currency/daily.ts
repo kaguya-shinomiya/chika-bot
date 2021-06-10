@@ -39,7 +39,7 @@ const daily: Command = {
     const cooldown = endOfToday() - nowStamp;
 
     setCooldown(author.id, this.name, cooldown);
-    prisma.incrRibbon(author, toAward);
+    prisma.incrRibbons(author, toAward);
   },
 };
 

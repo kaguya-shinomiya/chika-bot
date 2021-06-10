@@ -1,7 +1,7 @@
-import { ribbons } from "../../data/redisClient";
-import { getRibbons } from "../../data/ribbonsManager";
+import { prisma } from "../../data/prismaClient";
+import { getRibbons } from "../../data/redisRibbonManager";
 import { ribbon_emoji } from "../../shared/assets";
-import { DEFAULT_PREFIX, GLOBAL_RIBBONS } from "../../shared/constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { groupNum } from "../../utils/typography";
@@ -44,11 +44,8 @@ const give: Command = {
       return;
     }
 
-    ribbons
-      .pipeline()
-      .zincrby(GLOBAL_RIBBONS, donation, beneficiary.tag)
-      .zincrby(GLOBAL_RIBBONS, -donation, author.tag)
-      .exec();
+    prisma.incrRibbons(beneficiary, donation);
+    prisma.decrRibbons(author, donation);
 
     channel.send(
       baseEmbed().setDescription(

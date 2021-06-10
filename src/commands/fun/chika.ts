@@ -1,6 +1,7 @@
 import axios from "axios";
+import { prisma } from "../../data/prismaClient";
 import { chatbotInput, chatbotResponse } from "../../data/redisClient";
-import { decrRibbons, getRibbons } from "../../data/ribbonsManager";
+import { getRibbons } from "../../data/redisRibbonManager";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
@@ -58,7 +59,7 @@ const chika: Command = {
           .ltrim(channel.id, 0, 2)
           .exec();
 
-        decrRibbons(author, ribbonCost);
+        prisma.decrRibbons(author, ribbonCost);
       })
       .catch((err) => {
         if (err.response?.data?.error?.includes(`is currently loading`)) {
