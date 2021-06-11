@@ -1,4 +1,5 @@
 import type { Client, Collection, Message, User } from "discord.js";
+import { balloon_rules_jpg, ribbon_emoji } from "../../shared/assets";
 import { baseEmbed } from "../../shared/embeds";
 import { BlockingLevel } from "../../types/blockingLevel";
 import { GenericChannel } from "../../types/command";
@@ -16,8 +17,6 @@ export class Balloon extends Game {
   maxPlayerCount = 6;
 
   sessionDuration = 1000 * 60 * 10;
-
-  rules = baseEmbed().setTitle("Balloon");
 
   blockingLevel = BlockingLevel.guild;
 
@@ -53,4 +52,45 @@ export class Balloon extends Game {
 
     client.once("message", createBalloonListener(initState));
   }
+
+  rules = baseEmbed()
+    .setTitle("Balloon :balloon:")
+    .setImage(balloon_rules_jpg)
+    .setFooter(`chapter 91 page 3`)
+    .addFields([
+      {
+        name: "How it works",
+        value: `
+        Chika hands you a pump and a 
+        balloon. Each message you send
+        pumps the balloon by a certain
+        amount.
+
+        The balloon will pop! once it
+        reaches its limit, which is randomly
+        chosen each round. The player
+        who pops it loses!`,
+      },
+      {
+        name: "Player count",
+        value: `${this.minPlayerCount} - ${this.maxPlayerCount} players`,
+      },
+      {
+        name: "Losing",
+        value: `
+        The player who pops the balloon
+        will pay ${ribbon_emoji} to all other players.`,
+      },
+      {
+        name: "Options",
+        value: `
+        You may override the default
+        balloon's volume range for 
+        the server:
+        \`balloon-lower\`
+        Set lower bound for volume.
+        \`balloon-upper\`
+        Set upper bound for volume.`,
+      },
+    ]);
 }
