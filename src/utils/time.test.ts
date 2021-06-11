@@ -1,27 +1,26 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
-import { expect } from "chai";
 import { secToWordString } from "./time";
 
 describe("#secToWordString", () => {
-  context("given exact hour", () => {
+  describe("given exact hour", () => {
     it("should return hour only", () => {
-      expect(secToWordString(3600)).to.equal("1h");
+      expect(secToWordString(3600)).toEqual("1h");
     });
   });
-  context("given exact minute", () => {
+  describe("given exact minute", () => {
     it("should return minute only", () => {
-      expect(secToWordString(300)).to.equal("5min");
+      expect(secToWordString(300)).toEqual("5min");
     });
   });
-  context("given exact second", () => {
+  describe("given exact second", () => {
     it("should return second only", () => {
-      expect(secToWordString(45)).to.equal("45s");
+      expect(secToWordString(45)).toEqual("45s");
     });
   });
-  context("given mix of hours, minutes, and seconds", () => {
+  describe("given mix of hours, minutes, and seconds", () => {
     it("should convert correctly", () => {
-      expect(secToWordString(19230)).to.equal("5h 20min 30s");
+      expect(secToWordString(19230)).toEqual("5h 20min 30s");
     });
   });
 });
