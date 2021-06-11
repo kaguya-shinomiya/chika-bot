@@ -28,7 +28,8 @@ export class Balloon extends Game {
           channel,
           players.map((user) => user),
           {
-            startsInMessage: `Carry on with your lives. ʕ•ᴥ•ʔ Each time you send something, the balloon gets pumped. You'll know when it pops.`,
+            startsInMessage: `Carry on with your lives. ʕ•ᴥ•ʔ
+            Each time you send something, the balloon gets pumped. You'll know when it pops.`,
           }
         );
         this.startGame(players, { channel, client });
@@ -62,7 +63,7 @@ export class Balloon extends Game {
         name: "How it works",
         value: `
         Chika hands you a pump and a 
-        balloon. Each message you send
+        balloon. Each character you send
         pumps the balloon by a certain
         amount.
 
@@ -87,9 +88,9 @@ export class Balloon extends Game {
         You may override the default
         balloon's volume range for 
         the server:
-        \`balloon-lower\`
+        \`balloon-min\`
         Set lower bound for volume.
-        \`balloon-upper\`
+        \`balloon-max\`
         Set upper bound for volume.`,
       },
     ]);

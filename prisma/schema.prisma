@@ -8,31 +8,31 @@ generator client {
 }
 
 model User {
-  id        Int       @default(autoincrement()) @id
-  userId    String    @unique 
-  tag       String
-  ribbons   Int
+  id      Int    @id @default(autoincrement())
+  userId  String @unique
+  tag     String
+  ribbons Int
 }
 
 model Guild {
-  id        Int       @default(autoincrement()) @id
-  guildId   String    @unique
+  id        Int        @id @default(autoincrement())
+  guildId   String     @unique
   prefix    String?
   shiritori Shiritori?
   balloon   Balloon?
 }
 
 model Shiritori {
-  id        Int       @default(autoincrement()) @id
-  guild     Guild     @relation(fields: [guildId], references: [id])
-  guildId   Int       @unique
-  handSize  Int
+  id       Int    @id @default(autoincrement())
+  guild    Guild  @relation(fields: [guildId], references: [guildId])
+  guildId  String @unique
+  handSize Int?
 }
 
 model Balloon {
-  id        Int       @default(autoincrement()) @id
-  guild     Guild     @relation(fields: [guildId], references: [id])
-  guildId   Int       @unique
-  minVol    Int
-  maxVol    Int
+  id      Int    @id @default(autoincrement())
+  guild   Guild  @relation(fields: [guildId], references: [guildId])
+  guildId String @unique
+  minVol  Int?
+  maxVol  Int?
 }
