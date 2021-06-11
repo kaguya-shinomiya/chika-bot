@@ -12,7 +12,7 @@ export const char: Command = {
   category: CommandCategory.utility,
   usage: `${DEFAULT_PREFIX}char <character_name>`,
   description: "Search for an animanga character.",
-  execute(message, args) {
+  async execute(message, args) {
     const { channel } = message;
     const charName = args.join(" ");
 

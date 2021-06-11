@@ -48,14 +48,11 @@ const message: Event = {
 
     if (await isOnCooldown(message, command)) return;
 
-    try {
-      // TODO make every execute cmd async yo, then use .catch
-      command.execute(message, args);
-    } catch (err) {
+    command.execute(message, args).catch((err) => {
       // eslint-disable-next-line no-console
       console.log(err);
       channel.send(genericErrorEmbed());
-    }
+    });
   },
 };
 

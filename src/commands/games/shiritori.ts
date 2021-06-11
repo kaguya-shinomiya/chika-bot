@@ -11,7 +11,7 @@ const shiritori: Command = {
   description: "Play a round of Shiritori.",
   usage: `${DEFAULT_PREFIX}shiritori [opponent]`,
   aliases: ["sh"],
-  execute(message) {
+  async execute(message) {
     const taggedCount = message.mentions.users.size;
     if (taggedCount && taggedCount > 1) {
       message.channel.send(

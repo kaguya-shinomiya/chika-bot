@@ -8,7 +8,7 @@ const balloonRules: Command = {
   category: CommandCategory.game,
   description: "Check the rules for Balloon.",
   usage: `${DEFAULT_PREFIX}ballon-rules`,
-  execute(message) {
+  async execute(message) {
     const { channel } = message;
     channel.send(balloonGame.rules);
   },

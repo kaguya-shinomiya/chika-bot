@@ -8,7 +8,7 @@ export const boot: Command = {
   argsCount: 0,
   category: CommandCategory.music,
   usage: `${DEFAULT_PREFIX}boot`,
-  execute(message) {
+  async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
       sendNotInGuild(channel);

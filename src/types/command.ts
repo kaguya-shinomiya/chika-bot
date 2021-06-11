@@ -29,7 +29,7 @@ class Command {
 
   userCooldown?: number;
 
-  execute!: (message: Message, args: string[]) => void;
+  execute!: (message: Message, args: string[]) => Promise<void>;
 }
 
 export type { Command, GenericChannel };

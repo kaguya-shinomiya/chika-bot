@@ -10,7 +10,7 @@ const poll: Command = {
   description: "Begin a democratic process to collect public opinion.",
   usage: `${DEFAULT_PREFIX}poll <question>`,
   aliases: ["vote"],
-  execute(message, args) {
+  async execute(message, args) {
     const { guild, channel, author } = message;
     if (!guild) {
       sendNotInGuild(channel);

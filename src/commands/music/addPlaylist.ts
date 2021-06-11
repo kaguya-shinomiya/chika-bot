@@ -13,7 +13,7 @@ const addPlaylist: Command = {
   category: CommandCategory.music,
   description: "Add a YouTube playlist to the queue.",
   usage: `${DEFAULT_PREFIX}addp <url>`,
-  execute(message, args) {
+  async execute(message, args) {
     const { guild, channel, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);

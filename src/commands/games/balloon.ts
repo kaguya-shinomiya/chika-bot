@@ -10,7 +10,7 @@ const balloon: Command = {
   category: CommandCategory.game,
   description: "Chika hands you a balloon and you must pump it.",
   usage: `${DEFAULT_PREFIX}balloon`,
-  execute(message) {
+  async execute(message) {
     checkAndBlock(balloonGame, message).then(
       () => balloonGame.pregame(message),
       (err) => message.channel.send(lightErrorEmbed(err))

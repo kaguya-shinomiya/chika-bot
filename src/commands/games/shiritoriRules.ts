@@ -8,7 +8,7 @@ const shiritoriRules: Command = {
   category: CommandCategory.game,
   description: "Check the rules for Shiritori.",
   usage: `${DEFAULT_PREFIX}shiritori-rules`,
-  execute(message) {
+  async execute(message) {
     const { channel } = message;
     channel.send(shiritoriGame.rules);
   },

@@ -10,7 +10,7 @@ const prefix: Command = {
   category: CommandCategory.utility,
   description: "Set a new prefix for Chika. You'll need to be an admin.",
   usage: `${DEFAULT_PREFIX}set-prefix <new_prefix>`,
-  execute(message, args) {
+  async execute(message, args) {
     const { channel, guild } = message;
     if (!guild) {
       sendNotInGuild(channel);
