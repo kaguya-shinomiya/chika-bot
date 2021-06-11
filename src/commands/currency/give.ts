@@ -1,5 +1,4 @@
 import { prisma } from "../../data/prismaClient";
-import { getRibbons } from "../../data/redisRibbonManager";
 import { ribbon_emoji } from "../../shared/assets";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
@@ -34,11 +33,11 @@ const give: Command = {
       channel.send(lightErrorEmbed(`Please use a valid number!`));
       return;
     }
-    const benefactorStock = await getRibbons(author);
+    const benefactorStock = await prisma.getRibbons(author);
     if (donation > benefactorStock) {
       channel.send(
         lightErrorEmbed(
-          `LOL you're too poor to do that!\nYou only have ${benefactorStock} ${ribbon_emoji}.`
+          `LOL you're too poor to do that! You only have ${benefactorStock} ${ribbon_emoji}.`
         )
       );
       return;

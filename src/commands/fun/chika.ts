@@ -1,7 +1,6 @@
 import axios from "axios";
 import { prisma } from "../../data/prismaClient";
 import { chatbotInput, chatbotResponse } from "../../data/redisClient";
-import { getRibbons } from "../../data/redisRibbonManager";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
@@ -27,7 +26,7 @@ const chika: Command = {
     const text = args.join(" ");
 
     const ribbonCost = text.length;
-    const ribbonStock = await getRibbons(author);
+    const ribbonStock = await prisma.getRibbons(author);
     if (ribbonCost > ribbonStock) {
       sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
       return;

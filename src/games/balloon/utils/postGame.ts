@@ -1,6 +1,6 @@
 import { Collection, Message, User } from "discord.js";
+import { prisma } from "../../../data/prismaClient";
 import { ribbons } from "../../../data/redisClient";
-import { getRibbons } from "../../../data/redisRibbonManager";
 import { GLOBAL_RIBBONS } from "../../../shared/constants";
 import { sendPopped } from "./embeds";
 
@@ -11,7 +11,7 @@ export const postGameBalloon = async (
   const { channel, author: popper } = message;
 
   const winners = players.filter((user) => user.id !== popper.id);
-  const popperStock = await getRibbons(popper);
+  const popperStock = await prisma.getRibbons(popper);
 
   const winAmt = Math.floor(Math.random() * 20 + 20);
   const isBankrupt = winAmt * winners.size > popperStock;
