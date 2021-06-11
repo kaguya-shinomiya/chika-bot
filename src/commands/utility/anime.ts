@@ -1,10 +1,9 @@
 import { TextChannel } from "discord.js";
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
-import { genAnimeInfoEmbed } from "./embeds/animeInfoEmbed";
+import { Command, CommandCategory } from "../../types/command";
+import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
@@ -12,9 +11,8 @@ export const anime: Command = {
   name: "anime",
   description: "Look up info for an anime.",
   argsCount: -2,
-  category: "Utility",
-  redis: RedisPrefix.default,
-  usage: `${PREFIX}anime <anime_title>`,
+  category: CommandCategory.utility,
+  usage: `${DEFAULT_PREFIX}anime <anime_title>`,
   async execute(message, args) {
     const { channel } = message;
     const search = args.join(" ");
@@ -54,7 +52,7 @@ export const anime: Command = {
         } = result.Media;
 
         channel.send(
-          genAnimeInfoEmbed({
+          animeInfoEmbed({
             coverImage: coverImage?.medium,
             title: title?.userPreferred,
             description: description!,

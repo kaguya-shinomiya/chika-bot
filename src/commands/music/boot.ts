@@ -1,17 +1,14 @@
-import { PREFIX } from "../../constants";
-import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
-import { sendNotInGuild } from "./utils/embeds";
+import { DEFAULT_PREFIX } from "../../shared/constants";
+import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
+import { Command, CommandCategory } from "../../types/command";
 
 export const boot: Command = {
   name: "boot",
   description: "Boot Chika from the voice channel. Queue is not cleared.",
   argsCount: 0,
-  category: "Music",
-  usage: `${PREFIX}boot`,
-  redis: RedisPrefix.tracks,
-  execute(message) {
+  category: CommandCategory.music,
+  usage: `${DEFAULT_PREFIX}boot`,
+  async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
       sendNotInGuild(channel);

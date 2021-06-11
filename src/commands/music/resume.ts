@@ -1,16 +1,14 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const resume: Command = {
   name: "resume",
   argsCount: 0,
-  category: "Music",
+  category: CommandCategory.music,
   description: "Resume playback.",
-  usage: `${PREFIX}resume`,
-  redis: RedisPrefix.tracks,
+  usage: `${DEFAULT_PREFIX}resume`,
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -28,7 +26,7 @@ const resume: Command = {
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:arrow_forward: Resumed`)
-        .setDescription(trackLinkAndDuration({ title, url, duration }))
+        .setDescription(trackLinkAndDuration(title, url, duration))
     );
   },
 };

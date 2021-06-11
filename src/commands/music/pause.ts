@@ -1,7 +1,6 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const pause: Command = {
@@ -9,9 +8,8 @@ const pause: Command = {
   aliases: ["stop"],
   description: "Pause the current playback.",
   argsCount: 0,
-  usage: `${PREFIX}pause`,
-  category: "Music",
-  redis: RedisPrefix.tracks,
+  usage: `${DEFAULT_PREFIX}pause`,
+  category: CommandCategory.music,
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -36,7 +34,7 @@ const pause: Command = {
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:pause_button: Paused`)
-        .setDescription(trackLinkAndDuration({ title, url, duration }))
+        .setDescription(trackLinkAndDuration(title, url, duration))
     );
   },
 };

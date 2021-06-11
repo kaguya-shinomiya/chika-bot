@@ -1,33 +1,26 @@
-import { PREFIX } from "../../constants";
-import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
-import { sendNotInGuild, sendSearchResults } from "./utils/embeds";
+import { DEFAULT_PREFIX } from "../../shared/constants";
+import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
+import { Command, CommandCategory } from "../../types/command";
+import { setCooldown } from "../../utils/cooldownManager";
+import { sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
-
-// TODO add a cooldown for this
 
 export const search: Command = {
   name: "search",
   description: "Search for a track on YouTube",
   argsCount: -2,
-  category: "Music",
-  usage: `${PREFIX}search <search_string>`,
-  redis: RedisPrefix.tracks,
+  category: CommandCategory.music,
+  usage: `${DEFAULT_PREFIX}search <search_string>`,
   channelCooldown: 15000,
-  async execute(message, args, redis) {
+  async execute(message, args) {
     const { channel, client, guild } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
     }
 
-    client.cooldownManager.setCooldown(
-      channel.id,
-      this.name,
-      this.channelCooldown!
-    );
+    setCooldown(channel.id, this.name, this.channelCooldown!);
 
     const results = await searchVideo(args.join(" "));
     if (!results) {
@@ -35,13 +28,11 @@ export const search: Command = {
       return;
     }
 
-    sendSearchResults(results, channel);
+    sendSearchResults(channel, results);
 
-    const resultSelectListener = createResultSelectListener({
-      results,
-      channelID: channel.id,
-      guildID: guild.id,
-      redis,
+    const resultSelectListener = createResultSelectListener(results, {
+      channelId: channel.id,
+      guildId: guild.id,
     });
     const timeoutCallback = () => {
       client.removeListener("message", resultSelectListener);

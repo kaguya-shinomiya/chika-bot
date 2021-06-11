@@ -1,18 +1,17 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
+import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 
 const repeat: Command = {
   name: "repeat",
   aliases: ["rp"],
   argsCount: 0,
-  category: "Music",
-  usage: `${PREFIX}repeat`,
+  category: CommandCategory.music,
+  usage: `${DEFAULT_PREFIX}repeat`,
   description: "Repeats the current track once.",
-  redis: RedisPrefix.tracks,
-  async execute(message, _args, redis) {
+  async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
@@ -24,8 +23,8 @@ const repeat: Command = {
       return;
     }
 
-    sendRepeat({ channel, videoData: audioUtils.nowPlaying, author });
-    redis.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
+    sendRepeat(channel, { videoData: audioUtils.nowPlaying, author });
+    queue.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
   },
 };
 

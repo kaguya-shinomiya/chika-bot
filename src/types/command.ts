@@ -1,16 +1,23 @@
-import { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
-import { Redis } from "ioredis";
-import { RedisPrefix } from "./redis";
+import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 
-export type commandCategory = "Fun" | "Utility" | "Music";
-export type GenericChannel = TextChannel | DMChannel | NewsChannel;
+// eslint-disable-next-line no-shadow
+export enum CommandCategory {
+  fun = ":coffee: Fun",
+  utility = ":satellite: Utility",
+  music = ":headphones: Music",
+  currency = ":moneybag: Currency",
+  game = ":video_game: Game",
+}
 
-export class Command {
+// type commandCategory = "Fun" | "Utility" | "Music" | "Currency" | "Game";
+type GenericChannel = TextChannel | DMChannel | NewsChannel;
+
+class Command {
   name!: string;
 
   description!: string;
 
-  category!: commandCategory;
+  category!: CommandCategory;
 
   usage!: string;
 
@@ -18,11 +25,11 @@ export class Command {
 
   aliases?: string[];
 
-  redis!: RedisPrefix;
-
   channelCooldown?: number;
 
   userCooldown?: number;
 
-  execute!: (message: Message, args: string[], redis: Redis) => void;
+  execute!: (message: Message, args: string[]) => Promise<void>;
 }
+
+export type { Command, GenericChannel };

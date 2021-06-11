@@ -1,17 +1,15 @@
-import { kaguya_sleep_gif } from "../../assets";
-import { PREFIX } from "../../constants";
+import { kaguya_sleep_gif } from "../../shared/assets";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 
 const goodnight: Command = {
   name: "goodnight",
   description: "Greets goodnight.",
-  category: "Fun",
-  usage: `${PREFIX}goodnight [user ...]`,
+  category: CommandCategory.fun,
+  usage: `${DEFAULT_PREFIX}goodnight [user ...]`,
   aliases: ["gn"],
   argsCount: -1,
-  redis: RedisPrefix.default,
   async execute({ channel, mentions, author }) {
     let message;
     if (!mentions.users.size) {

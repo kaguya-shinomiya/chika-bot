@@ -1,18 +1,16 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
 
 const skip: Command = {
   name: "skip",
   description: "Skip the current track.",
-  usage: `${PREFIX}skip`,
+  usage: `${DEFAULT_PREFIX}skip`,
   argsCount: 0,
-  category: "Music",
-  redis: RedisPrefix.tracks,
-  async execute(message, _args, redis) {
+  category: CommandCategory.music,
+  async execute(message) {
     const { channel, guild, client, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
@@ -39,11 +37,9 @@ const skip: Command = {
 
     // a paused track cannot emit 'finish' for some reason
     // we'll do this manually
-    createFinishListener({
+    createFinishListener(guild, {
       channel,
-      guild,
       client,
-      redis,
     })();
   },
 };

@@ -1,5 +1,5 @@
-import { MessageEmbed, MessageReaction, User } from "discord.js";
-import { left_arrow, right_arrow } from "../assets";
+import type { MessageEmbed, MessageReaction, User } from "discord.js";
+import { left_arrow, right_arrow } from "./assets";
 import { GenericChannel } from "../types/command";
 
 interface sendPaginatedOptions {

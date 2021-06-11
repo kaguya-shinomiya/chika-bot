@@ -1,4 +1,4 @@
-import { VoiceChannel, VoiceConnection } from "discord.js";
+import type { VoiceChannel, VoiceConnection } from "discord.js";
 
 export const tryToConnect = async (
   channel: VoiceChannel

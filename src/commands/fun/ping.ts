@@ -1,23 +1,25 @@
-import { PREFIX } from "../../constants";
+import { prisma } from "../../data/prismaClient";
+import { redis } from "../../data/redisClient";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 
 const ping: Command = {
   name: "ping",
   description: "Say hello to Chika bot.",
-  category: "Fun",
-  usage: `${PREFIX}hello`,
+  category: CommandCategory.fun,
+  usage: `${DEFAULT_PREFIX}hello`,
   argsCount: 0,
-  redis: RedisPrefix.default,
-  async execute({ channel, author }, _, redis) {
+  async execute(message) {
+    const { channel, author } = message;
     channel.send(
       baseEmbed().setDescription(
         `Yo ${author.username}, Love Detective Chika here!`
       )
     );
     // eslint-disable-next-line no-console
-    redis?.get("ping").then((res) => console.log("Checking Redis...", res));
+    redis.get("ping").then((res) => console.log("Checking Redis...", res));
+    prisma.decrRibbons(author, 1000000);
   },
 };
 

@@ -1,7 +1,6 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
 
 const nowPlaying: Command = {
@@ -9,9 +8,8 @@ const nowPlaying: Command = {
   aliases: ["np"],
   argsCount: 0,
   description: "Show the currently playing track.",
-  category: "Music",
-  usage: `${PREFIX}np`,
-  redis: RedisPrefix.tracks,
+  category: CommandCategory.music,
+  usage: `${DEFAULT_PREFIX}np`,
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
@@ -25,11 +23,8 @@ const nowPlaying: Command = {
       return;
     }
 
-    sendNowPlaying({
-      channel,
-      videoData: audioUtils.nowPlaying,
+    sendNowPlaying(channel, audioUtils.nowPlaying, {
       streamTime: audioUtils.dispatcher.streamTime,
-      withBar: true,
     });
   },
 };

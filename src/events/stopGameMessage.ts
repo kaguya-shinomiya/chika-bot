@@ -1,21 +1,24 @@
 import { Message } from "discord.js";
-import { STOP_GAME_RE } from "../games/utils/constants";
+import { EXIT_GAME_RE } from "../games/utils/constants";
+import { blindUnblock } from "../games/utils/manageState";
 import { lightErrorEmbed } from "../shared/embeds";
 import { Event } from "../types/event";
 
 const stopGameMessage: Event = {
   name: "message",
   once: false,
-  listener({ redis }, message: Message) {
+  listener(_client, message: Message) {
     const { channel, author, content } = message;
-    if (!STOP_GAME_RE.test(content)) return;
+    if (!EXIT_GAME_RE.test(content)) return;
 
-    redis.gamesRedis.del(channel.id).then((num) => {
-      if (!num) return;
-      channel.send(
-        lightErrorEmbed(`**${author.username}** has stopped the game.`)
-      );
-    });
+    blindUnblock(message).then(
+      () => {
+        channel.send(
+          lightErrorEmbed(`**${author.username}** has stopped the game.`)
+        );
+      },
+      (err) => channel.send(lightErrorEmbed(err))
+    );
   },
 };
 

@@ -1,5 +1,3 @@
 import { Shiritori } from "./shiritori";
 
-const shiritori = new Shiritori();
-
-export default shiritori;
+export const shiritoriGame: Readonly<Shiritori> = new Shiritori();

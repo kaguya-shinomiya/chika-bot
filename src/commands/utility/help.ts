@@ -1,18 +1,16 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 
 const help: Command = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
-  usage: `${PREFIX}help [command ...]`,
-  category: "Utility",
+  usage: `${DEFAULT_PREFIX}help [command ...]`,
+  category: CommandCategory.utility,
   argsCount: -1,
   aliases: ["h"],
-  redis: RedisPrefix.default,
   async execute({ channel, client: { commands, commandsHelp } }, args) {
-    if (!args.length || /all/i.test(args[0])) {
+    if (!args.length || /^all$/i.test(args[0])) {
       // send a list of all commands
       channel.send(commandsHelp);
       return;

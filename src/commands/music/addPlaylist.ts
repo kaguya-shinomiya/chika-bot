@@ -1,8 +1,8 @@
 import ytpl from "ytpl";
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
+import { queue } from "../../data/redisClient";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { parsePlaylist } from "./utils/youtube";
 
@@ -10,11 +10,10 @@ const addPlaylist: Command = {
   name: "add-playlist",
   argsCount: 1,
   aliases: ["ap"],
-  category: "Music",
+  category: CommandCategory.music,
   description: "Add a YouTube playlist to the queue.",
-  usage: `${PREFIX}addp <url>`,
-  redis: RedisPrefix.tracks,
-  execute(message, args, redis) {
+  usage: `${DEFAULT_PREFIX}addp <url>`,
+  async execute(message, args) {
     const { guild, channel, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
@@ -24,7 +23,7 @@ const addPlaylist: Command = {
     ytpl(playlistURL)
       .then((res) => {
         const [playlistMetadata, videos] = parsePlaylist(res);
-        redis.rpush(guild.id, ...videos.map((video) => JSON.stringify(video)));
+        queue.rpush(guild.id, ...videos.map((video) => JSON.stringify(video)));
         channel.send(
           withAuthorEmbed(author)
             .setTitle("Added Playlist")

@@ -1,8 +1,8 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
+import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { QueueItem } from "../../types/queue";
-import { RedisPrefix } from "../../types/redis";
 import { tryToConnect } from "./utils/client";
 import {
   sendAddedToQueue,
@@ -11,18 +11,17 @@ import {
   sendNoVideo,
   sendNoVoicePermissions,
 } from "./utils/embeds";
-import { createFinishListener, playThis } from "./utils/listener";
-import { validateArgs } from "./utils/youtube";
+import { createFinishListener } from "./utils/listener";
+import { playThis, validateArgs } from "./utils/youtube";
 
 const play: Command = {
   name: "play",
   aliases: ["tunes"],
-  usage: `${PREFIX}tunes <URL|search_string>`,
+  usage: `${DEFAULT_PREFIX}tunes <URL|search_string>`,
   argsCount: -1,
-  category: "Music",
+  category: CommandCategory.music,
   description: "Let Chika play some music from YouTube for you.",
-  redis: RedisPrefix.tracks,
-  async execute(message, args, redis) {
+  async execute(message, args) {
     const { channel, member, guild, client, author } = message;
     if (!guild) {
       sendMusicOnlyInGuild(channel);
@@ -33,7 +32,7 @@ const play: Command = {
       return;
     }
 
-    const next = await redis.lpop(guild.id);
+    const next = await queue.lpop(guild.id);
     const audioUtils = client.cache.audioUtils.get(guild.id);
 
     // they called ck;play with no args
@@ -57,30 +56,31 @@ const play: Command = {
         client.cache.audioUtils.delete(guild.id)
       );
       const nextData = JSON.parse(next) as QueueItem;
-      playThis({
-        videoData: nextData,
-        connection,
+      playThis(connection, nextData, {
         channel,
         client,
-        guildID: guild.id,
-        onFinish: createFinishListener({ channel, client, guild, redis }),
+        guildId: guild.id,
+        onFinish: createFinishListener(guild, {
+          client,
+          channel,
+        }),
       });
       return;
     }
 
-    if (next) redis.lpush(guild.id, next); // push next track back
+    if (next) queue.lpush(guild.id, next); // push next track back
 
     const videoData = await validateArgs(args);
     if (!videoData) {
-      sendNoVideo(args.join(" "), channel);
+      sendNoVideo(channel, args.join(" "));
       return;
     }
 
     // there's a song playing
     // push to the redis queue
     if (audioUtils) {
-      redis.rpush(guild.id, JSON.stringify(videoData));
-      sendAddedToQueue({ videoData, author, channel });
+      queue.rpush(guild.id, JSON.stringify(videoData));
+      sendAddedToQueue(channel, { videoData, author });
       return;
     }
 
@@ -92,13 +92,11 @@ const play: Command = {
       return;
     }
     connection.on("disconnect", () => client.cache.audioUtils.delete(guild.id));
-    playThis({
-      videoData,
+    playThis(connection, videoData, {
       channel,
       client,
-      connection,
-      guildID: guild.id,
-      onFinish: createFinishListener({ channel, client, guild, redis }),
+      guildId: guild.id,
+      onFinish: createFinishListener(guild, { channel, client }),
     });
   },
 };

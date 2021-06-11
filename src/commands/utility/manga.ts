@@ -1,20 +1,18 @@
-import { TextChannel } from "discord.js";
-import { PREFIX } from "../../constants";
+import type { TextChannel } from "discord.js";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
+import { Command, CommandCategory } from "../../types/command";
 import { sendNotFoundError } from "./embeds/errors";
-import { genMangaInfoEmbed } from "./embeds/mangaInfoEmbed";
+import { mangaInfoEmbed } from "./embeds/mangaInfoEmbed";
 import { client } from "./graphql/aniListClient";
 
 export const manga: Command = {
   name: "manga",
   description: "Look up info for a manga.",
   argsCount: -2,
-  category: "Utility",
-  redis: RedisPrefix.default,
-  usage: `${PREFIX}manga <manga_title>`,
+  category: CommandCategory.utility,
+  usage: `${DEFAULT_PREFIX}manga <manga_title>`,
   async execute(message, args) {
     const { channel } = message;
     const search = args.join(" ");
@@ -53,7 +51,7 @@ export const manga: Command = {
           chapters,
         } = result.Media;
         channel.send(
-          genMangaInfoEmbed({
+          mangaInfoEmbed({
             coverImage: coverImage?.medium,
             title: title?.userPreferred,
             description: description!,

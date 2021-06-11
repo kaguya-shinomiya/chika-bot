@@ -1,9 +1,12 @@
-import { StreamDispatcher, VoiceConnection } from "discord.js";
+import type { Client, StreamDispatcher, VoiceConnection } from "discord.js";
 import ytdl from "ytdl-core";
 import ytpl from "ytpl";
 import ytsr, { Video } from "ytsr";
-import { QueueItem } from "../../../types/queue";
-import { secToMin } from "./helpers";
+import { GenericChannel } from "../../../types/command";
+import { AudioUtils, QueueItem } from "../../../types/queue";
+import { sendCannotPlay, sendNowPlaying } from "./embeds";
+import { secToString } from "./helpers";
+import type { createFinishListener } from "./listener";
 
 const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
@@ -64,7 +67,7 @@ export const validateArgs = async (
     if (!videoDetails) return null;
     return {
       title: videoDetails.title,
-      duration: secToMin(parseInt(videoDetails.lengthSeconds, 10)),
+      duration: secToString(parseInt(videoDetails.lengthSeconds, 10)),
       url: videoDetails.video_url,
       thumbnailURL: videoDetails.thumbnails[0].url,
     };
@@ -98,4 +101,33 @@ export const parsePlaylist = (
     })
   );
   return [metadata, items];
+};
+
+interface playThisParams {
+  client: Client;
+  channel: GenericChannel;
+  guildId: string;
+  onFinish: ReturnType<typeof createFinishListener>;
+}
+
+export const playThis = async (
+  connection: VoiceConnection,
+  videoData: QueueItem,
+  { client, channel, guildId, onFinish }: playThisParams
+): Promise<void> => {
+  const dispatcher = await playFromYt(connection, videoData.url);
+  if (!dispatcher) {
+    sendCannotPlay(channel, videoData.title, videoData.url);
+    onFinish();
+    return;
+  }
+  sendNowPlaying(channel, videoData);
+
+  const newAudioUtils: AudioUtils = {
+    connection,
+    dispatcher,
+    nowPlaying: videoData,
+  };
+  dispatcher.on("finish", onFinish);
+  client.cache.audioUtils.set(guildId, newAudioUtils);
 };

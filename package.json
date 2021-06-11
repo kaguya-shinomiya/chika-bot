@@ -9,6 +9,7 @@
     "@types/ffmpeg-static": "^3.0.0",
     "@types/he": "^1.1.1",
     "@types/ioredis": "^4.26.4",
+    "@types/lodash": "^4.14.170",
     "@types/mocha": "^8.2.2",
     "@types/node": "^15.3.0",
     "@types/ws": "^7.4.4",
@@ -24,10 +25,12 @@
     "mocha": "^8.4.0",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.0",
+    "ts-mocha": "^8.0.0",
     "typescript": "^4.2.4"
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
+    "@prisma/client": "^2.24.1",
     "axios": "^0.21.1",
     "discord.js": "^12.5.3",
     "dotenv-safe": "^8.2.0",
@@ -36,21 +39,25 @@
     "graphql-request": "^3.4.0",
     "graphql-tag": "^2.12.4",
     "he": "^1.2.0",
-    "ioredis": "^4.27.3",
+    "ioredis": "^4.27.5",
+    "lodash": "^4.17.21",
+    "prisma": "^2.24.1",
     "ytdl-core": "^4.8.2",
     "ytpl": "^2.2.1",
     "ytsr": "^3.5.0"
   },
   "scripts": {
     "start": "node dist/index.js",
-    "build": "tsc",
+    "build": "tsc && prisma migrate deploy",
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
-    "test": "mocha ",
+    "test": "ts-mocha -p tsconfig.testing.json 'src/**/*.test.ts'",
     "prepare": "husky install",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
-    "gen": "graphql-codegen --config codegen.yml"
+    "gen": "graphql-codegen --config codegen.yml",
+    "db:up": "prisma db push",
+    "db:migrate": "prisma migrate dev"
   },
   "lint-staged": {
     "src/**/*.ts": [
@@ -63,5 +70,5 @@
     "yarn": "1.22.10"
   },
   "license": "MIT",
-  "version": "0.2.7"
+  "version": "0.3.0"
 }

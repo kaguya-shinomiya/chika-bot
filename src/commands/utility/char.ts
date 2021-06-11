@@ -1,8 +1,7 @@
-import { PREFIX } from "../../constants";
+import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk } from "../../generated/graphql";
-import { Command } from "../../types/command";
-import { RedisPrefix } from "../../types/redis";
-import { genCharInfoEmbed } from "./embeds/charInfoEmbed";
+import { Command, CommandCategory } from "../../types/command";
+import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
@@ -10,11 +9,10 @@ export const char: Command = {
   name: "char",
   aliases: ["character"],
   argsCount: -2,
-  category: "Utility",
-  usage: `${PREFIX}char <character_name>`,
+  category: CommandCategory.utility,
+  usage: `${DEFAULT_PREFIX}char <character_name>`,
   description: "Search for an animanga character.",
-  redis: RedisPrefix.default,
-  execute(message, args) {
+  async execute(message, args) {
     const { channel } = message;
     const charName = args.join(" ");
 
@@ -26,11 +24,11 @@ export const char: Command = {
           sendNotFoundError(charName, channel);
           return;
         }
-        const { name, image, age, gender, description, dateOfBirth } =
+        const { name, image, age, gender, description, dateOfBirth, siteUrl } =
           result.Character;
 
         channel.send(
-          genCharInfoEmbed({
+          charInfoEmbed({
             englishName: name?.full,
             japName: name?.native,
             image: image?.large,
@@ -38,6 +36,7 @@ export const char: Command = {
             description,
             age,
             dateOfBirth,
+            siteUrl,
           })
         );
       })
