@@ -45,7 +45,7 @@ const chika: Command = {
       })
       .then((res) => {
         const reply = res.data.generated_text;
-        channel.send(reply);
+        channel.send(`> ${text}\n${reply}`);
         chatbotInput
           .pipeline()
           .lpush(channel.id, text)
