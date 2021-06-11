@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import type { Snowflake, User } from "discord.js";
-import { GLOBAL_RIBBONS } from "../shared/constants";
 import { guildPrefix, ribbons } from "./redisClient";
 
 class ChikaPrisma extends PrismaClient {
@@ -29,7 +28,7 @@ class ChikaPrisma extends PrismaClient {
   }
 
   async getRibbons(user: User) {
-    const ping = await ribbons.zscore(GLOBAL_RIBBONS, user.tag);
+    const ping = await ribbons.get(user.id);
     if (ping) return parseInt(ping, 10);
     return this.user
       .findUnique({
@@ -38,32 +37,55 @@ class ChikaPrisma extends PrismaClient {
       })
       .then((res) => {
         if (!res?.ribbons) {
-          ribbons.zadd(GLOBAL_RIBBONS, [0, user.tag]);
+          ribbons.set(user.id, 0, "ex", 3600);
           return 0;
         }
-        ribbons.zadd(GLOBAL_RIBBONS, [res.ribbons, user.tag]);
+        ribbons.set(user.id, res.ribbons, "ex", 3600);
         return res.ribbons;
       });
   }
 
   async incrRibbons(user: User, incrby: number) {
-    await this.user
+    return this.user
       .upsert({
-        create: { userId: user.id, username: user.username, ribbons: incrby },
+        create: { userId: user.id, tag: user.tag, ribbons: incrby },
         update: { ribbons: { increment: incrby } },
         where: { userId: user.id },
       })
-      .then((_user) => ribbons.zadd(GLOBAL_RIBBONS, [_user.ribbons, user.tag]));
+      .then((_user) => ribbons.set(user.id, _user.ribbons, "ex", 3600));
   }
 
   async decrRibbons(user: User, decrby: number) {
-    await this.user
-      .upsert({
-        create: { userId: user.id, username: user.username, ribbons: 0 },
-        update: { ribbons: { decrement: decrby } },
+    await this.$transaction([
+      this.$executeRaw<number>`
+        INSERT INTO "User" ("userId", tag, ribbons)
+        VALUES (${user.id}, ${user.tag}, ${0})
+        ON CONFLICT ("userId") DO UPDATE
+        SET ribbons =
+          CASE
+            WHEN "User".ribbons < ${decrby} THEN ${0}
+            ELSE "User".ribbons - ${decrby}
+          END;`,
+      this.user.findUnique({
         where: { userId: user.id },
-      })
-      .then((_user) => ribbons.zadd(GLOBAL_RIBBONS, [_user.ribbons, user.tag]));
+        select: { ribbons: true },
+      }),
+    ]).then((_res) => {
+      const [, res] = _res;
+      if (!res?.ribbons) {
+        ribbons.set(user.id, 0, "ex", 3600);
+        return;
+      }
+      ribbons.set(user.id, res.ribbons, "ex", 3600);
+    });
+  }
+
+  async getTopRibbons(take = 10) {
+    return this.user.findMany({
+      take,
+      orderBy: { ribbons: "desc" },
+      select: { tag: true, ribbons: true },
+    });
   }
 }
 

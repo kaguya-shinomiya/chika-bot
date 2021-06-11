@@ -11,8 +11,6 @@ const ready: Event = {
       "ping",
       `Redis is up and running at ${process.env.REDISCLOUD_URL}!`
     );
-    // eslint-disable-next-line no-console
-    redis.get("ping").then((res) => console.log(res));
   },
 };
 

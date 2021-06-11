@@ -1,4 +1,4 @@
-import { getGlobalTop } from "../../data/redisRibbonManager";
+import { prisma } from "../../data/prismaClient";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { Command, CommandCategory } from "../../types/command";
 import { sendTop } from "./utils/embeds";
@@ -12,7 +12,7 @@ const globalTop: Command = {
   aliases: ["gt"],
   async execute(message) {
     const { channel } = message;
-    const top = await getGlobalTop();
+    const top = await prisma.getTopRibbons();
     sendTop(channel, top);
   },
 };

@@ -16,14 +16,19 @@ export const sendRibbonStock = (
   );
 };
 
-export const sendTop = (channel: GenericChannel, top: string[][]) => {
-  const lines = top.map((pair) => {
-    const [tag, rb] = pair;
-    return `**${tag}** - ${rb} ${ribbon_emoji}`;
-  });
+export const sendTop = (
+  channel: GenericChannel,
+  top: {
+    tag: string;
+    ribbons: number;
+  }[]
+) => {
+  const lines = top.map(
+    ({ tag, ribbons }) => `**${tag}** - ${ribbons} ${ribbon_emoji}`
+  );
   channel.send(
     baseEmbed()
-      .setTitle(`Economic Inequalities in the 21st Century :coin:`)
+      .setTitle(`The Wealth Gap :coin:`)
       .setDescription(toListString(lines))
       .setFooter(`Showing top ${lines.length}`)
   );

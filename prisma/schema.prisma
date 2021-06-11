@@ -10,7 +10,7 @@ generator client {
 model User {
   id        Int       @default(autoincrement()) @id
   userId    String    @unique 
-  username  String
+  tag       String
   ribbons   Int
 }
 

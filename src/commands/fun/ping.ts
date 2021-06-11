@@ -1,3 +1,4 @@
+import { prisma } from "../../data/prismaClient";
 import { redis } from "../../data/redisClient";
 import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
@@ -18,6 +19,7 @@ const ping: Command = {
     );
     // eslint-disable-next-line no-console
     redis.get("ping").then((res) => console.log("Checking Redis...", res));
+    prisma.decrRibbons(author, 1000000);
   },
 };
 
