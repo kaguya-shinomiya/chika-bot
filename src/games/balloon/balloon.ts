@@ -1,4 +1,5 @@
-import type { Client, Collection, Message, User } from "discord.js";
+import type { Client, Collection, Guild, Message, User } from "discord.js";
+import { prisma } from "../../data/prismaClient";
 import { balloon_rules_jpg, ribbon_emoji } from "../../shared/assets";
 import { baseEmbed } from "../../shared/embeds";
 import { BlockingLevel } from "../../types/blockingLevel";
@@ -21,7 +22,7 @@ export class Balloon extends Game {
   blockingLevel = BlockingLevel.guild;
 
   pregame(message: Message) {
-    const { channel, client } = message;
+    const { channel, client, guild } = message;
     this.collectPlayers(message, {
       onTimeoutAccept: (players) => {
         this.sendParticipants(
@@ -32,17 +33,19 @@ export class Balloon extends Game {
             Each time you send something, the balloon gets pumped. You'll know when it pops.`,
           }
         );
-        this.startGame(players, { channel, client });
+        this.startGame(players, { channel, client, guild: guild! });
       },
     });
   }
 
-  startGame(
+  async startGame(
     players: Collection<string, User>,
-    meta: { channel: GenericChannel; client: Client }
+    meta: { channel: GenericChannel; guild: Guild; client: Client }
   ) {
-    const { channel, client } = meta;
-    const tolerance = Math.floor(Math.random() * 500 + 10);
+    const { channel, client, guild } = meta;
+    const max = await prisma.getBalloonMax(guild.id);
+    const min = await prisma.getBalloonMin(guild.id);
+    const tolerance = Math.floor(Math.random() * (max - min) + min);
     const initState: BalloonState = {
       gameTitle: this.title,
       channelId: channel.id,

@@ -9,6 +9,7 @@ import { Command, CommandCategory } from "../../types/command";
 
 const balloonMax: Command = {
   name: "balloon-max",
+  aliases: ["bl-max"],
   argsCount: -1,
   category: CommandCategory.game,
   description:

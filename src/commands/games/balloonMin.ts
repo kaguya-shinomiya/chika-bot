@@ -10,6 +10,7 @@ import { Command, CommandCategory } from "../../types/command";
 const balloonMin: Command = {
   name: "balloon-min",
   argsCount: -1,
+  aliases: ["bl-min"],
   category: CommandCategory.game,
   description:
     "Check or set the lower bound for balloons' volumes in this server.",
