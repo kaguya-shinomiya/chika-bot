@@ -1,7 +1,8 @@
 import type { Collection, User } from "discord.js";
-import { ribbon_emoji } from "../../../shared/assets";
+import { chika_peeking_png, ribbon_emoji } from "../../../shared/assets";
 import { baseEmbed } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
+import { groupNum } from "../../../utils/typography";
 import { toListString } from "../../music/utils/embeds";
 
 export const sendRibbonStock = (
@@ -21,14 +22,17 @@ export const sendTop = (
   top: {
     tag: string;
     ribbons: number;
-  }[]
+  }[],
+  options?: { locale?: string; thumbnail?: string | null }
 ) => {
   const lines = top.map(
-    ({ tag, ribbons }) => `**${tag}** - ${ribbons} ${ribbon_emoji}`
+    ({ tag, ribbons }) =>
+      `**${tag}**: ${groupNum.format(ribbons)} ${ribbon_emoji}`
   );
   channel.send(
     baseEmbed()
-      .setTitle(`The Wealth Gap :coin:`)
+      .setTitle(`Wealth Gap across ${options?.locale || "za Warudo"} :yen:`)
+      .setThumbnail(options?.thumbnail || chika_peeking_png)
       .setDescription(toListString(lines))
       .setFooter(`Showing top ${lines.length}`)
   );

@@ -12,7 +12,7 @@ const globalTop: Command = {
   aliases: ["gt"],
   async execute(message) {
     const { channel } = message;
-    const top = await prisma.getTopRibbons();
+    const top = await prisma.getGlobalTopRibbons();
     sendTop(channel, top);
   },
 };

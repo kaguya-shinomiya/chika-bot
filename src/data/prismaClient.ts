@@ -80,11 +80,21 @@ class ChikaPrisma extends PrismaClient {
     });
   }
 
-  async getTopRibbons(take = 10) {
+  async getGlobalTopRibbons(take = 10) {
     return this.user.findMany({
       take,
       orderBy: { ribbons: "desc" },
       select: { tag: true, ribbons: true },
+    });
+  }
+
+  async getLocalTopRibbons(members: User[], take = 10) {
+    const IDs = members.map((member) => member.id);
+    return this.user.findMany({
+      take,
+      select: { ribbons: true, tag: true },
+      where: { userId: { in: IDs } },
+      orderBy: { ribbons: "desc" },
     });
   }
 }
