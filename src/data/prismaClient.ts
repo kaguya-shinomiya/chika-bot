@@ -1,11 +1,18 @@
 import { PrismaClient } from "@prisma/client";
 import type { Snowflake, User } from "discord.js";
-import { guildPrefix, ribbons } from "./redisClient";
+import {
+  DEFAULT_MAX_BALLOON,
+  DEFAULT_MIN_BALLOON,
+} from "../games/balloon/utils/defaults";
+import { balloonMax, balloonMin, guildPrefix, ribbons } from "./redisClient";
 
 class ChikaPrisma extends PrismaClient {
   async getPrefix(guildId: Snowflake) {
     const ping = await guildPrefix.get(guildId);
-    if (ping) return ping;
+    if (ping) {
+      guildPrefix.expire(guildId, 600);
+      return ping;
+    }
     return this.guild
       .findUnique({
         where: { guildId },
@@ -13,13 +20,13 @@ class ChikaPrisma extends PrismaClient {
       })
       .then((res) => {
         if (!res?.prefix) return null;
-        guildPrefix.set(guildId, res.prefix, "ex", 3600);
+        guildPrefix.set(guildId, res.prefix, "ex", 600);
         return res.prefix;
       });
   }
 
   async setPrefix(guildId: Snowflake, prefix: string) {
-    guildPrefix.set(guildId, prefix, "ex", 3600);
+    guildPrefix.set(guildId, prefix, "ex", 600);
     await this.guild.upsert({
       create: { guildId, prefix },
       update: { prefix },
@@ -29,7 +36,10 @@ class ChikaPrisma extends PrismaClient {
 
   async getRibbons(user: User) {
     const ping = await ribbons.get(user.id);
-    if (ping) return parseInt(ping, 10);
+    if (ping) {
+      ribbons.expire(user.id, 600);
+      return parseInt(ping, 10);
+    }
     return this.user
       .findUnique({
         where: { userId: user.id },
@@ -37,10 +47,10 @@ class ChikaPrisma extends PrismaClient {
       })
       .then((res) => {
         if (!res?.ribbons) {
-          ribbons.set(user.id, 0, "ex", 3600);
+          ribbons.set(user.id, 0, "ex", 600);
           return 0;
         }
-        ribbons.set(user.id, res.ribbons, "ex", 3600);
+        ribbons.set(user.id, res.ribbons, "ex", 600);
         return res.ribbons;
       });
   }
@@ -52,7 +62,7 @@ class ChikaPrisma extends PrismaClient {
         update: { ribbons: { increment: incrby } },
         where: { userId: user.id },
       })
-      .then((_user) => ribbons.set(user.id, _user.ribbons, "ex", 3600));
+      .then((_user) => ribbons.set(user.id, _user.ribbons, "ex", 600));
   }
 
   async decrRibbons(user: User, decrby: number) {
@@ -73,10 +83,10 @@ class ChikaPrisma extends PrismaClient {
     ]).then((_res) => {
       const [, res] = _res;
       if (!res?.ribbons) {
-        ribbons.set(user.id, 0, "ex", 3600);
+        ribbons.set(user.id, 0, "ex", 600);
         return;
       }
-      ribbons.set(user.id, res.ribbons, "ex", 3600);
+      ribbons.set(user.id, res.ribbons, "ex", 600);
     });
   }
 
@@ -96,6 +106,84 @@ class ChikaPrisma extends PrismaClient {
       where: { userId: { in: IDs } },
       orderBy: { ribbons: "desc" },
     });
+  }
+
+  async setBalloonMin(minVol: number, guildId: string) {
+    // validation to be done in app code
+    await this.guild
+      .upsert({
+        update: {
+          balloon: {
+            upsert: { update: { minVol }, create: { minVol } },
+          },
+        },
+        where: { guildId },
+        create: {
+          guildId,
+          balloon: {
+            connectOrCreate: { create: { minVol }, where: { guildId } },
+          },
+        },
+      })
+      .then(() => {
+        balloonMin.set(guildId, minVol, "ex", 600);
+      });
+  }
+
+  async getBalloonMin(guildId: string) {
+    const ping = await balloonMin.get(guildId);
+    if (ping) {
+      balloonMin.expire(guildId, 600);
+      return parseInt(ping, 10);
+    }
+    return this.balloon
+      .findUnique({
+        where: { guildId },
+        select: { minVol: true },
+      })
+      .then((res) => {
+        if (!res?.minVol) return DEFAULT_MIN_BALLOON;
+        return res.minVol;
+      });
+  }
+
+  async setBalloonMax(maxVol: number, guildId: string) {
+    // validation to be done in app code
+    await this.guild
+      .upsert({
+        update: {
+          balloon: {
+            upsert: { update: { maxVol }, create: { maxVol } },
+          },
+        },
+        where: { guildId },
+        create: {
+          guildId,
+          balloon: {
+            connectOrCreate: { create: { maxVol }, where: { guildId } },
+          },
+        },
+      })
+      .then(() => {
+        balloonMax.set(guildId, maxVol, "ex", 600);
+      });
+  }
+
+  async getBalloonMax(guildId: string) {
+    const ping = await balloonMax.get(guildId);
+    if (ping) {
+      balloonMax.expire(guildId, 600);
+      return parseInt(ping, 10);
+    }
+    return this.balloon
+      .findUnique({
+        where: { guildId },
+        select: { maxVol: true },
+      })
+      .then((res) => {
+        if (!res?.maxVol) return DEFAULT_MAX_BALLOON;
+        return res.maxVol;
+      });
   }
 }
 

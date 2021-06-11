@@ -4,6 +4,7 @@ import { Command, CommandCategory } from "../../types/command";
 
 const shiritoriRules: Command = {
   name: "shiritori-rules",
+  aliases: ["sh-rules"],
   argsCount: 0,
   category: CommandCategory.game,
   description: "Check the rules for Shiritori.",

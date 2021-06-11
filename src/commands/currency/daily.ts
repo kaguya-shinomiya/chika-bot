@@ -20,7 +20,9 @@ const daily: Command = {
     if (cooldownDuration) {
       channel.send(
         lightErrorEmbed(
-          `You've already collected today's ribbons!\nPlease wait ${secToWordString(
+          `You've already collected today's ribbons!
+          
+          Please wait ${secToWordString(
             cooldownDuration
           )} before collecting again.`
         )

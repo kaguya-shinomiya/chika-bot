@@ -1,6 +1,6 @@
 import type { Message, Snowflake, User } from "discord.js";
 import { Collection } from "discord.js";
-import { shiritori_rules_png } from "../../shared/assets";
+import { shiritori_rules_jpg } from "../../shared/assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { BlockingLevel } from "../../types/blockingLevel";
 import { Game } from "../../types/game";
@@ -102,6 +102,6 @@ export class Shiritori extends Game {
         value: `Be the first to clear all 5 cards!`,
       },
     ])
-    .setImage(shiritori_rules_png)
+    .setImage(shiritori_rules_jpg)
     .setFooter(`chapter 188 page 4`);
 }

@@ -46,6 +46,10 @@
     "ytpl": "^2.2.1",
     "ytsr": "^3.5.0"
   },
+  "resolutions": {
+    "normalize-url": "^4.5.1",
+    "ws": "^7.4.6"
+  },
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc && prisma migrate deploy",
@@ -70,5 +74,5 @@
     "yarn": "1.22.10"
   },
   "license": "MIT",
-  "version": "0.3.0"
+  "version": "0.3.1"
 }

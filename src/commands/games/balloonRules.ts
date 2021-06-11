@@ -4,6 +4,7 @@ import { Command, CommandCategory } from "../../types/command";
 
 const balloonRules: Command = {
   name: "balloon-rules",
+  aliases: ["bl-rules"],
   argsCount: 0,
   category: CommandCategory.game,
   description: "Check the rules for Balloon.",

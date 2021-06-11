@@ -50,7 +50,7 @@ const message: Event = {
 
     command.execute(message, args).catch((err) => {
       // eslint-disable-next-line no-console
-      console.log(err);
+      console.error(err);
       channel.send(genericErrorEmbed());
     });
   },

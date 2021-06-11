@@ -6,6 +6,7 @@ import { Command, CommandCategory } from "../../types/command";
 
 const balloon: Command = {
   name: "balloon",
+  aliases: ["bl"],
   argsCount: 0,
   category: CommandCategory.game,
   description: "Chika hands you a balloon and you must pump it.",
