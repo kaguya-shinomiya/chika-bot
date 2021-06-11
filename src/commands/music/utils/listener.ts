@@ -35,7 +35,7 @@ export function createFinishListener(
         });
       })
       // eslint-disable-next-line no-console
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
   return onFinish;
 }

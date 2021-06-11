@@ -68,7 +68,7 @@ export const anime: Command = {
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
         sendNotFoundError(search, channel);
       });
   },

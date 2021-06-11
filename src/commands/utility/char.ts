@@ -42,7 +42,7 @@ export const char: Command = {
       })
       .catch((err) => {
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.error(err);
         sendNotFoundError(charName, channel);
       });
   },
