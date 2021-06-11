@@ -188,7 +188,7 @@ export abstract class Game {
           `
           To review the rules of **${
             this.displayTitle
-          }**, use \`${DEFAULT_PREFIX}rules ${this.title}\`.
+          }**, use \`${DEFAULT_PREFIX}${`${this.title}-rules`}\`.
         \`${EXIT_GAME}\` will stop the game at anytime.
         
         ${options?.startsInMessage || "I'll start the game in 5 seconds!"}
