@@ -25,7 +25,6 @@
     "mocha": "^8.4.0",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.0",
-    "prisma": "^2.24.1",
     "ts-mocha": "^8.0.0",
     "typescript": "^4.2.4"
   },
@@ -42,12 +41,13 @@
     "he": "^1.2.0",
     "ioredis": "^4.27.5",
     "lodash": "^4.17.21",
+    "prisma": "^2.24.1",
     "ytdl-core": "^4.8.2",
     "ytpl": "^2.2.1",
     "ytsr": "^3.5.0"
   },
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "prisma migrate deploy && node dist/index.js",
     "build": "tsc",
     "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
@@ -55,7 +55,9 @@
     "prepare": "husky install",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
-    "gen": "graphql-codegen --config codegen.yml"
+    "gen": "graphql-codegen --config codegen.yml",
+    "db:up": "prisma db push",
+    "db:migrate": "prisma migrate dev"
   },
   "lint-staged": {
     "src/**/*.ts": [
