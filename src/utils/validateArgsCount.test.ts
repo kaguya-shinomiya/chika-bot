@@ -134,4 +134,107 @@ describe("#validateArgsCount", () => {
       expect(channelSendSpy).toBeCalledTimes(1);
     });
   });
+
+  describe("for command with N multi-required params", () => {
+    beforeEach(() => {
+      mockCommand.args = [
+        { name: "arg1", multi: true },
+        { name: "arg2", multi: true },
+      ];
+    });
+    it("should return null if args < N", () => {
+      expect(validateArgsCount(mockCommand, [], mockChannel)).toBe(null);
+      expect(validateArgsCount(mockCommand, ["1"], mockChannel)).toBe(null);
+      expect(embedErrorSpy).toBeCalledTimes(2);
+      expect(channelSendSpy).toBeCalledTimes(2);
+    });
+    it("should return args if args >= N", () => {
+      let args = ["1", "2"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      args = ["1", "2", "3"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+  });
+
+  describe("for command with N multi-optional params", () => {
+    beforeEach(() => {
+      mockCommand.args = [
+        { name: "arg1", multi: true, optional: true },
+        { name: "arg2", multi: true, optional: true },
+      ];
+    });
+    it("should return args if no args submitted", () => {
+      const args: string[] = [];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+    it("should return args if args < N", () => {
+      const args = ["1"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+    it("should return args if args = N", () => {
+      const args = ["1", "2"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+    it("should return args if args > N", () => {
+      const args = ["1", "2", "3", "4"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+  });
+
+  describe("for command with N multi-required and M multi-optional params", () => {
+    beforeEach(() => {
+      mockCommand.args = [
+        { name: "arg1", multi: true },
+        { name: "arg2", multi: true },
+        { name: "arg3", multi: true, optional: true },
+        { name: "arg4", multi: true, optional: true },
+      ];
+    });
+    it("should return null if no args submitted", () => {
+      const args: string[] = [];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(null);
+      expect(embedErrorSpy).toBeCalledTimes(1);
+      expect(channelSendSpy).toBeCalledTimes(1);
+    });
+    it("should return null if args < N", () => {
+      const args = ["1"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(null);
+      expect(embedErrorSpy).toBeCalledTimes(1);
+      expect(channelSendSpy).toBeCalledTimes(1);
+    });
+    it("should return args if args = N", () => {
+      const args = ["1", "2"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+    it("should return args if N < args < N + M", () => {
+      const args = ["1", "2", "3"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+    it("should return args if args = N + M", () => {
+      const args = ["1", "2", "3", "4"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+    it("should return args if args > N + M", () => {
+      const args = ["1", "2", "3", "4", "5"];
+      expect(validateArgsCount(mockCommand, args, mockChannel)).toBe(args);
+      expect(embedErrorSpy).toBeCalledTimes(0);
+      expect(channelSendSpy).toBeCalledTimes(0);
+    });
+  });
 });
