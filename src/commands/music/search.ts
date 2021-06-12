@@ -10,7 +10,7 @@ const search: PartialCommand = {
   name: "search",
   description: "Search for a track on YouTube",
   args: [{ name: "search_string", multi: true }],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   channelCooldown: 15000,
 
   async execute(message, args) {

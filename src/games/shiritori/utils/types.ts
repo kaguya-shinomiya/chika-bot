@@ -3,16 +3,11 @@ import { GameState } from "../../../types/gameState";
 
 // TODO game timeout on inactivity
 
-export class ShiritoriState implements GameState {
-  readonly gameTitle = "shiritori";
-
-  readonly channelId!: string;
-
-  readonly p1!: User;
-
-  readonly p2!: User;
-
-  cards!: Collection<Snowflake, string[]>;
-
-  startingChar!: string;
+interface ShiritoriState extends GameState {
+  p1: User;
+  p2: User;
+  cards: Collection<Snowflake, string[]>;
+  startingChar: string;
 }
+
+export type { ShiritoriState };

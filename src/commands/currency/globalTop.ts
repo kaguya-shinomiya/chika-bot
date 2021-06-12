@@ -8,7 +8,7 @@ const globalTop: PartialCommand = {
   name: "global-top",
   description: `Track down the top 1%.`,
   args: [],
-  category: CommandCategory.currency,
+  category: CommandCategory.CURRENCY,
   aliases: ["gt"],
 
   async execute(message) {

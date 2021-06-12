@@ -11,7 +11,7 @@ export const anime: PartialCommand = {
   name: "anime",
   description: "Look up info for an anime.",
   args: [{ name: "title", multi: true }],
-  category: CommandCategory.utility,
+  category: CommandCategory.UTILITY,
 
   async execute(message, args) {
     const { channel } = message;

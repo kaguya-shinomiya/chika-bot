@@ -9,7 +9,7 @@ import { parsePlaylist } from "./utils/youtube";
 const addPlaylist: PartialCommand = {
   name: "add-playlist",
   aliases: ["ap"],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   description: "Add a YouTube playlist to the queue.",
   args: [{ name: "playlist_url" }],
 

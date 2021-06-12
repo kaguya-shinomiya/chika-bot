@@ -8,7 +8,7 @@ const clear: PartialCommand = {
   name: "clear",
   description: "Clears all tracks from the queue.",
   aliases: ["c"],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   args: [],
 
   async execute(message) {

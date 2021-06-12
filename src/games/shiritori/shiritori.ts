@@ -27,7 +27,6 @@ export class Shiritori extends Game {
 
   blockingLevel = BlockingLevel.channel;
 
-  // eslint-disable-next-line class-methods-use-this
   pregame(message: Message) {
     const { channel, mentions, author } = message;
     const taggedOpponent = mentions.users.first();

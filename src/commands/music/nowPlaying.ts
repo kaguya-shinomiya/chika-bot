@@ -8,7 +8,7 @@ const nowPlaying: PartialCommand = {
   aliases: ["np"],
   args: [],
   description: "Show the currently playing track.",
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
 
   async execute(message) {
     const { guild, client, channel } = message;

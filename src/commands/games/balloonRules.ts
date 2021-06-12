@@ -6,7 +6,7 @@ const balloonRules: PartialCommand = {
   name: "balloon-rules",
   aliases: ["bl-rules"],
   args: [],
-  category: CommandCategory.game,
+  category: CommandCategory.GAME,
   description: "Check the rules for Balloon.",
 
   async execute(message) {

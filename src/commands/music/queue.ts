@@ -11,7 +11,7 @@ const queue: PartialCommand = {
   description: "Display tracks in the queue.",
   aliases: ["q"],
   args: [],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
 
   async execute(message) {
     const { channel, client, guild } = message;

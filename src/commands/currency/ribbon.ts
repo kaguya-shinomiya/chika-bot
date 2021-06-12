@@ -8,7 +8,7 @@ export const ribbon: PartialCommand = {
   name: "ribbon",
   description: "Check how many ribbons you or another user has.",
   args: [{ name: "user", optional: true }],
-  category: CommandCategory.currency,
+  category: CommandCategory.CURRENCY,
   aliases: ["r"],
   async execute(message) {
     const { mentions, author, channel } = message;

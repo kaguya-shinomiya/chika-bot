@@ -7,7 +7,7 @@ import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 const repeat: PartialCommand = {
   name: "repeat",
   aliases: ["rp"],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   description: "Repeats the current track once.",
   args: [],
 

@@ -7,7 +7,7 @@ import { sendTop } from "./utils/embeds";
 const top: PartialCommand = {
   name: "top",
   args: [],
-  category: CommandCategory.currency,
+  category: CommandCategory.CURRENCY,
   description: "Hunt down the richest in this server.",
   aliases: ["richest"],
 

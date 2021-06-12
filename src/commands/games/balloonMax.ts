@@ -10,7 +10,7 @@ import { genUsage } from "../../utils/genUsage";
 const balloonMax: PartialCommand = {
   name: "balloon-max",
   aliases: ["bl-max"],
-  category: CommandCategory.game,
+  category: CommandCategory.GAME,
   description:
     "Check or set the upper bound for balloons' volumes in this server.",
   args: [{ name: "new_max", optional: true }],

@@ -7,7 +7,7 @@ import { isAdmin } from "../../utils/validateMessages";
 const prefix: PartialCommand = {
   name: "set-prefix",
   args: [{ name: "new_prefix" }],
-  category: CommandCategory.utility,
+  category: CommandCategory.UTILITY,
   description: "Set a new prefix for Chika. You'll need to be an admin.",
 
   async execute(message, args) {

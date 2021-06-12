@@ -5,7 +5,7 @@ import { genUsage } from "../../utils/genUsage";
 export const boot: PartialCommand = {
   name: "boot",
   description: "Boot Chika from the voice channel. Queue is not cleared.",
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   args: [],
 
   async execute(message) {

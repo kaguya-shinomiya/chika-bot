@@ -50,7 +50,9 @@ export const animeInfoEmbed = (info: animeEmbedParams) => {
       {
         name: ":cherry_blossom: Season",
         value:
-          seasonYear && season ? `${_.startCase(season)} ${seasonYear}` : "?",
+          seasonYear && season
+            ? `${_.startCase(season.toLowerCase())} ${seasonYear}`
+            : "?",
         inline: true,
       },
     ])
@@ -68,7 +70,9 @@ export const animeInfoEmbed = (info: animeEmbedParams) => {
       },
       {
         name: ":ramen: Sauce",
-        value: source ? _.startCase(source.replace(/_/g, " ")) : "?",
+        value: source
+          ? _.startCase(source.replace(/_/g, " ").toLowerCase())
+          : "?",
         inline: true,
       },
     ]);

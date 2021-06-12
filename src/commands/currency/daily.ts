@@ -8,7 +8,7 @@ import { endOfToday, secToWordString } from "../../utils/time";
 
 const daily: PartialCommand = {
   name: "daily",
-  category: CommandCategory.currency,
+  category: CommandCategory.CURRENCY,
   args: [],
   description: "Collect your daily dose of ribbons.",
 

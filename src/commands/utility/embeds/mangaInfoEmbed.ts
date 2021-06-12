@@ -57,7 +57,9 @@ export const mangaInfoEmbed = (info: mangaEmbedParams) => {
     .addFields([
       {
         name: ":pencil: Status",
-        value: status ? _.capitalize(status.replace(/_/g, " ")) : "?",
+        value: status
+          ? _.startCase(status.replace(/_/g, " ").toLowerCase())
+          : "?",
         inline: true,
       },
       {
@@ -69,7 +71,9 @@ export const mangaInfoEmbed = (info: mangaEmbedParams) => {
       },
       {
         name: ":ramen: Sauce",
-        value: source ? _.capitalize(source.replace(/_/g, " ")) : "?",
+        value: source
+          ? _.startCase(source.replace(/_/g, " ").toLowerCase())
+          : "?",
         inline: true,
       },
     ])

@@ -11,7 +11,7 @@ import { validateArgs } from "./utils/youtube";
 const insert: PartialCommand = {
   name: "insert",
   aliases: ["addd"],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   description: "Inserts a track to the front of the queue.",
   args: [{ name: "url_or_title", multi: true }],
 

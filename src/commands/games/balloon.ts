@@ -8,7 +8,7 @@ const balloon: PartialCommand = {
   name: "balloon",
   aliases: ["bl"],
   args: [],
-  category: CommandCategory.game,
+  category: CommandCategory.GAME,
   description: "Chika hands you a balloon and you must pump it.",
   async execute(message) {
     checkAndBlock(balloonGame, message).then(

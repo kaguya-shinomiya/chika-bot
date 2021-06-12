@@ -6,7 +6,7 @@ import { genUsage } from "../../utils/genUsage";
 
 const shiritori: PartialCommand = {
   name: "shiritori",
-  category: CommandCategory.game,
+  category: CommandCategory.GAME,
   description: "Play a round of Shiritori.",
   aliases: ["sh"],
   args: [{ name: "an_opponent", optional: true }],

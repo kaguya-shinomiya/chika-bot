@@ -8,7 +8,7 @@ const skip: PartialCommand = {
   name: "skip",
   description: "Skip the current track.",
   args: [],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
 
   async execute(message) {
     const { channel, guild, client, author } = message;

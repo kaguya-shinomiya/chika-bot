@@ -18,7 +18,7 @@ const play: PartialCommand = {
   name: "play",
   aliases: ["tunes"],
   args: [{ name: "url_or_title", multi: true, optional: true }],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   description: "Let Chika play some music from YouTube for you.",
 
   async execute(message, args) {

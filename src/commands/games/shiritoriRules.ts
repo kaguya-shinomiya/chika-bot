@@ -6,7 +6,7 @@ const shiritoriRules: PartialCommand = {
   name: "shiritori-rules",
   aliases: ["sh-rules"],
   args: [],
-  category: CommandCategory.game,
+  category: CommandCategory.GAME,
   description: "Check the rules for Shiritori.",
 
   async execute(message) {

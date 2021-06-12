@@ -6,7 +6,7 @@ const help: PartialCommand = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
   args: [{ name: "command", optional: true, multi: true }],
-  category: CommandCategory.utility,
+  category: CommandCategory.UTILITY,
   aliases: ["h"],
 
   async execute({ channel, client: { commands, commandsHelp } }, args) {

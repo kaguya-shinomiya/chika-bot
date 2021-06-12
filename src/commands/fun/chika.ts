@@ -10,7 +10,7 @@ const chika: PartialCommand = {
   name: "chika",
   aliases: ["ck"],
   args: [{ name: "your_message", multi: true }],
-  category: CommandCategory.fun,
+  category: CommandCategory.FUN,
   description:
     "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
 

@@ -6,7 +6,7 @@ import { genUsage } from "../../utils/genUsage";
 const poll: PartialCommand = {
   name: "poll",
   args: [{ name: "question", multi: true }],
-  category: CommandCategory.utility,
+  category: CommandCategory.UTILITY,
   description: "Show your enthusiasm for democracy.",
   aliases: ["vote"],
   async execute(message, args) {

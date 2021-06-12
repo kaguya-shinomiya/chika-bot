@@ -5,7 +5,7 @@ import { avatarEmbed } from "./utils/embeds";
 const avatar: PartialCommand = {
   name: "avatar",
   description: "Retrieves users' avatars.",
-  category: CommandCategory.fun,
+  category: CommandCategory.FUN,
   args: [{ name: "user", optional: true, multi: true }],
 
   async execute(message) {

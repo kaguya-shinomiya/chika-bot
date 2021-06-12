@@ -7,7 +7,7 @@ const pause: PartialCommand = {
   name: "pause",
   aliases: ["stop"],
   description: "Pause the current playback.",
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   args: [],
 
   async execute(message) {

@@ -9,7 +9,7 @@ const give: PartialCommand = {
   name: "give",
   args: [{ name: "user" }, { name: "amount" }],
   description: `Be charitable and give another user some ${ribbon_emoji}.`,
-  category: CommandCategory.currency,
+  category: CommandCategory.CURRENCY,
   aliases: ["donate"],
 
   async execute(message, args) {

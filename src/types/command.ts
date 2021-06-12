@@ -2,11 +2,11 @@ import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 
 // eslint-disable-next-line no-shadow
 export enum CommandCategory {
-  fun = ":coffee: Fun",
-  utility = ":satellite: Utility",
-  music = ":headphones: Music",
-  currency = ":moneybag: Currency",
-  game = ":video_game: Game",
+  FUN = ":coffee: Fun",
+  UTILITY = ":satellite: Utility",
+  MUSIC = ":headphones: Music",
+  CURRENCY = ":moneybag: Currency",
+  GAME = ":video_game: Game",
 }
 
 interface CommandArg {
@@ -17,16 +17,16 @@ interface CommandArg {
 
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
-class Command {
-  name!: string;
+interface Command {
+  name: string;
 
-  description!: string;
+  description: string;
 
-  category!: CommandCategory;
+  category: CommandCategory;
 
-  usage!: string;
+  usage: string;
 
-  args!: CommandArg[];
+  args: CommandArg[];
 
   aliases?: string[];
 
@@ -34,7 +34,7 @@ class Command {
 
   userCooldown?: number;
 
-  execute!: (message: Message, args: string[]) => Promise<void>;
+  execute(message: Message, args: string[]): Promise<void>;
 }
 
 type PartialCommand = Omit<Command, "usage">;

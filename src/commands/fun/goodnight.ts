@@ -5,7 +5,7 @@ import { CommandCategory, PartialCommand } from "../../types/command";
 const goodnight: PartialCommand = {
   name: "goodnight",
   description: "Greets goodnight.",
-  category: CommandCategory.fun,
+  category: CommandCategory.FUN,
   aliases: ["gn"],
   args: [{ name: "user", optional: true }],
 

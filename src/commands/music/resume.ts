@@ -6,7 +6,7 @@ import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 const resume: PartialCommand = {
   name: "resume",
   args: [],
-  category: CommandCategory.music,
+  category: CommandCategory.MUSIC,
   description: "Resume playback.",
 
   async execute(message) {

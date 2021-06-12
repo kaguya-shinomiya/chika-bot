@@ -10,7 +10,7 @@ import { genUsage } from "../../utils/genUsage";
 const balloonMin: PartialCommand = {
   name: "balloon-min",
   aliases: ["bl-min"],
-  category: CommandCategory.game,
+  category: CommandCategory.GAME,
   description:
     "Check or set the lower bound for balloons' volumes in this server.",
   args: [{ name: "new_min", optional: true }],

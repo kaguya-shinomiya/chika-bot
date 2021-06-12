@@ -9,7 +9,7 @@ export const char: PartialCommand = {
   name: "char",
   aliases: ["character"],
   args: [{ name: "character", multi: true }],
-  category: CommandCategory.utility,
+  category: CommandCategory.UTILITY,
   description: "Search for an animanga character.",
 
   async execute(message, args) {

@@ -5,7 +5,7 @@ import { genUsage } from "../../utils/genUsage";
 const ping: PartialCommand = {
   name: "ping",
   description: "Say hello to Chika bot.",
-  category: CommandCategory.fun,
+  category: CommandCategory.FUN,
   args: [],
 
   async execute(message) {
