@@ -1,16 +1,16 @@
 import { lightErrorEmbed } from "../shared/embeds";
 import { Command, GenericChannel } from "../types/command";
 
-export function validateArgsCount<T>(
+export function validateArgsCount(
   command: Command,
-  args: T[],
+  args: string[],
   channel: GenericChannel
-): T[] | null {
+): string[] | null {
   let softMax = 0;
   let hasNoMulti = true;
   command.args.forEach((arg) => {
     if (!arg.optional) softMax += 1;
-    if (!arg.optional && !arg.multi) softMax += 1;
+    if (arg.optional && !arg.multi) softMax += 1;
     if (arg.multi) hasNoMulti = false;
   });
 
