@@ -1,7 +1,7 @@
 import { cooldownRedis, setCooldown, getCooldown } from "./cooldownManager";
 
 afterAll(() => {
-  cooldownRedis.quit();
+  return cooldownRedis.quit();
 });
 
 describe("cooldownManager", () => {
