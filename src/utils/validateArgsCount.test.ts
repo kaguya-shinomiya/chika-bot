@@ -237,4 +237,32 @@ describe("#validateArgsCount", () => {
       expect(channelSendSpy).toBeCalledTimes(0);
     });
   });
+
+  describe("for command with >=1 mono-required/mono-optional and 0 multi", () => {
+    it("should return null if 0 args given", () => {
+      mockCommand.args = [{ name: "arg1" }, { name: "arg2", optional: true }];
+      expect(validateArgsCount(mockCommand, [], mockChannel)).toBe(null);
+      expect(embedErrorSpy).toBeCalledTimes(1);
+      expect(channelSendSpy).toBeCalledTimes(1);
+    });
+    it("should return null if too many args are given", () => {
+      mockCommand.args = [{ name: "arg3", optional: true }];
+      expect(
+        validateArgsCount(mockCommand, ["1", "2", "3", "4"], mockChannel)
+      ).toBe(null);
+      expect(embedErrorSpy).toBeCalledTimes(1);
+      expect(channelSendSpy).toBeCalledTimes(1);
+    });
+  });
+
+  describe("for commands with no optionals params", () => {
+    describe("and exactly 1 mono-required param", () => {
+      it("should return null if 0 args given", () => {
+        mockCommand.args = [{ name: "arg1" }];
+        expect(validateArgsCount(mockCommand, [], mockChannel)).toBe(null);
+        expect(embedErrorSpy).toBeCalledTimes(1);
+        expect(channelSendSpy).toBeCalledTimes(1);
+      });
+    });
+  });
 });
