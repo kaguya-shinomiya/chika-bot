@@ -11,4 +11,5 @@ export const genUsage = (command: PartialCommand) => {
     .join(" ")}`;
   // eslint-disable-next-line no-param-reassign
   (command as Command).usage = usage;
+  return usage;
 };

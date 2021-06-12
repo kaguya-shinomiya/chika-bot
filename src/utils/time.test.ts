@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 /* eslint-disable import/no-extraneous-dependencies */
-import { secToWordString } from "./time";
+import { endOfToday, secToWordString } from "./time";
 
 describe("#secToWordString", () => {
   describe("given exact hour", () => {
@@ -22,5 +22,22 @@ describe("#secToWordString", () => {
     it("should convert correctly", () => {
       expect(secToWordString(19230)).toEqual("5h 20min 30s");
     });
+  });
+});
+
+describe("#endOfToday", () => {
+  const dateSpy = jest.spyOn(Date.prototype, "setHours").mockReturnValue(420);
+
+  beforeEach(() => {
+    dateSpy.mockClear();
+  });
+
+  it("should call Date with 23, 59, 59, 999", () => {
+    endOfToday();
+    expect(dateSpy).toBeCalledTimes(1);
+    expect(dateSpy).toBeCalledWith(23, 59, 59, 999);
+  });
+  it("should call valueOf and return a number", () => {
+    expect(endOfToday()).toBe(420);
   });
 });

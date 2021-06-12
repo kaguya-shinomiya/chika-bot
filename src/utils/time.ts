@@ -1,4 +1,4 @@
-export const endOfToday = () => new Date().setHours(23, 59, 59, 999).valueOf();
+export const endOfToday = () => new Date().setHours(23, 59, 59, 999);
 
 export const secToWordString = (sec: number): string => {
   const h = Math.floor(sec / 3600);
