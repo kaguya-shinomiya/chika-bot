@@ -1,9 +1,8 @@
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
-const resume: PartialCommand = {
+const resume = new Command({
   name: "resume",
   args: [],
   category: CommandCategory.MUSIC,
@@ -29,7 +28,6 @@ const resume: PartialCommand = {
         .setDescription(trackLinkAndDuration(title, url, duration))
     );
   },
-};
+});
 
-genUsage(resume);
-export default resume as Command;
+export default resume;

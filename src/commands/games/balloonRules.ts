@@ -1,8 +1,7 @@
 import { balloonGame } from "../../games/balloon";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const balloonRules: PartialCommand = {
+const balloonRules = new Command({
   name: "balloon-rules",
   aliases: ["bl-rules"],
   args: [],
@@ -13,7 +12,6 @@ const balloonRules: PartialCommand = {
     const { channel } = message;
     channel.send(balloonGame.rules);
   },
-};
+});
 
-genUsage(balloonRules);
-export default balloonRules as Command;
+export default balloonRules;

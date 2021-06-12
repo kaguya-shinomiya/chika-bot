@@ -1,9 +1,8 @@
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
 
-const nowPlaying: PartialCommand = {
+const nowPlaying = new Command({
   name: "now-playing",
   aliases: ["np"],
   args: [],
@@ -27,7 +26,6 @@ const nowPlaying: PartialCommand = {
       streamTime: audioUtils.dispatcher.streamTime,
     });
   },
-};
+});
 
-genUsage(nowPlaying);
-export default nowPlaying as Command;
+export default nowPlaying;

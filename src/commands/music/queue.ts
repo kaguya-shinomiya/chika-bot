@@ -1,12 +1,11 @@
 import { queue as tracks } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
 
 // TODO use paginated embed for this
 
-const queue: PartialCommand = {
+const queue = new Command({
   name: "queue",
   description: "Display tracks in the queue.",
   aliases: ["q"],
@@ -37,7 +36,6 @@ const queue: PartialCommand = {
       });
     });
   },
-};
+});
 
-genUsage(queue);
-export default queue as Command;
+export default queue;

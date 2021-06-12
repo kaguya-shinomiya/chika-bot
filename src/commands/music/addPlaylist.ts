@@ -1,12 +1,11 @@
 import ytpl from "ytpl";
 import { queue } from "../../data/redisClient";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { parsePlaylist } from "./utils/youtube";
 
-const addPlaylist: PartialCommand = {
+const addPlaylist = new Command({
   name: "add-playlist",
   aliases: ["ap"],
   category: CommandCategory.MUSIC,
@@ -48,7 +47,6 @@ const addPlaylist: PartialCommand = {
         )
       );
   },
-};
+});
 
-genUsage(addPlaylist);
-export default addPlaylist as Command;
+export default addPlaylist;

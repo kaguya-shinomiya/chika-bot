@@ -1,5 +1,7 @@
 import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 
+type GenericChannel = TextChannel | DMChannel | NewsChannel;
+
 // eslint-disable-next-line no-shadow
 export enum CommandCategory {
   FUN = ":coffee: Fun",
@@ -15,9 +17,19 @@ interface CommandArg {
   multi?: boolean;
 }
 
-type GenericChannel = TextChannel | DMChannel | NewsChannel;
+interface ICommand {
+  name: string;
+  description: string;
+  category: CommandCategory;
+  args: CommandArg[];
+  execute(message: Message, args: string[]): Promise<void>;
 
-interface Command {
+  aliases?: string[];
+  channelCooldown?: number;
+  userCooldown?: number;
+}
+
+export class Command implements ICommand {
   name: string;
 
   description: string;
@@ -28,15 +40,45 @@ interface Command {
 
   args: CommandArg[];
 
+  execute: (message: Message, args: string[]) => Promise<void>;
+
   aliases?: string[];
 
   channelCooldown?: number;
 
   userCooldown?: number;
 
-  execute(message: Message, args: string[]): Promise<void>;
+  constructor({
+    name,
+    description,
+    category,
+    args,
+    aliases,
+    channelCooldown,
+    userCooldown,
+    execute,
+  }: ICommand) {
+    this.name = name;
+    this.description = description;
+    this.category = category;
+    this.args = args;
+    this.aliases = aliases;
+    this.channelCooldown = channelCooldown;
+    this.userCooldown = userCooldown;
+    this.execute = execute;
+
+    this.usage = this.genUsage();
+  }
+
+  genUsage(): string {
+    return `${this.name} ${this.args
+      .map((arg) => {
+        if (!arg.optional) return `<${arg.name}>`;
+        if (arg.optional && !arg.multi) return `[${arg.name}]`;
+        return `[${arg.name} ...]`;
+      })
+      .join(" ")}`;
+  }
 }
 
-type PartialCommand = Omit<Command, "usage">;
-
-export type { Command, GenericChannel, CommandArg, PartialCommand };
+export type { GenericChannel };

@@ -4,10 +4,9 @@ import {
   lightErrorEmbed,
   sendNotInGuild,
 } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const balloonMin: PartialCommand = {
+const balloonMin = new Command({
   name: "balloon-min",
   aliases: ["bl-min"],
   category: CommandCategory.GAME,
@@ -60,7 +59,6 @@ const balloonMin: PartialCommand = {
       )
     );
   },
-};
+});
 
-genUsage(balloonMin);
-export default balloonMin as Command;
+export default balloonMin;

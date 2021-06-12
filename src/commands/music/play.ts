@@ -1,8 +1,7 @@
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { QueueItem } from "../../types/queue";
-import { genUsage } from "../../utils/genUsage";
 import { tryToConnect } from "./utils/client";
 import {
   sendAddedToQueue,
@@ -14,7 +13,7 @@ import {
 import { createFinishListener } from "./utils/listener";
 import { playThis, validateArgs } from "./utils/youtube";
 
-const play: PartialCommand = {
+const play = new Command({
   name: "play",
   aliases: ["tunes"],
   args: [{ name: "url_or_title", multi: true, optional: true }],
@@ -99,7 +98,6 @@ const play: PartialCommand = {
       onFinish: createFinishListener(guild, { channel, client }),
     });
   },
-};
+});
 
-genUsage(play);
-export default play as Command;
+export default play;

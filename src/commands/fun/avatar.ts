@@ -1,8 +1,7 @@
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { avatarEmbed } from "./utils/embeds";
 
-const avatar: PartialCommand = {
+const avatar = new Command({
   name: "avatar",
   description: "Retrieves users' avatars.",
   category: CommandCategory.FUN,
@@ -18,7 +17,6 @@ const avatar: PartialCommand = {
       channel.send(avatarEmbed(user));
     });
   },
-};
+});
 
-genUsage(avatar);
-export default avatar as Command;
+export default avatar;

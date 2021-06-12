@@ -1,9 +1,8 @@
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
-const pause: PartialCommand = {
+const pause = new Command({
   name: "pause",
   aliases: ["stop"],
   description: "Pause the current playback.",
@@ -37,7 +36,6 @@ const pause: PartialCommand = {
         .setDescription(trackLinkAndDuration(title, url, duration))
     );
   },
-};
+});
 
-genUsage(pause);
-export default pause as Command;
+export default pause;

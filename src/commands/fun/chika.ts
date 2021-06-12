@@ -2,11 +2,10 @@ import axios from "axios";
 import { prisma } from "../../data/prismaClient";
 import { chatbotInput, chatbotResponse } from "../../data/redisClient";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { ChatbotInput } from "./utils/types";
 
-const chika: PartialCommand = {
+const chika = new Command({
   name: "chika",
   aliases: ["ck"],
   args: [{ name: "your_message", multi: true }],
@@ -70,7 +69,6 @@ const chika: PartialCommand = {
         }
       });
   },
-};
+});
 
-genUsage(chika);
-export default chika as Command;
+export default chika;

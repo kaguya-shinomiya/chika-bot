@@ -1,9 +1,8 @@
 import { red_cross, white_check_mark } from "../../shared/assets";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const poll: PartialCommand = {
+const poll = new Command({
   name: "poll",
   args: [{ name: "question", multi: true }],
   category: CommandCategory.UTILITY,
@@ -29,7 +28,6 @@ const poll: PartialCommand = {
           .then(() => _message.react(red_cross));
       });
   },
-};
+});
 
-genUsage(poll);
-export default poll as Command;
+export default poll;

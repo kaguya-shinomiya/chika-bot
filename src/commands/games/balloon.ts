@@ -1,10 +1,9 @@
 import { balloonGame } from "../../games/balloon";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const balloon: PartialCommand = {
+const balloon = new Command({
   name: "balloon",
   aliases: ["bl"],
   args: [],
@@ -16,7 +15,6 @@ const balloon: PartialCommand = {
       (err) => message.channel.send(lightErrorEmbed(err))
     );
   },
-};
+});
 
-genUsage(balloon);
-export default balloon as Command;
+export default balloon;

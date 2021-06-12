@@ -1,8 +1,7 @@
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-export const boot: PartialCommand = {
+const boot = new Command({
   name: "boot",
   description: "Boot Chika from the voice channel. Queue is not cleared.",
   category: CommandCategory.MUSIC,
@@ -23,7 +22,6 @@ export const boot: PartialCommand = {
     channel.send(lightErrorEmbed(`I've left the voice channel.`));
     client.cache.audioUtils.delete(guild.id);
   },
-};
+});
 
-genUsage(boot);
-export default boot as Command;
+export default boot;

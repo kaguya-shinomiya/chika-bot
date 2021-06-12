@@ -1,6 +1,5 @@
 import { queue } from "../../data/redisClient";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import {
   sendAddedToQueue,
   sendMusicOnlyInGuild,
@@ -8,7 +7,7 @@ import {
 } from "./utils/embeds";
 import { validateArgs } from "./utils/youtube";
 
-const insert: PartialCommand = {
+const insert = new Command({
   name: "insert",
   aliases: ["addd"],
   category: CommandCategory.MUSIC,
@@ -31,7 +30,6 @@ const insert: PartialCommand = {
     queue.lpush(guild.id, JSON.stringify(videoData));
     sendAddedToQueue(channel, { videoData, author });
   },
-};
+});
 
-genUsage(insert);
-export default insert as Command;
+export default insert;

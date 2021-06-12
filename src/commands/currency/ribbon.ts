@@ -1,10 +1,9 @@
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
 import { baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-export const ribbon: PartialCommand = {
+const ribbon = new Command({
   name: "ribbon",
   description: "Check how many ribbons you or another user has.",
   args: [{ name: "user", optional: true }],
@@ -21,7 +20,6 @@ export const ribbon: PartialCommand = {
       )
     );
   },
-};
+});
 
-genUsage(ribbon);
-export default ribbon as Command;
+export default ribbon;

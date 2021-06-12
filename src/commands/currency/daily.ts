@@ -1,12 +1,11 @@
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { getCooldown, setCooldown } from "../../utils/cooldownManager";
-import { genUsage } from "../../utils/genUsage";
 import { endOfToday, secToWordString } from "../../utils/time";
 
-const daily: PartialCommand = {
+const daily = new Command({
   name: "daily",
   category: CommandCategory.CURRENCY,
   args: [],
@@ -43,7 +42,6 @@ const daily: PartialCommand = {
     setCooldown(author.id, this.name, cooldown);
     prisma.incrRibbons(author, toAward);
   },
-};
+});
 
-genUsage(daily);
-export default daily as Command;
+export default daily;

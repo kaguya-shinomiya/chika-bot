@@ -1,10 +1,9 @@
 import { prisma } from "../../data/prismaClient";
 import { sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendTop } from "./utils/embeds";
 
-const top: PartialCommand = {
+const top = new Command({
   name: "top",
   args: [],
   category: CommandCategory.CURRENCY,
@@ -27,7 +26,6 @@ const top: PartialCommand = {
         })
       );
   },
-};
+});
 
-genUsage(top);
-export default top as Command;
+export default top;

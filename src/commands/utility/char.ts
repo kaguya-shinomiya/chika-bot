@@ -1,11 +1,10 @@
 import { getSdk } from "../../generated/graphql";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
-export const char: PartialCommand = {
+const char = new Command({
   name: "char",
   aliases: ["character"],
   args: [{ name: "character", multi: true }],
@@ -46,7 +45,6 @@ export const char: PartialCommand = {
         sendNotFoundError(charName, channel);
       });
   },
-};
+});
 
-genUsage(char);
-export default char as Command;
+export default char;

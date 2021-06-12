@@ -1,10 +1,9 @@
 import { prisma } from "../../data/prismaClient";
 import { genericErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendTop } from "./utils/embeds";
 
-const globalTop: PartialCommand = {
+const globalTop = new Command({
   name: "global-top",
   description: `Track down the top 1%.`,
   args: [],
@@ -20,7 +19,6 @@ const globalTop: PartialCommand = {
     }
     sendTop(channel, top);
   },
-};
+});
 
-genUsage(globalTop);
-export default globalTop as Command;
+export default globalTop;

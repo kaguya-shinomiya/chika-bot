@@ -1,10 +1,9 @@
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild } from "./utils/embeds";
 
-const clear: PartialCommand = {
+const clear = new Command({
   name: "clear",
   description: "Clears all tracks from the queue.",
   aliases: ["c"],
@@ -26,7 +25,6 @@ const clear: PartialCommand = {
       channel.send(withAuthorEmbed(author).setTitle("Queue has been cleared."));
     });
   },
-};
+});
 
-genUsage(clear);
-export default clear as Command;
+export default clear;

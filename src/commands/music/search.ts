@@ -1,12 +1,11 @@
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 import { setCooldown } from "../../utils/cooldownManager";
-import { genUsage } from "../../utils/genUsage";
 import { sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
 
-const search: PartialCommand = {
+const search = new Command({
   name: "search",
   description: "Search for a track on YouTube",
   args: [{ name: "search_string", multi: true }],
@@ -40,7 +39,6 @@ const search: PartialCommand = {
     client.on("message", resultSelectListener);
     client.setTimeout(timeoutCallback, this.channelCooldown!);
   },
-};
+});
 
-genUsage(search);
-export default search as Command;
+export default search;

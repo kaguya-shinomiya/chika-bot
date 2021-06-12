@@ -1,13 +1,12 @@
 import { TextChannel } from "discord.js";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
-export const anime: PartialCommand = {
+const anime = new Command({
   name: "anime",
   description: "Look up info for an anime.",
   args: [{ name: "title", multi: true }],
@@ -72,7 +71,6 @@ export const anime: PartialCommand = {
         sendNotFoundError(search, channel);
       });
   },
-};
+});
 
-genUsage(anime);
-export default anime as Command;
+export default anime;

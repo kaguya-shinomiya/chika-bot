@@ -1,8 +1,8 @@
+import { redis } from "../../data/redisClient";
 import { baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const ping: PartialCommand = {
+const ping = new Command({
   name: "ping",
   description: "Say hello to Chika bot.",
   category: CommandCategory.FUN,
@@ -10,15 +10,14 @@ const ping: PartialCommand = {
 
   async execute(message) {
     const { channel, author } = message;
-    // TODO actually report latency
     // TODO actually use the redis ping
     channel.send(
       baseEmbed().setDescription(
         `Yo ${author.username}, Love Detective Chika here!`
       )
     );
+    redis.ping();
   },
-};
+});
 
-genUsage(ping);
-export default ping as Command;
+export default ping;

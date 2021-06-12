@@ -1,8 +1,8 @@
 import { kaguya_sleep_gif } from "../../shared/assets";
 import { baseEmbed } from "../../shared/embeds";
-import { CommandCategory, PartialCommand } from "../../types/command";
+import { Command, CommandCategory } from "../../types/command";
 
-const goodnight: PartialCommand = {
+const goodnight = new Command({
   name: "goodnight",
   description: "Greets goodnight.",
   category: CommandCategory.FUN,
@@ -29,6 +29,6 @@ const goodnight: PartialCommand = {
       baseEmbed().setDescription(message).setImage(kaguya_sleep_gif)
     );
   },
-};
+});
 
 export default goodnight;

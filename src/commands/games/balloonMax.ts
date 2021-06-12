@@ -4,10 +4,9 @@ import {
   lightErrorEmbed,
   sendNotInGuild,
 } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const balloonMax: PartialCommand = {
+const balloonMax = new Command({
   name: "balloon-max",
   aliases: ["bl-max"],
   category: CommandCategory.GAME,
@@ -59,7 +58,6 @@ const balloonMax: PartialCommand = {
       )
     );
   },
-};
+});
 
-genUsage(balloonMax);
-export default balloonMax as Command;
+export default balloonMax;

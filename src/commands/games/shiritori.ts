@@ -1,10 +1,9 @@
 import { shiritoriGame } from "../../games/shiritori";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const shiritori: PartialCommand = {
+const shiritori = new Command({
   name: "shiritori",
   category: CommandCategory.GAME,
   description: "Play a round of Shiritori.",
@@ -26,7 +25,6 @@ const shiritori: PartialCommand = {
       (err) => message.channel.send(lightErrorEmbed(err))
     );
   },
-};
+});
 
-genUsage(shiritori);
-export default shiritori as Command;
+export default shiritori;

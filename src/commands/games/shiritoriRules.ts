@@ -1,8 +1,7 @@
 import { shiritoriGame } from "../../games/shiritori";
-import { CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const shiritoriRules: PartialCommand = {
+const shiritoriRules = new Command({
   name: "shiritori-rules",
   aliases: ["sh-rules"],
   args: [],
@@ -13,7 +12,6 @@ const shiritoriRules: PartialCommand = {
     const { channel } = message;
     channel.send(shiritoriGame.rules);
   },
-};
+});
 
-genUsage(shiritoriRules);
 export default shiritoriRules;

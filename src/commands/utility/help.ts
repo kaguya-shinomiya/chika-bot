@@ -1,8 +1,7 @@
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 
-const help: PartialCommand = {
+const help = new Command({
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
   args: [{ name: "command", optional: true, multi: true }],
@@ -39,7 +38,6 @@ const help: PartialCommand = {
       channel.send(badCommandsEmbed(...unknownCommands));
     }
   },
-};
+});
 
-genUsage(help);
-export default help as Command;
+export default help;

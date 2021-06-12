@@ -1,10 +1,9 @@
 import { prisma } from "../../data/prismaClient";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { isAdmin } from "../../utils/validateMessages";
 
-const prefix: PartialCommand = {
+const prefix = new Command({
   name: "set-prefix",
   args: [{ name: "new_prefix" }],
   category: CommandCategory.UTILITY,
@@ -24,7 +23,6 @@ const prefix: PartialCommand = {
       baseEmbed().setDescription(`Chika's prefix is now **${newPrefix}**`)
     );
   },
-};
+});
 
-genUsage(prefix);
-export default prefix as Command;
+export default prefix;

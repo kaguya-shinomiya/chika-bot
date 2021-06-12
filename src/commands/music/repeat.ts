@@ -1,10 +1,9 @@
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 
-const repeat: PartialCommand = {
+const repeat = new Command({
   name: "repeat",
   aliases: ["rp"],
   category: CommandCategory.MUSIC,
@@ -26,7 +25,6 @@ const repeat: PartialCommand = {
     sendRepeat(channel, { videoData: audioUtils.nowPlaying, author });
     queue.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
   },
-};
+});
 
-genUsage(repeat);
 export default repeat;

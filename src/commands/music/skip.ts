@@ -1,10 +1,9 @@
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
 
-const skip: PartialCommand = {
+const skip = new Command({
   name: "skip",
   description: "Skip the current track.",
   args: [],
@@ -42,7 +41,6 @@ const skip: PartialCommand = {
       client,
     })();
   },
-};
+});
 
-genUsage(skip);
-export default skip as Command;
+export default skip;

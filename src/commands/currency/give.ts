@@ -1,11 +1,10 @@
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory, PartialCommand } from "../../types/command";
-import { genUsage } from "../../utils/genUsage";
+import { Command, CommandCategory } from "../../types/command";
 import { groupNum } from "../../utils/typography";
 
-const give: PartialCommand = {
+const give = new Command({
   name: "give",
   args: [{ name: "user" }, { name: "amount" }],
   description: `Be charitable and give another user some ${ribbon_emoji}.`,
@@ -54,7 +53,6 @@ const give: PartialCommand = {
       )
     );
   },
-};
+});
 
-genUsage(give);
-export default give as Command;
+export default give;
