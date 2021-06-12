@@ -11,6 +11,7 @@ const ping: PartialCommand = {
   async execute(message) {
     const { channel, author } = message;
     // TODO actually report latency
+    // TODO actually use the redis ping
     channel.send(
       baseEmbed().setDescription(
         `Yo ${author.username}, Love Detective Chika here!`
