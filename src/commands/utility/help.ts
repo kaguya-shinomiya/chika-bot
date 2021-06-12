@@ -23,10 +23,12 @@ const help: Command = {
         (command) => command.name === arg || !!command.aliases?.includes(arg)
       );
       if (match) {
-        const embed = baseEmbed().addField(match.usage, match.description);
+        const embed = baseEmbed()
+          .addField(match.name, match.description)
+          .addField("Usage", `\`${match.usage}\``, true);
         if (match.aliases) {
           const preTag = match.aliases.map((alias) => `\`${alias}\``);
-          embed.addField("Aliases", preTag.join(", "));
+          embed.addField("Aliases", preTag.join(", "), true);
         }
         channel.send(embed);
         return;
