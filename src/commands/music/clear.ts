@@ -1,16 +1,16 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendMusicOnlyInGuild } from "./utils/embeds";
 
-const clear: Command = {
+const clear: PartialCommand = {
   name: "clear",
   description: "Clears all tracks from the queue.",
-  argsCount: 0,
   aliases: ["c"],
   category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}clear`,
+  args: [],
+
   async execute(message) {
     const { guild, channel, author } = message;
     if (!guild) {
@@ -28,4 +28,5 @@ const clear: Command = {
   },
 };
 
-export default clear;
+genUsage(clear);
+export default clear as Command;

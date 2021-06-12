@@ -49,9 +49,9 @@
     "ws": "^7.4.6"
   },
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "node dist/index.js --unhandled-rejections=strict",
     "build": "tsc && prisma migrate deploy",
-    "dev": "nodemon dist/index.js",
+    "dev": "nodemon --unhandled-rejections=strict dist/index.js",
     "watch": "tsc -w",
     "test": "jest",
     "prepare": "husky install",

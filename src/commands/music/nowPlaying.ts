@@ -1,15 +1,15 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
 
-const nowPlaying: Command = {
+const nowPlaying: PartialCommand = {
   name: "now-playing",
   aliases: ["np"],
-  argsCount: 0,
+  args: [],
   description: "Show the currently playing track.",
   category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}np`,
+
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
@@ -29,4 +29,5 @@ const nowPlaying: Command = {
   },
 };
 
-export default nowPlaying;
+genUsage(nowPlaying);
+export default nowPlaying as Command;

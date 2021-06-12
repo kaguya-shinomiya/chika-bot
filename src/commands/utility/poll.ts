@@ -1,14 +1,13 @@
 import { red_cross, white_check_mark } from "../../shared/assets";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-const poll: Command = {
+const poll: PartialCommand = {
   name: "poll",
-  argsCount: -2,
+  args: [{ name: "question", multi: true }],
   category: CommandCategory.utility,
-  description: "Begin a democratic process to collect public opinion.",
-  usage: `${DEFAULT_PREFIX}poll <question>`,
+  description: "Show your enthusiasm for democracy.",
   aliases: ["vote"],
   async execute(message, args) {
     const { guild, channel, author } = message;
@@ -32,4 +31,5 @@ const poll: Command = {
   },
 };
 
-export default poll;
+genUsage(poll);
+export default poll as Command;

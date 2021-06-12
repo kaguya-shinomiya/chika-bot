@@ -1,18 +1,19 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { shiritoriGame } from "../../games/shiritori";
-import { Command, CommandCategory } from "../../types/command";
+import { CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-const shiritoriRules: Command = {
+const shiritoriRules: PartialCommand = {
   name: "shiritori-rules",
   aliases: ["sh-rules"],
-  argsCount: 0,
+  args: [],
   category: CommandCategory.game,
   description: "Check the rules for Shiritori.",
-  usage: `${DEFAULT_PREFIX}shiritori-rules`,
+
   async execute(message) {
     const { channel } = message;
     channel.send(shiritoriGame.rules);
   },
 };
 
+genUsage(shiritoriRules);
 export default shiritoriRules;

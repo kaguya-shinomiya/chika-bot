@@ -1,18 +1,18 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
-import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
-import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
 import { queue as tracks } from "../../data/redisClient";
+import { lightErrorEmbed } from "../../shared/embeds";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
+import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
 
 // TODO use paginated embed for this
 
-const queue: Command = {
+const queue: PartialCommand = {
   name: "queue",
   description: "Display tracks in the queue.",
   aliases: ["q"],
-  argsCount: 0,
+  args: [],
   category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}queue`,
+
   async execute(message) {
     const { channel, client, guild } = message;
     if (!guild) {
@@ -39,4 +39,5 @@ const queue: Command = {
   },
 };
 
-export default queue;
+genUsage(queue);
+export default queue as Command;

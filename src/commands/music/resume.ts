@@ -1,14 +1,14 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
-const resume: Command = {
+const resume: PartialCommand = {
   name: "resume",
-  argsCount: 0,
+  args: [],
   category: CommandCategory.music,
   description: "Resume playback.",
-  usage: `${DEFAULT_PREFIX}resume`,
+
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -31,4 +31,5 @@ const resume: Command = {
   },
 };
 
-export default resume;
+genUsage(resume);
+export default resume as Command;

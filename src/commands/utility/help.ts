@@ -1,14 +1,14 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-const help: Command = {
+const help: PartialCommand = {
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
-  usage: `${DEFAULT_PREFIX}help [command ...]`,
+  args: [{ name: "command", optional: true, multi: true }],
   category: CommandCategory.utility,
-  argsCount: -1,
   aliases: ["h"],
+
   async execute({ channel, client: { commands, commandsHelp } }, args) {
     if (!args.length || /^all$/i.test(args[0])) {
       // send a list of all commands
@@ -41,4 +41,5 @@ const help: Command = {
   },
 };
 
-export default help;
+genUsage(help);
+export default help as Command;

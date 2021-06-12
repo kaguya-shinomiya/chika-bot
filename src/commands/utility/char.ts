@@ -1,17 +1,17 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk } from "../../generated/graphql";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
-export const char: Command = {
+export const char: PartialCommand = {
   name: "char",
   aliases: ["character"],
-  argsCount: -2,
+  args: [{ name: "character", multi: true }],
   category: CommandCategory.utility,
-  usage: `${DEFAULT_PREFIX}char <character_name>`,
   description: "Search for an animanga character.",
+
   async execute(message, args) {
     const { channel } = message;
     const charName = args.join(" ");
@@ -48,4 +48,5 @@ export const char: Command = {
   },
 };
 
-export default char;
+genUsage(char);
+export default char as Command;

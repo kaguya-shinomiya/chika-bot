@@ -36,3 +36,28 @@ model Balloon {
   minVol  Int?
   maxVol  Int?
 }
+
+model Arg {
+  id        Int      @id @default(autoincrement())
+  name      String
+  optional  Boolean
+  multi     Boolean
+  Command   Command? @relation(fields: [commandId], references: [id])
+  commandId Int?
+}
+
+enum CmdCategory {
+  CURRENCY
+  FUN
+  GAMES
+  MUSIC
+  UTILITY
+}
+
+model Command {
+  id          Int         @id @default(autoincrement())
+  name        String      @unique
+  args        Arg[]
+  description String
+  category    CmdCategory
+}

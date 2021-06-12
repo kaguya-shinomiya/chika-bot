@@ -1,17 +1,17 @@
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
 import { getCooldown, setCooldown } from "../../utils/cooldownManager";
+import { genUsage } from "../../utils/genUsage";
 import { endOfToday, secToWordString } from "../../utils/time";
 
-const daily: Command = {
+const daily: PartialCommand = {
   name: "daily",
   category: CommandCategory.currency,
-  argsCount: 0,
+  args: [],
   description: "Collect your daily dose of ribbons.",
-  usage: `${DEFAULT_PREFIX}daily`,
+
   async execute(message) {
     const { author, channel } = message;
 
@@ -45,4 +45,5 @@ const daily: Command = {
   },
 };
 
-export default daily;
+genUsage(daily);
+export default daily as Command;

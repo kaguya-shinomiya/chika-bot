@@ -1,15 +1,15 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
 
-const skip: Command = {
+const skip: PartialCommand = {
   name: "skip",
   description: "Skip the current track.",
-  usage: `${DEFAULT_PREFIX}skip`,
-  argsCount: 0,
+  args: [],
   category: CommandCategory.music,
+
   async execute(message) {
     const { channel, guild, client, author } = message;
     if (!guild) {
@@ -44,4 +44,5 @@ const skip: Command = {
   },
 };
 
-export default skip;
+genUsage(skip);
+export default skip as Command;

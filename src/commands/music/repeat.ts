@@ -1,16 +1,16 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 
-const repeat: Command = {
+const repeat: PartialCommand = {
   name: "repeat",
   aliases: ["rp"],
-  argsCount: 0,
   category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}repeat`,
   description: "Repeats the current track once.",
+  args: [],
+
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -28,4 +28,5 @@ const repeat: Command = {
   },
 };
 
+genUsage(repeat);
 export default repeat;

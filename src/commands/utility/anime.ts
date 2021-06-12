@@ -1,18 +1,18 @@
 import { TextChannel } from "discord.js";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
-export const anime: Command = {
+export const anime: PartialCommand = {
   name: "anime",
   description: "Look up info for an anime.",
-  argsCount: -2,
+  args: [{ name: "title", multi: true }],
   category: CommandCategory.utility,
-  usage: `${DEFAULT_PREFIX}anime <anime_title>`,
+
   async execute(message, args) {
     const { channel } = message;
     const search = args.join(" ");
@@ -74,4 +74,5 @@ export const anime: Command = {
   },
 };
 
-export default anime;
+genUsage(anime);
+export default anime as Command;

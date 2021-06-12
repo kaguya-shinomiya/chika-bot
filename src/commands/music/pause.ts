@@ -1,15 +1,15 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
-const pause: Command = {
+const pause: PartialCommand = {
   name: "pause",
   aliases: ["stop"],
   description: "Pause the current playback.",
-  argsCount: 0,
-  usage: `${DEFAULT_PREFIX}pause`,
   category: CommandCategory.music,
+  args: [],
+
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -39,4 +39,5 @@ const pause: Command = {
   },
 };
 
-export default pause;
+genUsage(pause);
+export default pause as Command;

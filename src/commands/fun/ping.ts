@@ -1,26 +1,23 @@
-import { prisma } from "../../data/prismaClient";
-import { redis } from "../../data/redisClient";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-const ping: Command = {
+const ping: PartialCommand = {
   name: "ping",
   description: "Say hello to Chika bot.",
   category: CommandCategory.fun,
-  usage: `${DEFAULT_PREFIX}hello`,
-  argsCount: 0,
+  args: [],
+
   async execute(message) {
     const { channel, author } = message;
+    // TODO actually report latency
     channel.send(
       baseEmbed().setDescription(
         `Yo ${author.username}, Love Detective Chika here!`
       )
     );
-    // eslint-disable-next-line no-console
-    redis.get("ping").then((res) => console.log("Checking Redis...", res));
-    prisma.decrRibbons(author, 1000000);
   },
 };
 
-export default ping;
+genUsage(ping);
+export default ping as Command;

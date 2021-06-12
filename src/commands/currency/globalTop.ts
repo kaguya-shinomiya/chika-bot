@@ -1,16 +1,16 @@
 import { prisma } from "../../data/prismaClient";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { genericErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendTop } from "./utils/embeds";
 
-const globalTop: Command = {
+const globalTop: PartialCommand = {
   name: "global-top",
   description: `Track down the top 1%.`,
-  argsCount: 0,
+  args: [],
   category: CommandCategory.currency,
-  usage: `${DEFAULT_PREFIX}global-top`,
   aliases: ["gt"],
+
   async execute(message) {
     const { channel } = message;
     const top = await prisma.getGlobalTopRibbons();
@@ -22,4 +22,5 @@ const globalTop: Command = {
   },
 };
 
-export default globalTop;
+genUsage(globalTop);
+export default globalTop as Command;

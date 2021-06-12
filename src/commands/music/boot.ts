@@ -1,13 +1,13 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-export const boot: Command = {
+export const boot: PartialCommand = {
   name: "boot",
   description: "Boot Chika from the voice channel. Queue is not cleared.",
-  argsCount: 0,
   category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}boot`,
+  args: [],
+
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
@@ -25,4 +25,5 @@ export const boot: Command = {
   },
 };
 
-export default boot;
+genUsage(boot);
+export default boot as Command;

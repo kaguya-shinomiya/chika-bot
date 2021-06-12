@@ -1,20 +1,19 @@
 import { prisma } from "../../data/prismaClient";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import {
   baseEmbed,
   lightErrorEmbed,
   sendNotInGuild,
 } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-const balloonMax: Command = {
+const balloonMax: PartialCommand = {
   name: "balloon-max",
   aliases: ["bl-max"],
-  argsCount: -1,
   category: CommandCategory.game,
   description:
     "Check or set the upper bound for balloons' volumes in this server.",
-  usage: `${DEFAULT_PREFIX}balloon-max [number]`,
+  args: [{ name: "new_max", optional: true }],
   async execute(message, args) {
     const { channel, guild } = message;
     if (!guild) {
@@ -62,4 +61,5 @@ const balloonMax: Command = {
   },
 };
 
-export default balloonMax;
+genUsage(balloonMax);
+export default balloonMax as Command;

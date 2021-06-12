@@ -1,8 +1,8 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
 import { QueueItem } from "../../types/queue";
+import { genUsage } from "../../utils/genUsage";
 import { tryToConnect } from "./utils/client";
 import {
   sendAddedToQueue,
@@ -14,13 +14,13 @@ import {
 import { createFinishListener } from "./utils/listener";
 import { playThis, validateArgs } from "./utils/youtube";
 
-const play: Command = {
+const play: PartialCommand = {
   name: "play",
   aliases: ["tunes"],
-  usage: `${DEFAULT_PREFIX}tunes <URL|search_string>`,
-  argsCount: -1,
+  args: [{ name: "url_or_title", multi: true, optional: true }],
   category: CommandCategory.music,
   description: "Let Chika play some music from YouTube for you.",
+
   async execute(message, args) {
     const { channel, member, guild, client, author } = message;
     if (!guild) {
@@ -101,4 +101,5 @@ const play: Command = {
   },
 };
 
-export default play;
+genUsage(play);
+export default play as Command;

@@ -1,12 +1,9 @@
 import { Message } from "discord.js";
 import { prisma } from "../data/prismaClient";
 import { DEFAULT_PREFIX } from "../shared/constants";
-import {
-  badArgsEmbed,
-  badCommandsEmbed,
-  genericErrorEmbed,
-} from "../shared/embeds";
+import { badCommandsEmbed, genericErrorEmbed } from "../shared/embeds";
 import { Event } from "../types/event";
+import { validateArgsCount } from "../utils/validateArgsCount";
 import { isOnCooldown } from "../utils/validateCooldowns";
 
 const message: Event = {
@@ -37,14 +34,7 @@ const message: Event = {
       return;
     }
 
-    if (command.argsCount >= 0 && args.length !== command.argsCount) {
-      channel.send(badArgsEmbed(command, args.length));
-      return;
-    }
-    if (command.argsCount === -2 && args.length === 0) {
-      channel.send(badArgsEmbed(command, args.length));
-      return;
-    }
+    if (!validateArgsCount(command, args, channel)) return;
 
     if (await isOnCooldown(message, command)) return;
 

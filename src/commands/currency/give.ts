@@ -1,17 +1,17 @@
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { groupNum } from "../../utils/typography";
 
-const give: Command = {
+const give: PartialCommand = {
   name: "give",
-  argsCount: 2,
+  args: [{ name: "user" }, { name: "amount" }],
   description: `Be charitable and give another user some ${ribbon_emoji}.`,
-  usage: `${DEFAULT_PREFIX}give <user> <amount>`,
   category: CommandCategory.currency,
   aliases: ["donate"],
+
   async execute(message, args) {
     const { author, channel, mentions } = message;
     const beneficiary = mentions.users.first();
@@ -56,4 +56,5 @@ const give: Command = {
   },
 };
 
-export default give;
+genUsage(give);
+export default give as Command;

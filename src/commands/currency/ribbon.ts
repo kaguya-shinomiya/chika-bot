@@ -1,16 +1,15 @@
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-export const ribbon: Command = {
+export const ribbon: PartialCommand = {
   name: "ribbon",
   description: "Check how many ribbons you or another user has.",
-  argsCount: -1,
+  args: [{ name: "user", optional: true }],
   category: CommandCategory.currency,
   aliases: ["r"],
-  usage: `${DEFAULT_PREFIX}ribbon [user]`,
   async execute(message) {
     const { mentions, author, channel } = message;
     const user = mentions.users.first() || author;
@@ -24,4 +23,5 @@ export const ribbon: Command = {
   },
 };
 
-export default ribbon;
+genUsage(ribbon);
+export default ribbon as Command;

@@ -1,15 +1,15 @@
 import { prisma } from "../../data/prismaClient";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { isAdmin } from "../../utils/validateMessages";
 
-const prefix: Command = {
+const prefix: PartialCommand = {
   name: "set-prefix",
-  argsCount: 1,
+  args: [{ name: "new_prefix" }],
   category: CommandCategory.utility,
   description: "Set a new prefix for Chika. You'll need to be an admin.",
-  usage: `${DEFAULT_PREFIX}set-prefix <new_prefix>`,
+
   async execute(message, args) {
     const { channel, guild } = message;
     if (!guild) {
@@ -26,4 +26,5 @@ const prefix: Command = {
   },
 };
 
-export default prefix;
+genUsage(prefix);
+export default prefix as Command;

@@ -1,16 +1,15 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { shiritoriGame } from "../../games/shiritori";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 
-const shiritori: Command = {
+const shiritori: PartialCommand = {
   name: "shiritori",
-  argsCount: -1,
   category: CommandCategory.game,
   description: "Play a round of Shiritori.",
-  usage: `${DEFAULT_PREFIX}shiritori [opponent]`,
   aliases: ["sh"],
+  args: [{ name: "an_opponent", optional: true }],
   async execute(message) {
     const taggedCount = message.mentions.users.size;
     if (taggedCount && taggedCount > 1) {
@@ -29,4 +28,5 @@ const shiritori: Command = {
   },
 };
 
-export default shiritori;
+genUsage(shiritori);
+export default shiritori as Command;

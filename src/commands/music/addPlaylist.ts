@@ -1,18 +1,18 @@
 import ytpl from "ytpl";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisClient";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { parsePlaylist } from "./utils/youtube";
 
-const addPlaylist: Command = {
+const addPlaylist: PartialCommand = {
   name: "add-playlist",
-  argsCount: 1,
   aliases: ["ap"],
   category: CommandCategory.music,
   description: "Add a YouTube playlist to the queue.",
-  usage: `${DEFAULT_PREFIX}addp <url>`,
+  args: [{ name: "playlist_url" }],
+
   async execute(message, args) {
     const { guild, channel, author } = message;
     if (!guild) {
@@ -50,4 +50,5 @@ const addPlaylist: Command = {
   },
 };
 
-export default addPlaylist;
+genUsage(addPlaylist);
+export default addPlaylist as Command;

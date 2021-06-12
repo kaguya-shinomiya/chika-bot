@@ -1,18 +1,18 @@
 import type { TextChannel } from "discord.js";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { sendNotFoundError } from "./embeds/errors";
 import { mangaInfoEmbed } from "./embeds/mangaInfoEmbed";
 import { client } from "./graphql/aniListClient";
 
-export const manga: Command = {
+export const manga: PartialCommand = {
   name: "manga",
   description: "Look up info for a manga.",
-  argsCount: -2,
+  args: [{ name: "manga", multi: true }],
   category: CommandCategory.utility,
-  usage: `${DEFAULT_PREFIX}manga <manga_title>`,
+
   async execute(message, args) {
     const { channel } = message;
     const search = args.join(" ");
@@ -74,4 +74,5 @@ export const manga: Command = {
   },
 };
 
-export default manga;
+genUsage(manga);
+export default manga as Command;

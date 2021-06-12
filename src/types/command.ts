@@ -9,7 +9,12 @@ export enum CommandCategory {
   game = ":video_game: Game",
 }
 
-// type commandCategory = "Fun" | "Utility" | "Music" | "Currency" | "Game";
+interface CommandArg {
+  name: string;
+  optional?: boolean;
+  multi?: boolean;
+}
+
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
 class Command {
@@ -21,7 +26,7 @@ class Command {
 
   usage!: string;
 
-  argsCount!: number; // set to -1 for any, -2 for at least one
+  args!: CommandArg[];
 
   aliases?: string[];
 
@@ -32,4 +37,6 @@ class Command {
   execute!: (message: Message, args: string[]) => Promise<void>;
 }
 
-export type { Command, GenericChannel };
+type PartialCommand = Omit<Command, "usage">;
+
+export type { Command, GenericChannel, CommandArg, PartialCommand };

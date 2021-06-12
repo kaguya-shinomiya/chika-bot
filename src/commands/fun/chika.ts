@@ -1,19 +1,19 @@
 import axios from "axios";
 import { prisma } from "../../data/prismaClient";
 import { chatbotInput, chatbotResponse } from "../../data/redisClient";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import { ChatbotInput } from "./utils/types";
 
-const chika: Command = {
+const chika: PartialCommand = {
   name: "chika",
   aliases: ["ck"],
-  argsCount: -2,
+  args: [{ name: "your_message", multi: true }],
   category: CommandCategory.fun,
   description:
     "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
-  usage: `${DEFAULT_PREFIX}chat <message>`,
+
   async execute(message, args) {
     const { channel, author } = message;
 
@@ -72,4 +72,5 @@ const chika: Command = {
   },
 };
 
-export default chika;
+genUsage(chika);
+export default chika as Command;

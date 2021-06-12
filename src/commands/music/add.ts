@@ -1,6 +1,6 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisClient";
-import { Command, CommandCategory } from "../../types/command";
+import { Command, CommandCategory, PartialCommand } from "../../types/command";
+import { genUsage } from "../../utils/genUsage";
 import {
   sendAddedToQueue,
   sendMusicOnlyInGuild,
@@ -8,12 +8,12 @@ import {
 } from "./utils/embeds";
 import { validateArgs } from "./utils/youtube";
 
-const add: Command = {
+const add: PartialCommand = {
   name: "add",
-  argsCount: -2,
   category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}add <url|search_string>`,
   description: "Adds a track to the queue.",
+  args: [{ name: "url_or_title", multi: true }],
+
   async execute(message, args) {
     const { channel, guild, author } = message;
     if (!guild) {
@@ -31,4 +31,5 @@ const add: Command = {
   },
 };
 
-export default add;
+genUsage(add);
+export default add as Command;

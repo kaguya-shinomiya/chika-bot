@@ -1,16 +1,16 @@
-import { MessageEmbed } from "discord.js";
 import type { User } from "discord.js";
+import { MessageEmbed } from "discord.js";
+import { GenericChannel } from "../types/command";
 import {
   chika_crying_png,
   chika_detective_png,
   chika_peeking_png,
+  chika_pink,
   chika_pointing_png,
   chika_rap_png,
-  chika_pink,
   ribbon_emoji,
 } from "./assets";
 import { DEFAULT_PREFIX } from "./constants";
-import { Command, GenericChannel } from "../types/command";
 
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);
 
@@ -25,22 +25,6 @@ export const lightErrorEmbed = (msg: string) =>
   baseEmbed().setDescription(`:broken_heart: ${msg}`);
 export const lightOkEmbed = (msg: string) =>
   baseEmbed().setDescription(`:magic_wand: ${msg}`);
-
-export const badArgsEmbed = (command: Command, provided: number) =>
-  cryingEmbed()
-    .setDescription(
-      `Command \`${command.name}\` expected ${
-        command.argsCount === -2 ? "at least one " : command.argsCount
-      } ${
-        command.argsCount === 1 || command.argsCount === -2
-          ? `argument`
-          : `arguments`
-      }, but ${provided} ${provided === 1 ? `was` : `were`} provided.`
-    )
-    .addField(
-      "Further help",
-      `For more info, you may run \`${DEFAULT_PREFIX}help ${command.name}\`.`
-    );
 
 export const badCommandsEmbed = (...badCommands: string[]) =>
   cryingEmbed()
