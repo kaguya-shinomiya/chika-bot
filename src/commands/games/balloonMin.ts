@@ -1,5 +1,4 @@
 import { prisma } from "../../data/prismaClient";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import {
   baseEmbed,
   lightErrorEmbed,
@@ -7,14 +6,14 @@ import {
 } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 
-const balloonMin: Command = {
+const balloonMin = new Command({
   name: "balloon-min",
-  argsCount: -1,
   aliases: ["bl-min"],
-  category: CommandCategory.game,
+  category: CommandCategory.GAME,
   description:
     "Check or set the lower bound for balloons' volumes in this server.",
-  usage: `${DEFAULT_PREFIX}balloon-min [number]`,
+  args: [{ name: "new_min", optional: true }],
+
   async execute(message, args) {
     const { channel, guild } = message;
     if (!guild) {
@@ -60,6 +59,6 @@ const balloonMin: Command = {
       )
     );
   },
-};
+});
 
 export default balloonMin;

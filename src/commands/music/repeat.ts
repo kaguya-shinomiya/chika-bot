@@ -1,16 +1,15 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 
-const repeat: Command = {
+const repeat = new Command({
   name: "repeat",
   aliases: ["rp"],
-  argsCount: 0,
-  category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}repeat`,
+  category: CommandCategory.MUSIC,
   description: "Repeats the current track once.",
+  args: [],
+
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -26,6 +25,6 @@ const repeat: Command = {
     sendRepeat(channel, { videoData: audioUtils.nowPlaying, author });
     queue.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
   },
-};
+});
 
 export default repeat;

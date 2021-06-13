@@ -1,14 +1,13 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 
-const help: Command = {
+const help = new Command({
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
-  usage: `${DEFAULT_PREFIX}help [command ...]`,
-  category: CommandCategory.utility,
-  argsCount: -1,
+  args: [{ name: "command", optional: true, multi: true }],
+  category: CommandCategory.UTILITY,
   aliases: ["h"],
+
   async execute({ channel, client: { commands, commandsHelp } }, args) {
     if (!args.length || /^all$/i.test(args[0])) {
       // send a list of all commands
@@ -23,10 +22,12 @@ const help: Command = {
         (command) => command.name === arg || !!command.aliases?.includes(arg)
       );
       if (match) {
-        const embed = baseEmbed().addField(match.usage, match.description);
+        const embed = baseEmbed()
+          .addField(match.name, match.description)
+          .addField("Usage", `\`${match.usage}\``, true);
         if (match.aliases) {
           const preTag = match.aliases.map((alias) => `\`${alias}\``);
-          embed.addField("Aliases", preTag.join(", "));
+          embed.addField("Aliases", preTag.join(", "), true);
         }
         channel.send(embed);
         return;
@@ -37,6 +38,6 @@ const help: Command = {
       channel.send(badCommandsEmbed(...unknownCommands));
     }
   },
-};
+});
 
 export default help;

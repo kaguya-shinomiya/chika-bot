@@ -1,1 +1,3 @@
 src/generated/**/*
+src/**/*.test.ts
+__mocks__/

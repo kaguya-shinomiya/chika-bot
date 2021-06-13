@@ -1,17 +1,16 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk } from "../../generated/graphql";
 import { Command, CommandCategory } from "../../types/command";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
-export const char: Command = {
+const char = new Command({
   name: "char",
   aliases: ["character"],
-  argsCount: -2,
-  category: CommandCategory.utility,
-  usage: `${DEFAULT_PREFIX}char <character_name>`,
+  args: [{ name: "character", multi: true }],
+  category: CommandCategory.UTILITY,
   description: "Search for an animanga character.",
+
   async execute(message, args) {
     const { channel } = message;
     const charName = args.join(" ");
@@ -46,6 +45,6 @@ export const char: Command = {
         sendNotFoundError(charName, channel);
       });
   },
-};
+});
 
 export default char;

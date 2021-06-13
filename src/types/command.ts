@@ -1,27 +1,46 @@
 import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 
-// eslint-disable-next-line no-shadow
-export enum CommandCategory {
-  fun = ":coffee: Fun",
-  utility = ":satellite: Utility",
-  music = ":headphones: Music",
-  currency = ":moneybag: Currency",
-  game = ":video_game: Game",
-}
-
-// type commandCategory = "Fun" | "Utility" | "Music" | "Currency" | "Game";
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
-class Command {
-  name!: string;
+// eslint-disable-next-line no-shadow
+export enum CommandCategory {
+  FUN = ":coffee: Fun",
+  UTILITY = ":satellite: Utility",
+  MUSIC = ":headphones: Music",
+  CURRENCY = ":moneybag: Currency",
+  GAME = ":video_game: Game",
+}
 
-  description!: string;
+interface CommandArg {
+  name: string;
+  optional?: boolean;
+  multi?: boolean;
+}
 
-  category!: CommandCategory;
+interface ICommand {
+  name: string;
+  description: string;
+  category: CommandCategory;
+  args: CommandArg[];
+  execute(message: Message, args: string[]): Promise<void>;
 
-  usage!: string;
+  aliases?: string[];
+  channelCooldown?: number;
+  userCooldown?: number;
+}
 
-  argsCount!: number; // set to -1 for any, -2 for at least one
+export class Command implements ICommand {
+  name: string;
+
+  description: string;
+
+  category: CommandCategory;
+
+  usage: string;
+
+  args: CommandArg[];
+
+  execute: (message: Message, args: string[]) => Promise<void>;
 
   aliases?: string[];
 
@@ -29,7 +48,37 @@ class Command {
 
   userCooldown?: number;
 
-  execute!: (message: Message, args: string[]) => Promise<void>;
+  constructor({
+    name,
+    description,
+    category,
+    args,
+    aliases,
+    channelCooldown,
+    userCooldown,
+    execute,
+  }: ICommand) {
+    this.name = name;
+    this.description = description;
+    this.category = category;
+    this.args = args;
+    this.aliases = aliases;
+    this.channelCooldown = channelCooldown;
+    this.userCooldown = userCooldown;
+    this.execute = execute;
+
+    this.usage = this.genUsage();
+  }
+
+  genUsage(): string {
+    return `${this.name} ${this.args
+      .map((arg) => {
+        if (!arg.optional) return `<${arg.name}>`;
+        if (arg.optional && !arg.multi) return `[${arg.name}]`;
+        return `[${arg.name} ...]`;
+      })
+      .join(" ")}`;
+  }
 }
 
-export type { Command, GenericChannel };
+export type { GenericChannel };

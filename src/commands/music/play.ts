@@ -1,4 +1,3 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { queue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
@@ -14,13 +13,13 @@ import {
 import { createFinishListener } from "./utils/listener";
 import { playThis, validateArgs } from "./utils/youtube";
 
-const play: Command = {
+const play = new Command({
   name: "play",
   aliases: ["tunes"],
-  usage: `${DEFAULT_PREFIX}tunes <URL|search_string>`,
-  argsCount: -1,
-  category: CommandCategory.music,
+  args: [{ name: "url_or_title", multi: true, optional: true }],
+  category: CommandCategory.MUSIC,
   description: "Let Chika play some music from YouTube for you.",
+
   async execute(message, args) {
     const { channel, member, guild, client, author } = message;
     if (!guild) {
@@ -99,6 +98,6 @@ const play: Command = {
       onFinish: createFinishListener(guild, { channel, client }),
     });
   },
-};
+});
 
 export default play;

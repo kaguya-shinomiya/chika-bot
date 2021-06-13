@@ -1,13 +1,12 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 
-export const boot: Command = {
+const boot = new Command({
   name: "boot",
   description: "Boot Chika from the voice channel. Queue is not cleared.",
-  argsCount: 0,
-  category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}boot`,
+  category: CommandCategory.MUSIC,
+  args: [],
+
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
@@ -23,6 +22,6 @@ export const boot: Command = {
     channel.send(lightErrorEmbed(`I've left the voice channel.`));
     client.cache.audioUtils.delete(guild.id);
   },
-};
+});
 
 export default boot;

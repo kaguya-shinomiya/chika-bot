@@ -5,10 +5,11 @@ const ready: Event = {
   name: "ready",
   once: true,
   listener() {
-    redis.set(
-      "ping",
-      `Redis is up and running at ${process.env.REDISCLOUD_URL}!`
-    );
+    redis.ping().catch((err) => {
+      // eslint-disable-next-line no-console
+      console.error(err);
+      Promise.reject(err);
+    });
   },
 };
 

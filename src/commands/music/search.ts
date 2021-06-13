@@ -1,4 +1,3 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { setCooldown } from "../../utils/cooldownManager";
@@ -6,13 +5,13 @@ import { sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
 import { searchVideo } from "./utils/youtube";
 
-export const search: Command = {
+const search = new Command({
   name: "search",
   description: "Search for a track on YouTube",
-  argsCount: -2,
-  category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}search <search_string>`,
+  args: [{ name: "search_string", multi: true }],
+  category: CommandCategory.MUSIC,
   channelCooldown: 15000,
+
   async execute(message, args) {
     const { channel, client, guild } = message;
     if (!guild) {
@@ -40,6 +39,6 @@ export const search: Command = {
     client.on("message", resultSelectListener);
     client.setTimeout(timeoutCallback, this.channelCooldown!);
   },
-};
+});
 
 export default search;

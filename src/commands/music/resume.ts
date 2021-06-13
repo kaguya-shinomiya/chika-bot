@@ -1,14 +1,13 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
-const resume: Command = {
+const resume = new Command({
   name: "resume",
-  argsCount: 0,
-  category: CommandCategory.music,
+  args: [],
+  category: CommandCategory.MUSIC,
   description: "Resume playback.",
-  usage: `${DEFAULT_PREFIX}resume`,
+
   async execute(message) {
     const { client, channel, guild, author } = message;
     if (!guild) {
@@ -29,6 +28,6 @@ const resume: Command = {
         .setDescription(trackLinkAndDuration(title, url, duration))
     );
   },
-};
+});
 
 export default resume;

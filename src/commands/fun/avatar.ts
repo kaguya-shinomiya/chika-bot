@@ -1,19 +1,12 @@
-import { MessageEmbed, User } from "discord.js";
-import { DEFAULT_PREFIX } from "../../shared/constants";
-import { baseEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
+import { avatarEmbed } from "./utils/embeds";
 
-const avatarEmbed = (user: User): MessageEmbed =>
-  baseEmbed()
-    .setImage(user.displayAvatarURL({ dynamic: true }))
-    .setFooter(`${user.tag}'s avatar`);
-
-const avatar: Command = {
+const avatar = new Command({
   name: "avatar",
   description: "Retrieves users' avatars.",
-  category: CommandCategory.fun,
-  usage: `${DEFAULT_PREFIX}avatar [user ...]`,
-  argsCount: -1,
+  category: CommandCategory.FUN,
+  args: [{ name: "user", optional: true, multi: true }],
+
   async execute(message) {
     const { mentions, author, channel } = message;
     if (!mentions.users.size) {
@@ -24,6 +17,6 @@ const avatar: Command = {
       channel.send(avatarEmbed(user));
     });
   },
-};
+});
 
 export default avatar;

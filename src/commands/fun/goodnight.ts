@@ -1,15 +1,14 @@
 import { kaguya_sleep_gif } from "../../shared/assets";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 
-const goodnight: Command = {
+const goodnight = new Command({
   name: "goodnight",
   description: "Greets goodnight.",
-  category: CommandCategory.fun,
-  usage: `${DEFAULT_PREFIX}goodnight [user ...]`,
+  category: CommandCategory.FUN,
   aliases: ["gn"],
-  argsCount: -1,
+  args: [{ name: "user", optional: true }],
+
   async execute({ channel, mentions, author }) {
     let message;
     if (!mentions.users.size) {
@@ -30,6 +29,6 @@ const goodnight: Command = {
       baseEmbed().setDescription(message).setImage(kaguya_sleep_gif)
     );
   },
-};
+});
 
 export default goodnight;

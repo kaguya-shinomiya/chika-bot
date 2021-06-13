@@ -1,16 +1,15 @@
 import { prisma } from "../../data/prismaClient";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { sendNotInGuild } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendTop } from "./utils/embeds";
 
-const top: Command = {
+const top = new Command({
   name: "top",
-  argsCount: 0,
-  category: CommandCategory.currency,
+  args: [],
+  category: CommandCategory.CURRENCY,
   description: "Hunt down the richest in this server.",
-  usage: `${DEFAULT_PREFIX}top`,
   aliases: ["richest"],
+
   async execute(message) {
     const { channel, guild } = message;
     if (!guild) {
@@ -27,6 +26,6 @@ const top: Command = {
         })
       );
   },
-};
+});
 
 export default top;

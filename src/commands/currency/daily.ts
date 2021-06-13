@@ -1,17 +1,16 @@
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { getCooldown, setCooldown } from "../../utils/cooldownManager";
 import { endOfToday, secToWordString } from "../../utils/time";
 
-const daily: Command = {
+const daily = new Command({
   name: "daily",
-  category: CommandCategory.currency,
-  argsCount: 0,
+  category: CommandCategory.CURRENCY,
+  args: [],
   description: "Collect your daily dose of ribbons.",
-  usage: `${DEFAULT_PREFIX}daily`,
+
   async execute(message) {
     const { author, channel } = message;
 
@@ -43,6 +42,6 @@ const daily: Command = {
     setCooldown(author.id, this.name, cooldown);
     prisma.incrRibbons(author, toAward);
   },
-};
+});
 
 export default daily;

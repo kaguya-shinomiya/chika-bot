@@ -1,5 +1,4 @@
 import { TextChannel } from "discord.js";
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
@@ -7,12 +6,12 @@ import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
 
-export const anime: Command = {
+const anime = new Command({
   name: "anime",
   description: "Look up info for an anime.",
-  argsCount: -2,
-  category: CommandCategory.utility,
-  usage: `${DEFAULT_PREFIX}anime <anime_title>`,
+  args: [{ name: "title", multi: true }],
+  category: CommandCategory.UTILITY,
+
   async execute(message, args) {
     const { channel } = message;
     const search = args.join(" ");
@@ -72,6 +71,6 @@ export const anime: Command = {
         sendNotFoundError(search, channel);
       });
   },
-};
+});
 
 export default anime;

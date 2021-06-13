@@ -1,15 +1,14 @@
-import { DEFAULT_PREFIX } from "../../shared/constants";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
 
-const nowPlaying: Command = {
+const nowPlaying = new Command({
   name: "now-playing",
   aliases: ["np"],
-  argsCount: 0,
+  args: [],
   description: "Show the currently playing track.",
-  category: CommandCategory.music,
-  usage: `${DEFAULT_PREFIX}np`,
+  category: CommandCategory.MUSIC,
+
   async execute(message) {
     const { guild, client, channel } = message;
     if (!guild) {
@@ -27,6 +26,6 @@ const nowPlaying: Command = {
       streamTime: audioUtils.dispatcher.streamTime,
     });
   },
-};
+});
 
 export default nowPlaying;
