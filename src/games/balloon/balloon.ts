@@ -54,7 +54,7 @@ export class Balloon extends Game {
       players,
     };
 
-    client.once("message", createBalloonListener(initState));
+    client.once("message", createBalloonListener(initState, this));
   }
 
   rules = baseEmbed()
