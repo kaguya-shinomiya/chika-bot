@@ -39,12 +39,12 @@ model Balloon {
 }
 
 model Arg {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
   optional  Boolean
   multi     Boolean
-  Command   Command? @relation(fields: [commandId], references: [id])
-  commandId Int?
+  Command   Command @relation(fields: [commandId], references: [id])
+  commandId Int
 }
 
 enum CmdCategory {

@@ -1,5 +1,5 @@
 import type { Collection, User } from "discord.js";
-import { chika_peeking_png, ribbon_emoji } from "../../../shared/assets";
+import { ribbon_emoji } from "../../../shared/assets";
 import { baseEmbed } from "../../../shared/embeds";
 import { GenericChannel } from "../../../types/command";
 import { groupNum } from "../../../utils/typography";
@@ -29,11 +29,14 @@ export const sendTop = (
     ({ tag, ribbons }) =>
       `**${tag}**: ${groupNum.format(ribbons)} ${ribbon_emoji}`
   );
+  const partialEmbed = baseEmbed()
+    .setTitle(`Wealth Gap in ${options?.locale || "za Warudo"} :yen:`)
+    .setDescription(toListString(lines))
+    .setFooter(`Showing top ${lines.length}`);
+
   channel.send(
-    baseEmbed()
-      .setTitle(`Wealth Gap across ${options?.locale || "za Warudo"} :yen:`)
-      .setThumbnail(options?.thumbnail || chika_peeking_png)
-      .setDescription(toListString(lines))
-      .setFooter(`Showing top ${lines.length}`)
+    options?.thumbnail
+      ? partialEmbed.setThumbnail(options.thumbnail)
+      : partialEmbed
   );
 };
