@@ -23,7 +23,7 @@ export const createOnceShiritoriListener = (
         channelId: state.channelId,
         authors: [state.p1, state.p2],
         content: new RegExp(`^${state.startingChar}`, "i"),
-        minLen: 1, // TODO make this a per server setting
+        minLen: state.minLen,
       })
     ) {
       reject();

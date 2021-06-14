@@ -1,4 +1,4 @@
-import { queue } from "../../data/redisClient";
+import { redisQueue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
@@ -23,7 +23,7 @@ const repeat = new Command({
     }
 
     sendRepeat(channel, { videoData: audioUtils.nowPlaying, author });
-    queue.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
+    redisQueue.lpush(guild.id, JSON.stringify(audioUtils.nowPlaying));
   },
 });
 

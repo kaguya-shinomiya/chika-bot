@@ -1,7 +1,7 @@
 import { Collection, Message, User } from "discord.js";
 import _ from "lodash";
 import { prisma } from "../../../data/prismaClient";
-import { ribbons } from "../../../data/redisClient";
+import { redisRibbons } from "../../../data/redisClient";
 import { sendPopped } from "./embeds";
 
 export const postGameBalloon = async (
@@ -29,7 +29,7 @@ export const postGameBalloon = async (
       )
     )
     .then((res) =>
-      ribbons.mset(..._.flattenDeep(res.map((_res) => _.values(_res))))
+      redisRibbons.mset(..._.flattenDeep(res.map((_res) => _.values(_res))))
     );
 
   prisma.decrRibbons(popper, winAmt * winners.size);

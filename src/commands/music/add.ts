@@ -1,4 +1,4 @@
-import { queue } from "../../data/redisClient";
+import { redisQueue } from "../../data/redisClient";
 import { Command, CommandCategory } from "../../types/command";
 import {
   sendAddedToQueue,
@@ -25,7 +25,7 @@ const add = new Command({
       return;
     }
 
-    queue.rpush(guild.id, JSON.stringify(videoData));
+    redisQueue.rpush(guild.id, JSON.stringify(videoData));
     sendAddedToQueue(channel, { videoData, author });
   },
 });

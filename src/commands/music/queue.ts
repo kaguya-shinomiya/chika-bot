@@ -1,4 +1,4 @@
-import { queue as tracks } from "../../data/redisClient";
+import { redisQueue as tracks } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";

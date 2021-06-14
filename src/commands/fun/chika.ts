@@ -1,6 +1,9 @@
 import axios from "axios";
 import { prisma } from "../../data/prismaClient";
-import { chatbotInput, chatbotResponse } from "../../data/redisClient";
+import {
+  redisChatbotInput,
+  redisChatbotResponse,
+} from "../../data/redisClient";
 import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { ChatbotInput } from "./utils/types";
@@ -17,10 +20,10 @@ const chika = new Command({
     const { channel, author } = message;
 
     const generated_responses = (
-      await chatbotResponse.lrange(author.id, 0, -1)
+      await redisChatbotResponse.lrange(author.id, 0, -1)
     ).reverse();
     const past_user_inputs = (
-      await chatbotInput.lrange(author.id, 0, -1)
+      await redisChatbotInput.lrange(author.id, 0, -1)
     ).reverse();
     const text = args.join(" ");
 
@@ -45,13 +48,13 @@ const chika = new Command({
       .then((res) => {
         const reply = res.data.generated_text;
         channel.send(`> ${text}\n${reply}`);
-        chatbotInput
+        redisChatbotInput
           .pipeline()
           .lpush(channel.id, text)
           .ltrim(channel.id, 0, 2)
           .exec();
 
-        chatbotResponse
+        redisChatbotResponse
           .pipeline()
           .lpush(channel.id, reply)
           .ltrim(channel.id, 0, 2)

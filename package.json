@@ -59,8 +59,9 @@
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
     "gen": "graphql-codegen --config codegen.yml",
-    "db:up": "prisma db push",
-    "db:migrate": "prisma migrate dev"
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:edit": "prisma studio"
   },
   "lint-staged": {
     "src/**/*.ts": [

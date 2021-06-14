@@ -1,4 +1,4 @@
-import { queue } from "../../data/redisClient";
+import { redisQueue } from "../../data/redisClient";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild } from "./utils/embeds";
@@ -17,7 +17,7 @@ const clear = new Command({
       return;
     }
 
-    queue.del(guild.id).then((res) => {
+    redisQueue.del(guild.id).then((res) => {
       if (!res) {
         channel.send(lightErrorEmbed("Queue is already empty."));
         return;

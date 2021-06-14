@@ -8,6 +8,7 @@ interface ShiritoriState extends GameState {
   p2: User;
   cards: Collection<Snowflake, string[]>;
   startingChar: string;
+  minLen: number;
 }
 
 export type { ShiritoriState };

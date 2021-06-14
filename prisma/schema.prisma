@@ -27,6 +27,7 @@ model Shiritori {
   guild    Guild  @relation(fields: [guildId], references: [guildId])
   guildId  String @unique
   handSize Int?
+  minLen   Int?
 }
 
 model Balloon {

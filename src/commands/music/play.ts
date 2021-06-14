@@ -1,4 +1,4 @@
-import { queue } from "../../data/redisClient";
+import { redisQueue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { QueueItem } from "../../types/queue";
@@ -31,7 +31,7 @@ const play = new Command({
       return;
     }
 
-    const next = await queue.lpop(guild.id);
+    const next = await redisQueue.lpop(guild.id);
     const audioUtils = client.cache.audioUtils.get(guild.id);
 
     // they called ck;play with no args
@@ -67,7 +67,7 @@ const play = new Command({
       return;
     }
 
-    if (next) queue.lpush(guild.id, next); // push next track back
+    if (next) redisQueue.lpush(guild.id, next); // push next track back
 
     const videoData = await validateArgs(args);
     if (!videoData) {
@@ -78,7 +78,7 @@ const play = new Command({
     // there's a song playing
     // push to the redis queue
     if (audioUtils) {
-      queue.rpush(guild.id, JSON.stringify(videoData));
+      redisQueue.rpush(guild.id, JSON.stringify(videoData));
       sendAddedToQueue(channel, { videoData, author });
       return;
     }

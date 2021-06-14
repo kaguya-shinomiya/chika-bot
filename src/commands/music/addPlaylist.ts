@@ -1,5 +1,5 @@
 import ytpl from "ytpl";
-import { queue } from "../../data/redisClient";
+import { redisQueue } from "../../data/redisClient";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
 import { Command, CommandCategory } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
@@ -22,7 +22,10 @@ const addPlaylist = new Command({
     ytpl(playlistURL)
       .then((res) => {
         const [playlistMetadata, videos] = parsePlaylist(res);
-        queue.rpush(guild.id, ...videos.map((video) => JSON.stringify(video)));
+        redisQueue.rpush(
+          guild.id,
+          ...videos.map((video) => JSON.stringify(video))
+        );
         channel.send(
           withAuthorEmbed(author)
             .setTitle("Added Playlist")

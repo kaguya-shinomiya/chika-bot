@@ -6,10 +6,11 @@ const withPrefix = (keyPrefix: string) =>
   });
 
 export const redis = new Redis(process.env.REDISCLOUD_URL);
-export const queue = withPrefix("queue");
-export const chatbotInput = withPrefix("chatbotInput");
-export const chatbotResponse = withPrefix("chatbotResponse");
-export const ribbons = withPrefix("ribbons");
-export const guildPrefix = withPrefix("prefix");
-export const balloonMin = withPrefix("balloonMin");
-export const balloonMax = withPrefix("balloonMax");
+export const redisQueue = withPrefix("queue");
+export const redisChatbotInput = withPrefix("chatbot:input");
+export const redisChatbotResponse = withPrefix("chatbot:response");
+export const redisRibbons = withPrefix("ribbons");
+export const redisGuildPrefix = withPrefix("prefix");
+export const redisBalloonMin = withPrefix("balloon:min");
+export const redisBalloonMax = withPrefix("balloon:max");
+export const redisShiritoriMinLen = withPrefix("shiritori:minlen");

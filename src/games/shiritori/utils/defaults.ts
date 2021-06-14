@@ -1,0 +1,1 @@
+export const DEFAULT_SHIRITORI_MIN_LEN = 4;
