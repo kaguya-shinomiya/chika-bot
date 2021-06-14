@@ -1,5 +1,6 @@
+import { CmdCategory } from "@prisma/client";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendNowPlaying } from "./utils/embeds";
 
 const nowPlaying = new Command({
@@ -7,7 +8,7 @@ const nowPlaying = new Command({
   aliases: ["np"],
   args: [],
   description: "Show the currently playing track.",
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
 
   async execute(message) {
     const { guild, client, channel } = message;

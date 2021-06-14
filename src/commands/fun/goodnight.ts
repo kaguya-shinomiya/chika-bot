@@ -1,11 +1,12 @@
+import { CmdCategory } from "@prisma/client";
 import { kaguya_sleep_gif } from "../../shared/assets";
 import { baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const goodnight = new Command({
   name: "goodnight",
   description: "Greets goodnight.",
-  category: CommandCategory.FUN,
+  category: CmdCategory.FUN,
   aliases: ["gn"],
   args: [{ name: "user", optional: true }],
 

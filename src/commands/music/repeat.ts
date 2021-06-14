@@ -1,12 +1,13 @@
+import { CmdCategory } from "@prisma/client";
 import { redisQueue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendRepeat } from "./utils/embeds";
 
 const repeat = new Command({
   name: "repeat",
   aliases: ["rp"],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   description: "Repeats the current track once.",
   args: [],
 

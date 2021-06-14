@@ -1,5 +1,6 @@
+import { CmdCategory } from "@prisma/client";
 import { redisQueue } from "../../data/redisClient";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import {
   sendAddedToQueue,
   sendMusicOnlyInGuild,
@@ -10,7 +11,7 @@ import { validateArgs } from "./utils/youtube";
 const insert = new Command({
   name: "insert",
   aliases: ["addd"],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   description: "Inserts a track to the front of the queue.",
   args: [{ name: "url_or_title", multi: true }],
 

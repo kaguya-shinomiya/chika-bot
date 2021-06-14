@@ -1,14 +1,15 @@
+import { CmdCategory } from "@prisma/client";
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { groupNum } from "../../utils/typography";
 
 const give = new Command({
   name: "give",
   args: [{ name: "user" }, { name: "amount" }],
   description: `Be charitable and give another user some ${ribbon_emoji}.`,
-  category: CommandCategory.CURRENCY,
+  category: CmdCategory.CURRENCY,
   aliases: ["donate"],
 
   async execute(message, args) {

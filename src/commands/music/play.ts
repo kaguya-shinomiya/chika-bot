@@ -1,6 +1,7 @@
+import { CmdCategory } from "@prisma/client";
 import { redisQueue } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { QueueItem } from "../../types/queue";
 import { tryToConnect } from "./utils/client";
 import {
@@ -17,7 +18,7 @@ const play = new Command({
   name: "play",
   aliases: ["tunes"],
   args: [{ name: "url_or_title", multi: true, optional: true }],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   description: "Let Chika play some music from YouTube for you.",
 
   async execute(message, args) {

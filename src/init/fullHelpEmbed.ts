@@ -1,12 +1,13 @@
+import { CmdCategory } from "@prisma/client";
 import type { Collection, EmbedFieldData, MessageEmbed } from "discord.js";
 import { DEFAULT_PREFIX } from "../shared/constants";
 import { detectiveEmbed } from "../shared/embeds";
-import { Command, CommandCategory } from "../types/command";
+import type { Command } from "../types/command";
 
-export const fullHelpEmbed = (
+export const genFullHelpEmbed = (
   commands: Collection<string, Command>
 ): MessageEmbed => {
-  const categoryMap: Record<CommandCategory, Command[]> = {} as any;
+  const categoryMap: Record<CmdCategory, Command[]> = {} as any;
   commands.forEach((command) => {
     if (categoryMap[command.category]) {
       categoryMap[command.category].push(command);
@@ -16,10 +17,13 @@ export const fullHelpEmbed = (
   });
   const fields: EmbedFieldData[] = [];
   Object.keys(categoryMap).forEach((category) => {
-    const cmds = categoryMap[category as CommandCategory].map(
+    const cmds = categoryMap[category as CmdCategory].map(
       (command) => `\`${command.name}\``
     );
-    fields.push({ name: category, value: cmds.join(", ") });
+    fields.push({
+      name: tagEmoji(category as CmdCategory),
+      value: cmds.join(", "),
+    });
   });
   return detectiveEmbed()
     .setTitle("Chika Commands")
@@ -28,3 +32,20 @@ export const fullHelpEmbed = (
       `For more info about a specific command, run ${DEFAULT_PREFIX}help <command>.`
     );
 };
+
+function tagEmoji(category: CmdCategory) {
+  switch (category) {
+    case "CURRENCY":
+      return ":moneybag: Currency";
+    case "FUN":
+      return ":coffee: Fun";
+    case "GAMES":
+      return ":video_game: Game";
+    case "MUSIC":
+      return ":headphones: Music";
+    case "UTILITY":
+      return ":satellite: Utility";
+    default:
+      return ":coffee: Fun";
+  }
+}

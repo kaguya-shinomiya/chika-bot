@@ -1,6 +1,7 @@
+import { CmdCategory } from "@prisma/client";
 import { redisQueue as tracks } from "../../data/redisClient";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
 
 // TODO use paginated embed for this
@@ -10,7 +11,7 @@ const queue = new Command({
   description: "Display tracks in the queue.",
   aliases: ["q"],
   args: [],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
 
   async execute(message) {
     const { channel, client, guild } = message;

@@ -1,14 +1,16 @@
+import { CmdCategory } from "@prisma/client";
 import { shiritoriGame } from "../../games/shiritori";
 import { checkAndBlock } from "../../games/utils/manageState";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const shiritori = new Command({
   name: "shiritori",
-  category: CommandCategory.GAME,
+  category: CmdCategory.GAMES,
   description: "Play a round of Shiritori.",
   aliases: ["sh"],
   args: [{ name: "an_opponent", optional: true }],
+
   async execute(message) {
     const taggedCount = message.mentions.users.size;
     if (taggedCount && taggedCount > 1) {

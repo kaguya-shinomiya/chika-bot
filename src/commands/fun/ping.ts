@@ -1,11 +1,12 @@
+import { CmdCategory } from "@prisma/client";
 import { redis } from "../../data/redisClient";
 import { baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const ping = new Command({
   name: "ping",
   description: "Say hello to Chika bot.",
-  category: CommandCategory.FUN,
+  category: CmdCategory.FUN,
   args: [],
 
   async execute(message) {

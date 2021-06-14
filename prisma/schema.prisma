@@ -61,4 +61,5 @@ model Command {
   args        Arg[]
   description String
   category    CmdCategory
+  aliases     String[]
 }

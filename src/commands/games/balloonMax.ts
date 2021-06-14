@@ -1,15 +1,16 @@
+import { CmdCategory } from "@prisma/client";
 import { prisma } from "../../data/prismaClient";
 import {
   baseEmbed,
   lightErrorEmbed,
   sendNotInGuild,
 } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const balloonMax = new Command({
   name: "balloon-max",
   aliases: ["bl-max"],
-  category: CommandCategory.GAME,
+  category: CmdCategory.GAMES,
   description:
     "Check or set the upper bound for balloons' volumes in this server.",
   args: [{ name: "new_max", optional: true }],

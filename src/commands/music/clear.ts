@@ -1,13 +1,14 @@
+import { CmdCategory } from "@prisma/client";
 import { redisQueue } from "../../data/redisClient";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild } from "./utils/embeds";
 
 const clear = new Command({
   name: "clear",
   description: "Clears all tracks from the queue.",
   aliases: ["c"],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   args: [],
 
   async execute(message) {

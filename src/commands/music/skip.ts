@@ -1,5 +1,6 @@
+import { CmdCategory } from "@prisma/client";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { createFinishListener } from "./utils/listener";
 
@@ -7,7 +8,7 @@ const skip = new Command({
   name: "skip",
   description: "Skip the current track.",
   args: [],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
 
   async execute(message) {
     const { channel, guild, client, author } = message;

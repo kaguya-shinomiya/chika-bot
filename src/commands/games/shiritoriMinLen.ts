@@ -1,17 +1,19 @@
-import { Command, CommandCategory } from "../../types/command";
+import { CmdCategory } from "@prisma/client";
+import { prisma } from "../../data/prismaClient";
 import {
   baseEmbed,
   lightErrorEmbed,
   sendNotInGuild,
 } from "../../shared/embeds";
-import { prisma } from "../../data/prismaClient";
+import { Command } from "../../types/command";
 
 const shiritoriMinLen = new Command({
   name: "shiritori-minlen",
   aliases: ["sh-min"],
   args: [{ name: "new_min", optional: true }],
-  category: CommandCategory.GAME,
+  category: CmdCategory.GAMES,
   description: "Check or set the minimum word length in Shiritori.",
+
   async execute(message, args) {
     const { channel, guild } = message;
     if (!guild) {

@@ -1,10 +1,11 @@
-import { Command, CommandCategory } from "../../types/command";
+import { CmdCategory } from "@prisma/client";
+import { Command } from "../../types/command";
 import { avatarEmbed } from "./utils/embeds";
 
 const avatar = new Command({
   name: "avatar",
   description: "Retrieves users' avatars.",
-  category: CommandCategory.FUN,
+  category: CmdCategory.FUN,
   args: [{ name: "user", optional: true, multi: true }],
 
   async execute(message) {

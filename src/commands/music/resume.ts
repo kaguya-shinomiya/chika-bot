@@ -1,11 +1,12 @@
+import { CmdCategory } from "@prisma/client";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const resume = new Command({
   name: "resume",
   args: [],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   description: "Resume playback.",
 
   async execute(message) {

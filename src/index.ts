@@ -1,9 +1,9 @@
-import cluster from "cluster";
 import Discord from "discord.js";
-import { fullHelpEmbed } from "./init/fullHelpEmbed";
+import { genFullHelpEmbed } from "./init/fullHelpEmbed";
 import { initialClientCache } from "./init/initialClientCache";
 import { loadCommands } from "./init/loadCommands";
 import { loadEventListeners } from "./init/loadEventListeners";
+import { seedCommands } from "./init/seedCommands";
 
 require("dotenv-safe").config();
 
@@ -12,7 +12,8 @@ const main = async () => {
   client.login(process.env.APP_TOKEN);
 
   client.commands = loadCommands();
-  client.commandsHelp = fullHelpEmbed(client.commands); // generates full help message
+  client.commandsHelp = genFullHelpEmbed(client.commands); // generates full help message
+  seedCommands(client.commands);
 
   client.cache = initialClientCache;
 
@@ -21,15 +22,18 @@ const main = async () => {
   client.setMaxListeners(2048);
 };
 
-// experimental
-if (cluster.isMaster) {
-  cluster.fork();
-  cluster.on("exit", (worker) => {
-    // eslint-disable-next-line no-console
-    console.error(`worker ${worker.process.pid} exited unexpectedly`);
-    cluster.fork();
-  });
-} else {
-  // eslint-disable-next-line no-console
-  main().catch((err) => console.error(err));
-}
+// eslint-disable-next-line no-console
+main().catch((err) => console.error(err));
+
+// // experimental
+// if (cluster.isMaster) {
+//   cluster.fork();
+//   cluster.on("exit", (worker) => {
+//     // eslint-disable-next-line no-console
+//     console.error(`worker ${worker.process.pid} exited unexpectedly`);
+//     cluster.fork();
+//   });
+// } else {
+//   // eslint-disable-next-line no-console
+//   main().catch((err) => console.error(err));
+// }

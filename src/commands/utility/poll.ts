@@ -1,12 +1,14 @@
+import { CmdCategory } from "@prisma/client";
 import { red_cross, white_check_mark } from "../../shared/assets";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const poll = new Command({
   name: "poll",
   args: [{ name: "question", multi: true }],
-  category: CommandCategory.UTILITY,
+  category: CmdCategory.UTILITY,
   description: "Show your enthusiasm for democracy.",
+
   aliases: ["vote"],
   async execute(message, args) {
     const { guild, channel, author } = message;
