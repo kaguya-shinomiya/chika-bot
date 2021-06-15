@@ -1,12 +1,13 @@
+import { CmdCategory } from "@prisma/client";
 import { prisma } from "../../data/prismaClient";
 import { sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendTop } from "./utils/embeds";
 
 const top = new Command({
   name: "top",
   args: [],
-  category: CommandCategory.CURRENCY,
+  category: CmdCategory.CURRENCY,
   description: "Hunt down the richest in this server.",
   aliases: ["richest"],
 

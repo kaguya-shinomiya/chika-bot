@@ -1,5 +1,6 @@
+import { CmdCategory } from "@prisma/client";
 import { getSdk } from "../../generated/graphql";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
@@ -8,7 +9,7 @@ const char = new Command({
   name: "char",
   aliases: ["character"],
   args: [{ name: "character", multi: true }],
-  category: CommandCategory.UTILITY,
+  category: CmdCategory.UTILITY,
   description: "Search for an animanga character.",
 
   async execute(message, args) {

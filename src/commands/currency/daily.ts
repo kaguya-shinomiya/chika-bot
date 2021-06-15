@@ -1,13 +1,14 @@
+import { CmdCategory } from "@prisma/client";
 import { prisma } from "../../data/prismaClient";
 import { ribbon_emoji } from "../../shared/assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { getCooldown, setCooldown } from "../../utils/cooldownManager";
 import { endOfToday, secToWordString } from "../../utils/time";
 
 const daily = new Command({
   name: "daily",
-  category: CommandCategory.CURRENCY,
+  category: CmdCategory.CURRENCY,
   args: [],
   description: "Collect your daily dose of ribbons.",
 

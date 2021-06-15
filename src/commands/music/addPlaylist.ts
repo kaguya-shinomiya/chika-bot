@@ -1,14 +1,15 @@
+import { CmdCategory } from "@prisma/client";
 import ytpl from "ytpl";
-import { queue } from "../../data/redisClient";
+import { redisQueue } from "../../data/redisClient";
 import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
 import { parsePlaylist } from "./utils/youtube";
 
 const addPlaylist = new Command({
   name: "add-playlist",
   aliases: ["ap"],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   description: "Add a YouTube playlist to the queue.",
   args: [{ name: "playlist_url" }],
 
@@ -22,7 +23,10 @@ const addPlaylist = new Command({
     ytpl(playlistURL)
       .then((res) => {
         const [playlistMetadata, videos] = parsePlaylist(res);
-        queue.rpush(guild.id, ...videos.map((video) => JSON.stringify(video)));
+        redisQueue.rpush(
+          guild.id,
+          ...videos.map((video) => JSON.stringify(video))
+        );
         channel.send(
           withAuthorEmbed(author)
             .setTitle("Added Playlist")

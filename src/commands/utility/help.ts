@@ -1,11 +1,12 @@
+import { CmdCategory } from "@prisma/client";
 import { badCommandsEmbed, baseEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const help = new Command({
   name: "help",
   description: "Get a list of all commands, or look up specific commands.",
   args: [{ name: "command", optional: true, multi: true }],
-  category: CommandCategory.UTILITY,
+  category: CmdCategory.UTILITY,
   aliases: ["h"],
 
   async execute({ channel, client: { commands, commandsHelp } }, args) {

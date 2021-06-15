@@ -1,7 +1,8 @@
+import { CmdCategory } from "@prisma/client";
 import { TextChannel } from "discord.js";
 import { getSdk, MediaType } from "../../generated/graphql";
 import { lightErrorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
 import { client } from "./graphql/aniListClient";
@@ -10,7 +11,7 @@ const anime = new Command({
   name: "anime",
   description: "Look up info for an anime.",
   args: [{ name: "title", multi: true }],
-  category: CommandCategory.UTILITY,
+  category: CmdCategory.UTILITY,
 
   async execute(message, args) {
     const { channel } = message;

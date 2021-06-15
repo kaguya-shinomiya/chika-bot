@@ -1,12 +1,13 @@
+import { CmdCategory } from "@prisma/client";
 import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
 
 const pause = new Command({
   name: "pause",
   aliases: ["stop"],
   description: "Pause the current playback.",
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   args: [],
 
   async execute(message) {

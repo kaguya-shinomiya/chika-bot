@@ -1,5 +1,6 @@
 import type { Message, Snowflake, User } from "discord.js";
 import { Collection } from "discord.js";
+import { prisma } from "../../data/prismaClient";
 import { shiritori_rules_jpg } from "../../shared/assets";
 import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
 import { BlockingLevel } from "../../types/blockingLevel";
@@ -61,6 +62,8 @@ export class Shiritori extends Game {
     cards.set(p1.id, p1Cards);
     cards.set(p2.id, p2Cards);
 
+    const minLen = await prisma.getShiritoriMinLen(message.guild?.id);
+
     const initState: ShiritoriState = {
       gameTitle: "shiritori",
       cards,
@@ -68,6 +71,7 @@ export class Shiritori extends Game {
       p1,
       p2,
       startingChar,
+      minLen,
     };
 
     this.sendParticipants(channel, [p1, p2], {

@@ -1,5 +1,6 @@
+import { CmdCategory } from "@prisma/client";
 import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { setCooldown } from "../../utils/cooldownManager";
 import { sendSearchResults } from "./utils/embeds";
 import { createResultSelectListener } from "./utils/listener";
@@ -9,7 +10,7 @@ const search = new Command({
   name: "search",
   description: "Search for a track on YouTube",
   args: [{ name: "search_string", multi: true }],
-  category: CommandCategory.MUSIC,
+  category: CmdCategory.MUSIC,
   channelCooldown: 15000,
 
   async execute(message, args) {

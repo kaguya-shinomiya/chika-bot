@@ -1,12 +1,13 @@
+import { CmdCategory } from "@prisma/client";
 import { prisma } from "../../data/prismaClient";
 import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 import { isAdmin } from "../../utils/validateMessages";
 
 const prefix = new Command({
   name: "set-prefix",
   args: [{ name: "new_prefix" }],
-  category: CommandCategory.UTILITY,
+  category: CmdCategory.UTILITY,
   description: "Set a new prefix for Chika. You'll need to be an admin.",
 
   async execute(message, args) {

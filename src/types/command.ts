@@ -1,15 +1,16 @@
+import { CmdCategory } from "@prisma/client";
 import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
 
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
 
 // eslint-disable-next-line no-shadow
-export enum CommandCategory {
-  FUN = ":coffee: Fun",
-  UTILITY = ":satellite: Utility",
-  MUSIC = ":headphones: Music",
-  CURRENCY = ":moneybag: Currency",
-  GAME = ":video_game: Game",
-}
+// export enum CommandCategory {
+//   FUN = ":coffee: Fun",
+//   UTILITY = ":satellite: Utility",
+//   MUSIC = ":headphones: Music",
+//   CURRENCY = ":moneybag: Currency",
+//   GAME = ":video_game: Game",
+// }
 
 interface CommandArg {
   name: string;
@@ -20,7 +21,7 @@ interface CommandArg {
 interface ICommand {
   name: string;
   description: string;
-  category: CommandCategory;
+  category: CmdCategory;
   args: CommandArg[];
   execute(message: Message, args: string[]): Promise<void>;
 
@@ -34,7 +35,7 @@ export class Command implements ICommand {
 
   description: string;
 
-  category: CommandCategory;
+  category: CmdCategory;
 
   usage: string;
 

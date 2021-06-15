@@ -1,11 +1,12 @@
+import { CmdCategory } from "@prisma/client";
 import { balloonGame } from "../../games/balloon";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const balloonRules = new Command({
   name: "balloon-rules",
   aliases: ["bl-rules"],
   args: [],
-  category: CommandCategory.GAME,
+  category: CmdCategory.GAMES,
   description: "Check the rules for Balloon.",
 
   async execute(message) {

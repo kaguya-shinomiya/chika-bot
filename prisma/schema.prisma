@@ -27,6 +27,7 @@ model Shiritori {
   guild    Guild  @relation(fields: [guildId], references: [guildId])
   guildId  String @unique
   handSize Int?
+  minLen   Int?
 }
 
 model Balloon {
@@ -38,12 +39,12 @@ model Balloon {
 }
 
 model Arg {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
   optional  Boolean
   multi     Boolean
-  Command   Command? @relation(fields: [commandId], references: [id])
-  commandId Int?
+  Command   Command @relation(fields: [commandId], references: [id])
+  commandId Int
 }
 
 enum CmdCategory {
@@ -60,4 +61,5 @@ model Command {
   args        Arg[]
   description String
   category    CmdCategory
+  aliases     String[]
 }

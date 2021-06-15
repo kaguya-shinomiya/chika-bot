@@ -4,13 +4,20 @@ import {
   DEFAULT_MAX_BALLOON,
   DEFAULT_MIN_BALLOON,
 } from "../games/balloon/utils/defaults";
-import { balloonMax, balloonMin, guildPrefix, ribbons } from "./redisClient";
+import { DEFAULT_SHIRITORI_MIN_LEN } from "../games/shiritori/utils/defaults";
+import {
+  redisBalloonMax,
+  redisBalloonMin,
+  redisGuildPrefix,
+  redisRibbons,
+  redisShiritoriMinLen,
+} from "./redisClient";
 
 class ChikaPrisma extends PrismaClient {
   async getPrefix(guildId: Snowflake) {
-    const ping = await guildPrefix.get(guildId);
+    const ping = await redisGuildPrefix.get(guildId);
     if (ping) {
-      guildPrefix.expire(guildId, 600);
+      redisGuildPrefix.expire(guildId, 600);
       return ping;
     }
     return this.guild
@@ -20,13 +27,13 @@ class ChikaPrisma extends PrismaClient {
       })
       .then((res) => {
         if (!res?.prefix) return null;
-        guildPrefix.set(guildId, res.prefix, "ex", 600);
+        redisGuildPrefix.set(guildId, res.prefix, "ex", 600);
         return res.prefix;
       });
   }
 
   async setPrefix(guildId: Snowflake, prefix: string) {
-    guildPrefix.set(guildId, prefix, "ex", 600);
+    redisGuildPrefix.set(guildId, prefix, "ex", 600);
     await this.guild.upsert({
       create: { guildId, prefix },
       update: { prefix },
@@ -35,9 +42,9 @@ class ChikaPrisma extends PrismaClient {
   }
 
   async getRibbons(user: User) {
-    const ping = await ribbons.get(user.id);
+    const ping = await redisRibbons.get(user.id);
     if (ping) {
-      ribbons.expire(user.id, 600);
+      redisRibbons.expire(user.id, 600);
       return parseInt(ping, 10);
     }
     return this.user
@@ -47,10 +54,10 @@ class ChikaPrisma extends PrismaClient {
       })
       .then((res) => {
         if (!res?.ribbons) {
-          ribbons.set(user.id, 0, "ex", 600);
+          redisRibbons.set(user.id, 0, "ex", 600);
           return 0;
         }
-        ribbons.set(user.id, res.ribbons, "ex", 600);
+        redisRibbons.set(user.id, res.ribbons, "ex", 600);
         return res.ribbons;
       });
   }
@@ -62,7 +69,7 @@ class ChikaPrisma extends PrismaClient {
         update: { ribbons: { increment: incrby } },
         where: { userId: user.id },
       })
-      .then((_user) => ribbons.set(user.id, _user.ribbons, "ex", 600));
+      .then((_user) => redisRibbons.set(user.id, _user.ribbons, "ex", 600));
   }
 
   async decrRibbons(user: User, decrby: number) {
@@ -83,10 +90,10 @@ class ChikaPrisma extends PrismaClient {
     ]).then((_res) => {
       const [, res] = _res;
       if (!res?.ribbons) {
-        ribbons.set(user.id, 0, "ex", 600);
+        redisRibbons.set(user.id, 0, "ex", 600);
         return;
       }
-      ribbons.set(user.id, res.ribbons, "ex", 600);
+      redisRibbons.set(user.id, res.ribbons, "ex", 600);
     });
   }
 
@@ -126,14 +133,14 @@ class ChikaPrisma extends PrismaClient {
         },
       })
       .then(() => {
-        balloonMin.set(guildId, minVol, "ex", 600);
+        redisBalloonMin.set(guildId, minVol, "ex", 600);
       });
   }
 
   async getBalloonMin(guildId: string) {
-    const ping = await balloonMin.get(guildId);
+    const ping = await redisBalloonMin.get(guildId);
     if (ping) {
-      balloonMin.expire(guildId, 600);
+      redisBalloonMin.expire(guildId, 600);
       return parseInt(ping, 10);
     }
     return this.balloon
@@ -160,19 +167,19 @@ class ChikaPrisma extends PrismaClient {
         create: {
           guildId,
           balloon: {
-            connectOrCreate: { create: { maxVol }, where: { guildId } },
+            create: { maxVol },
           },
         },
       })
       .then(() => {
-        balloonMax.set(guildId, maxVol, "ex", 600);
+        redisBalloonMax.set(guildId, maxVol, "ex", 600);
       });
   }
 
   async getBalloonMax(guildId: string) {
-    const ping = await balloonMax.get(guildId);
+    const ping = await redisBalloonMax.get(guildId);
     if (ping) {
-      balloonMax.expire(guildId, 600);
+      redisBalloonMax.expire(guildId, 600);
       return parseInt(ping, 10);
     }
     return this.balloon
@@ -183,6 +190,42 @@ class ChikaPrisma extends PrismaClient {
       .then((res) => {
         if (!res?.maxVol) return DEFAULT_MAX_BALLOON;
         return res.maxVol;
+      });
+  }
+
+  async setShiritoriMinLen(guildId: string, minLen: number) {
+    await this.guild
+      .upsert({
+        where: { guildId },
+        update: {
+          shiritori: {
+            upsert: { update: { minLen }, create: { minLen } },
+          },
+        },
+        create: {
+          guildId,
+          shiritori: { create: { minLen } },
+        },
+      })
+      .then(() => redisShiritoriMinLen.set(guildId, minLen, "ex", 600));
+  }
+
+  async getShiritoriMinLen(guildId: string | undefined) {
+    if (!guildId) return DEFAULT_SHIRITORI_MIN_LEN;
+
+    const ping = await redisShiritoriMinLen.get(guildId);
+    if (ping) {
+      redisShiritoriMinLen.expire(guildId, 600);
+      return parseInt(ping, 10);
+    }
+    return this.shiritori
+      .findUnique({
+        where: { guildId },
+        select: { minLen: true },
+      })
+      .then((res) => {
+        if (!res?.minLen) return DEFAULT_SHIRITORI_MIN_LEN;
+        return res.minLen;
       });
   }
 }

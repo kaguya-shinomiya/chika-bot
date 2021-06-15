@@ -1,15 +1,16 @@
+import { CmdCategory } from "@prisma/client";
 import { prisma } from "../../data/prismaClient";
 import {
   baseEmbed,
   lightErrorEmbed,
   sendNotInGuild,
 } from "../../shared/embeds";
-import { Command, CommandCategory } from "../../types/command";
+import { Command } from "../../types/command";
 
 const balloonMin = new Command({
   name: "balloon-min",
   aliases: ["bl-min"],
-  category: CommandCategory.GAME,
+  category: CmdCategory.GAMES,
   description:
     "Check or set the lower bound for balloons' volumes in this server.",
   args: [{ name: "new_min", optional: true }],
