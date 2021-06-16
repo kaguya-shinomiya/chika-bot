@@ -1,11 +1,12 @@
+/* eslint-disable import/first */
+require("dotenv-safe").config();
+
 import Discord from "discord.js";
 import { genFullHelpEmbed } from "./init/fullHelpEmbed";
 import { initialClientCache } from "./init/initialClientCache";
 import { loadCommands } from "./init/loadCommands";
 import { loadEventListeners } from "./init/loadEventListeners";
 import { seedCommands } from "./init/seedCommands";
-
-require("dotenv-safe").config();
 
 const main = async () => {
   const client = new Discord.Client();
@@ -22,8 +23,16 @@ const main = async () => {
   client.setMaxListeners(2048);
 };
 
-// eslint-disable-next-line no-console
-main().catch((err) => console.error(err));
+try {
+  main().catch((err) => {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    throw err;
+  });
+} catch (err) {
+  // eslint-disable-next-line no-console
+  console.error(err);
+}
 
 // // experimental
 // if (cluster.isMaster) {

@@ -22,9 +22,9 @@ export type Argument = {
   __typename?: "Argument";
   command: Command;
   id: Scalars["ID"];
-  multi: Scalars["Boolean"];
+  multi?: Maybe<Scalars["Boolean"]>;
   name: Scalars["String"];
-  optional: Scalars["Boolean"];
+  optional?: Maybe<Scalars["Boolean"]>;
 };
 
 export type Command = {
@@ -46,9 +46,9 @@ export enum CommandCategory {
 }
 
 export type CreateArgumentInput = {
-  multi: Scalars["Boolean"];
+  multi?: Maybe<Scalars["Boolean"]>;
   name: Scalars["String"];
-  optional: Scalars["Boolean"];
+  optional?: Maybe<Scalars["Boolean"]>;
 };
 
 export type CreateCommandInput = {
@@ -62,6 +62,7 @@ export type CreateCommandInput = {
 export type Mutation = {
   __typename?: "Mutation";
   createCommand: Scalars["Int"];
+  dropCommands?: Maybe<Scalars["Int"]>;
 };
 
 export type MutationCreateCommandArgs = {
@@ -87,9 +88,21 @@ export type CreateCommandsMutation = { __typename?: "Mutation" } & Pick<
   "createCommand"
 >;
 
+export type DropCommandsMutationVariables = Exact<{ [key: string]: never }>;
+
+export type DropCommandsMutation = { __typename?: "Mutation" } & Pick<
+  Mutation,
+  "dropCommands"
+>;
+
 export const CreateCommandsDocument = gql`
   mutation createCommands($commands: [CreateCommandInput!]!) {
     createCommand(createCommandInput: $commands)
+  }
+`;
+export const DropCommandsDocument = gql`
+  mutation dropCommands {
+    dropCommands
   }
 `;
 
@@ -117,6 +130,20 @@ export function getSdk(
             { ...requestHeaders, ...wrappedRequestHeaders }
           ),
         "createCommands"
+      );
+    },
+    dropCommands(
+      variables?: DropCommandsMutationVariables,
+      requestHeaders?: Dom.RequestInit["headers"]
+    ): Promise<DropCommandsMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<DropCommandsMutation>(
+            DropCommandsDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders }
+          ),
+        "dropCommands"
       );
     },
   };
