@@ -32,9 +32,7 @@ export const seedCommands = async (commands: Collection<string, Command>) => {
 
   const sdk = getSdk(chikav2Client);
 
-  sdk.dropCommands().then(() => {
-    sdk.createCommands({ commands: commandInputs });
-  });
+  sdk.seedCommands({ commands: commandInputs });
 
   const jobs: PrismaPromise<any>[] = [
     prisma.$executeRaw(`TRUNCATE TABLE "Command", "Arg" RESTART IDENTITY`),

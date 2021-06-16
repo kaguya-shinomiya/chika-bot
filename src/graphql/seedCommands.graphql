@@ -1,0 +1,3 @@
+mutation seedCommands($commands: [CreateCommandInput!]!) {
+  seedCommands(commands: $commands)
+}

@@ -61,12 +61,20 @@ export type CreateCommandInput = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  /** Number of rows inserted. */
   createCommand: Scalars["Int"];
+  /** Number of rows deleted. */
   dropCommands?: Maybe<Scalars["Int"]>;
+  /** Number of rows inserted */
+  seedCommands?: Maybe<Scalars["Int"]>;
 };
 
 export type MutationCreateCommandArgs = {
-  createCommandInput: Array<CreateCommandInput>;
+  commands: Array<CreateCommandInput>;
+};
+
+export type MutationSeedCommandsArgs = {
+  commands: Array<CreateCommandInput>;
 };
 
 export type Query = {
@@ -79,30 +87,18 @@ export type QueryCommandArgs = {
   name: Scalars["String"];
 };
 
-export type CreateCommandsMutationVariables = Exact<{
+export type SeedCommandsMutationVariables = Exact<{
   commands: Array<CreateCommandInput> | CreateCommandInput;
 }>;
 
-export type CreateCommandsMutation = { __typename?: "Mutation" } & Pick<
+export type SeedCommandsMutation = { __typename?: "Mutation" } & Pick<
   Mutation,
-  "createCommand"
+  "seedCommands"
 >;
 
-export type DropCommandsMutationVariables = Exact<{ [key: string]: never }>;
-
-export type DropCommandsMutation = { __typename?: "Mutation" } & Pick<
-  Mutation,
-  "dropCommands"
->;
-
-export const CreateCommandsDocument = gql`
-  mutation createCommands($commands: [CreateCommandInput!]!) {
-    createCommand(createCommandInput: $commands)
-  }
-`;
-export const DropCommandsDocument = gql`
-  mutation dropCommands {
-    dropCommands
+export const SeedCommandsDocument = gql`
+  mutation seedCommands($commands: [CreateCommandInput!]!) {
+    seedCommands(commands: $commands)
   }
 `;
 
@@ -118,32 +114,18 @@ export function getSdk(
   withWrapper: SdkFunctionWrapper = defaultWrapper
 ) {
   return {
-    createCommands(
-      variables: CreateCommandsMutationVariables,
+    seedCommands(
+      variables: SeedCommandsMutationVariables,
       requestHeaders?: Dom.RequestInit["headers"]
-    ): Promise<CreateCommandsMutation> {
+    ): Promise<SeedCommandsMutation> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.request<CreateCommandsMutation>(
-            CreateCommandsDocument,
+          client.request<SeedCommandsMutation>(
+            SeedCommandsDocument,
             variables,
             { ...requestHeaders, ...wrappedRequestHeaders }
           ),
-        "createCommands"
-      );
-    },
-    dropCommands(
-      variables?: DropCommandsMutationVariables,
-      requestHeaders?: Dom.RequestInit["headers"]
-    ): Promise<DropCommandsMutation> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.request<DropCommandsMutation>(
-            DropCommandsDocument,
-            variables,
-            { ...requestHeaders, ...wrappedRequestHeaders }
-          ),
-        "dropCommands"
+        "seedCommands"
       );
     },
   };
