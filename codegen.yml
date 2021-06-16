@@ -1,8 +1,15 @@
 overwrite: true
-schema: "https://graphql.anilist.co/"
-documents: ./src/**/*.graphql
 generates:
-  src/generated/graphql.ts:
+  src/generated/anilist.ts:
+    schema: ${ANILIST_SCHEMA}
+    documents: ./src/commands/utility/**/*.graphql
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - typescript-graphql-request
+  src/generated/chika.ts:
+    schema: ${CHIKA_DB_SCHEMA}
+    documents: ./src/graphql/**/*.graphql
     plugins:
       - "typescript"
       - "typescript-operations"

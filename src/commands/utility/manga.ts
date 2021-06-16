@@ -1,6 +1,6 @@
 import { CmdCategory } from "@prisma/client";
 import type { TextChannel } from "discord.js";
-import { getSdk, MediaType } from "../../generated/graphql";
+import { getSdk, MediaType } from "../../generated/anilist";
 import { lightErrorEmbed } from "../../shared/embeds";
 import { Command } from "../../types/command";
 import { sendNotFoundError } from "./embeds/errors";

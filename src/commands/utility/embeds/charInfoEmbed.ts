@@ -1,5 +1,5 @@
 import { unknown_png } from "../../../shared/assets";
-import { FuzzyDate } from "../../../generated/graphql";
+import { FuzzyDate } from "../../../generated/anilist";
 import { baseEmbed } from "../../../shared/embeds";
 import { parseHtml, truncate, wrapText } from "../../../utils/typography";
 import { parseFuzzyDate } from "./mangaInfoEmbed";

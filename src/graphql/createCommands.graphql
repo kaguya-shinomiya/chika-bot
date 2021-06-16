@@ -1,0 +1,3 @@
+mutation createCommands($commands: [CreateCommandInput!]!) {
+  createCommand(createCommandInput: $commands)
+}

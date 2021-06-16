@@ -5,6 +5,8 @@ declare namespace NodeJS {
     DATABASE_URL: string;
     REDISCLOUD_URL: string;
     HUGGING_FACE_API_URL: string;
+    ANILIST_SCHEMA: string;
     HUGGING_FACE_API_KEY: string;
+    CHIKA_DB_SCHEMA: string;
   }
 }

@@ -1,5 +1,5 @@
 import { CmdCategory } from "@prisma/client";
-import { getSdk } from "../../generated/graphql";
+import { getSdk } from "../../generated/anilist";
 import { Command } from "../../types/command";
 import { charInfoEmbed } from "./embeds/charInfoEmbed";
 import { sendNotFoundError } from "./embeds/errors";
