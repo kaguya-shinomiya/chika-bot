@@ -52,7 +52,7 @@
   "scripts": {
     "start": "node dist/index.js --unhandled-rejections=strict",
     "build": "tsc && prisma migrate deploy",
-    "dev": "nodemon --unhandled-rejections=strict dist/index.js",
+    "dev": "nodemon dist/index.js",
     "watch": "tsc -w",
     "test": "jest --coverage",
     "prepare": "husky install",

@@ -36,6 +36,12 @@ const main = () => {
 //   console.error(err);
 // }
 
+process.on("unhandledRejection", (err) => {
+  // eslint-disable-next-line no-console
+  console.error(`Got an unhandledRejection Error ---> `, err);
+  throw err;
+});
+
 // experimental
 if (cluster.isMaster) {
   cluster.fork();
