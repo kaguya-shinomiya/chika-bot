@@ -1,7 +1,8 @@
 import { Message } from "discord.js";
 import { prisma } from "../data/prismaClient";
 import { DEFAULT_PREFIX } from "../shared/constants";
-import { badCommandsEmbed, genericErrorEmbed } from "../shared/embeds";
+import { badCommandsEmbed } from "../shared/embeds";
+import { CriticalError } from "../shared/errors";
 import { Event } from "../types/event";
 import { validateArgsCount } from "../utils/validateArgsCount";
 import { isOnCooldown } from "../utils/validateCooldowns";
@@ -38,11 +39,13 @@ const message: Event = {
 
     if (await isOnCooldown(message, command)) return;
 
-    command.execute(message, args).catch((err) => {
+    try {
+      command.execute(message, args);
+    } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err);
-      channel.send(genericErrorEmbed());
-    });
+      if (err instanceof CriticalError) throw err;
+    }
   },
 };
 

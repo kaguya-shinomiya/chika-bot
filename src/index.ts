@@ -1,3 +1,6 @@
+/* eslint-disable import/first */
+require("dotenv-safe").config();
+
 import Discord from "discord.js";
 import { genFullHelpEmbed } from "./init/fullHelpEmbed";
 import { initialClientCache } from "./init/initialClientCache";
@@ -5,9 +8,7 @@ import { loadCommands } from "./init/loadCommands";
 import { loadEventListeners } from "./init/loadEventListeners";
 import { seedCommands } from "./init/seedCommands";
 
-require("dotenv-safe").config();
-
-const main = async () => {
+const main = () => {
   const client = new Discord.Client();
   client.login(process.env.APP_TOKEN);
 
@@ -22,18 +23,30 @@ const main = async () => {
   client.setMaxListeners(2048);
 };
 
-// eslint-disable-next-line no-console
-main().catch((err) => console.error(err));
+process.on("unhandledRejection", (err) => {
+  // eslint-disable-next-line no-console
+  console.error(`Got an unhandledRejection Error ---> `, err);
+  throw err;
+});
+
+main();
 
 // // experimental
 // if (cluster.isMaster) {
 //   cluster.fork();
 //   cluster.on("exit", (worker) => {
 //     // eslint-disable-next-line no-console
-//     console.error(`worker ${worker.process.pid} exited unexpectedly`);
+//     console.error(
+//       `Worker ${worker.process.pid} exited unexpectedly. Starting a new process.`
+//     );
 //     cluster.fork();
 //   });
 // } else {
-//   // eslint-disable-next-line no-console
-//   main().catch((err) => console.error(err));
+//   try {
+//     main();
+//   } catch (err) {
+//     // eslint-disable-next-line no-console
+//     console.error(err);
+//     if (err instanceof CriticalError) throw err;
+//   }
 // }

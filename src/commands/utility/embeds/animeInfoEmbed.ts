@@ -4,7 +4,7 @@ import {
   MediaSeason,
   MediaSource,
   MediaStatus,
-} from "../../../generated/graphql";
+} from "../../../generated/anilist";
 import { unknown_png } from "../../../shared/assets";
 import { baseEmbed } from "../../../shared/embeds";
 import { parseHtml } from "../../../utils/typography";

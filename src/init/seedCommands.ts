@@ -1,13 +1,49 @@
-import type { PrismaPromise } from "@prisma/client";
+import { CmdCategory, PrismaPromise } from "@prisma/client";
 import type { Collection } from "discord.js";
+import { GraphQLClient } from "graphql-request";
 import { prisma } from "../data/prismaClient";
+import {
+  CommandCategory,
+  CreateCommandInput,
+  getSdk,
+} from "../generated/chika";
 import type { Command } from "../types/command";
 
 export const seedCommands = async (commands: Collection<string, Command>) => {
+  try {
+    const chikav2Client = new GraphQLClient(process.env.CHIKA_DB_SCHEMA, {
+      headers: {
+        authorization: `Bearer ${process.env.SUPERUSER_KEY}`,
+      },
+    });
+
+    const commandInputs: CreateCommandInput[] = commands.map(
+      ({ name, category, description, aliases, args }): CreateCommandInput => ({
+        name,
+        category: normalizeCategory(category),
+        description,
+        aliases,
+        args: args.map(({ name: _name, multi, optional }) => ({
+          name: _name,
+          multi,
+          optional,
+        })),
+      })
+    );
+
+    const sdk = getSdk(chikav2Client);
+    sdk
+      .seedCommands({ commands: commandInputs })
+      // eslint-disable-next-line no-console
+      .catch((err) => console.error(err));
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
+
   const jobs: PrismaPromise<any>[] = [
     prisma.$executeRaw(`TRUNCATE TABLE "Command", "Arg" RESTART IDENTITY`),
   ];
-
   commands.forEach(({ name, args, aliases, description, category }) =>
     jobs.push(
       prisma.command.create({
@@ -37,3 +73,20 @@ export const seedCommands = async (commands: Collection<string, Command>) => {
     console.error(err);
   }
 };
+
+function normalizeCategory(category: CmdCategory): CommandCategory {
+  switch (category) {
+    case "CURRENCY":
+      return CommandCategory.Currency;
+    case "FUN":
+      return CommandCategory.Fun;
+    case "GAMES":
+      return CommandCategory.Games;
+    case "MUSIC":
+      return CommandCategory.Music;
+    case "UTILITY":
+      return CommandCategory.Utility;
+    default:
+      return CommandCategory.Fun;
+  }
+}
