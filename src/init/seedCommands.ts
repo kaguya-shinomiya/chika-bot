@@ -10,29 +10,36 @@ import {
 import type { Command } from "../types/command";
 
 export const seedCommands = async (commands: Collection<string, Command>) => {
-  const chikav2Client = new GraphQLClient(process.env.CHIKA_DB_SCHEMA, {
-    headers: {
-      authorization: `Bearer ${process.env.SUPERUSER_KEY}`,
-    },
-  });
+  try {
+    const chikav2Client = new GraphQLClient(process.env.CHIKA_DB_SCHEMA, {
+      headers: {
+        authorization: `Bearer ${process.env.SUPERUSER_KEY}`,
+      },
+    });
 
-  const commandInputs: CreateCommandInput[] = commands.map(
-    ({ name, category, description, aliases, args }): CreateCommandInput => ({
-      name,
-      category: normalizeCategory(category),
-      description,
-      aliases,
-      args: args.map(({ name: _name, multi, optional }) => ({
-        name: _name,
-        multi,
-        optional,
-      })),
-    })
-  );
+    const commandInputs: CreateCommandInput[] = commands.map(
+      ({ name, category, description, aliases, args }): CreateCommandInput => ({
+        name,
+        category: normalizeCategory(category),
+        description,
+        aliases,
+        args: args.map(({ name: _name, multi, optional }) => ({
+          name: _name,
+          multi,
+          optional,
+        })),
+      })
+    );
 
-  const sdk = getSdk(chikav2Client);
-
-  sdk.seedCommands({ commands: commandInputs });
+    const sdk = getSdk(chikav2Client);
+    sdk
+      .seedCommands({ commands: commandInputs })
+      // eslint-disable-next-line no-console
+      .catch((err) => console.error(err));
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+  }
 
   const jobs: PrismaPromise<any>[] = [
     prisma.$executeRaw(`TRUNCATE TABLE "Command", "Arg" RESTART IDENTITY`),

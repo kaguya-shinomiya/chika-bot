@@ -59,32 +59,72 @@ export type CreateCommandInput = {
   name: Scalars["String"];
 };
 
+export type CreateGuildInput = {
+  customPrefix?: Maybe<Scalars["String"]>;
+  /** The commands to disable in this server. */
+  disabledCommands?: Maybe<Array<Scalars["String"]>>;
+  id: Scalars["String"];
+};
+
+export type Guild = {
+  __typename?: "Guild";
+  customPrefix?: Maybe<Scalars["String"]>;
+  /** Array of commands disabled in this server. */
+  disabledCommands?: Maybe<Array<Command>>;
+  id: Scalars["String"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
-  /** Number of rows inserted. */
-  createCommand: Scalars["Int"];
-  /** Number of rows deleted. */
+  /** Creates one to many commands. */
+  createCommand: Array<Command>;
+  createGuild: Guild;
   dropCommands?: Maybe<Scalars["Int"]>;
-  /** Number of rows inserted */
+  removeGuild: Guild;
   seedCommands?: Maybe<Scalars["Int"]>;
+  updateGuild: Guild;
 };
 
 export type MutationCreateCommandArgs = {
   commands: Array<CreateCommandInput>;
 };
 
+export type MutationCreateGuildArgs = {
+  createGuildInput: CreateGuildInput;
+};
+
+export type MutationRemoveGuildArgs = {
+  id: Scalars["String"];
+};
+
 export type MutationSeedCommandsArgs = {
   commands: Array<CreateCommandInput>;
+};
+
+export type MutationUpdateGuildArgs = {
+  updateGuildInput: UpdateGuildInput;
 };
 
 export type Query = {
   __typename?: "Query";
   command: Command;
   commands: Array<Command>;
+  guild: Guild;
 };
 
 export type QueryCommandArgs = {
   name: Scalars["String"];
+};
+
+export type QueryGuildArgs = {
+  id: Scalars["String"];
+};
+
+export type UpdateGuildInput = {
+  customPrefix?: Maybe<Scalars["String"]>;
+  /** The commands to disable in this server. */
+  disabledCommands?: Maybe<Array<Scalars["String"]>>;
+  id: Scalars["String"];
 };
 
 export type SeedCommandsMutationVariables = Exact<{

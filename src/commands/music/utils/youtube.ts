@@ -7,6 +7,7 @@ import { AudioUtils, QueueItem } from "../../../types/queue";
 import { sendCannotPlay, sendNowPlaying } from "./embeds";
 import { secToString } from "./helpers";
 import type { createFinishListener } from "./listener";
+import { CriticalError } from "../../../shared/errors";
 
 const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
@@ -32,10 +33,9 @@ export const searchVideo = async (
 export const playFromYt = async (
   connection: VoiceConnection,
   url: string
-): Promise<StreamDispatcher | null> =>
-  ytdl
-    .getInfo(url)
-    .then((info) =>
+): Promise<StreamDispatcher> => {
+  try {
+    const dispatcher = await ytdl.getInfo(url).then((info) =>
       connection.play(
         ytdl.downloadFromInfo(info, {
           filter: "audioonly",
@@ -44,12 +44,18 @@ export const playFromYt = async (
           highWaterMark: 1 << 25,
         })
       )
-    )
-    .catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(err);
-      return null;
-    });
+    );
+    return dispatcher;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(err);
+    if (err.statusCode === 429) {
+      throw new CriticalError("YouTube has blocked us.");
+    } else {
+      throw err;
+    }
+  }
+};
 
 export const validateArgs = async (
   args: string[]
@@ -115,19 +121,18 @@ export const playThis = async (
   videoData: QueueItem,
   { client, channel, guildId, onFinish }: playThisParams
 ): Promise<void> => {
-  const dispatcher = await playFromYt(connection, videoData.url);
-  if (!dispatcher) {
+  try {
+    const dispatcher = await playFromYt(connection, videoData.url);
+    sendNowPlaying(channel, videoData);
+    const newAudioUtils: AudioUtils = {
+      connection,
+      dispatcher,
+      nowPlaying: videoData,
+    };
+    dispatcher.on("finish", onFinish);
+    client.cache.audioUtils.set(guildId, newAudioUtils);
+  } catch (err) {
     sendCannotPlay(channel, videoData.title, videoData.url);
-    onFinish();
-    return;
+    if (err instanceof CriticalError) throw err;
   }
-  sendNowPlaying(channel, videoData);
-
-  const newAudioUtils: AudioUtils = {
-    connection,
-    dispatcher,
-    nowPlaying: videoData,
-  };
-  dispatcher.on("finish", onFinish);
-  client.cache.audioUtils.set(guildId, newAudioUtils);
 };
