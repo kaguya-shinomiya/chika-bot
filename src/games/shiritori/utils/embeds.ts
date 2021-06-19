@@ -1,10 +1,10 @@
-import { baseEmbed } from "../../../shared/embeds";
-import type { ShiritoriState } from "./types";
-import { genCardsString } from "./cards";
+import { baseEmbed } from '../../../shared/embeds';
+import type { ShiritoriState } from './types';
+import { genCardsString } from './cards';
 
 export const shiritoriPlayerCardsEmbed = ({ p1, p2, cards }: ShiritoriState) =>
   baseEmbed()
-    .setTitle("Your cards!")
+    .setTitle('Your cards!')
     .addFields([
       {
         name: `**${p1.username}**'s cards`,

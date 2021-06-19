@@ -1,21 +1,21 @@
-import type { Client, StreamDispatcher, VoiceConnection } from "discord.js";
-import ytdl from "ytdl-core";
-import ytpl from "ytpl";
-import ytsr, { Video } from "ytsr";
-import { GenericChannel } from "../../../types/command";
-import { AudioUtils, QueueItem } from "../../../types/queue";
-import { sendCannotPlay, sendNowPlaying } from "./embeds";
-import { secToString } from "./helpers";
-import type { createFinishListener } from "./listener";
-import { CriticalError } from "../../../shared/errors";
+import type { Client, StreamDispatcher, VoiceConnection } from 'discord.js';
+import ytdl from 'ytdl-core';
+import ytpl from 'ytpl';
+import ytsr, { Video } from 'ytsr';
+import { GenericChannel } from '../../../types/command';
+import { AudioUtils, QueueItem } from '../../../types/queue';
+import { sendCannotPlay, sendNowPlaying } from './embeds';
+import { secToString } from './helpers';
+import type { createFinishListener } from './listener';
+import { CriticalError } from '../../../shared/errors';
 
 const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
 export const searchVideo = async (
   title: string,
-  maxResults = 10
+  maxResults = 10,
 ): Promise<QueueItem[] | null> => {
-  const vFilter = (await ytsr.getFilters(title)).get("Type")!.get("Video")!;
+  const vFilter = (await ytsr.getFilters(title)).get('Type')!.get('Video')!;
   const videos = (await ytsr(vFilter.url!, { limit: maxResults }))
     .items as Video[];
   if (videos.length === 0) return null;
@@ -26,31 +26,29 @@ export const searchVideo = async (
         duration: video.duration,
         thumbnailURL: video.bestThumbnail.url,
         url: video.url,
-      } as QueueItem)
+      } as QueueItem),
   );
 };
 
 export const playFromYt = async (
   connection: VoiceConnection,
-  url: string
+  url: string,
 ): Promise<StreamDispatcher> => {
   try {
     const dispatcher = await ytdl.getInfo(url).then((info) =>
       connection.play(
         ytdl.downloadFromInfo(info, {
-          filter: "audioonly",
-          quality: "highestaudio",
-          // eslint-disable-next-line no-bitwise
+          filter: 'audioonly',
+          quality: 'highestaudio',
           highWaterMark: 1 << 25,
-        })
-      )
+        }),
+      ),
     );
     return dispatcher;
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
     if (err.statusCode === 429) {
-      throw new CriticalError("YouTube has blocked us.");
+      throw new CriticalError('YouTube has blocked us.');
     } else {
       throw err;
     }
@@ -58,7 +56,7 @@ export const playFromYt = async (
 };
 
 export const validateArgs = async (
-  args: string[]
+  args: string[],
 ): Promise<QueueItem | null> => {
   if (YOUTUBE_URL_RE.test(args[0])) {
     const [url] = args;
@@ -79,7 +77,7 @@ export const validateArgs = async (
     };
   }
 
-  const res = await searchVideo(args.join(" "), 1);
+  const res = await searchVideo(args.join(' '), 1);
   if (!res) return null;
   return { ...res[0] };
 };
@@ -91,7 +89,7 @@ interface PlaylistMetadata {
 }
 
 export const parsePlaylist = (
-  res: ytpl.Result
+  res: ytpl.Result,
 ): [PlaylistMetadata, QueueItem[]] => {
   const metadata: PlaylistMetadata = {
     title: res.title,
@@ -104,7 +102,7 @@ export const parsePlaylist = (
       title: item.title,
       thumbnailURL: item.bestThumbnail.url!,
       duration: item.duration!,
-    })
+    }),
   );
   return [metadata, items];
 };
@@ -119,7 +117,7 @@ interface playThisParams {
 export const playThis = async (
   connection: VoiceConnection,
   videoData: QueueItem,
-  { client, channel, guildId, onFinish }: playThisParams
+  { client, channel, guildId, onFinish }: playThisParams,
 ): Promise<void> => {
   try {
     const dispatcher = await playFromYt(connection, videoData.url);
@@ -129,7 +127,7 @@ export const playThis = async (
       dispatcher,
       nowPlaying: videoData,
     };
-    dispatcher.on("finish", onFinish);
+    dispatcher.on('finish', onFinish);
     client.cache.audioUtils.set(guildId, newAudioUtils);
   } catch (err) {
     sendCannotPlay(channel, videoData.title, videoData.url);

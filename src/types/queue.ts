@@ -1,4 +1,4 @@
-import type { StreamDispatcher, VoiceConnection } from "discord.js";
+import type { StreamDispatcher, VoiceConnection } from 'discord.js';
 
 interface QueueItem {
   url: string;

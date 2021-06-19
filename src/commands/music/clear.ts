@@ -1,13 +1,13 @@
-import { CmdCategory } from "@prisma/client";
-import { redisQueue } from "../../data/redisClient";
-import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendMusicOnlyInGuild } from "./utils/embeds";
+import { CmdCategory } from '@prisma/client';
+import { redisQueue } from '../../data/redisClient';
+import { lightErrorEmbed, withAuthorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendMusicOnlyInGuild } from './utils/embeds';
 
 const clear = new Command({
-  name: "clear",
-  description: "Clears all tracks from the queue.",
-  aliases: ["c"],
+  name: 'clear',
+  description: 'Clears all tracks from the queue.',
+  aliases: ['c'],
   category: CmdCategory.MUSIC,
   args: [],
 
@@ -20,10 +20,10 @@ const clear = new Command({
 
     redisQueue.del(guild.id).then((res) => {
       if (!res) {
-        channel.send(lightErrorEmbed("Queue is already empty."));
+        channel.send(lightErrorEmbed('Queue is already empty.'));
         return;
       }
-      channel.send(withAuthorEmbed(author).setTitle("Queue has been cleared."));
+      channel.send(withAuthorEmbed(author).setTitle('Queue has been cleared.'));
     });
   },
 });

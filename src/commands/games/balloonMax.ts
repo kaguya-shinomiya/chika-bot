@@ -1,19 +1,19 @@
-import { CmdCategory } from "@prisma/client";
-import { prisma } from "../../data/prismaClient";
+import { CmdCategory } from '@prisma/client';
+import { prisma } from '../../data/prismaClient';
 import {
   baseEmbed,
   lightErrorEmbed,
   sendNotInGuild,
-} from "../../shared/embeds";
-import { Command } from "../../types/command";
+} from '../../shared/embeds';
+import { Command } from '../../types/command';
 
 const balloonMax = new Command({
-  name: "balloon-max",
-  aliases: ["bl-max"],
+  name: 'balloon-max',
+  aliases: ['bl-max'],
   category: CmdCategory.GAMES,
   description:
     "Check or set the upper bound for balloons' volumes in this server.",
-  args: [{ name: "new_max", optional: true }],
+  args: [{ name: 'new_max', optional: true }],
   async execute(message, args) {
     const { channel, guild } = message;
     if (!guild) {
@@ -24,7 +24,7 @@ const balloonMax = new Command({
     if (!_newMax) {
       const currMax = await prisma.getBalloonMax(guild.id);
       channel.send(
-        baseEmbed().setDescription(`Current max volume: **${currMax}**`)
+        baseEmbed().setDescription(`Current max volume: **${currMax}**`),
       );
       return;
     }
@@ -39,14 +39,14 @@ const balloonMax = new Command({
         lightErrorEmbed(
           `The current min is **${currMin}**.
           
-          Please set a max below that, or lower the min.`
-        )
+          Please set a max below that, or lower the min.`,
+        ),
       );
       return;
     }
     if (newMax <= 0) {
       channel.send(
-        lightErrorEmbed("Volume is a *non-negative scalar*  ლ(´ڡ`ლ)")
+        lightErrorEmbed('Volume is a *non-negative scalar*  ლ(´ڡ`ლ)'),
       );
       return;
     }
@@ -55,8 +55,8 @@ const balloonMax = new Command({
       baseEmbed().setDescription(
         `The maximum balloon volume has been set to **${newMax}**!
         
-        This will apply on the next game.`
-      )
+        This will apply on the next game.`,
+      ),
     );
   },
 });

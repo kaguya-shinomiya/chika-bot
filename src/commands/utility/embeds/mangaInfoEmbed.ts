@@ -1,13 +1,13 @@
-import _ from "lodash";
+import _ from 'lodash';
 import {
   FuzzyDate,
   Maybe,
   MediaSource,
   MediaStatus,
-} from "../../../generated/anilist";
-import { unknown_png } from "../../../shared/assets";
-import { baseEmbed } from "../../../shared/embeds";
-import { parseHtml } from "../../../utils/typography";
+} from '../../../generated/anilist';
+import { unknown_png } from '../../../shared/assets';
+import { baseEmbed } from '../../../shared/embeds';
+import { parseHtml } from '../../../utils/typography';
 
 interface mangaEmbedParams {
   title: string | null | undefined;
@@ -15,7 +15,7 @@ interface mangaEmbedParams {
   status: MediaStatus | null | undefined;
   averageScore: number | null | undefined;
   coverImage: string | null | undefined;
-  genres: Maybe<String>[] | null | undefined;
+  genres: Maybe<string>[] | null | undefined;
   source: MediaSource | null | undefined;
   startDate: FuzzyDate | null | undefined;
   endDate: FuzzyDate | null | undefined;
@@ -25,13 +25,13 @@ interface mangaEmbedParams {
 
 export function parseFuzzyDate(date?: FuzzyDate | null): string {
   if (!date) {
-    return "?";
+    return '?';
   }
   const { year, month, day } = date;
   if (!year && !month && !day) {
-    return "?";
+    return '?';
   }
-  return `${day || "?"}-${month || "?"}-${year || "?"}`;
+  return `${day || '?'}-${month || '?'}-${year || '?'}`;
 }
 
 export const mangaInfoEmbed = (info: mangaEmbedParams) => {
@@ -52,42 +52,42 @@ export const mangaInfoEmbed = (info: mangaEmbedParams) => {
     .setThumbnail(coverImage || unknown_png)
     .setTitle(title)
     .setDescription(
-      description ? parseHtml(description) : `*No description for this manga.*`
+      description ? parseHtml(description) : `*No description for this manga.*`,
     )
     .addFields([
       {
-        name: ":pencil: Status",
+        name: ':pencil: Status',
         value: status
-          ? _.startCase(status.replace(/_/g, " ").toLowerCase())
-          : "?",
+          ? _.startCase(status.replace(/_/g, ' ').toLowerCase())
+          : '?',
         inline: true,
       },
       {
-        name: ":calendar: Published",
+        name: ':calendar: Published',
         value: `From **${parseFuzzyDate(startDate)}** to **${parseFuzzyDate(
-          endDate
+          endDate,
         )}**`,
         inline: true,
       },
       {
-        name: ":ramen: Sauce",
+        name: ':ramen: Sauce',
         value: source
-          ? _.startCase(source.replace(/_/g, " ").toLowerCase())
-          : "?",
+          ? _.startCase(source.replace(/_/g, ' ').toLowerCase())
+          : '?',
         inline: true,
       },
     ])
-    .addField(":shinto_shrine: Genres", genres?.join(", ") || ":question:")
+    .addField(':shinto_shrine: Genres', genres?.join(', ') || ':question:')
     .addFields([
-      { name: ":books: Volumes", value: volumes || "?", inline: true },
+      { name: ':books: Volumes', value: volumes || '?', inline: true },
       {
-        name: ":newspaper2: Chapters",
-        value: chapters || "?",
+        name: ':newspaper2: Chapters',
+        value: chapters || '?',
         inline: true,
       },
       {
-        name: ":star: Rating",
-        value: averageScore ? `${averageScore}/100` : "?",
+        name: ':star: Rating',
+        value: averageScore ? `${averageScore}/100` : '?',
         inline: true,
       },
     ]);

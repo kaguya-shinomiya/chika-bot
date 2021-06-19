@@ -1,17 +1,17 @@
-import { CmdCategory } from "@prisma/client";
-import ytpl from "ytpl";
-import { redisQueue } from "../../data/redisClient";
-import { cryingEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
-import { parsePlaylist } from "./utils/youtube";
+import { CmdCategory } from '@prisma/client';
+import ytpl from 'ytpl';
+import { redisQueue } from '../../data/redisClient';
+import { cryingEmbed, withAuthorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendMusicOnlyInGuild, toUrlString } from './utils/embeds';
+import { parsePlaylist } from './utils/youtube';
 
 const addPlaylist = new Command({
-  name: "add-playlist",
-  aliases: ["ap"],
+  name: 'add-playlist',
+  aliases: ['ap'],
   category: CmdCategory.MUSIC,
-  description: "Add a YouTube playlist to the queue.",
-  args: [{ name: "playlist_url" }],
+  description: 'Add a YouTube playlist to the queue.',
+  args: [{ name: 'playlist_url' }],
 
   async execute(message, args) {
     const { guild, channel, author } = message;
@@ -25,30 +25,34 @@ const addPlaylist = new Command({
         const [playlistMetadata, videos] = parsePlaylist(res);
         redisQueue.rpush(
           guild.id,
-          ...videos.map((video) => JSON.stringify(video))
+          ...videos.map((video) => JSON.stringify(video)),
         );
         channel.send(
           withAuthorEmbed(author)
-            .setTitle("Added Playlist")
+            .setTitle('Added Playlist')
             .setDescription(
-              `${toUrlString(playlistMetadata.title, playlistMetadata.url, 40)}`
+              `${toUrlString(
+                playlistMetadata.title,
+                playlistMetadata.url,
+                40,
+              )}`,
             )
-            .setThumbnail(playlistMetadata.thumbnailURL)
+            .setThumbnail(playlistMetadata.thumbnailURL),
         );
       })
       .catch(() =>
         channel.send(
           cryingEmbed()
-            .setTitle("Sorry...")
+            .setTitle('Sorry...')
             .setDescription(
               `I couldn't find a playlist at ${toUrlString(
                 playlistURL,
                 playlistURL,
-                40
-              )}`
+                40,
+              )}`,
             )
-            .addField("\u200b", "It might be a private playlist?")
-        )
+            .addField('\u200b', 'It might be a private playlist?'),
+        ),
       );
   },
 });

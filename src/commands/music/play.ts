@@ -1,25 +1,25 @@
-import { CmdCategory } from "@prisma/client";
-import { redisQueue } from "../../data/redisClient";
-import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { QueueItem } from "../../types/queue";
-import { tryToConnect } from "./utils/client";
+import { CmdCategory } from '@prisma/client';
+import { redisQueue } from '../../data/redisClient';
+import { lightErrorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { QueueItem } from '../../types/queue';
+import { tryToConnect } from './utils/client';
 import {
   sendAddedToQueue,
   sendMusicOnlyInGuild,
   sendNotInVoiceChannel,
   sendNoVideo,
   sendNoVoicePermissions,
-} from "./utils/embeds";
-import { createFinishListener } from "./utils/listener";
-import { playThis, validateArgs } from "./utils/youtube";
+} from './utils/embeds';
+import { createFinishListener } from './utils/listener';
+import { playThis, validateArgs } from './utils/youtube';
 
 const play = new Command({
-  name: "play",
-  aliases: ["tunes"],
-  args: [{ name: "url_or_title", multi: true, optional: true }],
+  name: 'play',
+  aliases: ['tunes'],
+  args: [{ name: 'url_or_title', multi: true, optional: true }],
   category: CmdCategory.MUSIC,
-  description: "Let Chika play some music from YouTube for you.",
+  description: 'Let Chika play some music from YouTube for you.',
 
   async execute(message, args) {
     const { channel, member, guild, client, author } = message;
@@ -39,7 +39,7 @@ const play = new Command({
     if (args.length === 0) {
       if (!next) {
         channel.send(
-          lightErrorEmbed("There are no songs in the queue for me to play.")
+          lightErrorEmbed('There are no songs in the queue for me to play.'),
         );
         return;
       }
@@ -52,8 +52,8 @@ const play = new Command({
         sendNoVoicePermissions(channel);
         return;
       }
-      connection.on("disconnect", () =>
-        client.cache.audioUtils.delete(guild.id)
+      connection.on('disconnect', () =>
+        client.cache.audioUtils.delete(guild.id),
       );
       const nextData = JSON.parse(next) as QueueItem;
       playThis(connection, nextData, {
@@ -72,7 +72,7 @@ const play = new Command({
 
     const videoData = await validateArgs(args);
     if (!videoData) {
-      sendNoVideo(channel, args.join(" "));
+      sendNoVideo(channel, args.join(' '));
       return;
     }
 
@@ -91,7 +91,7 @@ const play = new Command({
       sendNoVoicePermissions(channel);
       return;
     }
-    connection.on("disconnect", () => client.cache.audioUtils.delete(guild.id));
+    connection.on('disconnect', () => client.cache.audioUtils.delete(guild.id));
     playThis(connection, videoData, {
       channel,
       client,

@@ -1,10 +1,10 @@
-import { CmdCategory } from "@prisma/client";
-import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { CmdCategory } from '@prisma/client';
+import { lightErrorEmbed, sendNotInGuild } from '../../shared/embeds';
+import { Command } from '../../types/command';
 
 const boot = new Command({
-  name: "boot",
-  description: "Boot Chika from the voice channel. Queue is not cleared.",
+  name: 'boot',
+  description: 'Boot Chika from the voice channel. Queue is not cleared.',
   category: CmdCategory.MUSIC,
   args: [],
 

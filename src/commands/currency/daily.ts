@@ -1,16 +1,16 @@
-import { CmdCategory } from "@prisma/client";
-import { prisma } from "../../data/prismaClient";
-import { ribbon_emoji } from "../../shared/assets";
-import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { getCooldown, setCooldown } from "../../utils/cooldownManager";
-import { endOfToday, secToWordString } from "../../utils/time";
+import { CmdCategory } from '@prisma/client';
+import { prisma } from '../../data/prismaClient';
+import { ribbon_emoji } from '../../shared/assets';
+import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { getCooldown, setCooldown } from '../../utils/cooldownManager';
+import { endOfToday, secToWordString } from '../../utils/time';
 
 const daily = new Command({
-  name: "daily",
+  name: 'daily',
   category: CmdCategory.CURRENCY,
   args: [],
-  description: "Collect your daily dose of ribbons.",
+  description: 'Collect your daily dose of ribbons.',
 
   async execute(message) {
     const { author, channel } = message;
@@ -23,9 +23,9 @@ const daily = new Command({
           `You've already collected today's ribbons!
           
           Please wait ${secToWordString(
-            cooldownDuration
-          )} before collecting again.`
-        )
+            cooldownDuration,
+          )} before collecting again.`,
+        ),
       );
       return;
     }
@@ -33,8 +33,8 @@ const daily = new Command({
     const toAward = Math.floor(Math.random() * 200 + 100);
     channel.send(
       baseEmbed().setDescription(
-        `**+ ${toAward}** ribbons ${ribbon_emoji} for **${author.username}**!`
-      )
+        `**+ ${toAward}** ribbons ${ribbon_emoji} for **${author.username}**!`,
+      ),
     );
 
     const nowStamp = Date.now();

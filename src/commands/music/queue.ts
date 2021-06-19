@@ -1,15 +1,15 @@
-import { CmdCategory } from "@prisma/client";
-import { redisQueue as tracks } from "../../data/redisClient";
-import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendMusicOnlyInGuild, sendQueue } from "./utils/embeds";
+import { CmdCategory } from '@prisma/client';
+import { redisQueue as tracks } from '../../data/redisClient';
+import { lightErrorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendMusicOnlyInGuild, sendQueue } from './utils/embeds';
 
 // TODO use paginated embed for this
 
 const queue = new Command({
-  name: "queue",
-  description: "Display tracks in the queue.",
-  aliases: ["q"],
+  name: 'queue',
+  description: 'Display tracks in the queue.',
+  aliases: ['q'],
   args: [],
   category: CmdCategory.MUSIC,
 
@@ -25,8 +25,8 @@ const queue = new Command({
       if (_tracks.length === 0 && !audioUtils) {
         channel.send(
           lightErrorEmbed(
-            "There are no tracks queued, and nothing is playing now."
-          )
+            'There are no tracks queued, and nothing is playing now.',
+          ),
         );
         return;
       }

@@ -1,13 +1,13 @@
-import { CmdCategory, PrismaPromise } from "@prisma/client";
-import type { Collection } from "discord.js";
-import { GraphQLClient } from "graphql-request";
-import { prisma } from "../data/prismaClient";
+import { CmdCategory, PrismaPromise } from '@prisma/client';
+import type { Collection } from 'discord.js';
+import { GraphQLClient } from 'graphql-request';
+import { prisma } from '../data/prismaClient';
 import {
   CommandCategory,
   CreateCommandInput,
   getSdk,
-} from "../generated/chika";
-import type { Command } from "../types/command";
+} from '../generated/chika';
+import type { Command } from '../types/command';
 
 export const seedCommands = async (commands: Collection<string, Command>) => {
   try {
@@ -28,16 +28,14 @@ export const seedCommands = async (commands: Collection<string, Command>) => {
           multi,
           optional,
         })),
-      })
+      }),
     );
 
     const sdk = getSdk(chikav2Client);
     sdk
       .seedCommands({ commands: commandInputs })
-      // eslint-disable-next-line no-console
       .catch((err) => console.error(err));
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
   }
 
@@ -63,28 +61,27 @@ export const seedCommands = async (commands: Collection<string, Command>) => {
             },
           },
         },
-      })
-    )
+      }),
+    ),
   );
   try {
     await prisma.$transaction(jobs);
   } catch (err) {
-    // eslint-disable-next-line no-console
     console.error(err);
   }
 };
 
 function normalizeCategory(category: CmdCategory): CommandCategory {
   switch (category) {
-    case "CURRENCY":
+    case 'CURRENCY':
       return CommandCategory.Currency;
-    case "FUN":
+    case 'FUN':
       return CommandCategory.Fun;
-    case "GAMES":
+    case 'GAMES':
       return CommandCategory.Games;
-    case "MUSIC":
+    case 'MUSIC':
       return CommandCategory.Music;
-    case "UTILITY":
+    case 'UTILITY':
       return CommandCategory.Utility;
     default:
       return CommandCategory.Fun;

@@ -1,12 +1,12 @@
-import type { Message } from "discord.js";
-import { lightErrorEmbed } from "../shared/embeds";
-import type { Command } from "../types/command";
-import { getCooldown } from "./cooldownManager";
-import { secToWordString } from "./time";
+import type { Message } from 'discord.js';
+import { lightErrorEmbed } from '../shared/embeds';
+import type { Command } from '../types/command';
+import { getCooldown } from './cooldownManager';
+import { secToWordString } from './time';
 
 export const isOnCooldown = async (
   message: Message,
-  command: Command
+  command: Command,
 ): Promise<boolean> => {
   const { channel, author } = message;
   if (command.channelCooldown) {
@@ -16,8 +16,8 @@ export const isOnCooldown = async (
         lightErrorEmbed(
           `Please wait ${secToWordString(ttl)} before using **${
             command.name
-          }** in this channel again.`
-        )
+          }** in this channel again.`,
+        ),
       );
       return true;
     }
@@ -28,9 +28,9 @@ export const isOnCooldown = async (
       message.channel.send(
         lightErrorEmbed(
           `**${author.username}**, please wait ${secToWordString(
-            ttl
-          )} before using **${command.name}** again.`
-        )
+            ttl,
+          )} before using **${command.name}** again.`,
+        ),
       );
       return true;
     }

@@ -1,9 +1,9 @@
-import { Client, Guild, Message } from "discord.js";
-import { redisQueue } from "../../../data/redisClient";
-import { GenericChannel } from "../../../types/command";
-import { QueueItem } from "../../../types/queue";
-import { sendAddedToQueue, sendFinishedAllTracks } from "./embeds";
-import { playThis } from "./youtube";
+import { Client, Guild, Message } from 'discord.js';
+import { redisQueue } from '../../../data/redisClient';
+import { GenericChannel } from '../../../types/command';
+import { QueueItem } from '../../../types/queue';
+import { sendAddedToQueue, sendFinishedAllTracks } from './embeds';
+import { playThis } from './youtube';
 
 interface createFinishListenerParams {
   channel: GenericChannel;
@@ -12,7 +12,7 @@ interface createFinishListenerParams {
 
 export function createFinishListener(
   guild: Guild,
-  { channel, client }: createFinishListenerParams
+  { channel, client }: createFinishListenerParams,
 ) {
   const onFinish = async () => {
     const audioUtils = client.cache.audioUtils.get(guild.id)!;
@@ -34,7 +34,6 @@ export function createFinishListener(
           onFinish,
         });
       })
-      // eslint-disable-next-line no-console
       .catch((err) => console.error(err));
   };
   return onFinish;
@@ -47,7 +46,7 @@ interface createResultSelectListenerParams {
 
 export const createResultSelectListener = (
   results: QueueItem[],
-  { channelId, guildId }: createResultSelectListenerParams
+  { channelId, guildId }: createResultSelectListenerParams,
 ) => {
   const resultSelectListener = async (message: Message) => {
     const { content, channel, author } = message;

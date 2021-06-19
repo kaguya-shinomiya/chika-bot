@@ -1,19 +1,19 @@
-import type { Collection, User } from "discord.js";
-import { ribbon_emoji } from "../../../shared/assets";
-import { baseEmbed } from "../../../shared/embeds";
-import { GenericChannel } from "../../../types/command";
-import { groupNum } from "../../../utils/typography";
-import { toListString } from "../../music/utils/embeds";
+import type { Collection, User } from 'discord.js';
+import { ribbon_emoji } from '../../../shared/assets';
+import { baseEmbed } from '../../../shared/embeds';
+import { GenericChannel } from '../../../types/command';
+import { groupNum } from '../../../utils/typography';
+import { toListString } from '../../music/utils/embeds';
 
 export const sendRibbonStock = (
   channel: GenericChannel,
-  stock: Collection<User, string | null>
+  stock: Collection<User, string | null>,
 ) => {
   const lines = stock.map(
-    (count, user) => `${user.toString()}: ${count || 0} ${ribbon_emoji}`
+    (count, user) => `${user.toString()}: ${count || 0} ${ribbon_emoji}`,
   );
   channel.send(
-    baseEmbed().setDescription(toListString(lines, { noNum: true }))
+    baseEmbed().setDescription(toListString(lines, { noNum: true })),
   );
 };
 
@@ -23,20 +23,20 @@ export const sendTop = (
     tag: string;
     ribbons: number;
   }[],
-  options?: { locale?: string; thumbnail?: string | null }
+  options?: { locale?: string; thumbnail?: string | null },
 ) => {
   const lines = top.map(
     ({ tag, ribbons }) =>
-      `**${tag}**: ${groupNum.format(ribbons)} ${ribbon_emoji}`
+      `**${tag}**: ${groupNum.format(ribbons)} ${ribbon_emoji}`,
   );
   const partialEmbed = baseEmbed()
-    .setTitle(`Wealth Gap in ${options?.locale || "za Warudo"} :yen:`)
+    .setTitle(`Wealth Gap in ${options?.locale || 'za Warudo'} :yen:`)
     .setDescription(toListString(lines))
     .setFooter(`Showing top ${lines.length}`);
 
   channel.send(
     options?.thumbnail
       ? partialEmbed.setThumbnail(options.thumbnail)
-      : partialEmbed
+      : partialEmbed,
   );
 };

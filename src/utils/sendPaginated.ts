@@ -1,6 +1,6 @@
-import type { MessageEmbed, MessageReaction, User } from "discord.js";
-import { GenericChannel } from "../types/command";
-import { left_arrow, right_arrow } from "../shared/assets";
+import type { MessageEmbed, MessageReaction, User } from 'discord.js';
+import { GenericChannel } from '../types/command';
+import { left_arrow, right_arrow } from '../shared/assets';
 
 interface sendPaginatedOptions {
   leftEmoji?: string;
@@ -13,7 +13,7 @@ interface sendPaginatedOptions {
 export const sendPaginated = (
   channel: GenericChannel,
   pages: MessageEmbed[],
-  options?: sendPaginatedOptions
+  options?: sendPaginatedOptions,
 ) => {
   const leftEmoji = options?.leftEmoji || left_arrow;
   const rightEmoji = options?.rightEmoji || right_arrow;
@@ -47,10 +47,10 @@ export const sendPaginated = (
       message.edit(pages[on].setFooter(`${on + 1}/${maxOn + 1}`));
     };
 
-    collector.on("remove", reactHandler);
-    collector.on("collect", reactHandler);
+    collector.on('remove', reactHandler);
+    collector.on('collect', reactHandler);
 
-    collector.on("end", () => {
+    collector.on('end', () => {
       if (!message.deleted) {
         message.reactions.removeAll();
       }

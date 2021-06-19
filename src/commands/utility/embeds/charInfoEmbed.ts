@@ -1,8 +1,8 @@
-import { unknown_png } from "../../../shared/assets";
-import { FuzzyDate } from "../../../generated/anilist";
-import { baseEmbed } from "../../../shared/embeds";
-import { parseHtml, truncate, wrapText } from "../../../utils/typography";
-import { parseFuzzyDate } from "./mangaInfoEmbed";
+import { unknown_png } from '../../../shared/assets';
+import { FuzzyDate } from '../../../generated/anilist';
+import { baseEmbed } from '../../../shared/embeds';
+import { parseHtml, truncate, wrapText } from '../../../utils/typography';
+import { parseFuzzyDate } from './mangaInfoEmbed';
 
 interface charInfoEmbedParams {
   englishName: string | null | undefined;
@@ -28,24 +28,24 @@ export const charInfoEmbed = (info: charInfoEmbedParams) => {
   } = info;
   let genderEmoji;
   switch (gender?.toLowerCase()) {
-    case "male":
-      genderEmoji = ":male_sign:";
+    case 'male':
+      genderEmoji = ':male_sign:';
       break;
-    case "female":
-      genderEmoji = ":female_sign:";
+    case 'female':
+      genderEmoji = ':female_sign:';
       break;
     default:
-      genderEmoji = "";
+      genderEmoji = '';
       break;
   }
 
   return baseEmbed()
-    .setTitle(`${englishName || "?"} ${genderEmoji}\n${japName || "?"}`)
+    .setTitle(`${englishName || '?'} ${genderEmoji}\n${japName || '?'}`)
     .setDescription(characterDescription(description, siteUrl))
     .addFields([
-      { name: ":calendar: Age", value: age || "?", inline: true },
+      { name: ':calendar: Age', value: age || '?', inline: true },
       {
-        name: ":cake: Birthday",
+        name: ':cake: Birthday',
         value: parseFuzzyDate(dateOfBirth),
         inline: true,
       },
@@ -55,9 +55,9 @@ export const charInfoEmbed = (info: charInfoEmbedParams) => {
 
 function characterDescription(
   desc: string | null | undefined,
-  siteUrl: string | null | undefined
+  siteUrl: string | null | undefined,
 ) {
-  if (!desc) return "*No description for this character.*";
+  if (!desc) return '*No description for this character.*';
   let body = truncate(parseHtml(desc), 70, true);
   if (!siteUrl || body.length === desc.length) return body;
   body = `${wrapText(`${body} [read more]`)}(${siteUrl})`;

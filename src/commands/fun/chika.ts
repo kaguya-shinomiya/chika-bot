@@ -1,18 +1,18 @@
-import { CmdCategory } from "@prisma/client";
-import axios from "axios";
-import { prisma } from "../../data/prismaClient";
+import { CmdCategory } from '@prisma/client';
+import axios from 'axios';
+import { prisma } from '../../data/prismaClient';
 import {
   redisChatbotInput,
   redisChatbotResponse,
-} from "../../data/redisClient";
-import { baseEmbed, sendInsufficientRibbons } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { ChatbotInput } from "./utils/types";
+} from '../../data/redisClient';
+import { baseEmbed, sendInsufficientRibbons } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { ChatbotInput } from './utils/types';
 
 const chika = new Command({
-  name: "chika",
-  aliases: ["ck"],
-  args: [{ name: "your_message", multi: true }],
+  name: 'chika',
+  aliases: ['ck'],
+  args: [{ name: 'your_message', multi: true }],
   category: CmdCategory.FUN,
   description:
     "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
@@ -26,7 +26,7 @@ const chika = new Command({
     const past_user_inputs = (
       await redisChatbotInput.lrange(author.id, 0, -1)
     ).reverse();
-    const text = args.join(" ");
+    const text = args.join(' ');
 
     const ribbonCost = text.length;
     const ribbonStock = await prisma.getRibbons(author);
@@ -67,8 +67,8 @@ const chika = new Command({
         if (err.response?.data?.error?.includes(`is currently loading`)) {
           channel.send(
             baseEmbed().setDescription(
-              `Thanks chatting with me! Please give me a minute to get ready.`
-            )
+              `Thanks chatting with me! Please give me a minute to get ready.`,
+            ),
           );
         }
       });

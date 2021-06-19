@@ -1,7 +1,7 @@
-import type { Message, User } from "discord.js";
-import { Guild } from "discord.js";
-import { sendNotAdmin, sendNotInGuild } from "../shared/embeds";
-import type { GenericChannel } from "../types/command";
+import type { Message, User } from 'discord.js';
+import { Guild } from 'discord.js';
+import { sendNotAdmin, sendNotInGuild } from '../shared/embeds';
+import type { GenericChannel } from '../types/command';
 
 interface validateMessageOptions {
   channelId?: string;
@@ -18,7 +18,7 @@ interface validateMessageOptions {
 
 export const filterMessage = (
   message: Message,
-  options: validateMessageOptions
+  options: validateMessageOptions,
 ): Message | null => {
   const {
     channel,
@@ -64,7 +64,7 @@ export const isAdmin = (message: Message) => {
     sendNotInGuild(channel);
     return false;
   }
-  if (!member.hasPermission("ADMINISTRATOR")) {
+  if (!member.hasPermission('ADMINISTRATOR')) {
     sendNotAdmin(channel);
     return false;
   }

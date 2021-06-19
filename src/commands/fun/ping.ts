@@ -1,11 +1,11 @@
-import { CmdCategory } from "@prisma/client";
-import { redis } from "../../data/redisClient";
-import { baseEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { CmdCategory } from '@prisma/client';
+import { redis } from '../../data/redisClient';
+import { baseEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
 
 const ping = new Command({
-  name: "ping",
-  description: "Say hello to Chika bot.",
+  name: 'ping',
+  description: 'Say hello to Chika bot.',
   category: CmdCategory.FUN,
   args: [],
 
@@ -14,8 +14,8 @@ const ping = new Command({
     // TODO actually use the redis ping
     channel.send(
       baseEmbed().setDescription(
-        `Yo ${author.username}, Love Detective Chika here!`
-      )
+        `Yo ${author.username}, Love Detective Chika here!`,
+      ),
     );
     redis.ping();
   },

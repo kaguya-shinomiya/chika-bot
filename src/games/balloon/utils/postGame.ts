@@ -1,12 +1,12 @@
-import { Collection, Message, User } from "discord.js";
-import _ from "lodash";
-import { prisma } from "../../../data/prismaClient";
-import { redisRibbons } from "../../../data/redisClient";
-import { sendPopped } from "./embeds";
+import { Collection, Message, User } from 'discord.js';
+import _ from 'lodash';
+import { prisma } from '../../../data/prismaClient';
+import { redisRibbons } from '../../../data/redisClient';
+import { sendPopped } from './embeds';
 
 export const postGameBalloon = async (
   message: Message,
-  players: Collection<string, User>
+  players: Collection<string, User>,
 ) => {
   const { channel, author: popper } = message;
 
@@ -25,11 +25,11 @@ export const postGameBalloon = async (
           where: { userId: winner.id },
           create: { userId: winner.id, tag: winner.tag, ribbons: winAmt },
           select: { userId: true, ribbons: true },
-        })
-      )
+        }),
+      ),
     )
     .then((res) =>
-      redisRibbons.mset(..._.flattenDeep(res.map((_res) => _.values(_res))))
+      redisRibbons.mset(..._.flattenDeep(res.map((_res) => _.values(_res)))),
     );
 
   prisma.decrRibbons(popper, winAmt * winners.size);
