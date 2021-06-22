@@ -35,20 +35,23 @@ export const playFromYt = async (
   url: string,
 ): Promise<StreamDispatcher> => {
   try {
-    const dispatcher = await ytdl.getInfo(url).then((info) =>
-      connection.play(
+    const dispatcher = await ytdl.getInfo(url).then((info) => {
+      console.log('info: ', info);
+      return connection.play(
         ytdl.downloadFromInfo(info, {
           filter: 'audioonly',
           quality: 'highestaudio',
           highWaterMark: 1 << 25,
         }),
-      ),
-    );
+      );
+    });
     return dispatcher;
   } catch (err) {
     console.error(err);
-    if (err.statusCode === 429) {
-      throw new CriticalError('YouTube has blocked us.');
+    if (err.statusCode >= 400) {
+      throw new CriticalError(
+        'YouTube has blocked us, or something really bad has happened.',
+      );
     } else {
       throw err;
     }

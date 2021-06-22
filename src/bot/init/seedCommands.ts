@@ -5,7 +5,9 @@ import type { Command } from '../types/command';
 
 export const seedCommands = async (commands: Collection<string, Command>) => {
   const jobs: PrismaPromise<any>[] = [
-    prisma.$executeRaw(`TRUNCATE TABLE "Command", "Arg" RESTART IDENTITY`),
+    prisma.$executeRaw(
+      `TRUNCATE TABLE "Command", "Arg" RESTART IDENTITY CASCADE`,
+    ),
   ];
   commands.forEach(({ name, args, aliases, description, category }) =>
     jobs.push(

@@ -405,6 +405,8 @@ export type CharacterName = {
   alternative?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Other names the character might be referred to as but are spoilers */
   alternativeSpoiler?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** The currently authenticated users preferred name language. Default romaji for non-authenticated */
+  userPreferred?: Maybe<Scalars['String']>;
 };
 
 /** The names of the character */
@@ -656,6 +658,12 @@ export type InternalPageRevisionHistoryArgs = {
   characterId?: Maybe<Scalars['Int']>;
   staffId?: Maybe<Scalars['Int']>;
   studioId?: Maybe<Scalars['Int']>;
+};
+
+/** Page of data (Used for internal use only) */
+export type InternalPageReportsArgs = {
+  reporterId?: Maybe<Scalars['Int']>;
+  reportedId?: Maybe<Scalars['Int']>;
 };
 
 /** Page of data (Used for internal use only) */
@@ -2062,6 +2070,7 @@ export type MutationUpdateUserArgs = {
   activityMergeTime?: Maybe<Scalars['Int']>;
   animeListOptions?: Maybe<MediaListOptionsInput>;
   mangaListOptions?: Maybe<MediaListOptionsInput>;
+  staffNameLanguage?: Maybe<UserStaffNameLanguage>;
 };
 
 export type MutationSaveMediaListEntryArgs = {
@@ -3099,6 +3108,7 @@ export type Report = {
   reason?: Maybe<Scalars['String']>;
   /** When the entry data was created */
   createdAt?: Maybe<Scalars['Int']>;
+  cleared?: Maybe<Scalars['Boolean']>;
 };
 
 /** A Review that features in an anime or manga */
@@ -3470,6 +3480,8 @@ export type StaffName = {
   native?: Maybe<Scalars['String']>;
   /** Other names the staff member might be referred to as (pen names) */
   alternative?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** The currently authenticated users preferred name language. Default romaji for non-authenticated */
+  userPreferred?: Maybe<Scalars['String']>;
 };
 
 /** The names of the staff member */
@@ -4052,6 +4064,7 @@ export type UserModData = {
   bans?: Maybe<Scalars['Json']>;
   ip?: Maybe<Scalars['Json']>;
   counts?: Maybe<Scalars['Json']>;
+  privacy?: Maybe<Scalars['Int']>;
   email?: Maybe<Scalars['String']>;
 };
 
@@ -4072,6 +4085,8 @@ export type UserOptions = {
   timezone?: Maybe<Scalars['String']>;
   /** Minutes between activity for them to be merged together. 0 is Never, Above 2 weeks (20160 mins) is Always. */
   activityMergeTime?: Maybe<Scalars['Int']>;
+  /** The language the user wants to see staff and character names in */
+  staffNameLanguage?: Maybe<UserStaffNameLanguage>;
 };
 
 export type UserReleaseYearStatistic = {
@@ -4105,6 +4120,16 @@ export enum UserSort {
   ChaptersRead = 'CHAPTERS_READ',
   ChaptersReadDesc = 'CHAPTERS_READ_DESC',
   SearchMatch = 'SEARCH_MATCH',
+}
+
+/** The language the user wants to see staff and character names in */
+export enum UserStaffNameLanguage {
+  /** The romanization of the staff or character's native name, with western name ordering */
+  RomajiWestern = 'ROMAJI_WESTERN',
+  /** The romanization of the staff or character's native name */
+  Romaji = 'ROMAJI',
+  /** The staff or character's name in their native language */
+  Native = 'NATIVE',
 }
 
 export type UserStaffStatistic = {

@@ -10,4 +10,20 @@ export class CommandResolver {
   getAllCommands() {
     return this.commandService.findAll();
   }
+
+  // @Mutation(() => Command)
+  // enableCommand(
+  //   @Args('toggleCommandInput', { type: () => ToggleCommandInput })
+  //   toggleCommandInput: ToggleCommandInput,
+  // ) {
+  //   this.commandService.enable(toggleCommandInput);
+  // }
+
+  // @Mutation(() => Command)
+  // disableCommand(
+  //   @Args('toggleCommandInput', { type: () => ToggleCommandInput })
+  //   toggleCommandInput: ToggleCommandInput,
+  // ) {
+  //   this.commandService.disable(toggleCommandInput);
+  // }
 }

@@ -1,6 +1,6 @@
 overwrite: true
 generates:
-  src/generated/anilist.ts:
+  src/bot/generated/anilist.ts:
     schema: ${ANILIST_SCHEMA}
     documents: ./src/bot/commands/utility/**/*.graphql
     plugins:

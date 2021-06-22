@@ -8,7 +8,7 @@ import { groupNum } from '../../utils/typography';
 const give = new Command({
   name: 'give',
   args: [{ name: 'user' }, { name: 'amount' }],
-  description: `Be charitable and give another user some ${ribbon_emoji}.`,
+  description: `Be charitable and give another user some ribbons.`,
   category: CmdCategory.CURRENCY,
   aliases: ['donate'],
 
