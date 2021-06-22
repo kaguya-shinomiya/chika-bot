@@ -1,10 +1,10 @@
 function bootstrap() {
   switch (process.env.PROCESS_TYPE) {
     case 'bot':
-      import('./chika');
+      import('./bot');
       break;
     case 'web':
-      import('./hayasaka');
+      import('./web');
       break;
     default:
       break;

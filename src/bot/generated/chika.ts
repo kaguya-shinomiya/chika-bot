@@ -1,6 +1,6 @@
-import { GraphQLClient } from "graphql-request";
-import * as Dom from "graphql-request/dist/types.dom";
-import gql from "graphql-tag";
+import { GraphQLClient } from 'graphql-request';
+import * as Dom from 'graphql-request/dist/types.dom';
+import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K];
@@ -19,69 +19,69 @@ export type Scalars = {
 };
 
 export type Argument = {
-  __typename?: "Argument";
+  __typename?: 'Argument';
   command: Command;
-  id: Scalars["ID"];
-  multi?: Maybe<Scalars["Boolean"]>;
-  name: Scalars["String"];
-  optional?: Maybe<Scalars["Boolean"]>;
+  id: Scalars['ID'];
+  multi?: Maybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  optional?: Maybe<Scalars['Boolean']>;
 };
 
 export type Command = {
-  __typename?: "Command";
-  aliases?: Maybe<Array<Scalars["String"]>>;
+  __typename?: 'Command';
+  aliases?: Maybe<Array<Scalars['String']>>;
   args?: Maybe<Array<Argument>>;
   category: CommandCategory;
-  description: Scalars["String"];
-  id: Scalars["ID"];
-  name: Scalars["String"];
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
 };
 
 export enum CommandCategory {
-  Currency = "CURRENCY",
-  Fun = "FUN",
-  Games = "GAMES",
-  Music = "MUSIC",
-  Utility = "UTILITY",
+  Currency = 'CURRENCY',
+  Fun = 'FUN',
+  Games = 'GAMES',
+  Music = 'MUSIC',
+  Utility = 'UTILITY',
 }
 
 export type CreateArgumentInput = {
-  multi?: Maybe<Scalars["Boolean"]>;
-  name: Scalars["String"];
-  optional?: Maybe<Scalars["Boolean"]>;
+  multi?: Maybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  optional?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateCommandInput = {
-  aliases?: Maybe<Array<Scalars["String"]>>;
+  aliases?: Maybe<Array<Scalars['String']>>;
   args?: Maybe<Array<CreateArgumentInput>>;
   category: CommandCategory;
-  description: Scalars["String"];
-  name: Scalars["String"];
+  description: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type CreateGuildInput = {
-  customPrefix?: Maybe<Scalars["String"]>;
+  customPrefix?: Maybe<Scalars['String']>;
   /** The commands to disable in this server. */
-  disabledCommands?: Maybe<Array<Scalars["String"]>>;
-  id: Scalars["String"];
+  disabledCommands?: Maybe<Array<Scalars['String']>>;
+  id: Scalars['String'];
 };
 
 export type Guild = {
-  __typename?: "Guild";
-  customPrefix?: Maybe<Scalars["String"]>;
+  __typename?: 'Guild';
+  customPrefix?: Maybe<Scalars['String']>;
   /** Array of commands disabled in this server. */
   disabledCommands?: Maybe<Array<Command>>;
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   /** Creates one to many commands. */
   createCommand: Array<Command>;
   createGuild: Guild;
-  dropCommands?: Maybe<Scalars["Int"]>;
+  dropCommands?: Maybe<Scalars['Int']>;
   removeGuild: Guild;
-  seedCommands?: Maybe<Scalars["Int"]>;
+  seedCommands?: Maybe<Scalars['Int']>;
   updateGuild: Guild;
 };
 
@@ -94,7 +94,7 @@ export type MutationCreateGuildArgs = {
 };
 
 export type MutationRemoveGuildArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
 export type MutationSeedCommandsArgs = {
@@ -106,34 +106,34 @@ export type MutationUpdateGuildArgs = {
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
   command: Command;
   commands: Array<Command>;
   guild: Guild;
 };
 
 export type QueryCommandArgs = {
-  name: Scalars["String"];
+  name: Scalars['String'];
 };
 
 export type QueryGuildArgs = {
-  id: Scalars["String"];
+  id: Scalars['String'];
 };
 
 export type UpdateGuildInput = {
-  customPrefix?: Maybe<Scalars["String"]>;
+  customPrefix?: Maybe<Scalars['String']>;
   /** The commands to disable in this server. */
-  disabledCommands?: Maybe<Array<Scalars["String"]>>;
-  id: Scalars["String"];
+  disabledCommands?: Maybe<Array<Scalars['String']>>;
+  id: Scalars['String'];
 };
 
 export type SeedCommandsMutationVariables = Exact<{
   commands: Array<CreateCommandInput> | CreateCommandInput;
 }>;
 
-export type SeedCommandsMutation = { __typename?: "Mutation" } & Pick<
+export type SeedCommandsMutation = { __typename?: 'Mutation' } & Pick<
   Mutation,
-  "seedCommands"
+  'seedCommands'
 >;
 
 export const SeedCommandsDocument = gql`
@@ -144,28 +144,28 @@ export const SeedCommandsDocument = gql`
 
 export type SdkFunctionWrapper = <T>(
   action: (requestHeaders?: Record<string, string>) => Promise<T>,
-  operationName: string
+  operationName: string,
 ) => Promise<T>;
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName) => action();
 
 export function getSdk(
   client: GraphQLClient,
-  withWrapper: SdkFunctionWrapper = defaultWrapper
+  withWrapper: SdkFunctionWrapper = defaultWrapper,
 ) {
   return {
     seedCommands(
       variables: SeedCommandsMutationVariables,
-      requestHeaders?: Dom.RequestInit["headers"]
+      requestHeaders?: Dom.RequestInit['headers'],
     ): Promise<SeedCommandsMutation> {
       return withWrapper(
         (wrappedRequestHeaders) =>
           client.request<SeedCommandsMutation>(
             SeedCommandsDocument,
             variables,
-            { ...requestHeaders, ...wrappedRequestHeaders }
+            { ...requestHeaders, ...wrappedRequestHeaders },
           ),
-        "seedCommands"
+        'seedCommands',
       );
     },
   };
