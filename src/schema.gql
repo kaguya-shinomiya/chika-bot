@@ -1,0 +1,31 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Argument {
+  command: Command!
+  id: ID!
+  name: String!
+  optional: Boolean!
+}
+
+type Command {
+  aliases: [String!]
+  args: [Argument!]
+  category: CommandCategory!
+  description: String!
+  id: ID!
+  name: String!
+}
+
+enum CommandCategory {
+  CURRENCY
+  FUN
+  GAMES
+  MUSIC
+  UTILITY
+}
+
+type Query {
+  getAllCommands: [Command!]!
+}

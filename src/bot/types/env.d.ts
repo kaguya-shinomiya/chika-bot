@@ -9,5 +9,6 @@ declare namespace NodeJS {
     HUGGING_FACE_API_KEY: string;
     SUPERUSER_KEY: string;
     CHIKA_DB_SCHEMA: string;
+    PROCESS_TYPE: string;
   }
 }

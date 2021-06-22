@@ -8,7 +8,7 @@ const goodnight = new Command({
   description: 'Greets goodnight.',
   category: CmdCategory.FUN,
   aliases: ['gn'],
-  args: [{ name: 'user', optional: true }],
+  args: [{ name: 'user', optional: true, multi: true }],
 
   async execute({ channel, mentions, author }) {
     let message;
