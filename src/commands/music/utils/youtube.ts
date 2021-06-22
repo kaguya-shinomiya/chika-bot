@@ -49,8 +49,10 @@ export const playFromYt = async (
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
-    if (err.statusCode === 429) {
-      throw new CriticalError("YouTube has blocked us.");
+    if (err.statusCode >= 400) {
+      throw new CriticalError(
+        "YouTube has blocked us, or something bad has happened."
+      );
     } else {
       throw err;
     }

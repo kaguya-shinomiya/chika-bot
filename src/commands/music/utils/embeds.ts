@@ -87,7 +87,7 @@ export const sendCannotPlay = async (
     cryingEmbed()
       .setTitle("Sorry...")
       .setDescription(
-        `I couldn't play [${title}](${url})! Maybe it's a restricted video?`
+        `I couldn't play [${title}](${url})!\nMaybe it's a restricted video?`
       )
   );
 
