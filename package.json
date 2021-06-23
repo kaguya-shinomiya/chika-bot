@@ -4,6 +4,7 @@
     "@graphql-codegen/typescript": "1.22.1",
     "@graphql-codegen/typescript-graphql-request": "^3.2.1",
     "@graphql-codegen/typescript-operations": "^1.18.0",
+    "@nestjs/testing": "^7.6.18",
     "@types/dotenv-safe": "^8.1.1",
     "@types/ffmpeg-static": "^3.0.0",
     "@types/he": "^1.1.1",
@@ -15,9 +16,8 @@
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",
-    "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-prettier": "^3.4.0",
     "husky": "^6.0.0",
     "jest": "^27.0.4",
     "jest-mock-extended": "^1.0.15",
@@ -30,18 +30,26 @@
   },
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
+    "@nestjs/common": "^7.6.18",
+    "@nestjs/core": "^7.6.18",
+    "@nestjs/graphql": "^7.11.0",
+    "@nestjs/platform-express": "^7.6.18",
     "@prisma/client": "^2.24.1",
+    "apollo-server-express": "^2.25.1",
     "axios": "^0.21.1",
     "discord.js": "^12.5.3",
-    "dotenv-safe": "^8.2.0",
+    "dotenv-cli": "^4.0.0",
     "ffmpeg-static": "^4.3.0",
-    "graphql": "^15.5.0",
+    "graphql": "^15.5.1",
     "graphql-request": "^3.4.0",
     "graphql-tag": "^2.12.4",
+    "graphql-tools": "^7.0.5",
     "he": "^1.2.0",
     "ioredis": "^4.27.5",
     "lodash": "^4.17.21",
     "pm2": "^5.1.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.1.0",
     "ytdl-core": "^4.8.2",
     "ytpl": "^2.2.1",
     "ytsr": "^3.5.0"
@@ -53,16 +61,19 @@
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "build": "tsc && prisma migrate deploy",
-    "dev": "nodemon dist/index.js",
+    "docker:up": "docker-compose up -d && yarn db:push",
+    "docker:down": "docker-compose down",
     "watch": "tsc -w",
-    "test": "jest --coverage",
-    "prepare": "husky install",
+    "dev:bot": "PROCESS_TYPE=bot dotenv -e .env -- nodemon dist/index.js",
+    "dev:web": "PROCESS_TYPE=web dotenv -e .env -- nodemon dist/index.js",
+    "test": "NODE_ENV=test dotenv -e .env -- jest --watch -i",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint 'src/**/*.ts' --fix",
+    "db:push": "dotenv -e .env -- prisma db push",
+    "db:migrate": "dotenv -e .env -- prisma migrate dev",
+    "db:edit": "dotenv -e .env -- prisma studio",
     "gen": "graphql-codegen --config codegen.yml -r dotenv/config",
-    "db:push": "prisma db push",
-    "db:migrate": "prisma migrate dev",
-    "db:edit": "prisma studio"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "src/**/*.ts": [
@@ -75,5 +86,5 @@
     "yarn": "1.22.10"
   },
   "license": "MIT",
-  "version": "0.3.5"
+  "version": "0.3.6"
 }
