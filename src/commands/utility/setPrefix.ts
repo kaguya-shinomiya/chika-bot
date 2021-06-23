@@ -1,12 +1,12 @@
-import { CmdCategory } from "@prisma/client";
-import { prisma } from "../../data/prismaClient";
-import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { isAdmin } from "../../utils/validateMessages";
+import { CmdCategory } from '@prisma/client';
+import { prisma } from '../../data/prismaClient';
+import { baseEmbed, sendNotInGuild } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { isAdmin } from '../../utils/validateMessages';
 
 const prefix = new Command({
-  name: "set-prefix",
-  args: [{ name: "new_prefix" }],
+  name: 'set-prefix',
+  args: [{ name: 'new_prefix' }],
   category: CmdCategory.UTILITY,
   description: "Set a new prefix for Chika. You'll need to be an admin.",
 
@@ -21,7 +21,7 @@ const prefix = new Command({
     prisma.setPrefix(guild.id, newPrefix);
 
     channel.send(
-      baseEmbed().setDescription(`Chika's prefix is now **${newPrefix}**`)
+      baseEmbed().setDescription(`Chika's prefix is now **${newPrefix}**`),
     );
   },
 });

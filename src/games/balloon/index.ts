@@ -1,3 +1,3 @@
-import { Balloon } from "./balloon";
+import { Balloon } from './balloon';
 
 export const balloonGame: Readonly<Balloon> = new Balloon();

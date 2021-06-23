@@ -1,5 +1,5 @@
-import type { User, MessageEmbed } from "discord.js";
-import { baseEmbed } from "../../../shared/embeds";
+import type { User, MessageEmbed } from 'discord.js';
+import { baseEmbed } from '../../../shared/embeds';
 
 export const avatarEmbed = (user: User): MessageEmbed =>
   baseEmbed()

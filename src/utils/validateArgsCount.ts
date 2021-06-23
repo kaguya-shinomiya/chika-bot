@@ -1,10 +1,10 @@
-import { lightErrorEmbed } from "../shared/embeds";
-import { Command, GenericChannel } from "../types/command";
+import { lightErrorEmbed } from '../shared/embeds';
+import { Command, GenericChannel } from '../types/command';
 
 export function validateArgsCount(
   command: Command,
   args: string[],
-  channel: GenericChannel
+  channel: GenericChannel,
 ): string[] | null {
   let softMax = 0;
   let hasNoMulti = true;
@@ -28,10 +28,10 @@ export function validateArgsCount(
     channel.send(
       lightErrorEmbed(
         `Command **${command.name}** expected ${min} ${
-          min === 1 ? "argument" : "arguments"
+          min === 1 ? 'argument' : 'arguments'
         } but got ${provided}.
-        Use \`help ${command.name}\` to see usage info.`
-      )
+        Use \`help ${command.name}\` to see usage info.`,
+      ),
     );
     return null;
   }
@@ -41,10 +41,10 @@ export function validateArgsCount(
     channel.send(
       lightErrorEmbed(
         `Command **${command.name}** expected at least ${min} ${
-          min === 1 ? "argument" : "arguments"
+          min === 1 ? 'argument' : 'arguments'
         } but got ${provided}.
-        Use \`help ${command.name}\` to see usage info.`
-      )
+        Use \`help ${command.name}\` to see usage info.`,
+      ),
     );
     return null;
   }
@@ -54,10 +54,10 @@ export function validateArgsCount(
     channel.send(
       lightErrorEmbed(
         `Command **${command.name}** expected at most ${softMax} ${
-          softMax === 1 ? "argument" : "arguments"
+          softMax === 1 ? 'argument' : 'arguments'
         } but got ${provided}.
-        Use \`help ${command.name}\` to see usage info.`
-      )
+        Use \`help ${command.name}\` to see usage info.`,
+      ),
     );
     return null;
   }

@@ -1,12 +1,12 @@
-import { CmdCategory } from "@prisma/client";
-import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendMusicOnlyInGuild, toUrlString } from "./utils/embeds";
-import { createFinishListener } from "./utils/listener";
+import { CmdCategory } from '@prisma/client';
+import { lightErrorEmbed, withAuthorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendMusicOnlyInGuild, toUrlString } from './utils/embeds';
+import { createFinishListener } from './utils/listener';
 
 const skip = new Command({
-  name: "skip",
-  description: "Skip the current track.",
+  name: 'skip',
+  description: 'Skip the current track.',
   args: [],
   category: CmdCategory.MUSIC,
 
@@ -18,7 +18,7 @@ const skip = new Command({
     }
     const audioUtils = client.cache.audioUtils.get(guild.id);
     if (!audioUtils) {
-      channel.send(lightErrorEmbed("There is no track to skip."));
+      channel.send(lightErrorEmbed('There is no track to skip.'));
       return;
     }
     channel.send(
@@ -26,9 +26,9 @@ const skip = new Command({
         `Skipping **${toUrlString(
           audioUtils.nowPlaying.title,
           audioUtils.nowPlaying.url,
-          40
-        )}**`
-      )
+          40,
+        )}**`,
+      ),
     );
     if (!audioUtils.dispatcher.paused) {
       audioUtils.dispatcher.end();

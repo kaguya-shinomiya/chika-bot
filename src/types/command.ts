@@ -1,16 +1,7 @@
-import { CmdCategory } from "@prisma/client";
-import type { DMChannel, Message, NewsChannel, TextChannel } from "discord.js";
+import { CmdCategory } from '@prisma/client';
+import type { DMChannel, Message, NewsChannel, TextChannel } from 'discord.js';
 
 type GenericChannel = TextChannel | DMChannel | NewsChannel;
-
-// eslint-disable-next-line no-shadow
-// export enum CommandCategory {
-//   FUN = ":coffee: Fun",
-//   UTILITY = ":satellite: Utility",
-//   MUSIC = ":headphones: Music",
-//   CURRENCY = ":moneybag: Currency",
-//   GAME = ":video_game: Game",
-// }
 
 interface CommandArg {
   name: string;
@@ -78,7 +69,7 @@ export class Command implements ICommand {
         if (arg.optional && !arg.multi) return `[${arg.name}]`;
         return `[${arg.name} ...]`;
       })
-      .join(" ")}`;
+      .join(' ')}`;
   }
 }
 

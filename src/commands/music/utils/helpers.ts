@@ -15,7 +15,7 @@ export const secToString = (sec: number): string => {
 };
 
 export const stringToSec = (min: string): number => {
-  const [hh, mm, ss] = min.split(":");
+  const [hh, mm, ss] = min.split(':');
   if (ss) {
     return 3600 * parseInt(hh, 10) + 60 * parseInt(mm, 10) + parseInt(ss, 10);
   }

@@ -15,11 +15,12 @@ model User {
 }
 
 model Guild {
-  id        Int        @id @default(autoincrement())
-  guildId   String     @unique
-  prefix    String?
-  shiritori Shiritori?
-  balloon   Balloon?
+  id               Int        @id @default(autoincrement())
+  guildId          String     @unique
+  prefix           String?
+  shiritori        Shiritori?
+  balloon          Balloon?
+  disabledCommands Command[]
 }
 
 model Shiritori {
@@ -56,10 +57,11 @@ enum CmdCategory {
 }
 
 model Command {
-  id          Int         @id @default(autoincrement())
-  name        String      @unique
-  args        Arg[]
-  description String
-  category    CmdCategory
-  aliases     String[]
+  id             Int         @id @default(autoincrement())
+  name           String      @unique
+  args           Arg[]
+  description    String
+  category       CmdCategory
+  aliases        String[]
+  disabledGuilds Guild[]
 }

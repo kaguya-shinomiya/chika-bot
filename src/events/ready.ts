@@ -1,12 +1,12 @@
-import { redis } from "../data/redisClient";
-import { Event } from "../types/event";
+import { redis } from '../data/redisClient';
+import { Event } from '../types/event';
 
 const ready: Event = {
-  name: "ready",
+  name: 'ready',
   once: true,
   listener() {
+    console.log('Chika bot has logged in.');
     redis.ping().catch((err) => {
-      // eslint-disable-next-line no-console
       console.error(err);
       Promise.reject(err);
     });

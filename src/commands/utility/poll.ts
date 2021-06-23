@@ -1,28 +1,28 @@
-import { CmdCategory } from "@prisma/client";
-import { red_cross, white_check_mark } from "../../shared/assets";
-import { baseEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command } from "../../types/command";
+import { CmdCategory } from '@prisma/client';
+import { red_cross, white_check_mark } from '../../shared/assets';
+import { baseEmbed, sendNotInGuild } from '../../shared/embeds';
+import { Command } from '../../types/command';
 
 const poll = new Command({
-  name: "poll",
-  args: [{ name: "question", multi: true }],
+  name: 'poll',
+  args: [{ name: 'question', multi: true }],
   category: CmdCategory.UTILITY,
-  description: "Show your enthusiasm for democracy.",
+  description: 'Show your enthusiasm for democracy.',
 
-  aliases: ["vote"],
+  aliases: ['vote'],
   async execute(message, args) {
     const { guild, channel, author } = message;
     if (!guild) {
       sendNotInGuild(channel);
       return;
     }
-    const pollQn = args.join(" ");
+    const pollQn = args.join(' ');
     channel
       .send(
         baseEmbed()
           .setThumbnail(author.displayAvatarURL())
           .setDescription(`**${author.username}** wants to know...`)
-          .addField(pollQn, `Please react to vote!`)
+          .addField(pollQn, `Please react to vote!`),
       )
       .then(async (_message) => {
         await _message

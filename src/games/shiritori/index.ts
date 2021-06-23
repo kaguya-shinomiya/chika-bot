@@ -1,3 +1,3 @@
-import { Shiritori } from "./shiritori";
+import { Shiritori } from './shiritori';
 
 export const shiritoriGame: Readonly<Shiritori> = new Shiritori();

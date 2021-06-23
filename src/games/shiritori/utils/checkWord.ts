@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const checkWord = (word: string): Promise<boolean> => {
   const uri = `http://api.datamuse.com/words?sp=${word}&max=1`;

@@ -1,6 +1,6 @@
-import type { User } from "discord.js";
-import { MessageEmbed } from "discord.js";
-import { GenericChannel } from "../types/command";
+import type { User } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
+import { GenericChannel } from '../types/command';
 import {
   chika_crying_png,
   chika_detective_png,
@@ -9,8 +9,8 @@ import {
   chika_pointing_png,
   chika_rap_png,
   ribbon_emoji,
-} from "./assets";
-import { DEFAULT_PREFIX } from "./constants";
+} from './assets';
+import { DEFAULT_PREFIX } from './constants';
 
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);
 
@@ -31,36 +31,36 @@ export const badCommandsEmbed = (...badCommands: string[]) =>
     .setDescription(
       `I couldn't understand these commands: ${badCommands
         .map((cmd) => `**${cmd}**`)
-        .join(", ")}.`
+        .join(', ')}.`,
     )
     .addField(
-      "Further help",
-      `To get a list of all the commands I know, run \`${DEFAULT_PREFIX}help\`.`
+      'Further help',
+      `To get a list of all the commands I know, run \`${DEFAULT_PREFIX}help\`.`,
     );
 
 export const genericErrorEmbed = () =>
   cryingEmbed()
-    .setTitle("Oh no!")
-    .setDescription("I ran into an unknown error while running your request.");
+    .setTitle('Oh no!')
+    .setDescription('I ran into an unknown error while running your request.');
 
 export const withAuthorEmbed = (author: User) =>
   baseEmbed().setFooter(
     `Requested by ${author.tag}`,
-    author.displayAvatarURL({ size: 32, dynamic: false })
+    author.displayAvatarURL({ size: 32, dynamic: false }),
   );
 
 export const sendNotInGuild = async (channel: GenericChannel) =>
-  channel.send(lightErrorEmbed("This command can only be used in a server!"));
+  channel.send(lightErrorEmbed('This command can only be used in a server!'));
 
 export const sendInsufficientRibbons = (
   channel: GenericChannel,
   cost: number,
-  stock: number
+  stock: number,
 ) =>
   channel.send(
     lightErrorEmbed(
-      `You don't have enough ribbons! You need ${cost} ${ribbon_emoji}, but only have ${stock} ${ribbon_emoji}.`
-    )
+      `You don't have enough ribbons! You need ${cost} ${ribbon_emoji}, but only have ${stock} ${ribbon_emoji}.`,
+    ),
   );
 
 export const sendNotAdmin = (channel: GenericChannel) =>

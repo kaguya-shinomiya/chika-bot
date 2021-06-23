@@ -1,14 +1,14 @@
-import type { Message, Snowflake, User } from "discord.js";
-import { Collection } from "discord.js";
-import { prisma } from "../../data/prismaClient";
-import { shiritori_rules_jpg } from "../../shared/assets";
-import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { BlockingLevel } from "../../types/blockingLevel";
-import { Game } from "../../types/game";
-import { genInitialCards } from "./utils/cards";
-import { shiritoriPlayerCardsEmbed } from "./utils/embeds";
-import { createOnceShiritoriListener } from "./utils/listener";
-import type { ShiritoriState } from "./utils/types";
+import type { Message, Snowflake, User } from 'discord.js';
+import { Collection } from 'discord.js';
+import { prisma } from '../../data/prismaClient';
+import { shiritori_rules_jpg } from '../../shared/assets';
+import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
+import { BlockingLevel } from '../../types/blockingLevel';
+import { Game } from '../../types/game';
+import { genInitialCards } from './utils/cards';
+import { shiritoriPlayerCardsEmbed } from './utils/embeds';
+import { createOnceShiritoriListener } from './utils/listener';
+import type { ShiritoriState } from './utils/types';
 
 interface startShiritoriParams {
   p1: User;
@@ -16,9 +16,9 @@ interface startShiritoriParams {
 }
 
 export class Shiritori extends Game {
-  title = "shiritori";
+  title = 'shiritori';
 
-  displayTitle = "Shiritori";
+  displayTitle = 'Shiritori';
 
   minPlayerCount = 2;
 
@@ -48,8 +48,8 @@ export class Shiritori extends Game {
       onReject: () =>
         channel.send(
           lightErrorEmbed(
-            `**${taggedOpponent.username}** does not want to play Shiritori.`
-          )
+            `**${taggedOpponent.username}** does not want to play Shiritori.`,
+          ),
         ),
     });
   }
@@ -65,7 +65,7 @@ export class Shiritori extends Game {
     const minLen = await prisma.getShiritoriMinLen(message.guild?.id);
 
     const initState: ShiritoriState = {
-      gameTitle: "shiritori",
+      gameTitle: 'shiritori',
       cards,
       channelId: channel.id,
       p1,
@@ -79,16 +79,16 @@ export class Shiritori extends Game {
     }).then(() => channel.send(shiritoriPlayerCardsEmbed(initState)));
 
     setTimeout(() => {
-      client.once("message", createOnceShiritoriListener(initState, this)); // register the new listener
+      client.once('message', createOnceShiritoriListener(initState, this)); // register the new listener
       channel.send(`:regional_indicator_${initState.startingChar}:`);
     }, 5000);
   }
 
   rules = baseEmbed()
-    .setTitle("Shiritori :u55b6:")
+    .setTitle('Shiritori :u55b6:')
     .addFields([
       {
-        name: "How it works",
+        name: 'How it works',
         value: `
       Each player is issued 5 cards.
       
@@ -101,7 +101,7 @@ export class Shiritori extends Game {
       `,
       },
       {
-        name: "To win",
+        name: 'To win',
         value: `Be the first to clear all 5 cards!`,
       },
     ])

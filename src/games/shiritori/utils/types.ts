@@ -1,5 +1,5 @@
-import type { Collection, Snowflake, User } from "discord.js";
-import { GameState } from "../../../types/gameState";
+import type { Collection, Snowflake, User } from 'discord.js';
+import { GameState } from '../../../types/gameState';
 
 // TODO game timeout on inactivity
 

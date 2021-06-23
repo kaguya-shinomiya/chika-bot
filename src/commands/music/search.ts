@@ -1,15 +1,15 @@
-import { CmdCategory } from "@prisma/client";
-import { lightErrorEmbed, sendNotInGuild } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { setCooldown } from "../../utils/cooldownManager";
-import { sendSearchResults } from "./utils/embeds";
-import { createResultSelectListener } from "./utils/listener";
-import { searchVideo } from "./utils/youtube";
+import { CmdCategory } from '@prisma/client';
+import { lightErrorEmbed, sendNotInGuild } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { setCooldown } from '../../utils/cooldownManager';
+import { sendSearchResults } from './utils/embeds';
+import { createResultSelectListener } from './utils/listener';
+import { searchVideo } from './utils/youtube';
 
 const search = new Command({
-  name: "search",
-  description: "Search for a track on YouTube",
-  args: [{ name: "search_string", multi: true }],
+  name: 'search',
+  description: 'Search for a track on YouTube',
+  args: [{ name: 'search_string', multi: true }],
   category: CmdCategory.MUSIC,
   channelCooldown: 15000,
 
@@ -22,9 +22,9 @@ const search = new Command({
 
     setCooldown(channel.id, this.name, this.channelCooldown!);
 
-    const results = await searchVideo(args.join(" "));
+    const results = await searchVideo(args.join(' '));
     if (!results) {
-      channel.send(lightErrorEmbed("Your search received no results."));
+      channel.send(lightErrorEmbed('Your search received no results.'));
       return;
     }
 
@@ -35,9 +35,9 @@ const search = new Command({
       guildId: guild.id,
     });
     const timeoutCallback = () => {
-      client.removeListener("message", resultSelectListener);
+      client.removeListener('message', resultSelectListener);
     };
-    client.on("message", resultSelectListener);
+    client.on('message', resultSelectListener);
     client.setTimeout(timeoutCallback, this.channelCooldown!);
   },
 });

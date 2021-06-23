@@ -1,20 +1,20 @@
-import { CmdCategory } from "@prisma/client";
-import { getSdk } from "../../generated/anilist";
-import { Command } from "../../types/command";
-import { charInfoEmbed } from "./embeds/charInfoEmbed";
-import { sendNotFoundError } from "./embeds/errors";
-import { client } from "./graphql/aniListClient";
+import { CmdCategory } from '@prisma/client';
+import { getSdk } from '../../generated/anilist';
+import { Command } from '../../types/command';
+import { charInfoEmbed } from './embeds/charInfoEmbed';
+import { sendNotFoundError } from './embeds/errors';
+import { client } from './graphql/aniListClient';
 
 const char = new Command({
-  name: "char",
-  aliases: ["character"],
-  args: [{ name: "character", multi: true }],
+  name: 'char',
+  aliases: ['character'],
+  args: [{ name: 'character', multi: true }],
   category: CmdCategory.UTILITY,
-  description: "Search for an animanga character.",
+  description: 'Search for an animanga character.',
 
   async execute(message, args) {
     const { channel } = message;
-    const charName = args.join(" ");
+    const charName = args.join(' ');
 
     const sdk = getSdk(client);
     sdk
@@ -37,11 +37,10 @@ const char = new Command({
             age,
             dateOfBirth,
             siteUrl,
-          })
+          }),
         );
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.error(err);
         sendNotFoundError(charName, channel);
       });

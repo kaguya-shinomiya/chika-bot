@@ -1,5 +1,5 @@
-import type { Collection, User } from "discord.js";
-import { GameState } from "../../../types/gameState";
+import type { Collection, User } from 'discord.js';
+import { GameState } from '../../../types/gameState';
 
 interface BalloonState extends GameState {
   players: Collection<string, User>;

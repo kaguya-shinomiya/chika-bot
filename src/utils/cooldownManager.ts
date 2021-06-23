@@ -1,12 +1,12 @@
-import type { Snowflake } from "discord.js";
-import Redis from "ioredis";
+import type { Snowflake } from 'discord.js';
+import Redis from 'ioredis';
 
 export const cooldownRedis = new Redis(process.env.REDISCLOUD_URL, {
-  keyPrefix: "cooldown:",
+  keyPrefix: 'cooldown:',
 });
 
 export const setCooldown = (id: Snowflake, command: string, time: number) =>
-  cooldownRedis.set(`${id}:${command}`, command, "px", time);
+  cooldownRedis.set(`${id}:${command}`, command, 'px', time);
 
 export const getCooldown = async (id: Snowflake, command: string) => {
   const ttl = await cooldownRedis.ttl(`${id}:${command}`);

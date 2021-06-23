@@ -1,16 +1,16 @@
-import { CmdCategory } from "@prisma/client";
-import { prisma } from "../../data/prismaClient";
-import { ribbon_emoji } from "../../shared/assets";
-import { baseEmbed, lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { groupNum } from "../../utils/typography";
+import { CmdCategory } from '@prisma/client';
+import { prisma } from '../../data/prismaClient';
+import { ribbon_emoji } from '../../shared/assets';
+import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { groupNum } from '../../utils/typography';
 
 const give = new Command({
-  name: "give",
-  args: [{ name: "user" }, { name: "amount" }],
-  description: `Be charitable and give another user some ${ribbon_emoji}.`,
+  name: 'give',
+  args: [{ name: 'user' }, { name: 'amount' }],
+  description: `Be charitable and give another user some ribbons.`,
   category: CmdCategory.CURRENCY,
-  aliases: ["donate"],
+  aliases: ['donate'],
 
   async execute(message, args) {
     const { author, channel, mentions } = message;
@@ -22,8 +22,8 @@ const give = new Command({
     if (beneficiary.bot) {
       channel.send(
         lightErrorEmbed(
-          `**${beneficiary.tag}** is a bot and does not care for ${ribbon_emoji}...`
-        )
+          `**${beneficiary.tag}** is a bot and does not care for ${ribbon_emoji}...`,
+        ),
       );
       return;
     }
@@ -37,8 +37,8 @@ const give = new Command({
     if (donation > benefactorStock) {
       channel.send(
         lightErrorEmbed(
-          `LOL you're too poor to do that! You only have ${benefactorStock} ${ribbon_emoji}.`
-        )
+          `LOL you're too poor to do that! You only have ${benefactorStock} ${ribbon_emoji}.`,
+        ),
       );
       return;
     }
@@ -49,9 +49,9 @@ const give = new Command({
     channel.send(
       baseEmbed().setDescription(
         `**${beneficiary.username}** has received **${groupNum.format(
-          donation
-        )}** ${ribbon_emoji} from ${author.username}!`
-      )
+          donation,
+        )}** ${ribbon_emoji} from ${author.username}!`,
+      ),
     );
   },
 });

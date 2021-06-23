@@ -1,12 +1,12 @@
-import { CmdCategory } from "@prisma/client";
-import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
+import { CmdCategory } from '@prisma/client';
+import { lightErrorEmbed, withAuthorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendMusicOnlyInGuild, trackLinkAndDuration } from './utils/embeds';
 
 const pause = new Command({
-  name: "pause",
-  aliases: ["stop"],
-  description: "Pause the current playback.",
+  name: 'pause',
+  aliases: ['stop'],
+  description: 'Pause the current playback.',
   category: CmdCategory.MUSIC,
   args: [],
 
@@ -20,12 +20,12 @@ const pause = new Command({
     const audioUtils = client.cache.audioUtils.get(guild.id);
     if (!audioUtils?.dispatcher) {
       channel.send(
-        lightErrorEmbed("There isn't anything playing right now...")
+        lightErrorEmbed("There isn't anything playing right now..."),
       );
       return;
     }
     if (audioUtils.dispatcher.paused) {
-      channel.send(lightErrorEmbed("Playback is already paused!"));
+      channel.send(lightErrorEmbed('Playback is already paused!'));
       return;
     }
 
@@ -34,7 +34,7 @@ const pause = new Command({
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:pause_button: Paused`)
-        .setDescription(trackLinkAndDuration(title, url, duration))
+        .setDescription(trackLinkAndDuration(title, url, duration)),
     );
   },
 });

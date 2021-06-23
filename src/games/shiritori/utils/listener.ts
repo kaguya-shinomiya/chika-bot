@@ -1,28 +1,28 @@
-import type { Message } from "discord.js";
-import { chika_beating_yu_gif, white_check_mark } from "../../../shared/assets";
-import { baseEmbed } from "../../../shared/embeds";
-import { filterMessage } from "../../../utils/validateMessages";
-import { isGameActive, unblock } from "../../utils/manageState";
-import type { Shiritori } from "../shiritori";
-import { checkWord } from "./checkWord";
-import { shiritoriPlayerCardsEmbed } from "./embeds";
-import type { ShiritoriState } from "./types";
+import type { Message } from 'discord.js';
+import { chika_beating_yu_gif, white_check_mark } from '../../../shared/assets';
+import { baseEmbed } from '../../../shared/embeds';
+import { filterMessage } from '../../../utils/validateMessages';
+import { isGameActive, unblock } from '../../utils/manageState';
+import type { Shiritori } from '../shiritori';
+import { checkWord } from './checkWord';
+import { shiritoriPlayerCardsEmbed } from './embeds';
+import type { ShiritoriState } from './types';
 
 export const createOnceShiritoriListener = (
   state: ShiritoriState,
-  game: Readonly<Shiritori>
+  game: Readonly<Shiritori>,
 ) => {
   const shiritoriListener = async (message: Message) => {
     const { author, content, channel, client } = message;
 
     const onRejectListener = createOnceShiritoriListener(state, game);
-    const reject = () => client.once("message", onRejectListener);
+    const reject = () => client.once('message', onRejectListener);
 
     if (
       !filterMessage(message, {
         channelId: state.channelId,
         authors: [state.p1, state.p2],
-        content: new RegExp(`^${state.startingChar}`, "i"),
+        content: new RegExp(`^${state.startingChar}`, 'i'),
         minLen: state.minLen,
       })
     ) {
@@ -54,20 +54,19 @@ export const createOnceShiritoriListener = (
           .setDescription(
             `**${author.username}** defeats **${
               author.id === state.p1.id ? state.p2.username : state.p1.username
-            }!**`
+            }!**`,
           )
-          .setImage(chika_beating_yu_gif)
+          .setImage(chika_beating_yu_gif),
       );
       unblock(game, message);
       return;
     }
 
-    client.once("message", createOnceShiritoriListener(state, game));
+    client.once('message', createOnceShiritoriListener(state, game));
     channel
       .send(shiritoriPlayerCardsEmbed(state))
       .then(() => channel.send(`:regional_indicator_${lastChar}:`));
 
-    // eslint-disable-next-line no-param-reassign
     state.startingChar = lastChar;
   };
 

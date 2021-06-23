@@ -1,6 +1,6 @@
 export const genCardsString = (chars: string[]): string => {
   // helper function to produce alphabet emojis
-  let generated = "";
+  let generated = '';
   chars.forEach((char) => {
     generated += `:regional_indicator_${char}: `;
   });

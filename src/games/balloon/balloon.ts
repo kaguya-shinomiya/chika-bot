@@ -1,17 +1,17 @@
-import type { Client, Collection, Guild, Message, User } from "discord.js";
-import { prisma } from "../../data/prismaClient";
-import { balloon_rules_jpg, ribbon_emoji } from "../../shared/assets";
-import { baseEmbed } from "../../shared/embeds";
-import { BlockingLevel } from "../../types/blockingLevel";
-import { GenericChannel } from "../../types/command";
-import { Game } from "../../types/game";
-import { createBalloonListener } from "./utils/listener";
-import { BalloonState } from "./utils/types";
+import type { Client, Collection, Guild, Message, User } from 'discord.js';
+import { prisma } from '../../data/prismaClient';
+import { balloon_rules_jpg, ribbon_emoji } from '../../shared/assets';
+import { baseEmbed } from '../../shared/embeds';
+import { BlockingLevel } from '../../types/blockingLevel';
+import { GenericChannel } from '../../types/command';
+import { Game } from '../../types/game';
+import { createBalloonListener } from './utils/listener';
+import { BalloonState } from './utils/types';
 
 export class Balloon extends Game {
-  title = "balloon";
+  title = 'balloon';
 
-  displayTitle = "Balloon";
+  displayTitle = 'Balloon';
 
   minPlayerCount = 2;
 
@@ -31,7 +31,7 @@ export class Balloon extends Game {
           {
             startsInMessage: `Carry on with your lives. ʕ•ᴥ•ʔ
             Each time you send something, the balloon gets pumped. You'll know when it pops.`,
-          }
+          },
         );
         this.startGame(players, { channel, client, guild: guild! });
       },
@@ -40,7 +40,7 @@ export class Balloon extends Game {
 
   async startGame(
     players: Collection<string, User>,
-    meta: { channel: GenericChannel; guild: Guild; client: Client }
+    meta: { channel: GenericChannel; guild: Guild; client: Client },
   ) {
     const { channel, client, guild } = meta;
     const max = await prisma.getBalloonMax(guild.id);
@@ -54,16 +54,16 @@ export class Balloon extends Game {
       players,
     };
 
-    client.once("message", createBalloonListener(initState, this));
+    client.once('message', createBalloonListener(initState, this));
   }
 
   rules = baseEmbed()
-    .setTitle("Balloon :balloon:")
+    .setTitle('Balloon :balloon:')
     .setImage(balloon_rules_jpg)
     .setFooter(`chapter 91 page 3`)
     .addFields([
       {
-        name: "How it works",
+        name: 'How it works',
         value: `
         Chika hands you a pump and a 
         balloon. Each character you send
@@ -76,17 +76,17 @@ export class Balloon extends Game {
         who pops it loses!`,
       },
       {
-        name: "Player count",
+        name: 'Player count',
         value: `${this.minPlayerCount} - ${this.maxPlayerCount} players`,
       },
       {
-        name: "Losing",
+        name: 'Losing',
         value: `
         The player who pops the balloon
         will pay ${ribbon_emoji} to all other players.`,
       },
       {
-        name: "Options",
+        name: 'Options',
         value: `
         You may override the default
         balloon's volume range for 

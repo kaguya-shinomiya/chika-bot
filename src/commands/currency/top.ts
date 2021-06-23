@@ -1,15 +1,15 @@
-import { CmdCategory } from "@prisma/client";
-import { prisma } from "../../data/prismaClient";
-import { sendNotInGuild } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendTop } from "./utils/embeds";
+import { CmdCategory } from '@prisma/client';
+import { prisma } from '../../data/prismaClient';
+import { sendNotInGuild } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendTop } from './utils/embeds';
 
 const top = new Command({
-  name: "top",
+  name: 'top',
   args: [],
   category: CmdCategory.CURRENCY,
-  description: "Hunt down the richest in this server.",
-  aliases: ["richest"],
+  description: 'Hunt down the richest in this server.',
+  aliases: ['richest'],
 
   async execute(message) {
     const { channel, guild } = message;
@@ -24,7 +24,7 @@ const top = new Command({
         sendTop(channel, res, {
           locale: guild.name,
           thumbnail: guild.iconURL({ dynamic: true, size: 64 }),
-        })
+        }),
       );
   },
 });

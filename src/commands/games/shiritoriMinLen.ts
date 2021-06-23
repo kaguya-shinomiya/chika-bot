@@ -1,18 +1,18 @@
-import { CmdCategory } from "@prisma/client";
-import { prisma } from "../../data/prismaClient";
+import { CmdCategory } from '@prisma/client';
+import { prisma } from '../../data/prismaClient';
 import {
   baseEmbed,
   lightErrorEmbed,
   sendNotInGuild,
-} from "../../shared/embeds";
-import { Command } from "../../types/command";
+} from '../../shared/embeds';
+import { Command } from '../../types/command';
 
 const shiritoriMinLen = new Command({
-  name: "shiritori-minlen",
-  aliases: ["sh-min"],
-  args: [{ name: "new_min", optional: true }],
+  name: 'shiritori-minlen',
+  aliases: ['sh-min'],
+  args: [{ name: 'new_min', optional: true }],
   category: CmdCategory.GAMES,
-  description: "Check or set the minimum word length in Shiritori.",
+  description: 'Check or set the minimum word length in Shiritori.',
 
   async execute(message, args) {
     const { channel, guild } = message;
@@ -25,7 +25,7 @@ const shiritoriMinLen = new Command({
     if (!_newMin) {
       const currMin = await prisma.getShiritoriMinLen(guild.id);
       channel.send(
-        baseEmbed().setDescription(`Current min word length: **${currMin}**`)
+        baseEmbed().setDescription(`Current min word length: **${currMin}**`),
       );
       return;
     }
@@ -44,8 +44,8 @@ const shiritoriMinLen = new Command({
       baseEmbed().setDescription(
         `The minimum word length for Shiritori has been set to **${newMin}**!
 			
-			This will apply on the next game.`
-      )
+			This will apply on the next game.`,
+      ),
     );
   },
 });

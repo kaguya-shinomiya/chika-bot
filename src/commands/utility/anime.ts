@@ -1,21 +1,21 @@
-import { CmdCategory } from "@prisma/client";
-import { TextChannel } from "discord.js";
-import { getSdk, MediaType } from "../../generated/anilist";
-import { lightErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { animeInfoEmbed } from "./embeds/animeInfoEmbed";
-import { sendNotFoundError } from "./embeds/errors";
-import { client } from "./graphql/aniListClient";
+import { CmdCategory } from '@prisma/client';
+import { TextChannel } from 'discord.js';
+import { getSdk, MediaType } from '../../generated/anilist';
+import { lightErrorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { animeInfoEmbed } from './embeds/animeInfoEmbed';
+import { sendNotFoundError } from './embeds/errors';
+import { client } from './graphql/aniListClient';
 
 const anime = new Command({
-  name: "anime",
-  description: "Look up info for an anime.",
-  args: [{ name: "title", multi: true }],
+  name: 'anime',
+  description: 'Look up info for an anime.',
+  args: [{ name: 'title', multi: true }],
   category: CmdCategory.UTILITY,
 
   async execute(message, args) {
     const { channel } = message;
-    const search = args.join(" ");
+    const search = args.join(' ');
 
     const sdk = getSdk(client);
     sdk
@@ -31,8 +31,8 @@ const anime = new Command({
           if (!textChannel.nsfw && result.Media.isAdult) {
             channel.send(
               lightErrorEmbed(
-                `This anime is marked as 18+! I can only show this in a NSFW channel.`
-              )
+                `This anime is marked as 18+! I can only show this in a NSFW channel.`,
+              ),
             );
             return;
           }
@@ -63,11 +63,10 @@ const anime = new Command({
             averageScore,
             season,
             seasonYear,
-          })
+          }),
         );
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.error(err);
         sendNotFoundError(search, channel);
       });

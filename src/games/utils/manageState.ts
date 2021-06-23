@@ -1,7 +1,6 @@
-/* eslint-disable prefer-promise-reject-errors */
-import type { Message } from "discord.js";
-import { BlockingLevel } from "../../types/blockingLevel";
-import type { Game } from "../../types/game";
+import type { Message } from 'discord.js';
+import { BlockingLevel } from '../../types/blockingLevel';
+import type { Game } from '../../types/game';
 
 export const checkAndBlock = (game: Game, message: Message): Promise<void> => {
   const {
@@ -19,19 +18,19 @@ export const checkAndBlock = (game: Game, message: Message): Promise<void> => {
       inGame = inGameStates.get(channel.id);
       if (inGame)
         return Promise.reject(
-          `There is already a game of **${inGame}** being played in this channel.`
+          `There is already a game of **${inGame}** being played in this channel.`,
         );
       inGameStates.set(channel.id, game.displayTitle);
       break;
     case BlockingLevel.guild:
       if (!guild)
         return Promise.reject(
-          `${game.displayTitle} can only be played in a guild.`
+          `${game.displayTitle} can only be played in a guild.`,
         );
       inGame = inGameStates.get(guild.id);
       if (inGame)
         return Promise.reject(
-          `There is already a game of **${inGame}** being played in this server.`
+          `There is already a game of **${inGame}** being played in this server.`,
         );
       inGameStates.set(guild.id, game.displayTitle);
       break;
@@ -39,19 +38,19 @@ export const checkAndBlock = (game: Game, message: Message): Promise<void> => {
       inGame = inGameStates.get(`${game.title}:${channel.id}`);
       if (inGame)
         return Promise.reject(
-          `There is already a game of **${inGame}** being played in this channel.`
+          `There is already a game of **${inGame}** being played in this channel.`,
         );
       inGameStates.set(`${game.title}:${channel.id}`, game.displayTitle);
       break;
     case BlockingLevel.selfGuild:
       if (!guild)
         return Promise.reject(
-          `${game.displayTitle} can only be played in a guild.`
+          `${game.displayTitle} can only be played in a guild.`,
         );
       inGame = inGameStates.get(`${game.title}:${guild.id}`);
       if (inGame)
         return Promise.reject(
-          `There is already a game of **${inGame}** being played in this channel.`
+          `There is already a game of **${inGame}** being played in this channel.`,
         );
       inGameStates.set(`${game.title}:${guild.id}`, game.displayTitle);
       break;
@@ -69,7 +68,7 @@ export const isGameActive = (game: Game, message: Message): boolean => {
     channel,
     guild,
   } = message;
-  let gameActive: boolean = false;
+  let gameActive = false;
   switch (game.blockingLevel) {
     case BlockingLevel.channel:
       gameActive = !!inGameStates.get(channel.id);

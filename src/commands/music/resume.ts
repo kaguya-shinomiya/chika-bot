@@ -1,13 +1,13 @@
-import { CmdCategory } from "@prisma/client";
-import { lightErrorEmbed, withAuthorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendMusicOnlyInGuild, trackLinkAndDuration } from "./utils/embeds";
+import { CmdCategory } from '@prisma/client';
+import { lightErrorEmbed, withAuthorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendMusicOnlyInGuild, trackLinkAndDuration } from './utils/embeds';
 
 const resume = new Command({
-  name: "resume",
+  name: 'resume',
   args: [],
   category: CmdCategory.MUSIC,
-  description: "Resume playback.",
+  description: 'Resume playback.',
 
   async execute(message) {
     const { client, channel, guild, author } = message;
@@ -17,7 +17,7 @@ const resume = new Command({
     }
     const audioUtils = client.cache.audioUtils.get(guild.id);
     if (!audioUtils?.dispatcher.paused) {
-      channel.send(lightErrorEmbed("There is nothing to resume..."));
+      channel.send(lightErrorEmbed('There is nothing to resume...'));
       return;
     }
 
@@ -26,7 +26,7 @@ const resume = new Command({
     channel.send(
       withAuthorEmbed(author)
         .setTitle(`:arrow_forward: Resumed`)
-        .setDescription(trackLinkAndDuration(title, url, duration))
+        .setDescription(trackLinkAndDuration(title, url, duration)),
     );
   },
 });

@@ -1,15 +1,15 @@
-import { CmdCategory } from "@prisma/client";
-import { prisma } from "../../data/prismaClient";
-import { genericErrorEmbed } from "../../shared/embeds";
-import { Command } from "../../types/command";
-import { sendTop } from "./utils/embeds";
+import { CmdCategory } from '@prisma/client';
+import { prisma } from '../../data/prismaClient';
+import { genericErrorEmbed } from '../../shared/embeds';
+import { Command } from '../../types/command';
+import { sendTop } from './utils/embeds';
 
 const globalTop = new Command({
-  name: "global-top",
+  name: 'global-top',
   description: `Track down the top 1%.`,
   args: [],
   category: CmdCategory.CURRENCY,
-  aliases: ["gt"],
+  aliases: ['gt'],
 
   async execute(message) {
     const { channel } = message;
