@@ -17,3 +17,12 @@ export const wrapText = (s: string) =>
   s.replace(/(?![^\n]{1,40}$)([^\n]{1,40})\s/g, '$1\n');
 
 export const groupNum = new Intl.NumberFormat('en-US', { useGrouping: true });
+
+export const withAnd = (words: string[]) => {
+  if (words.length === 1) return words[0];
+  if (words.length === 2) return `${words[0]} and ${words[1]}`;
+  return `${words
+    .slice(0, words.length - 1)
+    .map((word) => `${word},`)
+    .join(' ')} and ${words[words.length - 1]}`;
+};
