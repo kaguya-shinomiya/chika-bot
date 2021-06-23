@@ -1,16 +1,20 @@
 > ### Chika joins Discord
 >
-> _Hello Chika, what can you do for Discord servers?_
+> _Hi Chika, thanks for joining us here. Would you like to introduce yourself?_
 > <br/><br/>
-> **F. Chika**: Hi, thanks for having me here. I know how to play a few games. I can also stream music. And you can even chat directly with me.
+> **C. Fujiwara**: Oh hi!! didn't see you there. I was playing Amogus with Kei. But thanks for having me here.
 > <br/><br/>
-> _Cool, so -_
+> _I see, so what can you do as a Discord bot?_
 > <br/><br/>
-> **F. Chika**: But what the heck, that's the wrong question. Ask not what I can do for you, but what you can do for me! LOL. I always feel so under-appreciated.
+> **C. Fujiwara**: You know, I can't compete with the likes of MEE6 or Mudae, but I'm trying my best anyway. You can refer to the banner below for a list of commands.
 > <br/><br/>
-> _Sorry, we love you even though your IQ is 3._
+> _That's great that you're trying your best! I heard you have an IQ of 3?_
 > <br/><br/>
-> **F. Chika**: Ya that's true. Anyway, I'll bring the entire Shuchi'in Tabletop Game Club to Discord some day. Please stay tuned!
+> **C. Fujiwara**: I think so. Is that bad?
+> <br/><br/>
+> _No, it's great._
+> <br/><br/>
+> **C. Fujiwara**: Haha okay. Anyway, I'll bring the entire Shuchi'in Tabletop Game Club to Discord some day. Please stay tuned!
 
 > ### Introduction
 >
@@ -22,8 +26,8 @@
 
 > ### Usage
 >
-> Chika's default prefix is `ck;`, but this is customizable per-server. Here are the commands as of 11 Jun 2021.
+> Chika's default prefix is `ck;` and this is customizable per-server. Here are the commands as of 23 Jun 2021.
 > <br/><br/>
-> ![](https://i.imgur.com/6RoV2fD.png)
+> ![](https://i.imgur.com/pqNfPMx.png)
 > <br/><br/>
 > We hope that you'll have lots of fun with Chika bot!

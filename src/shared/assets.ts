@@ -3,6 +3,7 @@ export const chika_crying_png = 'https://i.imgur.com/yFjZVZN.png';
 export const chika_peeking_png = 'https://i.imgur.com/Clk50IV.png';
 export const chika_rap_png = 'https://i.imgur.com/AaSi3so.png';
 export const chika_pointing_png = 'https://i.imgur.com/OsVZH9j.png';
+export const ishigami_cake_png = 'https://i.imgur.com/y7STJ8k.jpg';
 
 export const chika_beating_yu_gif = 'https://i.imgur.com/kYTIHbE.gif';
 export const kaguya_sleep_gif = 'https://i.imgur.com/4y1lORB.gif';
