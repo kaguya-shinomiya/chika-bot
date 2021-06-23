@@ -1,8 +1,7 @@
 node_modules/
 *.log
 dist/
-.env
-.env.development
-.env.test
+.env*
+!.env.example
 .vscode/
 coverage/
