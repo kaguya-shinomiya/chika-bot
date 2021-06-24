@@ -1,7 +1,7 @@
 import { Collection, Message, User } from 'discord.js';
 import _ from 'lodash';
 import { prisma } from '../../../data/prismaClient';
-import { redisRibbons } from '../../../data/redisClient';
+import { forRibbons, redis } from '../../../data/redisClient';
 import { sendPopped } from './embeds';
 
 export const postGameBalloon = async (
@@ -21,15 +21,19 @@ export const postGameBalloon = async (
     .$transaction(
       winners.map((winner) =>
         prisma.user.upsert({
-          update: { ribbons: { increment: winAmt } },
           where: { userId: winner.id },
+          update: { ribbons: { increment: winAmt } },
           create: { userId: winner.id, tag: winner.tag, ribbons: winAmt },
           select: { userId: true, ribbons: true },
         }),
       ),
     )
     .then((res) =>
-      redisRibbons.mset(..._.flattenDeep(res.map((_res) => _.values(_res)))),
+      redis.mset(
+        ..._.flattenDeep(
+          res.map((_res) => [forRibbons(_res.userId), _res.ribbons]),
+        ),
+      ),
     );
 
   prisma.decrRibbons(popper, winAmt * winners.size);

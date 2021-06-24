@@ -1,19 +1,34 @@
 import { CmdCategory } from '@prisma/client';
 import { prisma } from '../../data/prismaClient';
-import { genericErrorEmbed } from '../../shared/embeds';
+import { genericErrorEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { sendTop } from './utils/embeds';
+import { MAX_TAKE } from './utils/defaults';
+import { sendExceededMaxTake, sendTop } from './utils/embeds';
 
 const globalTop = new Command({
   name: 'global-top',
   description: `Track down the top 1%.`,
-  args: [],
+  args: [{ name: 'take', optional: true, multi: false }],
   category: CmdCategory.CURRENCY,
   aliases: ['gt'],
 
-  async execute(message) {
+  async execute(message, args) {
     const { channel } = message;
-    const top = await prisma.getGlobalTopRibbons();
+    let take;
+    const [count] = args;
+    if (count) {
+      const _take = parseInt(count, 10);
+      if (Number.isNaN(_take)) {
+        channel.send(lightErrorEmbed('Gimme a number yo.'));
+        return;
+      }
+      if (_take > MAX_TAKE) {
+        sendExceededMaxTake(channel);
+        return;
+      }
+      take = _take;
+    }
+    const top = await prisma.getGlobalTopRibbons(take);
     if (!top) {
       channel.send(genericErrorEmbed());
       return;

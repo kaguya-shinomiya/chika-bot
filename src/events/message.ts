@@ -7,6 +7,9 @@ import { Event } from '../types/event';
 import { validateArgsCount } from '../utils/validateArgsCount';
 import { isOnCooldown } from '../utils/validateCooldowns';
 
+// TODO: add better arg validation
+// check arg types too
+
 const message: Event = {
   name: 'message',
   once: false,
