@@ -1,4 +1,4 @@
-import Redis from 'ioredis';
+import Redis, { KeyType } from 'ioredis';
 
 const withPrefix = (keyPrefix: string) =>
   new Redis(process.env.REDISCLOUD_URL, {
@@ -14,3 +14,5 @@ export const redisGuildPrefix = withPrefix('prefix');
 export const redisBalloonMin = withPrefix('balloon:min');
 export const redisBalloonMax = withPrefix('balloon:max');
 export const redisShiritoriMinLen = withPrefix('shiritori:minlen');
+
+export const forPrefix = (key: KeyType) => `prefix:${key}`;

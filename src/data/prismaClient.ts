@@ -17,7 +17,7 @@ class ChikaPrisma extends PrismaClient {
   async getPrefix(guildId: Snowflake) {
     const ping = await redisGuildPrefix.get(guildId);
     if (ping) {
-      redisGuildPrefix.expire(guildId, 600);
+      redisGuildPrefix.expire(guildId, 60);
       return ping;
     }
     return this.guild
