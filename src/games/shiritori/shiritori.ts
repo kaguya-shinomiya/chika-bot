@@ -5,6 +5,7 @@ import { shiritori_rules_jpg } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { BlockingLevel } from '../../types/blockingLevel';
 import { Game } from '../../types/game';
+import { sendTaggedSelfError } from '../utils/embeds';
 import { genInitialCards } from './utils/cards';
 import { shiritoriPlayerCardsEmbed } from './utils/embeds';
 import { createOnceShiritoriListener } from './utils/listener';
@@ -31,6 +32,14 @@ export class Shiritori extends Game {
   pregame(message: Message) {
     const { channel, mentions, author } = message;
     const taggedOpponent = mentions.users.first();
+
+    if (
+      process.env.NODE_ENV !== 'development' &&
+      taggedOpponent?.id === author.id
+    ) {
+      sendTaggedSelfError(channel);
+      return;
+    }
 
     if (!taggedOpponent) {
       this.collectPlayers(message, {
