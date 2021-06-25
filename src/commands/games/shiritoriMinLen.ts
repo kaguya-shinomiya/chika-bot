@@ -43,7 +43,6 @@ const shiritoriMinLen = new Command({
     channel.send(
       baseEmbed().setDescription(
         `The minimum word length for Shiritori has been set to **${newMin}**!
-			
 			This will apply on the next game.`,
       ),
     );

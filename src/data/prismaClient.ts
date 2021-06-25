@@ -4,12 +4,16 @@ import {
   DEFAULT_MAX_BALLOON,
   DEFAULT_MIN_BALLOON,
 } from '../games/balloon/utils/defaults';
-import { DEFAULT_SHIRITORI_MIN_LEN } from '../games/shiritori/utils/defaults';
+import {
+  DEFAULT_SHIRITORI_HAND,
+  DEFAULT_SHIRITORI_MIN_LEN,
+} from '../games/shiritori/utils/defaults';
 import {
   forBalloonMax,
   forBalloonMin,
   forPrefix,
   forRibbons,
+  forShiritoriHand,
   forShiritoriMinLen,
   redis,
 } from './redisClient';
@@ -224,6 +228,41 @@ class ChikaPrisma extends PrismaClient {
         const minLen = res?.minLen || DEFAULT_SHIRITORI_MIN_LEN;
         redis.set(forShiritoriMinLen(guildId), minLen, 'ex', 60);
         return minLen;
+      });
+  }
+
+  async setShiritoriHandSize(guildId: string, handSize: number) {
+    await this.guild
+      .upsert({
+        where: { guildId },
+        update: {
+          shiritori: {
+            upsert: {
+              update: { handSize },
+              create: { handSize },
+            },
+          },
+        },
+        create: { guildId, shiritori: { create: { handSize } } },
+      })
+      .then(() => redis.set(forShiritoriHand(guildId), handSize, 'ex', 60));
+  }
+
+  async getShiritoriHandSize(guildId: string) {
+    const ping = await redis.get(forShiritoriHand(guildId));
+    if (ping) {
+      redis.expire(forShiritoriHand(guildId), 60);
+      return parseInt(ping, 10);
+    }
+    return this.shiritori
+      .findUnique({
+        where: { guildId },
+        select: { handSize: true },
+      })
+      .then((res) => {
+        const handSize = res?.handSize || DEFAULT_SHIRITORI_HAND;
+        redis.set(forShiritoriHand(guildId), handSize, 'ex', 60);
+        return handSize;
       });
   }
 }

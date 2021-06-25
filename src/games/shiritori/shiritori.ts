@@ -97,12 +97,29 @@ export class Shiritori extends Game {
       on one of your cards, and c) be at
       least 4 characters long.
       
-      The game will start with a random card.
+      The game will start with a random 
+      card.
       `,
+      },
+      {
+        name: 'Player count',
+        value: '2',
       },
       {
         name: 'To win',
         value: `Be the first to clear all 5 cards!`,
+      },
+      {
+        name: 'Options',
+        value: `
+        You can override the default
+        minimum word length, as well as the
+        number of cards issued to each
+        player.
+        \`shiritori-minlen\`
+        Set the minimum word length.
+        \`shiritori-hand\`
+        Set the initial card count.`,
       },
     ])
     .setImage(shiritori_rules_jpg)
