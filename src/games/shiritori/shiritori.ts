@@ -55,8 +55,9 @@ export class Shiritori extends Game {
   }
 
   async startGame(message: Message, { p1, p2 }: startShiritoriParams) {
-    const { channel, client } = message;
-    const { p1Cards, p2Cards, startingChar } = genInitialCards();
+    const { channel, client, guild } = message;
+    const size = await prisma.getShiritoriHandSize(guild!.id);
+    const { p1Cards, p2Cards, startingChar } = genInitialCards(size);
 
     const cards = new Collection<Snowflake, string[]>();
     cards.set(p1.id, p1Cards);
@@ -75,7 +76,10 @@ export class Shiritori extends Game {
     };
 
     this.sendParticipants(channel, [p1, p2], {
-      startsInMessage: `I'll reveal the first card in 5 seconds!`,
+      startsInMessage: `Your words must have at least **${minLen}** ${
+        minLen === 1 ? 'letter' : 'letters'
+      }.
+      I'll reveal the first card in 5 seconds!`,
     }).then(() => channel.send(shiritoriPlayerCardsEmbed(initState)));
 
     setTimeout(() => {
@@ -116,9 +120,9 @@ export class Shiritori extends Game {
         minimum word length, as well as the
         number of cards issued to each
         player.
-        \`shiritori-minlen\`
+        \`sh-min\`
         Set the minimum word length.
-        \`shiritori-hand\`
+        \`sh-hand\`
         Set the initial card count.`,
       },
     ])

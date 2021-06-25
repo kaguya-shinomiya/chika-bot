@@ -40,7 +40,7 @@ const shiritoriHand = new Command({
       channel.send(lightErrorEmbed('Haha how does that even work.'));
       return;
     }
-    if (newSize > 10) {
+    if (newSize > 12) {
       channel.send(lightErrorEmbed('I can only issue a maximum of 12 cards!'));
       return;
     }
