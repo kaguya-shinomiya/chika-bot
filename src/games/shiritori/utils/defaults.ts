@@ -1,1 +1,2 @@
 export const DEFAULT_SHIRITORI_MIN_LEN = 4;
+export const DEFAULT_SHIRITORI_HAND = 5;

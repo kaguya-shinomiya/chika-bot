@@ -54,7 +54,6 @@ const balloonMax = new Command({
     channel.send(
       baseEmbed().setDescription(
         `The maximum balloon volume has been set to **${newMax}**!
-        
         This will apply on the next game.`,
       ),
     );

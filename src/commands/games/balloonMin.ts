@@ -55,7 +55,6 @@ const balloonMin = new Command({
     channel.send(
       baseEmbed().setDescription(
         `The minimum balloon volume has been set to **${newMin}**!
-        
         This will apply on the next game.`,
       ),
     );
