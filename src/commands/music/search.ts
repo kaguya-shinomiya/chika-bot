@@ -1,7 +1,7 @@
 import { CmdCategory } from '@prisma/client';
 import { lightErrorEmbed, sendNotInGuild } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { setCooldown } from '../../utils/cooldownManager';
+import { setCooldown } from '../../lib/cooldownManager';
 import { sendSearchResults } from './utils/embeds';
 import { createResultSelectListener } from './utils/listener';
 import { searchVideo } from './utils/youtube';

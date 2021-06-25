@@ -2,7 +2,7 @@ import { CmdCategory } from '.prisma/client';
 import { ishigami_cake_png } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { withAnd } from '../../utils/typography';
+import { withAnd } from '../../lib/typography';
 
 const birthday = new Command({
   name: 'birthday',

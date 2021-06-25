@@ -3,7 +3,7 @@ import { prisma } from '../../data/prismaClient';
 import { ribbon_emoji } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { groupNum } from '../../utils/typography';
+import { groupNum } from '../../lib/typography';
 
 const give = new Command({
   name: 'give',

@@ -2,7 +2,7 @@ import type { Collection, User } from 'discord.js';
 import { ribbon_emoji } from '../../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../../shared/embeds';
 import { GenericChannel } from '../../../types/command';
-import { groupNum } from '../../../utils/typography';
+import { groupNum } from '../../../lib/typography';
 import { toListString } from '../../music/utils/embeds';
 
 export const sendRibbonStock = (

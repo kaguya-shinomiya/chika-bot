@@ -15,3 +15,4 @@ export const forBalloonMax = (key: KeyType) => `balloon:max:${key}`;
 export const forShiritoriMinLen = (key: KeyType) => `shiritori:minlen:${key}`;
 export const forChikaInput = (key: KeyType) => `chika:input:${key}`;
 export const forChikaResponse = (key: KeyType) => `chika:response:${key}`;
+export const forCooldown = (key: KeyType) => `cooldown:${key}`;

@@ -4,7 +4,7 @@ import { Event } from '../types/event';
 const ready: Event = {
   name: 'ready',
   once: true,
-  listener() {
+  async listener() {
     console.log('Chika bot has logged in.');
     redis.ping().catch((err) => {
       console.error(err);

@@ -4,8 +4,8 @@ import { DEFAULT_PREFIX } from '../shared/constants';
 import { badCommandsEmbed } from '../shared/embeds';
 import { CriticalError } from '../shared/errors';
 import { Event } from '../types/event';
-import { validateArgsCount } from '../utils/validateArgsCount';
-import { isOnCooldown } from '../utils/validateCooldowns';
+import { validateArgsCount } from '../lib/validateArgsCount';
+import { isOnCooldown } from '../lib/validateCooldowns';
 
 // TODO: add better arg validation
 // check arg types too
