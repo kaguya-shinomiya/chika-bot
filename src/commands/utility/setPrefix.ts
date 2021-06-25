@@ -2,7 +2,7 @@ import { CmdCategory } from '@prisma/client';
 import { prisma } from '../../data/prismaClient';
 import { baseEmbed, sendNotInGuild } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { isAdmin } from '../../utils/validateMessages';
+import { isAdmin } from '../../lib/validateMessages';
 
 const prefix = new Command({
   name: 'set-prefix',

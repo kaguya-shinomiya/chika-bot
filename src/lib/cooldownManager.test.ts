@@ -1,12 +1,13 @@
-import { cooldownRedis, setCooldown, getCooldown } from './cooldownManager';
+import { setCooldown, getCooldown } from './cooldownManager';
+import { forCooldown, redis } from '../data/redisClient';
 
 afterAll(() => {
-  return cooldownRedis.quit();
+  return redis.quit();
 });
 
 describe('cooldownManager', () => {
-  const setSpy = jest.spyOn(cooldownRedis, 'set');
-  const ttlSpy = jest.spyOn(cooldownRedis, 'ttl');
+  const setSpy = jest.spyOn(redis, 'set');
+  const ttlSpy = jest.spyOn(redis, 'ttl');
 
   beforeEach(() => {
     setSpy.mockReset();
@@ -20,7 +21,12 @@ describe('cooldownManager', () => {
     });
     it('calls set with correct params', () => {
       setCooldown('id', 'command', 10);
-      expect(setSpy).toBeCalledWith('id:command', 'command', 'px', 10);
+      expect(setSpy).toBeCalledWith(
+        forCooldown('id:command'),
+        'command',
+        'px',
+        10,
+      );
     });
   });
 
@@ -31,7 +37,7 @@ describe('cooldownManager', () => {
     });
     it('calls set with correct params', () => {
       getCooldown('id', 'command');
-      expect(ttlSpy).toBeCalledWith('id:command');
+      expect(ttlSpy).toBeCalledWith(forCooldown('id:command'));
     });
     it('returns 0 if key already expired or has no ttl set (-1 or -2)', () => {
       ttlSpy.mockResolvedValueOnce(-1);

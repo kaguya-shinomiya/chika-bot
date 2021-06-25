@@ -2,12 +2,15 @@ import { CmdCategory } from '.prisma/client';
 import { ishigami_cake_png } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { withAnd } from '../../utils/typography';
+import { withAnd } from '../../lib/typography';
 
 const birthday = new Command({
   name: 'birthday',
   aliases: ['bd'],
-  args: [{ name: 'user', optional: false, multi: true }],
+  args: [
+    { name: 'users' },
+    { name: 'more_users', optional: true, multi: true },
+  ],
   category: CmdCategory.FUN,
   description: 'Wish your m8s a happy birthday.',
   execute: async (message) => {

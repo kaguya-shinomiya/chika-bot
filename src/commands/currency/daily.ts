@@ -3,8 +3,8 @@ import { prisma } from '../../data/prismaClient';
 import { ribbon_emoji } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { getCooldown, setCooldown } from '../../utils/cooldownManager';
-import { endOfToday, secToWordString } from '../../utils/time';
+import { getCooldown, setCooldown } from '../../lib/cooldownManager';
+import { endOfToday, secToWordString } from '../../lib/time';
 
 const daily = new Command({
   name: 'daily',

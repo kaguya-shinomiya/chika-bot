@@ -1,11 +1,14 @@
 import { Message } from 'discord.js';
 import { prisma } from '../data/prismaClient';
 import { DEFAULT_PREFIX } from '../shared/constants';
-import { badCommandsEmbed } from '../shared/embeds';
+import { badCommandsEmbed, lightErrorEmbed } from '../shared/embeds';
 import { CriticalError } from '../shared/errors';
 import { Event } from '../types/event';
-import { validateArgsCount } from '../utils/validateArgsCount';
-import { isOnCooldown } from '../utils/validateCooldowns';
+import { validateArgsCount } from '../lib/validateArgsCount';
+import { isOnCooldown } from '../lib/validateCooldowns';
+
+// TODO: add better arg validation
+// check arg types too
 
 const message: Event = {
   name: 'message',
@@ -31,6 +34,14 @@ const message: Event = {
     );
     if (!command) {
       channel.send(badCommandsEmbed(sentCommand));
+      return;
+    }
+
+    if (command.category === 'MUSIC') {
+      channel.send(
+        lightErrorEmbed(`Sorry, Music commands are broken for now ᕙ(⇀‸↼‶)ᕗ
+        There's a bug with ytdl which should be patched soon.`),
+      );
       return;
     }
 

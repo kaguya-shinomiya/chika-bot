@@ -7,7 +7,7 @@ import { Event } from '../types/event';
 const stopGameMessage: Event = {
   name: 'message',
   once: false,
-  listener(_client, message: Message) {
+  async listener(_client, message: Message) {
     const { channel, author, content } = message;
     if (!EXIT_GAME_RE.test(content)) return;
 
