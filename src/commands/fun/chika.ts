@@ -1,10 +1,7 @@
 import { CmdCategory } from '@prisma/client';
 import axios from 'axios';
 import { prisma } from '../../data/prismaClient';
-import {
-  redisChatbotInput,
-  redisChatbotResponse,
-} from '../../data/redisClient';
+import { forChikaInput, forChikaResponse, redis } from '../../data/redisClient';
 import { baseEmbed, sendInsufficientRibbons } from '../../shared/embeds';
 import { Command } from '../../types/command';
 import { ChatbotInput } from './utils/types';
@@ -21,10 +18,10 @@ const chika = new Command({
     const { channel, author } = message;
 
     const generated_responses = (
-      await redisChatbotResponse.lrange(author.id, 0, -1)
+      await redis.lrange(forChikaResponse(channel.id), 0, -1)
     ).reverse();
     const past_user_inputs = (
-      await redisChatbotInput.lrange(author.id, 0, -1)
+      await redis.lrange(forChikaInput(channel.id), 0, -1)
     ).reverse();
     const text = args.join(' ');
 
@@ -49,16 +46,18 @@ const chika = new Command({
       .then((res) => {
         const reply = res.data.generated_text;
         channel.send(`> ${text}\n${reply}`);
-        redisChatbotInput
+        redis
           .pipeline()
-          .lpush(channel.id, text)
-          .ltrim(channel.id, 0, 2)
+          .lpush(forChikaInput(channel.id), text)
+          .ltrim(forChikaInput(channel.id), 0, 2)
+          .expire(forChikaInput(channel.id), 300)
           .exec();
 
-        redisChatbotResponse
+        redis
           .pipeline()
-          .lpush(channel.id, reply)
-          .ltrim(channel.id, 0, 2)
+          .lpush(forChikaResponse(channel.id), reply)
+          .ltrim(forChikaResponse(channel.id), 0, 2)
+          .expire(forChikaResponse(channel.id), 300)
           .exec();
 
         prisma.decrRibbons(author, ribbonCost);
@@ -67,7 +66,7 @@ const chika = new Command({
         if (err.response?.data?.error?.includes(`is currently loading`)) {
           channel.send(
             baseEmbed().setDescription(
-              `Thanks chatting with me! Please give me a minute to get ready.`,
+              `Thanks chatting with me! Please give me a minute to get ready.\n(The API takes a moment to load sometimes.)`,
             ),
           );
         }

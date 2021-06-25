@@ -1,6 +1,6 @@
 import type { Collection, User } from 'discord.js';
 import { ribbon_emoji } from '../../../shared/assets';
-import { baseEmbed } from '../../../shared/embeds';
+import { baseEmbed, lightErrorEmbed } from '../../../shared/embeds';
 import { GenericChannel } from '../../../types/command';
 import { groupNum } from '../../../utils/typography';
 import { toListString } from '../../music/utils/embeds';
@@ -40,3 +40,6 @@ export const sendTop = (
       : partialEmbed,
   );
 };
+
+export const sendExceededMaxTake = (channel: GenericChannel) =>
+  channel.send(lightErrorEmbed('I can only fetch a maximum of 20 results.'));
