@@ -37,9 +37,9 @@ const message: Event = {
       return;
     }
 
-    if (command.category === 'MUSIC') {
+    if (command.name === 'play') {
       channel.send(
-        lightErrorEmbed(`Sorry, Music commands are broken for now ᕙ(⇀‸↼‶)ᕗ
+        lightErrorEmbed(`Sorry, Music playing is broken for now ᕙ(⇀‸↼‶)ᕗ
         There's a bug with ytdl which should be patched soon.`),
       );
       return;

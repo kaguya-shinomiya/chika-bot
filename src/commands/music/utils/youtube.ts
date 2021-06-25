@@ -2,12 +2,12 @@ import type { Client, StreamDispatcher, VoiceConnection } from 'discord.js';
 import ytdl from 'ytdl-core';
 import ytpl from 'ytpl';
 import ytsr, { Video } from 'ytsr';
+import { CriticalError } from '../../../shared/errors';
 import { GenericChannel } from '../../../types/command';
 import { AudioUtils, QueueItem } from '../../../types/queue';
 import { sendCannotPlay, sendNowPlaying } from './embeds';
 import { secToString } from './helpers';
 import type { createFinishListener } from './listener';
-import { CriticalError } from '../../../shared/errors';
 
 const YOUTUBE_URL_RE = /^(https?:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+$/;
 
@@ -134,6 +134,7 @@ export const playThis = async (
     client.cache.audioUtils.set(guildId, newAudioUtils);
   } catch (err) {
     sendCannotPlay(channel, videoData.title, videoData.url);
+    connection.disconnect();
     if (err instanceof CriticalError) throw err;
   }
 };
