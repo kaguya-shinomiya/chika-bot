@@ -7,10 +7,7 @@ import { withAnd } from '../../lib/typography';
 const birthday = new Command({
   name: 'birthday',
   aliases: ['bd'],
-  args: [
-    { name: 'users' },
-    { name: 'more_users', optional: true, multi: true },
-  ],
+  args: [{ name: 'user' }, { name: 'more_users', optional: true, multi: true }],
   category: CmdCategory.FUN,
   description: 'Wish your m8s a happy birthday.',
   execute: async (message) => {

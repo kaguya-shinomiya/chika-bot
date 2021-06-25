@@ -10,7 +10,7 @@ import { client } from './graphql/aniListClient';
 const manga = new Command({
   name: 'manga',
   description: 'Look up info for a manga.',
-  args: [{ name: 'manga', multi: true }],
+  args: [{ name: 'title', multi: true }],
   category: CmdCategory.UTILITY,
 
   async execute(message, args) {
