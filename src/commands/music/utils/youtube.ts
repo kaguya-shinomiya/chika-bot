@@ -36,7 +36,6 @@ export const playFromYt = async (
 ): Promise<StreamDispatcher> => {
   try {
     const dispatcher = await ytdl.getInfo(url).then((info) => {
-      console.log('info: ', info);
       return connection.play(
         ytdl.downloadFromInfo(info, {
           filter: 'audioonly',
