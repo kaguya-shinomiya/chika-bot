@@ -68,7 +68,7 @@ const chika = new Command({
           channel.send(
             baseEmbed()
               .setDescription(
-                `Thanks chatting with me! Please give me a minute to get ready.`,
+                `Thanks for chatting with me! Please give me a minute to get ready.`,
               )
               .setFooter('(The API takes a moment to load sometimes lol)'),
           );
