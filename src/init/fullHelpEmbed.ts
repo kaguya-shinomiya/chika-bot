@@ -33,7 +33,7 @@ export const helpExtraInfo = baseEmbed().addField(
   stripIndents`
   • Chika's default prefix is **ck;**
   • For more info about a specific command, use \`help <command>\`
-  • Chika has a simple [landing page](https://www.chikawara.xyz)!`,
+  • Chika has a simple [landing page](https://www.chikawara.xyz)! (dashboard coming soon)`,
 );
 
 function tagEmoji(category: CmdCategory) {
