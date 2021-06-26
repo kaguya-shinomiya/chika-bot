@@ -1,10 +1,9 @@
-import { stripIndents } from 'common-tags';
 import { Message } from 'discord.js';
 import { prisma } from '../data/prismaClient';
 import { validateArgsCount } from '../lib/validateArgsCount';
 import { isOnCooldown } from '../lib/validateCooldowns';
 import { DEFAULT_PREFIX } from '../shared/constants';
-import { badCommandsEmbed, lightErrorEmbed } from '../shared/embeds';
+import { badCommandsEmbed } from '../shared/embeds';
 import { CriticalError } from '../shared/errors';
 import { Event } from '../types/event';
 
@@ -35,15 +34,6 @@ const message: Event = {
     );
     if (!command) {
       channel.send(badCommandsEmbed(sentCommand));
-      return;
-    }
-
-    // this is just a temporary monkey patch
-    if (command.name === 'play') {
-      channel.send(
-        lightErrorEmbed(stripIndents`Sorry, Music playing is broken for now ᕙ(⇀‸↼‶)ᕗ
-        There's a bug with ytdl which should be patched soon.`),
-      );
       return;
     }
 
