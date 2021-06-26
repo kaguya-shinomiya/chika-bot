@@ -37,6 +37,7 @@ const message: Event = {
       return;
     }
 
+    // this is just a temporary monkey patch
     if (command.name === 'play') {
       channel.send(
         lightErrorEmbed(`Sorry, Music playing is broken for now ᕙ(⇀‸↼‶)ᕗ

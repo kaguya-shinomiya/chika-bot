@@ -6,11 +6,9 @@ import type {
   User,
 } from 'discord.js';
 import { Collection } from 'discord.js';
-import { red_cross, white_check_mark } from '../shared/assets';
 import { toListString } from '../commands/music/utils/embeds';
-import { DEFAULT_PREFIX } from '../shared/constants';
-import { EXIT_GAME } from '../games/utils/constants';
 import { unblock } from '../games/utils/manageState';
+import { red_cross, white_check_mark } from '../shared/assets';
 import {
   baseEmbed,
   detectiveEmbed,
@@ -19,6 +17,7 @@ import {
 } from '../shared/embeds';
 import { BlockingLevel } from './blockingLevel';
 import type { GenericChannel } from './command';
+import { stripIndents } from 'common-tags';
 
 interface collectPlayersOptions {
   onTimeoutAccept: (players: Collection<Snowflake, User>) => void;
@@ -32,19 +31,12 @@ interface getOpponentResponseOptions {
 
 export abstract class Game {
   abstract title: string;
-
   abstract displayTitle: string;
-
   abstract minPlayerCount: number;
-
   abstract maxPlayerCount: number;
-
   abstract rules: MessageEmbed;
-
   abstract sessionDuration: number; // in milliseconds
-
   abstract pregame(message: Message): void;
-
   abstract blockingLevel: BlockingLevel;
 
   collectPlayers(message: Message, options: collectPlayersOptions) {
@@ -182,11 +174,11 @@ export abstract class Game {
         .addField(`Players:`, toListString(players))
         .addField(
           `More info`,
-          `
+          stripIndents`
           To review the rules of **${
             this.displayTitle
-          }**, use \`${DEFAULT_PREFIX}${`${this.title}-rules`}\`.
-        \`${EXIT_GAME}\` will stop the game at anytime.
+          }**, use \`${`${this.title}-rules`}\`.
+        \`${'stop-game'}\` will stop the game at anytime.
         
         ${options?.startsInMessage || "I'll start the game in 5 seconds!"}
         `,
