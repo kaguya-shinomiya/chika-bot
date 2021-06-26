@@ -48,18 +48,21 @@ class ChikaPrisma extends PrismaClient {
 
   async getRibbons(user: User) {
     const ping = await redis.get(forRibbons(user.id));
+    console.log('got ribbons from redis: ', ping);
     if (ping) {
       redis.expire(forRibbons(user.id), 60);
       return parseInt(ping, 10);
     }
+    console.log('redis did not have the ribbon count');
     return this.user
       .findUnique({
         where: { userId: user.id },
         select: { ribbons: true },
       })
       .then((res) => {
+        console.log('got from prisma: ', res);
         const ribbons = res?.ribbons || 0;
-        redis.set(forRibbons(user.id), 0, 'ex', 60);
+        redis.set(forRibbons(user.id), ribbons, 'ex', 60);
         return ribbons;
       });
   }

@@ -2,7 +2,11 @@ import { CmdCategory } from '@prisma/client';
 import axios from 'axios';
 import { prisma } from '../../data/prismaClient';
 import { forChikaInput, forChikaResponse, redis } from '../../data/redisClient';
-import { baseEmbed, sendInsufficientRibbons } from '../../shared/embeds';
+import {
+  baseEmbed,
+  lightErrorEmbed,
+  sendInsufficientRibbons,
+} from '../../shared/embeds';
 import { Command } from '../../types/command';
 import { ChatbotInput } from './utils/types';
 
@@ -12,7 +16,7 @@ const chika = new Command({
   args: [{ name: 'your_message', multi: true }],
   category: CmdCategory.FUN,
   description:
-    "Chat with Chika. Be careful though, her IQ drops below 3 at times. You'll also need to pay in ribbons to chat with her, for some reason.",
+    'Chat with Chika. Be careful though, her IQ drops below 3 at times. This costs ribbons.',
 
   async execute(message, args) {
     const { channel, author } = message;
@@ -71,6 +75,10 @@ const chika = new Command({
                 `Thanks for chatting with me! Please give me a minute to get ready.`,
               )
               .setFooter('(The API takes a moment to load sometimes lol)'),
+          );
+        } else {
+          channel.send(
+            lightErrorEmbed('I ran into an error while thinking of a reply.'),
           );
         }
       });
