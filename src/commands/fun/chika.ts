@@ -50,24 +50,27 @@ const chika = new Command({
           .pipeline()
           .lpush(forChikaInput(channel.id), text)
           .ltrim(forChikaInput(channel.id), 0, 2)
-          .expire(forChikaInput(channel.id), 300)
+          .expire(forChikaInput(channel.id), 60)
           .exec();
 
         redis
           .pipeline()
-          .lpush(forChikaResponse(channel.id), reply)
+          .lpush(forChikaResponse(channel.id), reply.replace(/[^\w\s]/gi, ''))
           .ltrim(forChikaResponse(channel.id), 0, 2)
-          .expire(forChikaResponse(channel.id), 300)
+          .expire(forChikaResponse(channel.id), 60)
           .exec();
 
         prisma.decrRibbons(author, ribbonCost);
       })
       .catch((err) => {
+        console.error(err);
         if (err.response?.data?.error?.includes(`is currently loading`)) {
           channel.send(
-            baseEmbed().setDescription(
-              `Thanks chatting with me! Please give me a minute to get ready.\n(The API takes a moment to load sometimes.)`,
-            ),
+            baseEmbed()
+              .setDescription(
+                `Thanks chatting with me! Please give me a minute to get ready.`,
+              )
+              .setFooter('(The API takes a moment to load sometimes lol)'),
           );
         }
       });
