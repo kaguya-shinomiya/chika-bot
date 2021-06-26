@@ -1,8 +1,8 @@
 import { CmdCategory } from '@prisma/client';
 import type { Collection, EmbedFieldData, MessageEmbed } from 'discord.js';
-import { DEFAULT_PREFIX } from '../shared/constants';
-import { detectiveEmbed } from '../shared/embeds';
+import { baseEmbed, detectiveEmbed } from '../shared/embeds';
 import type { Command } from '../types/command';
+import { stripIndents } from 'common-tags';
 
 export const genFullHelpEmbed = (
   commands: Collection<string, Command>,
@@ -25,13 +25,16 @@ export const genFullHelpEmbed = (
       value: cmds.join(', '),
     });
   });
-  return detectiveEmbed()
-    .setTitle('Chika Commands')
-    .addFields(fields)
-    .setFooter(
-      `For more info about a specific command, run ${DEFAULT_PREFIX}help <command>.`,
-    );
+  return detectiveEmbed().setTitle('Chika Commands').addFields(fields);
 };
+
+export const helpExtraInfo = baseEmbed().addField(
+  'Some notes',
+  stripIndents`
+  • Chika's default prefix is **ck;**
+  • For more info about a specific command, use \`help <command>\`
+  • Chika has a simple [landing page](https://www.chikawara.xyz)! (dashboard coming soon)`,
+);
 
 function tagEmoji(category: CmdCategory) {
   switch (category) {

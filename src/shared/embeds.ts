@@ -1,3 +1,4 @@
+import { commaListsAnd, stripIndents } from 'common-tags';
 import type { User } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { GenericChannel } from '../types/command';
@@ -10,7 +11,6 @@ import {
   chika_rap_png,
   ribbon_emoji,
 } from './assets';
-import { DEFAULT_PREFIX } from './constants';
 
 export const baseEmbed = () => new MessageEmbed().setColor(chika_pink);
 
@@ -26,17 +26,12 @@ export const lightErrorEmbed = (msg: string) =>
 export const lightOkEmbed = (msg: string) =>
   baseEmbed().setDescription(`:magic_wand: ${msg}`);
 
-export const badCommandsEmbed = (...badCommands: string[]) =>
-  cryingEmbed()
-    .setDescription(
-      `I couldn't understand these commands: ${badCommands
-        .map((cmd) => `**${cmd}**`)
-        .join(', ')}.`,
-    )
-    .addField(
-      'Further help',
-      `To get a list of all the commands I know, run \`${DEFAULT_PREFIX}help\`.`,
-    );
+export const badCommandsEmbed = (...cmds: string[]) =>
+  lightErrorEmbed(
+    stripIndents(commaListsAnd`
+  I couldn't understand these commands: ${cmds.map((cmd) => `**${cmd}**`)}
+  To get a list of all the commands I know, use \`help\``),
+  );
 
 export const genericErrorEmbed = () =>
   cryingEmbed()
