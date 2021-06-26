@@ -1,18 +1,19 @@
 import { CmdCategory } from '@prisma/client';
+import { helpExtraInfo } from '../../init/fullHelpEmbed';
 import { badCommandsEmbed, baseEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
 
 const help = new Command({
   name: 'help',
   description: 'Get a list of all commands, or look up specific commands.',
-  args: [{ name: 'command', optional: true, multi: true }],
+  args: [{ name: 'commands', optional: true, multi: true }],
   category: CmdCategory.UTILITY,
   aliases: ['h'],
 
   async execute({ channel, client: { commands, commandsHelp } }, args) {
     if (!args.length || /^all$/i.test(args[0])) {
       // send a list of all commands
-      channel.send(commandsHelp);
+      channel.send(commandsHelp).then(() => channel.send(helpExtraInfo));
       return;
     }
 
