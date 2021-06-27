@@ -1,17 +1,14 @@
 import type { Client } from 'discord.js';
-import { redis } from '../data/redisClient';
 
 type IActivityUpdater = (client: Client) => void;
 
 export function setGuildCount(client: Client) {
-  const newCount = client.guilds.cache.size;
-  redis
-    .publish('guild-count-update', newCount.toString())
-    .catch((err) => console.error(err));
-
+  const guildCount = client.guilds.cache.size;
   client.user
     ?.setActivity({
-      name: `amogus in ${newCount} ${newCount === 1 ? 'server' : 'servers'}`,
+      name: `amogus in ${guildCount} ${
+        guildCount === 1 ? 'server' : 'servers'
+      }`,
       type: 'PLAYING',
     })
     .catch((err) => console.error(err));
@@ -36,14 +33,12 @@ export function setChikatto(client: Client) {
 }
 
 export function setUserCount(client: Client) {
-  const newCount = client.users.cache.size;
-  redis
-    .publish('user-count-update', newCount.toString())
-    .catch((err) => console.error(err));
-
+  const userCount = client.guilds.cache.reduce((acc, guild) => {
+    return acc + guild.memberCount;
+  }, 0);
   client.user
     ?.setActivity({
-      name: `with ${newCount} ${newCount === 1 ? 'user' : 'users'}`,
+      name: `with ${userCount} ${userCount === 1 ? 'user' : 'users'}`,
       type: 'PLAYING',
     })
     .catch((err) => console.error(err));

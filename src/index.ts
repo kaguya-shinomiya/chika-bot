@@ -1,4 +1,5 @@
 import Discord from 'discord.js';
+import { setIntervals } from './init/cron';
 import { genFullHelpEmbed } from './init/fullHelpEmbed';
 import { initialClientCache } from './init/initialClientCache';
 import { loadCommands } from './init/loadCommands';
@@ -15,7 +16,7 @@ const main = () => {
   client.cache = initialClientCache;
   loadEventListeners(client);
   client.setMaxListeners(2048);
-  // initCrons();
+  setIntervals(client);
 };
 
 process.on('unhandledRejection', (err) => {
