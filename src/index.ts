@@ -4,7 +4,6 @@ import { initialClientCache } from './init/initialClientCache';
 import { loadCommands } from './init/loadCommands';
 import { loadEventListeners } from './init/loadEventListeners';
 import { seedCommands } from './init/seedCommands';
-import { initCrons } from './init/cron';
 import { setHelp } from './lib/activityUpdaters';
 
 const main = () => {
@@ -16,8 +15,7 @@ const main = () => {
   client.cache = initialClientCache;
   loadEventListeners(client);
   client.setMaxListeners(2048);
-
-  initCrons();
+  // initCrons();
 };
 
 process.on('unhandledRejection', (err) => {
