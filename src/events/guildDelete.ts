@@ -1,10 +1,15 @@
-import { updateActivity } from '../lib/updateActivity';
+import { redis } from '../data/redisClient';
 import type { Event } from '../types/event';
 
 const guildCreate: Event = {
   name: 'guildDelete',
   once: false,
-  listener: updateActivity,
+  listener: async (client) => {
+    const newCount = client.guilds.cache.size;
+    redis
+      .publish('guild-count-update', newCount.toString())
+      .catch((err) => console.error(err));
+  },
 };
 
 export default guildCreate;
