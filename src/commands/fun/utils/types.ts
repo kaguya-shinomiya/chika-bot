@@ -6,4 +6,6 @@ interface ChatbotInput {
   };
 }
 
-export type { ChatbotInput };
+type ChatbotChar = 'ck' | 'ka';
+
+export type { ChatbotInput, ChatbotChar };

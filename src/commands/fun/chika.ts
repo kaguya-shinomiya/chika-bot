@@ -1,14 +1,15 @@
 import { CmdCategory } from '@prisma/client';
 import axios from 'axios';
 import { prisma } from '../../data/prismaClient';
-import { forChikaInput, forChikaResponse, redis } from '../../data/redisClient';
-import {
-  baseEmbed,
-  lightErrorEmbed,
-  sendInsufficientRibbons,
-} from '../../shared/embeds';
+import { forChikaInput, forChikaResponse } from '../../data/redisClient';
+import { sendInsufficientRibbons } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { ChatbotInput } from './utils/types';
+import {
+  cacheInput,
+  cacheResponse,
+  genChatData,
+  handleHuggingFaceError,
+} from './utils/chatbot';
 
 const chika = new Command({
   name: 'chika',
@@ -21,12 +22,6 @@ const chika = new Command({
   async execute(message, args) {
     const { channel, author } = message;
 
-    const generated_responses = (
-      await redis.lrange(forChikaResponse(channel.id), 0, -1)
-    ).reverse();
-    const past_user_inputs = (
-      await redis.lrange(forChikaInput(channel.id), 0, -1)
-    ).reverse();
     const text = args.join(' ');
 
     const ribbonCost = text.length;
@@ -36,51 +31,29 @@ const chika = new Command({
       return;
     }
 
-    const input: ChatbotInput = {
-      inputs: { text, generated_responses, past_user_inputs },
-    };
-    const data = JSON.stringify(input);
+    const data = await genChatData(channel.id, {
+      input: forChikaInput,
+      response: forChikaResponse,
+      text,
+    });
 
     axios
-      .post(process.env.HUGGING_FACE_API_URL, data, {
+      .post(process.env.HUGGING_FACE_CHIKA, data, {
         headers: {
-          Authorization: `Bearer ${process.env.HUGGING_FACE_API_KEY}`,
+          Authorization: `Bearer ${process.env.HUGGING_FACE_CHIKA_KEY}`,
         },
       })
       .then((res) => {
         const reply = res.data.generated_text;
         channel.send(`> ${text}\n${reply}`);
-        redis
-          .pipeline()
-          .lpush(forChikaInput(channel.id), text)
-          .ltrim(forChikaInput(channel.id), 0, 2)
-          .expire(forChikaInput(channel.id), 60)
-          .exec();
 
-        redis
-          .pipeline()
-          .lpush(forChikaResponse(channel.id), reply.replace(/[^\w\s]/gi, ''))
-          .ltrim(forChikaResponse(channel.id), 0, 2)
-          .expire(forChikaResponse(channel.id), 60)
-          .exec();
+        cacheInput(channel.id, text, forChikaInput);
+        cacheResponse(channel.id, reply, forChikaResponse);
 
         prisma.decrRibbons(author, ribbonCost);
       })
       .catch((err) => {
-        console.error(err);
-        if (err.response?.data?.error?.includes(`is currently loading`)) {
-          channel.send(
-            baseEmbed()
-              .setDescription(
-                `Thanks for chatting with me! Please give me a minute to get ready.`,
-              )
-              .setFooter('(The API takes a moment to load sometimes lol)'),
-          );
-        } else {
-          channel.send(
-            lightErrorEmbed('I ran into an error while thinking of a reply.'),
-          );
-        }
+        handleHuggingFaceError(channel, err, 'ck', text);
       });
   },
 });

@@ -5,11 +5,11 @@ import { initialClientCache } from './init/initialClientCache';
 import { loadCommands } from './init/loadCommands';
 import { loadEventListeners } from './init/loadEventListeners';
 import { seedCommands } from './init/seedCommands';
-import { setHelp } from './lib/activityUpdaters';
+import { setKaguya } from './lib/activityUpdaters';
 
 const main = () => {
   const client = new Discord.Client();
-  client.login(process.env.APP_TOKEN).then(() => setHelp(client));
+  client.login(process.env.APP_TOKEN).then(() => setKaguya(client));
   client.commands = loadCommands();
   client.commandsHelp = genFullHelpEmbed(client.commands); // generates full help message
   seedCommands(client.commands);

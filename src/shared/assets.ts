@@ -4,6 +4,7 @@ export const chika_peeking_png = 'https://i.imgur.com/Clk50IV.png';
 export const chika_rap_png = 'https://i.imgur.com/AaSi3so.png';
 export const chika_pointing_png = 'https://i.imgur.com/OsVZH9j.png';
 export const ishigami_cake_png = 'https://i.imgur.com/y7STJ8k.jpg';
+export const kaguya_pfp_png = 'https://i.imgur.com/i9Z2E31.png';
 
 export const chika_beating_yu_gif = 'https://i.imgur.com/kYTIHbE.gif';
 export const kaguya_sleep_gif = 'https://i.imgur.com/4y1lORB.gif';
@@ -23,3 +24,4 @@ export const ribbon_react = '851852767239864320';
 export const ribbon_emoji = '<:chikaribbon:851852767239864320>';
 
 export const chika_pink = '#f2d5da';
+export const kaguya_red = '#b32819';
