@@ -18,7 +18,7 @@ I strongly believe **Hayasaka is best girl**, so it puzzles myself why I chose C
 - 🦜 An unintelligent AI chatbot for Kaguya and Chika
   - I don't know anything about ML but hey it kinda works
 - 💰 Global currency system
-- ...and some others probably
+- ...and some others probably, see the full list [here](https://www.chikawara.xyz/commands)
 
 ## Run Locally
 
