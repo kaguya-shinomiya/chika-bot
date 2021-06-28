@@ -5,6 +5,7 @@ import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
 import { getCooldown, setCooldown } from '../../lib/cooldownManager';
 import { endOfToday, secToWordString } from '../../lib/time';
+import { stripIndents } from 'common-tags';
 
 const daily = new Command({
   name: 'daily',
@@ -20,8 +21,7 @@ const daily = new Command({
     if (cooldownDuration) {
       channel.send(
         lightErrorEmbed(
-          `You've already collected today's ribbons!
-          
+          stripIndents`You've already collected today's ribbons!
           Please wait ${secToWordString(
             cooldownDuration,
           )} before collecting again.`,

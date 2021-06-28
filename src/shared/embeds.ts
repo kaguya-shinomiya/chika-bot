@@ -54,7 +54,9 @@ export const sendInsufficientRibbons = (
 ) =>
   channel.send(
     lightErrorEmbed(
-      `You don't have enough ribbons! You need ${cost} ${ribbon_emoji}, but only have ${stock} ${ribbon_emoji}.`,
+      stripIndents`
+      You don't have enough ribbons!
+      You need **${cost}** ${ribbon_emoji}, but only have **${stock}** ${ribbon_emoji}.`,
     ),
   );
 
