@@ -97,7 +97,7 @@ export function handleHuggingFaceError(
   }
 }
 
-export function handleNoWebhookPermissionsError(
+export function handleWebhookAPIError(
   channel: GenericChannel,
   err: DiscordAPIError,
 ) {
@@ -111,6 +111,14 @@ export function handleNoWebhookPermissionsError(
       ),
     );
     return undefined;
+  }
+  if (err.code === 30007) {
+    // they maxed out the number of webhooks
+    channel.send(
+      lightErrorEmbed(stripIndents`
+    This channel has already hit the maximum number of webhooks.
+    I can't invite Kaguya to this channel...`),
+    );
   }
   console.error(err);
   return undefined;

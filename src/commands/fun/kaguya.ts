@@ -17,7 +17,7 @@ import {
   cacheResponse,
   genChatData,
   handleHuggingFaceError,
-  handleNoWebhookPermissionsError,
+  handleWebhookAPIError,
 } from './utils/chatbot';
 
 const kaguya = new Command({
@@ -36,7 +36,7 @@ const kaguya = new Command({
       hooks = await channel.fetchWebhooks();
     } catch (err) {
       // no webhook permissions, most likely
-      handleNoWebhookPermissionsError(channel, err);
+      handleWebhookAPIError(channel, err);
       return;
     }
 
@@ -50,12 +50,13 @@ const kaguya = new Command({
 
     if (!kaguya) {
       // try to create a webhook for Kaguya
+      // TODO: add error handling if the channel has already maxed out
       kaguya = await channel
         .createWebhook('Kaguya', {
           avatar: kaguya_pfp_png,
         })
         .catch((err: DiscordAPIError) => {
-          return handleNoWebhookPermissionsError(channel, err);
+          return handleWebhookAPIError(channel, err);
         });
     }
     // we couldn't create a webhook

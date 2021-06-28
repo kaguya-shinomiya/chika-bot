@@ -34,17 +34,16 @@ const top = new Command({
       take = _take;
     }
 
-    prisma
-      .getLocalTopRibbons(
-        guild.members.cache.map((member) => member.user),
-        take,
-      )
-      .then((res) =>
-        sendTop(channel, res, {
-          locale: guild.name,
-          thumbnail: guild.iconURL({ dynamic: true, size: 64 }),
-        }),
-      );
+    const guildMembers = (await guild.members.fetch()).map(
+      (member) => member.user,
+    );
+
+    prisma.getLocalTopRibbons(guildMembers, take).then((res) =>
+      sendTop(channel, res, {
+        locale: guild.name,
+        thumbnail: guild.iconURL({ dynamic: true, size: 128 }),
+      }),
+    );
   },
 });
 
