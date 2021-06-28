@@ -119,6 +119,7 @@ export function handleWebhookAPIError(
     This channel has already hit the maximum number of webhooks.
     I can't invite Kaguya to this channel...`),
     );
+    return undefined;
   }
   console.error(err);
   return undefined;
