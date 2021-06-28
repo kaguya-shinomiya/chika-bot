@@ -1,8 +1,10 @@
 ![](https://i.imgur.com/qNZOPv2.png)
 
-<img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fwww.chikawara.xyz">
-<img alt="GitHub" src="https://img.shields.io/github/license/shinomiya-corp/chika">
-<img alt="Code Climate maintainability" src="https://img.shields.io/codeclimate/maintainability/shinomiya-corp/chika-bot">
+<p>
+	<a href="https://www.chikawara.xyz"><img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fwww.chikawara.xyz"></a>
+	<a><img alt="GitHub" src="https://img.shields.io/github/license/shinomiya-corp/chika"></a>
+	<a href="https://github.com/shinomiya-corp/chika"><img alt="Code Climate maintainability" src="https://img.shields.io/codeclimate/maintainability/shinomiya-corp/chika-bot"></a>
+<p/>
 
 # discord.js bot for Chika
 
@@ -11,6 +13,7 @@ I strongly believe **Hayasaka is best girl**, so it puzzles myself why I chose C
 ## Features
 
 - 🎮 Games from the manga (Shiritori and Balloon(?))
+  - More are coming soon<sup>TM</sup>
 - 🎧 Simple music streaming
 - 🦜 An unintelligent AI chatbot for Kaguya and Chika
   - I don't know anything about ML but hey it kinda works
@@ -39,11 +42,11 @@ Build and run (requires node v14.16.1 for music to work, idk why lol)
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file.
+To run this project, you'll need to add the following environment variables to your .env file
 
-`APP_TOKEN`, `BOT_USER_ID` (from the Discord developer's portal)
+`APP_TOKEN`, `BOT_USER_ID` (from Discord's developer portal)
 
-`DATABASE_URL`, `REDISCLOUD_URL` (it's postgres)
+`DATABASE_URL`, `REDISCLOUD_URL` (postgres)
 
 `HUGGING_FACE_CHIKA`, `HUGGING_FACE_CHIKA_KEY`, `HUGGING_FACE_KAGUYA`, `HUGGING_FACE_KAGUYA_KEY` (from hosting the ML stuff on huggingface.co)
 
@@ -66,4 +69,4 @@ Here are some bruh moments
 
 ## Feedback
 
-If you have any feedback or spot bugs, please raise an issue on GitHub! Thanks for checking us out!
+If you have any feedback or spot bugs, please raise an issue on GitHub.
