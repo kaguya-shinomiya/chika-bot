@@ -7,6 +7,7 @@ import {
   User,
   Webhook,
 } from 'discord.js';
+import { userProvider } from '../../data/database/userProvider';
 import { prisma } from '../../data/prismaClient';
 import { forKaguyaInput, forKaguyaResponse } from '../../data/redisClient';
 import { kaguya_pfp_png } from '../../shared/assets';
@@ -66,7 +67,7 @@ const kaguya = new Command({
 
     const text = args.join(' ');
     const ribbonCost = text.length;
-    const ribbonStock = await prisma.getRibbons(author);
+    const ribbonStock = await userProvider.getRibbons(author);
     if (ribbonCost > ribbonStock) {
       sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
       return;

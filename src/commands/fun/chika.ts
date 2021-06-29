@@ -1,5 +1,6 @@
 import { CmdCategory } from '@prisma/client';
 import axios from 'axios';
+import { userProvider } from '../../data/database/userProvider';
 import { prisma } from '../../data/prismaClient';
 import { forChikaInput, forChikaResponse } from '../../data/redisClient';
 import { sendInsufficientRibbons } from '../../shared/embeds';
@@ -25,7 +26,7 @@ const chika = new Command({
     const text = args.join(' ');
 
     const ribbonCost = text.length;
-    const ribbonStock = await prisma.getRibbons(author);
+    const ribbonStock = await userProvider.getRibbons(author);
     if (ribbonCost > ribbonStock) {
       sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
       return;

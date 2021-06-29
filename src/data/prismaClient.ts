@@ -18,23 +18,23 @@ import {
 } from './redisClient';
 
 export class ChikaPrisma extends PrismaClient {
-  async getRibbons(user: User) {
-    const ping = await redis.get(forRibbons(user.id));
-    if (ping) {
-      redis.expire(forRibbons(user.id), 60);
-      return parseInt(ping, 10);
-    }
-    return this.user
-      .findUnique({
-        where: { userId: user.id },
-        select: { ribbons: true },
-      })
-      .then((res) => {
-        const ribbons = res?.ribbons || 0;
-        redis.set(forRibbons(user.id), ribbons, 'ex', 60);
-        return ribbons;
-      });
-  }
+  // async getRibbons(user: User) {
+  //   const ping = await redis.get(forRibbons(user.id));
+  //   if (ping) {
+  //     redis.expire(forRibbons(user.id), 60);
+  //     return parseInt(ping, 10);
+  //   }
+  //   return this.user
+  //     .findUnique({
+  //       where: { userId: user.id },
+  //       select: { ribbons: true },
+  //     })
+  //     .then((res) => {
+  //       const ribbons = res?.ribbons || 0;
+  //       redis.set(forRibbons(user.id), ribbons, 'ex', 60);
+  //       return ribbons;
+  //     });
+  // }
 
   async incrRibbons(user: User, incrby: number) {
     return this.user
