@@ -27,6 +27,17 @@ export class UserProvider {
         return ribbons;
       });
   }
+
+  async incrRibbons(user: User, incrby: number) {
+    if (incrby < 0) throw new Error('Got a negative value to increment.');
+    return this.prisma.user
+      .upsert({
+        where: { userId: user.id },
+        update: { ribbons: { increment: incrby } },
+        create: { userId: user.id, tag: user.tag, ribbons: incrby },
+      })
+      .then((_user) => redis.set(forRibbons(user.id), _user.ribbons, 'ex', 60));
+  }
 }
 
 export const userProvider = new UserProvider(prisma, redis);

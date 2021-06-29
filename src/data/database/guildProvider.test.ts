@@ -126,7 +126,7 @@ describe('#setPrefix', () => {
     test('inserts the guild', async () => {
       // ensure the guild does not exist
       const _guild = await prisma.guild.findUnique({ where: { guildId } });
-      expect(_guild).toBeNull;
+      expect(_guild).toBeNull();
 
       await guildProvider.setPrefix(guildId, 'p');
       const guild = await prisma.guild.findUnique({

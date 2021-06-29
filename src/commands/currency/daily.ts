@@ -1,7 +1,7 @@
 import { CmdCategory } from '@prisma/client';
 import { stripIndents } from 'common-tags';
 import ms from 'ms';
-import { prisma } from '../../data/prismaClient';
+import { userProvider } from '../../data/database/userProvider';
 import { getCooldown, setCooldown } from '../../lib/cooldownManager';
 import { endOfToday } from '../../lib/time';
 import { ribbon_emoji } from '../../shared/assets';
@@ -40,7 +40,7 @@ const daily = new Command({
     const cooldown = endOfToday() - nowStamp;
 
     setCooldown(author.id, this.name, cooldown);
-    prisma.incrRibbons(author, toAward);
+    userProvider.incrRibbons(author, toAward);
   },
 });
 

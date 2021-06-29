@@ -44,7 +44,7 @@ const give = new Command({
       return;
     }
 
-    prisma.incrRibbons(beneficiary, donation);
+    userProvider.incrRibbons(beneficiary, donation);
     prisma.decrRibbons(author, donation);
 
     channel.send(

@@ -36,15 +36,15 @@ export class ChikaPrisma extends PrismaClient {
   //     });
   // }
 
-  async incrRibbons(user: User, incrby: number) {
-    return this.user
-      .upsert({
-        where: { userId: user.id },
-        update: { ribbons: { increment: incrby } },
-        create: { userId: user.id, tag: user.tag, ribbons: incrby },
-      })
-      .then((_user) => redis.set(forRibbons(user.id), _user.ribbons, 'ex', 60));
-  }
+  // async incrRibbons(user: User, incrby: number) {
+  //   return this.user
+  //     .upsert({
+  //       where: { userId: user.id },
+  //       update: { ribbons: { increment: incrby } },
+  //       create: { userId: user.id, tag: user.tag, ribbons: incrby },
+  //     })
+  //     .then((_user) => redis.set(forRibbons(user.id), _user.ribbons, 'ex', 60));
+  // }
 
   async decrRibbons(user: User, decrby: number) {
     await this.$transaction([
