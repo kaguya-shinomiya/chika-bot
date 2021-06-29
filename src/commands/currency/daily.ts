@@ -1,11 +1,12 @@
 import { CmdCategory } from '@prisma/client';
+import { stripIndents } from 'common-tags';
+import ms from 'ms';
 import { prisma } from '../../data/prismaClient';
+import { getCooldown, setCooldown } from '../../lib/cooldownManager';
+import { endOfToday } from '../../lib/time';
 import { ribbon_emoji } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { getCooldown, setCooldown } from '../../lib/cooldownManager';
-import { endOfToday, secToWordString } from '../../lib/time';
-import { stripIndents } from 'common-tags';
 
 const daily = new Command({
   name: 'daily',
@@ -16,15 +17,13 @@ const daily = new Command({
   async execute(message) {
     const { author, channel } = message;
 
-    const cooldownDuration = await getCooldown(author.id, this.name);
+    const pttl = await getCooldown(author.id, this.name);
 
-    if (cooldownDuration) {
+    if (pttl) {
       channel.send(
         lightErrorEmbed(
           stripIndents`You've already collected today's ribbons!
-          Please wait ${secToWordString(
-            cooldownDuration,
-          )} before collecting again.`,
+          Please wait **${ms(pttl)}** before collecting again.`,
         ),
       );
       return;
