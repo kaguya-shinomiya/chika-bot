@@ -199,10 +199,7 @@ export const sendSearchResults = (
       .setTitle('I found these tracks:')
       .setDescription(toListString(urlTitles))
       .setThumbnail(chika_detective_png)
-      .addField(
-        '\u200b',
-        "Send me the track's number and I'll add it to the queue!",
-      ),
+      .setFooter("Send me the track's number and I'll add it to the queue!"),
   );
 };
 
