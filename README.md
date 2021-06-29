@@ -47,7 +47,7 @@ To run this project, you'll need to add the following environment variables to y
 
 `APP_TOKEN`, `BOT_USER_ID` (from Discord's developer portal)
 
-`DATABASE_URL`, `REDISCLOUD_URL` (postgres)
+`DATABASE_URL`, `REDISCLOUD_URL` (pointing to a postgres and redis instance)
 
 `HUGGING_FACE_CHIKA`, `HUGGING_FACE_CHIKA_KEY`, `HUGGING_FACE_KAGUYA`, `HUGGING_FACE_KAGUYA_KEY` (from hosting the ML stuff on huggingface.co)
 

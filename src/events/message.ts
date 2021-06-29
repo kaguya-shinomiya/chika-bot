@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { prisma } from '../data/prismaClient';
+import { guildProvider } from '../data/database/guildProvider';
 import { validateArgsCount } from '../lib/validateArgsCount';
 import { isOnCooldown } from '../lib/validateCooldowns';
 import { DEFAULT_PREFIX } from '../shared/constants';
@@ -20,7 +20,7 @@ const message: Event = {
     // check prefix
     let prefix = DEFAULT_PREFIX;
     if (guild) {
-      prefix = (await prisma.getPrefix(guild.id)) || DEFAULT_PREFIX;
+      prefix = await guildProvider.getPrefix(guild.id);
     }
     const prefixRe = new RegExp(`^${prefix}`, 'i');
     if (!prefixRe.test(content)) return;

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import type { Snowflake, User } from 'discord.js';
+import type { User } from 'discord.js';
 import {
   DEFAULT_MAX_BALLOON,
   DEFAULT_MIN_BALLOON,
@@ -11,41 +11,13 @@ import {
 import {
   forBalloonMax,
   forBalloonMin,
-  forPrefix,
   forRibbons,
   forShiritoriHand,
   forShiritoriMinLen,
   redis,
 } from './redisClient';
 
-class ChikaPrisma extends PrismaClient {
-  async getPrefix(guildId: Snowflake) {
-    const ping = await redis.get(forPrefix(guildId));
-    if (ping) {
-      redis.expire(forPrefix(guildId), 60);
-      return ping;
-    }
-    return this.guild
-      .findUnique({
-        where: { guildId },
-        select: { prefix: true },
-      })
-      .then((res) => {
-        if (!res?.prefix) return null;
-        redis.set(forPrefix(guildId), res.prefix, 'ex', 60);
-        return res.prefix;
-      });
-  }
-
-  async setPrefix(guildId: Snowflake, prefix: string) {
-    redis.set(forPrefix(guildId), prefix, 'ex', 60);
-    await this.guild.upsert({
-      create: { guildId, prefix },
-      update: { prefix },
-      where: { guildId },
-    });
-  }
-
+export class ChikaPrisma extends PrismaClient {
   async getRibbons(user: User) {
     const ping = await redis.get(forRibbons(user.id));
     if (ping) {
