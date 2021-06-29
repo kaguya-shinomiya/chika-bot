@@ -21,3 +21,4 @@ export const forChikaResponse = (key: KeyType) => `chika:response:${key}`;
 export const forKaguyaInput = (key: KeyType) => `kaguya:input:${key}`;
 export const forKaguyaResponse = (key: KeyType) => `kaguya:response:${key}`;
 export const forCooldown = (key: KeyType) => `cooldown:${key}`;
+export const blogKey = 'blog';

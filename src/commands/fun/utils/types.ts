@@ -8,4 +8,10 @@ interface ChatbotInput {
 
 type ChatbotChar = 'ck' | 'ka';
 
-export type { ChatbotInput, ChatbotChar };
+interface IBlogPost {
+  author: string; // Discord tag
+  time: number; // unix timestamp
+  message: string;
+}
+
+export type { ChatbotInput, ChatbotChar, IBlogPost };
