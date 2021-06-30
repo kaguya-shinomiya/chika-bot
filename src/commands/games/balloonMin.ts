@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { prisma } from '../../data/prismaClient';
+import { balloonProvider } from '../../data/database/balloonProvider';
 import {
   baseEmbed,
   lightErrorEmbed,
@@ -23,7 +23,7 @@ const balloonMin = new Command({
     }
     const [_newMin] = args;
     if (!_newMin) {
-      const currMin = await prisma.getBalloonMin(guild.id);
+      const currMin = await balloonProvider.getBalloonMin(guild.id);
       channel.send(
         baseEmbed().setDescription(`Current min volume: **${currMin}**`),
       );
@@ -34,7 +34,7 @@ const balloonMin = new Command({
       channel.send(lightErrorEmbed(`Please give me a valid number!`));
       return;
     }
-    const currMax = await prisma.getBalloonMax(guild.id);
+    const currMax = await balloonProvider.getBalloonMax(guild.id);
     if (newMin > currMax) {
       channel.send(
         lightErrorEmbed(
@@ -51,7 +51,7 @@ const balloonMin = new Command({
       );
       return;
     }
-    await prisma.setBalloonMin(newMin, guild.id);
+    await balloonProvider.setBalloonMin(newMin, guild.id);
     channel.send(
       baseEmbed().setDescription(
         `The minimum balloon volume has been set to **${newMin}**!

@@ -12,6 +12,11 @@ const userProvider = new UserProvider(prisma, mockRedis);
 const mockUserProps = { id: '1', tag: '#1' };
 const mockUser = { ...mock<User>(), ...mockUserProps };
 
+afterAll(async () => {
+  await prisma.user.deleteMany();
+  await prisma.$disconnect();
+});
+
 describe('#getRibbons', () => {
   const findUnique = jest.spyOn(prisma.user, 'findUnique');
 
@@ -101,7 +106,9 @@ describe('#incrRibbons', () => {
   });
 
   test('should try an error if a negative incrby is given', () => {
-    expect(userProvider.incrRibbons(mockUser as any, -10)).rejects.toThrow();
+    return expect(
+      userProvider.incrRibbons(mockUser as any, -10),
+    ).rejects.toThrow();
   });
   test('should cache the value from db', async () => {
     const upsert = jest.spyOn(prisma.user, 'upsert');
@@ -245,6 +252,10 @@ describe('#getTopRibbonsForUsers', () => {
         { userId: '3', tag: '#3', ribbons: 3 },
       ],
     });
+  });
+
+  afterAll(async () => {
+    await prisma.user.deleteMany();
   });
 
   test('returns in right order', async () => {
