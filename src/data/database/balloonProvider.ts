@@ -17,7 +17,7 @@ export class BalloonProvider {
     private readonly redis: Redis,
   ) {}
 
-  async setBalloonMin(minVol: number, guildId: string) {
+  async setMin(minVol: number, guildId: string) {
     // validation to be done in app code
     if (minVol < 0) throw new Error('Received negative volume.');
     await this.prisma.guild
@@ -40,7 +40,7 @@ export class BalloonProvider {
       });
   }
 
-  async getBalloonMin(guildId: string) {
+  async getMin(guildId: string) {
     const ping = await this.redis.get(forBalloonMin(guildId));
     if (ping) {
       this.redis.expire(forBalloonMin(guildId), 60);
@@ -58,7 +58,7 @@ export class BalloonProvider {
       });
   }
 
-  async setBalloonMax(maxVol: number, guildId: string) {
+  async setMax(maxVol: number, guildId: string) {
     // validation to be done in app code
     if (maxVol < 0) throw new Error('Received negative volume.');
     await this.prisma.guild
@@ -81,7 +81,7 @@ export class BalloonProvider {
       });
   }
 
-  async getBalloonMax(guildId: string) {
+  async getMax(guildId: string) {
     const ping = await this.redis.get(forBalloonMax(guildId));
     if (ping) {
       this.redis.expire(forBalloonMax(guildId), 60);

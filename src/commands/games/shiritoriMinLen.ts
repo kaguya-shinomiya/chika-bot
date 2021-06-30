@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { prisma } from '../../data/prismaClient';
+import { shiritoriProvider } from '../../data/database/shiritoriProvider';
 import {
   baseEmbed,
   lightErrorEmbed,
@@ -23,7 +23,7 @@ const shiritoriMinLen = new Command({
 
     const [_newMin] = args;
     if (!_newMin) {
-      const currMin = await prisma.getShiritoriMinLen(guild.id);
+      const currMin = await shiritoriProvider.getMinLen(guild.id);
       channel.send(
         baseEmbed().setDescription(`Current min word length: **${currMin}**`),
       );
@@ -39,7 +39,7 @@ const shiritoriMinLen = new Command({
       channel.send(lightErrorEmbed(`Bruh.`));
       return;
     }
-    await prisma.setShiritoriMinLen(guild.id, newMin);
+    await shiritoriProvider.setMinLen(guild.id, newMin);
     channel.send(
       baseEmbed().setDescription(
         `The minimum word length for Shiritori has been set to **${newMin}**!

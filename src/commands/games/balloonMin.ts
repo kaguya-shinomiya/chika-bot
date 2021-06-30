@@ -23,7 +23,7 @@ const balloonMin = new Command({
     }
     const [_newMin] = args;
     if (!_newMin) {
-      const currMin = await balloonProvider.getBalloonMin(guild.id);
+      const currMin = await balloonProvider.getMin(guild.id);
       channel.send(
         baseEmbed().setDescription(`Current min volume: **${currMin}**`),
       );
@@ -34,7 +34,7 @@ const balloonMin = new Command({
       channel.send(lightErrorEmbed(`Please give me a valid number!`));
       return;
     }
-    const currMax = await balloonProvider.getBalloonMax(guild.id);
+    const currMax = await balloonProvider.getMax(guild.id);
     if (newMin > currMax) {
       channel.send(
         lightErrorEmbed(
@@ -51,7 +51,7 @@ const balloonMin = new Command({
       );
       return;
     }
-    await balloonProvider.setBalloonMin(newMin, guild.id);
+    await balloonProvider.setMin(newMin, guild.id);
     channel.send(
       baseEmbed().setDescription(
         `The minimum balloon volume has been set to **${newMin}**!

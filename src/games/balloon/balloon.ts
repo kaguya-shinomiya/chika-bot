@@ -43,8 +43,8 @@ export class Balloon extends Game {
     meta: { channel: GenericChannel; guild: Guild; client: Client },
   ) {
     const { channel, client, guild } = meta;
-    const max = await balloonProvider.getBalloonMax(guild.id);
-    const min = await balloonProvider.getBalloonMin(guild.id);
+    const max = await balloonProvider.getMax(guild.id);
+    const min = await balloonProvider.getMin(guild.id);
     const tolerance = Math.floor(Math.random() * (max - min) + min);
     const initState: BalloonState = {
       gameTitle: this.title,

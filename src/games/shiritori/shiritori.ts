@@ -1,6 +1,6 @@
 import type { Message, Snowflake, User } from 'discord.js';
 import { Collection } from 'discord.js';
-import { prisma } from '../../data/prismaClient';
+import { shiritoriProvider } from '../../data/database/shiritoriProvider';
 import { shiritori_rules_jpg } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { BlockingLevel } from '../../types/blockingLevel';
@@ -65,14 +65,14 @@ export class Shiritori extends Game {
 
   async startGame(message: Message, { p1, p2 }: startShiritoriParams) {
     const { channel, client, guild } = message;
-    const size = await prisma.getShiritoriHandSize(guild!.id);
+    const size = await shiritoriProvider.getHandSize(guild!.id);
     const { p1Cards, p2Cards, startingChar } = genInitialCards(size);
 
     const cards = new Collection<Snowflake, string[]>();
     cards.set(p1.id, p1Cards);
     cards.set(p2.id, p2Cards);
 
-    const minLen = await prisma.getShiritoriMinLen(message.guild?.id);
+    const minLen = await shiritoriProvider.getMinLen(message.guild?.id);
 
     const initState: ShiritoriState = {
       gameTitle: 'shiritori',
