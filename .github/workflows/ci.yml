@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14.16.1
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.16.1'
+
+      - run: yarn # install dependencies
+
+      - run: yarn docker:up # set up services in docker-compose
+
+      - run: yarn build:dev
+
+      - run: yarn test
+        env:
+          REDISCLOUD_URL: 'redis://127.0.0.1:6379'
+          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/chikav1?schema=public'

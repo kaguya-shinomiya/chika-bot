@@ -58,6 +58,7 @@
   "scripts": {
     "start": "pm2-runtime start ecosystem.config.js --env production",
     "build": "tsc && prisma migrate deploy",
+    "build:dev": "tsc",
     "docker:up": "docker-compose up -d && yarn db:push",
     "docker:down": "docker-compose down",
     "watch": "tsc -w",
