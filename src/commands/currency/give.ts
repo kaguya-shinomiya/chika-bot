@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { userProvider } from '../../data/database/userProvider';
+import { userProvider } from '../../data/providers/userProvider';
 import { groupNum } from '../../lib/typography';
 import { ribbon_emoji } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';

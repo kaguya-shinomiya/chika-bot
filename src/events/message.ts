@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { guildProvider } from '../data/database/guildProvider';
+import { guildProvider } from '../data/providers/guildProvider';
 import { validateArgsCount } from '../lib/validateArgsCount';
 import { isOnCooldown } from '../lib/validateCooldowns';
 import { DEFAULT_PREFIX } from '../shared/constants';

@@ -1,6 +1,6 @@
 import { CmdCategory } from '@prisma/client';
 import axios from 'axios';
-import { userProvider } from '../../data/database/userProvider';
+import { userProvider } from '../../data/providers/userProvider';
 import { forChikaInput, forChikaResponse } from '../../data/redisClient';
 import { sendInsufficientRibbons } from '../../shared/embeds';
 import { Command } from '../../types/command';

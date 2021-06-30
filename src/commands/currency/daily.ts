@@ -1,7 +1,7 @@
 import { CmdCategory } from '@prisma/client';
 import { stripIndents } from 'common-tags';
 import ms from 'ms';
-import { userProvider } from '../../data/database/userProvider';
+import { userProvider } from '../../data/providers/userProvider';
 import { getCooldown, setCooldown } from '../../lib/cooldownManager';
 import { endOfToday } from '../../lib/time';
 import { ribbon_emoji } from '../../shared/assets';

@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { userProvider } from '../../data/database/userProvider';
+import { userProvider } from '../../data/providers/userProvider';
 import { genericErrorEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
 import { MAX_TAKE } from './utils/defaults';

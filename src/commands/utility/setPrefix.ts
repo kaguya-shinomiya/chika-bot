@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { guildProvider } from '../../data/database/guildProvider';
+import { guildProvider } from '../../data/providers/guildProvider';
 import { isAdmin } from '../../lib/validateMessages';
 import { baseEmbed, sendNotInGuild } from '../../shared/embeds';
 import { Command } from '../../types/command';

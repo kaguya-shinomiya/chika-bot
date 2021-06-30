@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { shiritoriProvider } from '../../data/database/shiritoriProvider';
+import { shiritoriProvider } from '../../data/providers/shiritoriProvider';
 import {
   baseEmbed,
   lightErrorEmbed,

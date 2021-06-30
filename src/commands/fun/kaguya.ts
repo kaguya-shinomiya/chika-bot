@@ -7,7 +7,7 @@ import {
   User,
   Webhook,
 } from 'discord.js';
-import { userProvider } from '../../data/database/userProvider';
+import { userProvider } from '../../data/providers/userProvider';
 import { forKaguyaInput, forKaguyaResponse } from '../../data/redisClient';
 import { kaguya_pfp_png } from '../../shared/assets';
 import { sendInsufficientRibbons } from '../../shared/embeds';

@@ -1,6 +1,6 @@
 import type { Message, Snowflake, User } from 'discord.js';
 import { Collection } from 'discord.js';
-import { shiritoriProvider } from '../../data/database/shiritoriProvider';
+import { shiritoriProvider } from '../../data/providers/shiritoriProvider';
 import { shiritori_rules_jpg } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { BlockingLevel } from '../../types/blockingLevel';

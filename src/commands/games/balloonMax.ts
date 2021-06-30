@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { balloonProvider } from '../../data/database/balloonProvider';
+import { balloonProvider } from '../../data/providers/balloonProvider';
 import {
   baseEmbed,
   lightErrorEmbed,

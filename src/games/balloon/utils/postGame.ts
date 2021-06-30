@@ -1,6 +1,6 @@
 import { Collection, Message, User } from 'discord.js';
 import _ from 'lodash';
-import { userProvider } from '../../../data/database/userProvider';
+import { userProvider } from '../../../data/providers/userProvider';
 import { prisma } from '../../../data/prismaClient';
 import { forRibbons, redis } from '../../../data/redisClient';
 import { sendPopped } from './embeds';

@@ -1,5 +1,5 @@
 import type { Client, Collection, Guild, Message, User } from 'discord.js';
-import { balloonProvider } from '../../data/database/balloonProvider';
+import { balloonProvider } from '../../data/providers/balloonProvider';
 import { balloon_rules_jpg, ribbon_emoji } from '../../shared/assets';
 import { baseEmbed } from '../../shared/embeds';
 import { BlockingLevel } from '../../types/blockingLevel';
