@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { prisma } from '../../data/prismaClient';
+import { userProvider } from '../../data/database/userProvider';
 import { genericErrorEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
 import { MAX_TAKE } from './utils/defaults';
@@ -28,7 +28,7 @@ const globalTop = new Command({
       }
       take = _take;
     }
-    const top = await prisma.getGlobalTopRibbons(take);
+    const top = await userProvider.getGlobalTopRibbons(take);
     if (!top) {
       channel.send(genericErrorEmbed());
       return;

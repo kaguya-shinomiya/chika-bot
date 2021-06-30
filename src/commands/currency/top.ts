@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { prisma } from '../../data/prismaClient';
+import { userProvider } from '../../data/database/userProvider';
 import { lightErrorEmbed, sendNotInGuild } from '../../shared/embeds';
 import { Command } from '../../types/command';
 import { MAX_TAKE } from './utils/defaults';
@@ -38,7 +38,7 @@ const top = new Command({
       (member) => member.user,
     );
 
-    prisma.getLocalTopRibbons(guildMembers, take).then((res) =>
+    userProvider.getTopRibbonsForUsers(guildMembers, take).then((res) =>
       sendTop(channel, res, {
         locale: guild.name,
         thumbnail: guild.iconURL({ dynamic: true, size: 128 }),

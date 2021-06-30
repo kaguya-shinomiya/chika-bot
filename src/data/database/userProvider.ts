@@ -65,6 +65,24 @@ export class UserProvider {
         this.redis.set(forRibbons(user.id), ribbons, 'ex', 60);
       });
   }
+
+  async getGlobalTopRibbons(take = 10) {
+    return this.prisma.user.findMany({
+      take,
+      orderBy: { ribbons: 'desc' },
+      select: { tag: true, ribbons: true },
+    });
+  }
+
+  async getTopRibbonsForUsers(members: User[], take = 10) {
+    const IDs = members.map((member) => member.id);
+    return this.prisma.user.findMany({
+      take,
+      select: { ribbons: true, tag: true },
+      where: { userId: { in: IDs } },
+      orderBy: { ribbons: 'desc' },
+    });
+  }
 }
 
 export const userProvider = new UserProvider(prismaClient, redisClient);
