@@ -32,4 +32,9 @@ jobs:
         run: yarn build:dev
 
       - name: Test
-        run: yarn test
+        run: yarn test:ci
+
+      - name: Upload report to codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}

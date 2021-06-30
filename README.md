@@ -1,9 +1,10 @@
 ![](https://i.imgur.com/qNZOPv2.png)
 
 <p>
+  <a><img alt="ci" src="https://github.com/shinomiya-corp/chika/actions/workflows/ci.yml/badge.svg"/></a>
 	<a href="https://www.chikawara.xyz"><img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fwww.chikawara.xyz"></a>
+	<a href="https://codeclimate.com/github/shinomiya-corp/chika-bot/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8793d37cbbbde8f1e96/maintainability" /></a>
 	<a><img alt="GitHub" src="https://img.shields.io/github/license/shinomiya-corp/chika"></a>
-	<a href="https://github.com/shinomiya-corp/chika"><img alt="Code Climate maintainability" src="https://img.shields.io/codeclimate/maintainability/shinomiya-corp/chika-bot"></a>
   <a href="https://discord.com/api/oauth2/authorize?client_id=843481025459519528&permissions=540018688&scope=bot"><img alt="Invite" src="https://img.shields.io/static/v1?logo=discord&label=invite&message=Chika&color=f2d5da"></a>
 <p/>
 
