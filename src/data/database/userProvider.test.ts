@@ -131,3 +131,71 @@ describe('#incrRibbons', () => {
     });
   });
 });
+
+describe('#decrRibbons', () => {
+  afterEach(async () => {
+    await prisma.user.deleteMany();
+  });
+
+  test('caches to redis with 60 seconds ttl', async () => {
+    const $transaction = jest.spyOn(prisma, '$transaction');
+    $transaction.mockResolvedValueOnce([1, { ribbons: 10 }]);
+    await userProvider.decrRibbons(user as any, 10);
+    expect(mockRedis.set).toBeCalledWith(forRibbons(user.id), 10, 'ex', 60);
+    $transaction.mockRestore();
+  });
+
+  describe('a negative decrby is given', () => {
+    test('throws an error', () => {
+      expect(userProvider.decrRibbons(user as any, -1)).rejects.toThrow();
+    });
+  });
+
+  describe('decrby more than current stock', () => {
+    beforeEach(async () => {
+      await prisma.user.create({
+        data: { userId: user.id, tag: user.tag, ribbons: 10 },
+      });
+    });
+    test('sets to zero', async () => {
+      await userProvider.decrRibbons(user as any, 20);
+      const res = await prisma.user.findUnique({
+        where: { userId: user.id },
+        select: { ribbons: true },
+      });
+      expect(res?.ribbons).toBe(0);
+    });
+  });
+
+  describe('decrby less than current stock', () => {
+    beforeEach(async () => {
+      await prisma.user.create({
+        data: { userId: user.id, tag: user.tag, ribbons: 10 },
+      });
+    });
+    test('decreases correctly', async () => {
+      await userProvider.decrRibbons(user as any, 5);
+      const res = await prisma.user.findUnique({
+        where: { userId: user.id },
+        select: { ribbons: true },
+      });
+      expect(res?.ribbons).toBe(5);
+    });
+  });
+
+  describe('user does not exist', () => {
+    test('should create the user with 0 ribbons', async () => {
+      const _user = await prisma.user.findUnique({
+        where: { userId: user.id },
+      });
+      expect(_user).toBeNull(); // check that its not in the db
+
+      await userProvider.decrRibbons(user as any, 10);
+      const res = await prisma.user.findUnique({
+        where: { userId: user.id },
+        select: { ribbons: true },
+      });
+      expect(res?.ribbons).toBe(0);
+    });
+  });
+});

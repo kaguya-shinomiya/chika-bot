@@ -37,5 +37,5 @@ export const postGameBalloon = async (
       ),
     );
 
-  prisma.decrRibbons(popper, winAmt * winners.size);
+  userProvider.decrRibbons(popper, winAmt * winners.size);
 };

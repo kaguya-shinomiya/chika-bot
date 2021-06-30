@@ -11,7 +11,6 @@ import {
 import {
   forBalloonMax,
   forBalloonMin,
-  forRibbons,
   forShiritoriHand,
   forShiritoriMinLen,
   redis,
@@ -46,27 +45,27 @@ export class ChikaPrisma extends PrismaClient {
   //     .then((_user) => redis.set(forRibbons(user.id), _user.ribbons, 'ex', 60));
   // }
 
-  async decrRibbons(user: User, decrby: number) {
-    await this.$transaction([
-      this.$executeRaw<number>`
-        INSERT INTO "User" ("userId", tag, ribbons)
-        VALUES (${user.id}, ${user.tag}, ${0})
-        ON CONFLICT ("userId") DO UPDATE
-        SET ribbons =
-          CASE
-            WHEN "User".ribbons < ${decrby} THEN ${0}
-            ELSE "User".ribbons - ${decrby}
-          END;`,
-      this.user.findUnique({
-        where: { userId: user.id },
-        select: { ribbons: true },
-      }),
-    ]).then((_res) => {
-      const [, res] = _res;
-      const ribbons = res?.ribbons || 0;
-      redis.set(forRibbons(user.id), ribbons, 'ex', 60);
-    });
-  }
+  // async decrRibbons(user: User, decrby: number) {
+  //   await this.$transaction([
+  //     this.$executeRaw<number>`
+  //       INSERT INTO "User" ("userId", tag, ribbons)
+  //       VALUES (${user.id}, ${user.tag}, ${0})
+  //       ON CONFLICT ("userId") DO UPDATE
+  //       SET ribbons =
+  //         CASE
+  //           WHEN "User".ribbons < ${decrby} THEN ${0}
+  //           ELSE "User".ribbons - ${decrby}
+  //         END;`,
+  //     this.user.findUnique({
+  //       where: { userId: user.id },
+  //       select: { ribbons: true },
+  //     }),
+  //   ]).then((_res) => {
+  //     const [, res] = _res;
+  //     const ribbons = res?.ribbons || 0;
+  //     redis.set(forRibbons(user.id), ribbons, 'ex', 60);
+  //   });
+  // }
 
   async getGlobalTopRibbons(take = 10) {
     return this.user.findMany({

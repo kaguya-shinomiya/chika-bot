@@ -1,8 +1,8 @@
 import { PrismaClient } from '.prisma/client';
 import type { User } from 'discord.js';
 import { Redis } from 'ioredis';
-import { prisma } from '../prismaClient';
-import { forRibbons, redis } from '../redisClient';
+import { prisma as prismaClient } from '../prismaClient';
+import { forRibbons, redis as redisClient } from '../redisClient';
 
 export class UserProvider {
   constructor(
@@ -36,8 +36,35 @@ export class UserProvider {
         update: { ribbons: { increment: incrby } },
         create: { userId: user.id, tag: user.tag, ribbons: incrby },
       })
-      .then((_user) => redis.set(forRibbons(user.id), _user.ribbons, 'ex', 60));
+      .then((_user) =>
+        this.redis.set(forRibbons(user.id), _user.ribbons, 'ex', 60),
+      );
+  }
+
+  async decrRibbons(user: User, decrby: number) {
+    if (decrby < 0) throw new Error('Received negative decrby value.');
+    await this.prisma
+      .$transaction([
+        this.prisma.$executeRaw<number>`
+        INSERT INTO "User" ("userId", tag, ribbons)
+        VALUES (${user.id}, ${user.tag}, ${0})
+        ON CONFLICT ("userId") DO UPDATE
+        SET ribbons =
+          CASE
+            WHEN "User".ribbons < ${decrby} THEN ${0}
+            ELSE "User".ribbons - ${decrby}
+          END;`,
+        this.prisma.user.findUnique({
+          where: { userId: user.id },
+          select: { ribbons: true },
+        }),
+      ])
+      .then((_res) => {
+        const [, res] = _res;
+        const ribbons = res?.ribbons || 0;
+        this.redis.set(forRibbons(user.id), ribbons, 'ex', 60);
+      });
   }
 }
 
-export const userProvider = new UserProvider(prisma, redis);
+export const userProvider = new UserProvider(prismaClient, redisClient);

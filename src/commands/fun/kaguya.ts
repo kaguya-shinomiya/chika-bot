@@ -8,7 +8,6 @@ import {
   Webhook,
 } from 'discord.js';
 import { userProvider } from '../../data/database/userProvider';
-import { prisma } from '../../data/prismaClient';
 import { forKaguyaInput, forKaguyaResponse } from '../../data/redisClient';
 import { kaguya_pfp_png } from '../../shared/assets';
 import { sendInsufficientRibbons } from '../../shared/embeds';
@@ -92,7 +91,7 @@ const kaguya = new Command({
         cacheInput(channel.id, text, forKaguyaInput);
         cacheResponse(channel.id, reply, forKaguyaResponse);
 
-        prisma.decrRibbons(author, ribbonCost);
+        userProvider.decrRibbons(author, ribbonCost);
       })
       .catch((err) => {
         handleHuggingFaceError(kaguya!, err, 'ka', text);

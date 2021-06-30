@@ -1,6 +1,5 @@
 import { CmdCategory } from '@prisma/client';
 import { userProvider } from '../../data/database/userProvider';
-import { prisma } from '../../data/prismaClient';
 import { groupNum } from '../../lib/typography';
 import { ribbon_emoji } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
@@ -45,7 +44,7 @@ const give = new Command({
     }
 
     userProvider.incrRibbons(beneficiary, donation);
-    prisma.decrRibbons(author, donation);
+    userProvider.decrRibbons(author, donation);
 
     channel.send(
       baseEmbed().setDescription(
