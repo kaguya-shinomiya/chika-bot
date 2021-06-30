@@ -7,7 +7,11 @@ on:
     branches: [dev]
 
 jobs:
-  build:
+  build-and-test:
+    env:
+      REDISCLOUD_URL: 'redis://127.0.0.1:6379'
+      DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/chikav1?schema=public'
+
     runs-on: ubuntu-latest
 
     steps:
@@ -18,13 +22,14 @@ jobs:
         with:
           node-version: '14.16.1'
 
-      - run: yarn # install dependencies
+      - name: Install dependencies
+        run: yarn
 
-      - run: yarn docker:up # set up services in docker-compose
+      - name: Set up databases
+        run: yarn docker:up
 
-      - run: yarn build:dev
+      - name: Build
+        run: yarn build:dev
 
-      - run: yarn test
-        env:
-          REDISCLOUD_URL: 'redis://127.0.0.1:6379'
-          DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/chikav1?schema=public'
+      - name: Test
+        run: yarn test
