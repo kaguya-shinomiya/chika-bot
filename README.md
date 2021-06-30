@@ -2,15 +2,16 @@
 
 <p>
   <a><img alt="ci" src="https://github.com/shinomiya-corp/chika/actions/workflows/ci.yml/badge.svg"/></a>
-	<a href="https://www.chikawara.xyz"><img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fwww.chikawara.xyz"></a>
-	<a href="https://codeclimate.com/github/shinomiya-corp/chika-bot/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8793d37cbbbde8f1e96/maintainability" /></a>
-	<a><img alt="GitHub" src="https://img.shields.io/github/license/shinomiya-corp/chika"></a>
+  <a href="https://codecov.io/gh/shinomiya-corp/chika"> <img src="https://codecov.io/gh/shinomiya-corp/chika/branch/dev/graph/badge.svg?token=F09KC3VESU"/> </a>
+  <a href="https://codeclimate.com/github/shinomiya-corp/chika-bot/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8793d37cbbbde8f1e96/maintainability" /></a>
+  <a href="https://www.chikawara.xyz"><img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fwww.chikawara.xyz"></a>
+  <a><img alt="GitHub" src="https://img.shields.io/github/license/shinomiya-corp/chika"></a>
   <a href="https://discord.com/api/oauth2/authorize?client_id=843481025459519528&permissions=540018688&scope=bot"><img alt="Invite" src="https://img.shields.io/static/v1?logo=discord&label=invite&message=Chika&color=f2d5da"></a>
 <p/>
 
 # discord.js bot for Chika
 
-I strongly believe **Hayasaka is best girl**, so it puzzles myself why I chose Chika as a template for the bot. But we've gone too far to turn back now.
+I strongly believe Hayasaka is best girl, so it puzzles myself why I chose Chika as a template for the bot. But we've gone too far to turn back now.
 
 ## Features
 
@@ -58,6 +59,7 @@ To run this project, you'll need to add the following environment variables to y
 
 - Web dashboard in NextJS
 - Integrate [uwu](https://github.com/Daniel-Liu-c0deb0t/uwu) into a command
+- Write moar tests
 
 ## Screenshots
 
