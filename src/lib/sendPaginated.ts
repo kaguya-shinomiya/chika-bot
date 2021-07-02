@@ -62,5 +62,7 @@ export const sendPaginated = (
 };
 
 function footer(curr: number, total: number) {
-  return `${curr}/${total}  •  ${dayjs().format('ddd h:ma')}`;
+  return `${curr}/${total}  •  ${dayjs().format(
+    'ddd h:ma',
+  )}, Chika Standard Time`;
 }
