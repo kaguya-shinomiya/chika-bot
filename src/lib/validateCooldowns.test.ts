@@ -1,9 +1,14 @@
 import { Message, TextChannel } from 'discord.js';
 import { mock } from 'jest-mock-extended';
+import { redis } from '../data/redisClient';
 import { Command } from '../types/command';
 import * as cooldownManager from './cooldownManager';
 import { isOnCooldown } from './validateCooldowns';
 jest.mock('../data/redisClient');
+
+afterAll(() => {
+  return redis.quit();
+});
 
 describe('#isOnCooldown', () => {
   const mockMessage = mock<Message>();

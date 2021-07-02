@@ -17,7 +17,7 @@ const ping = new Command({
         `Yo ${author.username}, Love Detective Chika here!`,
       ),
     );
-    redis.ping();
+    redis.ping().catch((err) => console.error(err));
   },
 });
 

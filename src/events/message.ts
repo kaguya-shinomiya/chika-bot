@@ -1,5 +1,5 @@
 import { Message } from 'discord.js';
-import { prisma } from '../data/prismaClient';
+import { guildProvider } from '../data/providers/guildProvider';
 import { validateArgsCount } from '../lib/validateArgsCount';
 import { isOnCooldown } from '../lib/validateCooldowns';
 import { DEFAULT_PREFIX } from '../shared/constants';
@@ -17,13 +17,15 @@ const message: Event = {
     const { guild, content, author, channel } = message;
     if (author.bot) return;
 
+    // check prefix
     let prefix = DEFAULT_PREFIX;
     if (guild) {
-      prefix = (await prisma.getPrefix(guild.id)) || DEFAULT_PREFIX;
+      prefix = await guildProvider.getPrefix(guild.id);
     }
     const prefixRe = new RegExp(`^${prefix}`, 'i');
     if (!prefixRe.test(content)) return;
 
+    // check command
     const args = content.split(/ +/);
     const sentCommand = args.shift()?.toLowerCase().replace(prefix, '');
     if (!sentCommand) return;
@@ -37,6 +39,7 @@ const message: Event = {
       return;
     }
 
+    // check argument count
     if (!validateArgsCount(command, args, channel)) return;
 
     if (await isOnCooldown(message, command)) return;

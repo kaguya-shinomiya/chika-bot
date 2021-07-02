@@ -7,7 +7,7 @@ import {
   User,
   Webhook,
 } from 'discord.js';
-import { prisma } from '../../data/prismaClient';
+import { userProvider } from '../../data/providers/userProvider';
 import { forKaguyaInput, forKaguyaResponse } from '../../data/redisClient';
 import { kaguya_pfp_png } from '../../shared/assets';
 import { sendInsufficientRibbons } from '../../shared/embeds';
@@ -66,7 +66,7 @@ const kaguya = new Command({
 
     const text = args.join(' ');
     const ribbonCost = text.length;
-    const ribbonStock = await prisma.getRibbons(author);
+    const ribbonStock = await userProvider.getRibbons(author);
     if (ribbonCost > ribbonStock) {
       sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
       return;
@@ -91,7 +91,7 @@ const kaguya = new Command({
         cacheInput(channel.id, text, forKaguyaInput);
         cacheResponse(channel.id, reply, forKaguyaResponse);
 
-        prisma.decrRibbons(author, ribbonCost);
+        userProvider.decrRibbons(author, ribbonCost);
       })
       .catch((err) => {
         handleHuggingFaceError(kaguya!, err, 'ka', text);

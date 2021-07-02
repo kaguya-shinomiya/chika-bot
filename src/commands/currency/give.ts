@@ -1,9 +1,9 @@
 import { CmdCategory } from '@prisma/client';
-import { prisma } from '../../data/prismaClient';
+import { userProvider } from '../../data/providers/userProvider';
+import { groupNum } from '../../lib/typography';
 import { ribbon_emoji } from '../../shared/assets';
 import { baseEmbed, lightErrorEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { groupNum } from '../../lib/typography';
 
 const give = new Command({
   name: 'give',
@@ -33,7 +33,7 @@ const give = new Command({
       channel.send(lightErrorEmbed(`Please use a valid number!`));
       return;
     }
-    const benefactorStock = await prisma.getRibbons(author);
+    const benefactorStock = await userProvider.getRibbons(author);
     if (donation > benefactorStock) {
       channel.send(
         lightErrorEmbed(
@@ -43,8 +43,8 @@ const give = new Command({
       return;
     }
 
-    prisma.incrRibbons(beneficiary, donation);
-    prisma.decrRibbons(author, donation);
+    userProvider.incrRibbons(beneficiary, donation);
+    userProvider.decrRibbons(author, donation);
 
     channel.send(
       baseEmbed().setDescription(

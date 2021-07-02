@@ -1,11 +1,11 @@
 import { CmdCategory } from '.prisma/client';
-import { Command } from '../../types/command';
+import { shiritoriProvider } from '../../data/providers/shiritoriProvider';
 import {
   baseEmbed,
   lightErrorEmbed,
   sendNotInGuild,
 } from '../../shared/embeds';
-import { prisma } from '../../data/prismaClient';
+import { Command } from '../../types/command';
 
 const shiritoriHand = new Command({
   name: 'shiritori-hand',
@@ -22,7 +22,7 @@ const shiritoriHand = new Command({
 
     const [_newSize] = args;
     if (!_newSize) {
-      const currHand = await prisma.getShiritoriHandSize(guild.id);
+      const currHand = await shiritoriProvider.getHandSize(guild.id);
       channel.send(
         baseEmbed().setDescription(
           `Current starting hand size: **${currHand}**`,
@@ -44,7 +44,7 @@ const shiritoriHand = new Command({
       channel.send(lightErrorEmbed('I can only issue a maximum of 12 cards!'));
       return;
     }
-    await prisma.setShiritoriHandSize(guild.id, newSize);
+    await shiritoriProvider.setHandSize(guild.id, newSize);
     channel.send(
       baseEmbed().setDescription(
         `The hand size for Shiritori has been set to **${newSize}**!

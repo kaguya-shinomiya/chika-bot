@@ -1,9 +1,76 @@
-![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/shinomiya-corp/chika-bot)
+![](https://i.imgur.com/qNZOPv2.png)
 
-Life is a spectrum between based and cringe. Chika is absolutely based.
+<p>
+  <a><img alt="ci" src="https://github.com/shinomiya-corp/chika/actions/workflows/ci.yml/badge.svg"/></a>
+  <a href="https://codecov.io/gh/shinomiya-corp/chika"> <img src="https://codecov.io/gh/shinomiya-corp/chika/branch/dev/graph/badge.svg?token=F09KC3VESU"/> </a>
+  <a href="https://codeclimate.com/github/shinomiya-corp/chika-bot/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8793d37cbbbde8f1e96/maintainability" /></a>
+  <a href="https://www.chikawara.xyz"><img alt="Website" src="https://img.shields.io/website?url=https%3A%2F%2Fwww.chikawara.xyz"></a>
+  <a><img alt="GitHub" src="https://img.shields.io/github/license/shinomiya-corp/chika"></a>
+  <a href="https://discord.com/api/oauth2/authorize?client_id=843481025459519528&permissions=540018688&scope=bot"><img alt="Invite" src="https://img.shields.io/static/v1?logo=discord&label=invite&message=Chika&color=f2d5da"></a>
+<p/>
 
-Please Observe this panel from chapter 219 page 5.
+# discord.js bot for Chika
 
-![](https://raw.githubusercontent.com/shinomiya-corp/chika/dev/docs/chika-amogus.jpg)
+I strongly believe Hayasaka is best girl, so it puzzles myself why I chose Chika as a template for the bot. But we've gone too far to turn back now.
 
-This is why I poured hours into this repo.
+## Features
+
+- 🎮 Games from the manga (Shiritori and Balloon(?))
+  - More are coming soon<sup>TM</sup>
+- 🎧 Simple music streaming
+- 🦜 An unintelligent AI chatbot for Kaguya and Chika
+  - I don't know anything about ML but hey it kinda works
+- 💰 Global currency system
+- ...and some others probably, see the full list [here](https://www.chikawara.xyz/commands)
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/shinomiya-corp/chika.git
+```
+
+Install dependencies
+
+```bash
+  cd chika && yarn
+```
+
+Build and run (requires node v14.16.1 for music to work, idk why lol)
+
+```bash
+  yarn tsc && node dist/index.js
+```
+
+## Environment Variables
+
+To run this project, you'll need to add the following environment variables to your .env file
+
+`APP_TOKEN`, `BOT_USER_ID` (from Discord's developer portal)
+
+`DATABASE_URL`, `REDISCLOUD_URL` (pointing to a postgres and redis instance)
+
+`HUGGING_FACE_CHIKA`, `HUGGING_FACE_CHIKA_KEY`, `HUGGING_FACE_KAGUYA`, `HUGGING_FACE_KAGUYA_KEY` (from hosting the ML stuff on huggingface.co)
+
+`ANILIST_SCHEMA` (it's just https://graphql.anilist.co)
+
+## Roadmap
+
+- Web dashboard in NextJS
+- Integrate [uwu](https://github.com/Daniel-Liu-c0deb0t/uwu) into a command
+- Write moar tests
+
+## Screenshots
+
+Here are some bruh moments
+
+![](https://i.imgur.com/f04jOgr.png)
+
+![](https://i.imgur.com/m5F6ows.png)
+
+![](https://i.imgur.com/UQZxD0E.png)
+
+## Feedback
+
+If you have any feedback or spot bugs, please raise an issue on GitHub.

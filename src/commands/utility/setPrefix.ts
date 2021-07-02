@@ -1,8 +1,8 @@
 import { CmdCategory } from '@prisma/client';
-import { prisma } from '../../data/prismaClient';
+import { guildProvider } from '../../data/providers/guildProvider';
+import { isAdmin } from '../../lib/validateMessages';
 import { baseEmbed, sendNotInGuild } from '../../shared/embeds';
 import { Command } from '../../types/command';
-import { isAdmin } from '../../lib/validateMessages';
 
 const prefix = new Command({
   name: 'set-prefix',
@@ -18,7 +18,7 @@ const prefix = new Command({
     }
     if (!isAdmin(message)) return;
     const [newPrefix] = args;
-    prisma.setPrefix(guild.id, newPrefix);
+    guildProvider.setPrefix(guild.id, newPrefix);
 
     channel.send(
       baseEmbed().setDescription(`Chika's prefix is now **${newPrefix}**`),

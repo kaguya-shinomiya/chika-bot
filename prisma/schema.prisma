@@ -4,7 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
 }
 
 model User {
@@ -25,7 +26,7 @@ model Guild {
 
 model Shiritori {
   id       Int    @id @default(autoincrement())
-  guild    Guild  @relation(fields: [guildId], references: [guildId])
+  guild    Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
   guildId  String @unique
   handSize Int?
   minLen   Int?
@@ -33,7 +34,7 @@ model Shiritori {
 
 model Balloon {
   id      Int    @id @default(autoincrement())
-  guild   Guild  @relation(fields: [guildId], references: [guildId])
+  guild   Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
   guildId String @unique
   minVol  Int?
   maxVol  Int?
@@ -44,7 +45,7 @@ model Arg {
   name      String
   optional  Boolean
   multi     Boolean
-  Command   Command @relation(fields: [commandId], references: [id])
+  Command   Command @relation(fields: [commandId], references: [id], onDelete: Cascade)
   commandId Int
 }
 

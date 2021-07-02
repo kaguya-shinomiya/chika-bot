@@ -1,5 +1,5 @@
 import { CmdCategory } from '@prisma/client';
-import { prisma } from '../../data/prismaClient';
+import { userProvider } from '../../data/providers/userProvider';
 import { ribbon_emoji } from '../../shared/assets';
 import { baseEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
@@ -14,7 +14,7 @@ const ribbon = new Command({
     const { mentions, author, channel } = message;
     const user = mentions.users.first() || author;
 
-    const stock = await prisma.getRibbons(user);
+    const stock = await userProvider.getRibbons(user);
     channel.send(
       baseEmbed().setDescription(
         `**${user.tag}** has **${stock}** ${ribbon_emoji}`,

@@ -1,8 +1,8 @@
 import type { Message } from 'discord.js';
+import ms from 'ms';
 import { lightErrorEmbed } from '../shared/embeds';
 import type { Command } from '../types/command';
 import { getCooldown } from './cooldownManager';
-import { secToWordString } from './time';
 
 export const isOnCooldown = async (
   message: Message,
@@ -10,11 +10,11 @@ export const isOnCooldown = async (
 ): Promise<boolean> => {
   const { channel, author } = message;
   if (command.channelCooldown) {
-    const ttl = await getCooldown(channel.id, command.name);
-    if (ttl) {
+    const pttl = await getCooldown(channel.id, command.name);
+    if (pttl) {
       channel.send(
         lightErrorEmbed(
-          `Please wait ${secToWordString(ttl)} before using **${
+          `Please wait ${ms(pttl)} before using **${
             command.name
           }** in this channel again.`,
         ),
@@ -23,13 +23,13 @@ export const isOnCooldown = async (
     }
   }
   if (command.userCooldown) {
-    const ttl = await getCooldown(author.id, command.name);
-    if (ttl) {
+    const pttl = await getCooldown(author.id, command.name);
+    if (pttl) {
       message.channel.send(
         lightErrorEmbed(
-          `**${author.username}**, please wait ${secToWordString(
-            ttl,
-          )} before using **${command.name}** again.`,
+          `**${author.username}**, please wait ${ms(pttl)} before using **${
+            command.name
+          }** again.`,
         ),
       );
       return true;

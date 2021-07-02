@@ -1,6 +1,6 @@
 import { CmdCategory } from '@prisma/client';
 import axios from 'axios';
-import { prisma } from '../../data/prismaClient';
+import { userProvider } from '../../data/providers/userProvider';
 import { forChikaInput, forChikaResponse } from '../../data/redisClient';
 import { sendInsufficientRibbons } from '../../shared/embeds';
 import { Command } from '../../types/command';
@@ -25,7 +25,7 @@ const chika = new Command({
     const text = args.join(' ');
 
     const ribbonCost = text.length;
-    const ribbonStock = await prisma.getRibbons(author);
+    const ribbonStock = await userProvider.getRibbons(author);
     if (ribbonCost > ribbonStock) {
       sendInsufficientRibbons(channel, ribbonCost, ribbonStock);
       return;
@@ -50,7 +50,7 @@ const chika = new Command({
         cacheInput(channel.id, text, forChikaInput);
         cacheResponse(channel.id, reply, forChikaResponse);
 
-        prisma.decrRibbons(author, ribbonCost);
+        userProvider.decrRibbons(author, ribbonCost);
       })
       .catch((err) => {
         handleHuggingFaceError(channel, err, 'ck', text);

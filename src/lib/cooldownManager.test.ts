@@ -7,11 +7,11 @@ afterAll(() => {
 
 describe('cooldownManager', () => {
   const setSpy = jest.spyOn(redis, 'set');
-  const ttlSpy = jest.spyOn(redis, 'ttl');
+  const pttlSpy = jest.spyOn(redis, 'pttl');
 
   beforeEach(() => {
     setSpy.mockReset();
-    ttlSpy.mockReset();
+    pttlSpy.mockReset();
   });
 
   describe('#setCooldown', () => {
@@ -33,20 +33,20 @@ describe('cooldownManager', () => {
   describe('#getCooldown', () => {
     it('calls get once', () => {
       getCooldown('id', 'command');
-      expect(ttlSpy).toBeCalledTimes(1);
+      expect(pttlSpy).toBeCalledTimes(1);
     });
     it('calls set with correct params', () => {
       getCooldown('id', 'command');
-      expect(ttlSpy).toBeCalledWith(forCooldown('id:command'));
+      expect(pttlSpy).toBeCalledWith(forCooldown('id:command'));
     });
     it('returns 0 if key already expired or has no ttl set (-1 or -2)', () => {
-      ttlSpy.mockResolvedValueOnce(-1);
+      pttlSpy.mockResolvedValueOnce(-1);
       return getCooldown('id', 'command').then((res) => {
         expect(res).toBe(0);
       });
     });
     it('returns ttl if ttl is found', () => {
-      ttlSpy.mockResolvedValueOnce(1000);
+      pttlSpy.mockResolvedValueOnce(1000);
       return getCooldown('id', 'command').then((res) => {
         expect(res).toBe(1000);
       });

@@ -1,5 +1,5 @@
 import type { Client, Collection, Guild, Message, User } from 'discord.js';
-import { prisma } from '../../data/prismaClient';
+import { balloonProvider } from '../../data/providers/balloonProvider';
 import { balloon_rules_jpg, ribbon_emoji } from '../../shared/assets';
 import { baseEmbed } from '../../shared/embeds';
 import { BlockingLevel } from '../../types/blockingLevel';
@@ -43,8 +43,8 @@ export class Balloon extends Game {
     meta: { channel: GenericChannel; guild: Guild; client: Client },
   ) {
     const { channel, client, guild } = meta;
-    const max = await prisma.getBalloonMax(guild.id);
-    const min = await prisma.getBalloonMin(guild.id);
+    const max = await balloonProvider.getMax(guild.id);
+    const min = await balloonProvider.getMin(guild.id);
     const tolerance = Math.floor(Math.random() * (max - min) + min);
     const initState: BalloonState = {
       gameTitle: this.title,

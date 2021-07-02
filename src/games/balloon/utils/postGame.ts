@@ -1,5 +1,6 @@
 import { Collection, Message, User } from 'discord.js';
 import _ from 'lodash';
+import { userProvider } from '../../../data/providers/userProvider';
 import { prisma } from '../../../data/prismaClient';
 import { forRibbons, redis } from '../../../data/redisClient';
 import { sendPopped } from './embeds';
@@ -11,7 +12,7 @@ export const postGameBalloon = async (
   const { channel, author: popper } = message;
 
   const winners = players.filter((user) => user.id !== popper.id);
-  const popperStock = await prisma.getRibbons(popper);
+  const popperStock = await userProvider.getRibbons(popper);
   const winAmt = Math.floor(Math.random() * 20 + 20);
   const isBankrupt = winAmt * winners.size > popperStock;
 
@@ -36,5 +37,5 @@ export const postGameBalloon = async (
       ),
     );
 
-  prisma.decrRibbons(popper, winAmt * winners.size);
+  userProvider.decrRibbons(popper, winAmt * winners.size);
 };
