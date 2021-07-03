@@ -73,6 +73,7 @@
     "db:push": "dotenv -e .env -- prisma db push",
     "db:migrate": "dotenv -e .env -- prisma migrate dev",
     "db:studio": "dotenv -e .env -- prisma studio",
+    "schema:pull": "git fetch schema main && git subtree pull --prefix prisma schema main --squash",
     "gen": "graphql-codegen --config codegen.yml -r dotenv/config",
     "prepare": "husky install"
   },
