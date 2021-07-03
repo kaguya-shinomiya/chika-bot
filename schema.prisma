@@ -1,0 +1,68 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialActions"]
+}
+
+model User {
+  id      Int    @id @default(autoincrement())
+  userId  String @unique
+  tag     String
+  ribbons Int
+}
+
+model Guild {
+  id               Int        @id @default(autoincrement())
+  guildId          String     @unique
+  prefix           String?
+  shiritori        Shiritori?
+  balloon          Balloon?
+  disabledCommands Command[]
+}
+
+model Shiritori {
+  id       Int    @id @default(autoincrement())
+  guild    Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId  String @unique
+  handSize Int?
+  minLen   Int?
+}
+
+model Balloon {
+  id      Int    @id @default(autoincrement())
+  guild   Guild  @relation(fields: [guildId], references: [guildId], onDelete: Cascade)
+  guildId String @unique
+  minVol  Int?
+  maxVol  Int?
+}
+
+model Arg {
+  id        Int     @id @default(autoincrement())
+  name      String
+  optional  Boolean
+  multi     Boolean
+  Command   Command @relation(fields: [commandId], references: [id], onDelete: Cascade)
+  commandId Int
+}
+
+enum CmdCategory {
+  CURRENCY
+  FUN
+  GAMES
+  MUSIC
+  UTILITY
+}
+
+model Command {
+  id             Int         @id @default(autoincrement())
+  name           String      @unique
+  args           Arg[]
+  description    String
+  category       CmdCategory
+  aliases        String[]
+  disabledGuilds Guild[]
+}
