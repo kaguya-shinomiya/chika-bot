@@ -1,11 +1,13 @@
 import { CmdCategory } from '.prisma/client';
+import { stripIndents } from 'common-tags';
 import _ from 'lodash';
 import { blogKey, redis } from '../../data/redisClient';
+import { setCooldown } from '../../lib/cooldownManager';
+import { sendPaginated } from '../../lib/sendPaginated';
+import { baseEmbed } from '../../shared/embeds';
 import { Command } from '../../types/command';
 import { blogPage } from './utils/embeds';
 import { IBlogPost } from './utils/types';
-import { sendPaginated } from '../../lib/sendPaginated';
-import { setCooldown } from '../../lib/cooldownManager';
 
 const blog = new Command({
   name: 'blog',
@@ -21,6 +23,14 @@ const blog = new Command({
     const posts: IBlogPost[] = await redis
       .lrange(blogKey, 0, -1)
       .then((posts) => posts.map((post) => JSON.parse(post)));
+
+    if (posts.length < 1) {
+      sendPaginated(channel, [
+        baseEmbed().setTitle('ChikaSpot').setDescription(stripIndents`
+        ...no posts here...ᕙ(⇀‸↼‶)ᕗ
+        post something on the blog with \`post\`!`),
+      ]);
+    }
 
     // split into individual embeds
     const pages = _.chunk(posts, 5).map((_posts) => blogPage(_posts));
