@@ -33,6 +33,7 @@ export const seedCommands = async (commands: Collection<string, Command>) => {
   );
   try {
     await prisma.$transaction(jobs);
+    console.log(`commands have been written to ${process.env.DATABASE_URL}`);
   } catch (err) {
     console.error(err);
   }
