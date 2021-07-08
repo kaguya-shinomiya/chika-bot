@@ -1,14 +1,16 @@
 import { redis } from '../data/redisClient';
 import type { Event } from '../types/event';
+import { pubGuildCount, updateGuildList } from './lib/guild';
 
 const guildCreate: Event = {
   name: 'guildCreate',
   once: false,
   listener: async (client) => {
-    const newCount = client.guilds.cache.size;
-    redis
-      .publish('guild-count-update', newCount.toString())
-      .catch((err) => console.error(err));
+    const { cache: guilds } = client.guilds;
+    await pubGuildCount(redis, guilds.size);
+    // update the list in redis
+    const ids = guilds.map((guild) => guild.id);
+    await updateGuildList(redis, ids);
   },
 };
 

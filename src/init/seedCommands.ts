@@ -5,6 +5,8 @@ import type { Command } from '../types/command';
 
 export const seedCommands = async (commands: Collection<string, Command>) => {
   const jobs: PrismaPromise<any>[] = [
+    // FIXME: this shit doesn't work
+    // it's gonna remove all the relations between Guild and Command
     prisma.$executeRaw(
       `TRUNCATE TABLE "Command", "Arg" RESTART IDENTITY CASCADE`,
     ),
