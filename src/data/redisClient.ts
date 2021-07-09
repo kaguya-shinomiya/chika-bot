@@ -10,6 +10,7 @@ export const redisQueue = withPrefix('queue');
 
 export type redisPrefixer = (key: KeyType) => string;
 
+export const forNowPlaying = (guildId: KeyType) => `nowplaying:${guildId}`;
 export const forPrefix = (key: KeyType) => `prefix:${key}`;
 export const forRibbons = (key: KeyType) => `ribbons:${key}`;
 export const forBalloonMin = (key: KeyType) => `balloon:min:${key}`;

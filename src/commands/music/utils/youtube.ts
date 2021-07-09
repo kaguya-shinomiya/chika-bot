@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import ytdl from 'ytdl-core';
 import ytpl from 'ytpl';
 import ytsr, { Video } from 'ytsr';
+import { forNowPlaying, redis } from '../../../data/redisClient';
 import { CriticalError } from '../../../shared/errors';
 import { GenericChannel } from '../../../types/command';
 import { AudioUtils, QueueItem } from '../../../types/queue';
@@ -126,6 +127,7 @@ export const playThis = async (
 ): Promise<void> => {
   try {
     const dispatcher = await playFromYt(connection, videoData.url);
+    redis.set(forNowPlaying(guildId), JSON.stringify(videoData));
     sendNowPlaying(channel, videoData);
     const newAudioUtils: AudioUtils = {
       connection,
