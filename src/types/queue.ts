@@ -1,6 +1,7 @@
 import type { StreamDispatcher, VoiceConnection } from 'discord.js';
 
 interface QueueItem {
+  id: string;
   url: string;
   title: string;
   thumbnailURL: string;

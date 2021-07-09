@@ -26,6 +26,7 @@ const add = new Command({
       return;
     }
 
+    console.log({ videoData });
     redisQueue.rpush(guild.id, JSON.stringify(videoData));
     sendAddedToQueue(channel, { videoData, author });
   },

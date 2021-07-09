@@ -1,4 +1,5 @@
 import type { Client, StreamDispatcher, VoiceConnection } from 'discord.js';
+import { v4 } from 'uuid';
 import ytdl from 'ytdl-core';
 import ytpl from 'ytpl';
 import ytsr, { Video } from 'ytsr';
@@ -20,13 +21,13 @@ export const searchVideo = async (
     .items as Video[];
   if (videos.length === 0) return null;
   return videos.map(
-    (video) =>
-      ({
-        title: video.title,
-        duration: video.duration,
-        thumbnailURL: video.bestThumbnail.url,
-        url: video.url,
-      } as QueueItem),
+    (video): QueueItem => ({
+      id: v4(),
+      title: video.title,
+      duration: video.duration!,
+      thumbnailURL: video.bestThumbnail.url!,
+      url: video.url,
+    }),
   );
 };
 
@@ -72,6 +73,7 @@ export const validateArgs = async (
     const { videoDetails } = res;
     if (!videoDetails) return null;
     return {
+      id: v4(),
       title: videoDetails.title,
       duration: secToString(parseInt(videoDetails.lengthSeconds, 10)),
       url: videoDetails.video_url,
@@ -100,6 +102,7 @@ export const parsePlaylist = (
   };
   const items = res.items.map(
     (item): QueueItem => ({
+      id: v4(),
       url: item.shortUrl,
       title: item.title,
       thumbnailURL: item.bestThumbnail.url!,
