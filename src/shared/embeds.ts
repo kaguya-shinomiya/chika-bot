@@ -62,3 +62,8 @@ export const sendInsufficientRibbons = (
 
 export const sendNotAdmin = (channel: GenericChannel) =>
   channel.send(lightErrorEmbed(`Only admins can  use that command!`));
+
+export const sendBlockedCommand = (channel: GenericChannel, command: string) =>
+  channel.send(
+    lightErrorEmbed(`Command **${command} has been disabled in this server!`),
+  );
