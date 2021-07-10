@@ -3,7 +3,7 @@ import { Snowflake } from 'discord.js';
 import { Redis } from 'ioredis';
 import { DEFAULT_PREFIX } from '../../shared/constants';
 import { prisma } from '../prismaClient';
-import { forPrefix, redis } from '../redisClient';
+import { forBlockedCommands, forPrefix, redis } from '../redisClient';
 
 export class GuildProvider {
   constructor(
@@ -38,6 +38,24 @@ export class GuildProvider {
       update: { prefix },
       where: { guildId },
     });
+  }
+
+  async getBlockedCommands(guildId: Snowflake): Promise<string[]> {
+    // just store the command name in redis
+    const ping = await this.redis.lrange(forBlockedCommands(guildId), 0, -1);
+    if (ping?.length) {
+      this.redis.expire(forBlockedCommands(guildId), 60);
+      return ping;
+    }
+    return this.prisma.guild
+      .findUnique({
+        where: { guildId },
+        select: { disabledCommands: { select: { name: true } } },
+      })
+      .then((res) => {
+        if (!res?.disabledCommands?.length) return [];
+        return res.disabledCommands.map(({ name }) => name);
+      });
   }
 }
 

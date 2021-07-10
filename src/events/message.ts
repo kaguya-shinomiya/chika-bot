@@ -3,7 +3,7 @@ import { guildProvider } from '../data/providers/guildProvider';
 import { validateArgsCount } from '../lib/validateArgsCount';
 import { isOnCooldown } from '../lib/validateCooldowns';
 import { DEFAULT_PREFIX } from '../shared/constants';
-import { badCommandsEmbed } from '../shared/embeds';
+import { badCommandsEmbed, sendBlockedCommand } from '../shared/embeds';
 import { CriticalError } from '../shared/errors';
 import { Event } from '../types/event';
 
@@ -25,7 +25,7 @@ const message: Event = {
     const prefixRe = new RegExp(`^${prefix}`, 'i');
     if (!prefixRe.test(content)) return;
 
-    // check command
+    // check if command exists
     const args = content.split(/ +/);
     const sentCommand = args.shift()?.toLowerCase().replace(prefix, '');
     if (!sentCommand) return;
@@ -37,6 +37,15 @@ const message: Event = {
     if (!command) {
       channel.send(badCommandsEmbed(sentCommand));
       return;
+    }
+
+    // check if command is blocked
+    if (guild) {
+      const blocked = await guildProvider.getBlockedCommands(guild.id);
+      if (blocked.includes(command.name)) {
+        sendBlockedCommand(channel, command.name);
+        return;
+      }
     }
 
     // check argument count

@@ -1,5 +1,5 @@
 import { Client, Guild, Message } from 'discord.js';
-import { redisQueue } from '../../../data/redisClient';
+import { forNowPlaying, redis, redisQueue } from '../../../data/redisClient';
 import { GenericChannel } from '../../../types/command';
 import { QueueItem } from '../../../types/queue';
 import { sendAddedToQueue, sendFinishedAllTracks } from './embeds';
@@ -24,6 +24,7 @@ export function createFinishListener(
           sendFinishedAllTracks(channel);
           audioUtils.dispatcher.destroy();
           audioUtils.connection.disconnect();
+          redis.del(forNowPlaying(guild.id));
           return;
         }
         const nextData = JSON.parse(res) as QueueItem;
