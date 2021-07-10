@@ -5,13 +5,13 @@ import { initialClientCache } from './init/initialClientCache';
 import { loadCommands } from './init/loadCommands';
 import { loadEventListeners } from './init/loadEventListeners';
 import { seedCommands } from './init/seedCommands';
-import { setKaguya } from './lib/activityUpdaters';
+import { setHelp } from './lib/activityUpdaters';
 
 const main = () => {
   // instantiate the client
   const client = new Discord.Client();
   // login to the gateway, and set our status
-  client.login(process.env.APP_TOKEN).then(() => setKaguya(client));
+  client.login(process.env.APP_TOKEN).then(() => setHelp(client));
   // load commands
   client.commands = loadCommands();
   // seed commands to our database

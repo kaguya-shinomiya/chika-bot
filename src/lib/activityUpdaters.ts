@@ -44,19 +44,9 @@ export function setUserCount(client: Client) {
     .catch((err) => console.error(err));
 }
 
-export function setKaguya(client: Client) {
-  client.user
-    ?.setActivity({
-      name: `ck;ka`,
-      type: 'PLAYING',
-    })
-    .catch((err) => console.error(err));
-}
-
 export const activityUpdaters: IActivityUpdater[] = [
   setGuildCount,
   setHelp,
   setChikatto,
   setUserCount,
-  setKaguya,
 ];
