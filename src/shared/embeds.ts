@@ -65,5 +65,5 @@ export const sendNotAdmin = (channel: GenericChannel) =>
 
 export const sendBlockedCommand = (channel: GenericChannel, command: string) =>
   channel.send(
-    lightErrorEmbed(`Command **${command} has been disabled in this server!`),
+    lightErrorEmbed(`Command **${command}** has been disabled in this server.`),
   );
