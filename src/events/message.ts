@@ -41,8 +41,8 @@ const message: Event = {
 
     // check if command is blocked
     if (guild) {
-      const blocked = await guildProvider.getBlockedCommands(guild.id);
-      if (blocked.includes(command.name)) {
+      const isBlocked = await guildProvider.isBlocked(guild.id, command.name);
+      if (isBlocked) {
         sendBlockedCommand(channel, command.name);
         return;
       }

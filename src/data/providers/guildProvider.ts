@@ -40,22 +40,21 @@ export class GuildProvider {
     });
   }
 
-  async getBlockedCommands(guildId: Snowflake): Promise<string[]> {
-    // just store the command name in redis
-    const ping = await this.redis.lrange(forBlockedCommands(guildId), 0, -1);
-    if (ping?.length) {
-      this.redis.expire(forBlockedCommands(guildId), 60);
-      return ping;
-    }
-    return this.prisma.guild
-      .findUnique({
-        where: { guildId },
-        select: { disabledCommands: { select: { name: true } } },
-      })
-      .then((res) => {
-        if (!res?.disabledCommands?.length) return [];
-        return res.disabledCommands.map(({ name }) => name);
-      });
+  getBlockedCommands(guildId: Snowflake): Promise<string[]> {
+    return this.redis.smembers(forBlockedCommands(guildId));
+  }
+
+  async isBlocked(guildId: Snowflake, name: string): Promise<boolean> {
+    const res = await this.redis.sismember(forBlockedCommands(guildId), name);
+    return Boolean(res);
+  }
+
+  blockCommand(guildId: Snowflake, name: string): Promise<number> {
+    return redis.sadd(forBlockedCommands(guildId), name);
+  }
+
+  unblockCommand(guildId: Snowflake, name: string): Promise<number> {
+    return redis.srem(forBlockedCommands(guildId), name);
   }
 }
 
