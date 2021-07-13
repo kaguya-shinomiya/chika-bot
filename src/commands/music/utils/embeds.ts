@@ -86,8 +86,9 @@ export const sendCannotPlay = async (
   channel.send(
     cryingEmbed()
       .setTitle('Sorry...')
-      .setDescription(
-        `I couldn't play [${title}](${url})!\nMaybe it's a restricted video?`,
+      .setDescription(`I couldn't play [${title}](${url})!`)
+      .setFooter(
+        "It might be a restricted video, or Chika's music player might be down.",
       ),
   );
 
