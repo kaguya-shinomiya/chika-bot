@@ -50,9 +50,7 @@ export const playFromYt = async (
   } catch (err) {
     console.error(err);
     if (err.statusCode >= 400) {
-      throw new CriticalError(
-        'YouTube has blocked us, or something bad has happened.',
-      );
+      throw new Error('YouTube has blocked us, or something bad has happened.');
     } else {
       throw err;
     }

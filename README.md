@@ -11,7 +11,7 @@
 
 # discord.js bot for Chika
 
-I strongly believe Hayasaka is best girl, so it puzzles myself why I chose Chika as a template for the bot. But we've gone too far to turn back now.
+Hayasaka is best girl, so it puzzles myself why I chose Chika as a template for the bot. But we've gone too far to turn back now. If I started this project from scratch today, I'd use a tool like [Nx](https://github.com/nrwl/nx) and put everything in a mono-repo. But I was dumb and divided this project into: the bot itself (this page), [server](https://github.com/shinomiya-corp/chika-server), [landing page](https://github.com/immanuelhume/chika-next), [dashboard](https://github.com/immanuelhume/chika-dashboard), and even a repo just for a freakin prisma [schema file and migrations](https://github.com/shinomiya-corp/chika-schema).
 
 ## Features
 
@@ -57,9 +57,9 @@ To run this project, you'll need to add the following environment variables to y
 
 ## Roadmap
 
-- Web dashboard in NextJS
+- Web dashboard in NextJS 🥢
 - Integrate [uwu](https://github.com/Daniel-Liu-c0deb0t/uwu) into a command
-- Write moar tests
+- 30% test cov pls
 
 ## Screenshots
 
